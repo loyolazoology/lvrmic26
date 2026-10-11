@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conference Themes | VRMIC 2026 · CIMSER, Loyola College</title>
+<meta name="description" content="Conference themes of VRMIC 2026 — 4th International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment, 26–28 November 2026, Loyola College (Autonomous), Chennai. Search 15 themes and their topics of interest.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap');
+
+:root{
+  --navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;
+  --navy-border:rgba(226,187,120,.24);
+  --gold:#c9974f;--gold-light:#e8c983;
+  --teal:#279c85;--teal-light:#6fc9b6;
+  --text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;
+  --danger:#d8695a;--success:#4fa980;
+  --radius:10px;--maxw:1180px;
+  --paper:#faf8f3;--paper-alt:#f0eee7;--paper-card:#ffffff;--paper-border:rgba(20,30,60,.10);
+  --ink-1:#151c33;--ink-2:#4b5573;--ink-3:#7c869f;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html,body{overflow-x:hidden;max-width:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 700px at 85% -10%, #12234f 0%, transparent 55%),
+    radial-gradient(900px 500px at -10% 10%, #0f1d42 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%23cda355' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M60 0 90 17.3 90 51.9 60 69.2 30 51.9 30 17.3Z'/%3E%3C/g%3E%3C/svg%3E") 0 0/120px 104px,
+    var(--navy-950);
+  color:var(--text-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+body.no-scroll{overflow:hidden;}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:500;letter-spacing:.2px;margin:0 0 .4em;color:var(--text-1);}
+h1{font-size:clamp(2rem,4vw,3.2rem);font-weight:600;line-height:1.12;}
+h2{font-size:clamp(1.5rem,2.6vw,2.1rem);}
+h3{font-size:1.2rem;}
+p{color:var(--text-2);margin:0 0 1em;}
+a{color:var(--gold-light);text-decoration:none;}
+a:hover{text-decoration:underline;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.section{padding:72px 0;}
+.section-tight{padding:40px 0;}
+@media (max-width:600px){.wrap{padding:0 18px;}.section{padding:48px 0;}.section-tight{padding:30px 0;}}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;
+  font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);
+  border:1px solid var(--navy-border);background:rgba(205,163,85,.08);padding:6px 14px;border-radius:999px;margin-bottom:18px;
+}
+
+/* Clock bar */
+.utcbar{background:#070c22;border-bottom:1px solid var(--navy-border);}
+.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);letter-spacing:.4px;text-align:center;flex-wrap:wrap;}
+.utcbar i{color:var(--gold-light);font-size:11px;}
+.utcbar b{color:var(--text-2);font-weight:500;}
+@media (min-width:701px){.utcbar-inner{justify-content:flex-end;}}
+
+/* Logo strip */
+.topbar{background:var(--navy-950);border-bottom:1px solid var(--navy-border);}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;}
+@media (min-width:701px){.topbar-inner{justify-content:space-between;}}
+.logo-slots{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
+.logo-slot{height:52px;min-width:52px;width:auto;border-radius:8px;border:1px solid var(--paper-border);display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:14px;background:#fff;padding:6px 10px;flex-shrink:0;transition:transform .2s ease, box-shadow .2s ease;}
+.logo-slot:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.18);}
+.logo-slot img{width:auto;height:100%;max-width:90px;object-fit:contain;display:block;}
+.logo-slot.empty{border-style:dashed;background:rgba(255,255,255,.03);color:var(--text-3);}
+@media (max-width:800px){.logo-slot{height:40px;min-width:40px;}}
+.topbar-text{font-size:12px;color:var(--text-1);font-family:'IBM Plex Mono',monospace;letter-spacing:.3px;text-align:center;max-width:560px;line-height:1.6;}
+@media (max-width:900px){.topbar-text{display:none;}}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:100;background:rgba(6,11,28,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--navy-border);width:100%;}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:18px;width:100%;}
+.nav-brand{display:flex;align-items:center;gap:14px;flex-shrink:1;min-width:0;overflow:hidden;}
+.brand-logo-link{display:flex;align-items:center;height:100%;flex-shrink:0;}
+.brand-logo-img{height:52px;width:auto;max-width:100px;object-fit:contain;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));}
+.brand-title{font-family:'Fraunces',serif;font-weight:700;font-size:23px;letter-spacing:.4px;color:var(--text-1);white-space:nowrap;}
+@media(max-width:1080px){.brand-logo-img{height:44px;}.brand-title{font-size:20px;}}
+@media(max-width:992px){.brand-logo-img{height:40px;}}
+@media(max-width:700px){.brand-logo-img{height:34px;}.brand-title{font-size:18px;}}
+@media(max-width:480px){.brand-title{font-size:16px;}.brand-logo-img{height:30px;}.nav-brand{gap:8px;}}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;padding:0;margin:0;flex-shrink:0;}
+.nav-links>li{position:relative;}
+.nav-links a{display:flex;align-items:center;gap:6px;padding:10px 11px;border-radius:6px;color:var(--text-2);font-size:13px;font-weight:500;white-space:nowrap;transition:.25s;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold-light);background:rgba(232,201,131,.08);text-decoration:none;}
+.dropdown-toggle{cursor:pointer;}
+.has-dropdown>a .caret{font-size:10px;transition:.25s;}
+.has-dropdown.open>a .caret{transform:rotate(180deg);}
+.dropdown{position:absolute;left:0;top:calc(100% + 8px);min-width:250px;padding:8px;list-style:none;background:var(--navy-850);border:1px solid var(--navy-border);border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(8px);transition:.25s;z-index:999;}
+.dropdown a{display:block;padding:10px 12px;border-radius:6px;color:var(--text-2);white-space:normal;}
+.dropdown a:hover{background:rgba(232,201,131,.08);color:var(--gold-light);}
+.has-dropdown:hover .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--navy-border);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:18px;flex-shrink:0;appearance:none;-webkit-appearance:none;line-height:1;}
+@media(max-width:1200px){.nav-links a{font-size:12.5px;padding:9px 9px;}}
+@media(max-width:800px){
+  .nav-toggle{display:block;position:relative;z-index:101;}
+  .nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;margin-left:0;}
+  .nav-links.open{transform:translateX(0);visibility:visible;}
+  .nav-links>li{width:100%;}
+  .nav-links>li>a{width:100%;justify-content:space-between;font-size:14.5px;padding:12px 12px;}
+  .dropdown{position:static;opacity:1;visibility:visible;transform:none;display:none;background:rgba(255,255,255,.04);border:none;box-shadow:none;margin-top:4px;}
+  .has-dropdown.open .dropdown{display:block;}
+}
+
+/* Buttons, cards, grid */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;padding:13px 24px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:transform .15s ease, opacity .15s ease, box-shadow .15s ease;}
+.btn:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.2);}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;}
+.btn-outline{background:transparent;border-color:var(--navy-border);color:var(--text-1);}
+.btn-outline:hover{border-color:var(--gold);}
+.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:var(--radius);padding:26px;transition:transform .25s ease, box-shadow .25s ease;}
+.grid{display:grid;gap:20px;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+@media (max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:800px){.grid-3,.grid-2{grid-template-columns:1fr;}}
+@media (max-width:520px){.grid-4{grid-template-columns:1fr;}}
+.helix-rule{height:2px;width:56px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:2px;margin:0 0 20px;}
+.helix-rule-center{margin-left:auto;margin-right:auto;}
+.hint{font-size:12.5px;color:var(--text-3);margin-top:6px;}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-family:'IBM Plex Mono',monospace;}
+.badge-success{background:rgba(79,169,128,.15);color:var(--teal-light);border:1px solid rgba(79,169,128,.35);}
+.badge-pending{background:rgba(205,163,85,.15);color:var(--gold-light);border:1px solid var(--navy-border);}
+.pill-row{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.pill{border:1px solid var(--navy-border);border-radius:999px;padding:9px 16px;font-size:13px;color:var(--text-2);display:inline-flex;align-items:center;gap:8px;line-height:1;}
+.pill b{color:var(--text-1);font-weight:600;}
+.pill i{color:var(--gold-light);font-size:13px;}
+
+/* Light sections */
+.section-light{background:var(--paper);color:var(--ink-2);}
+.section-alt{background:var(--paper-alt);color:var(--ink-2);}
+.section-light h2,.section-light h3,.section-light h4,.section-alt h2,.section-alt h3,.section-alt h4{color:var(--ink-1);}
+.section-light p,.section-alt p{color:var(--ink-2);}
+.section-light .eyebrow,.section-alt .eyebrow{background:rgba(201,151,79,.1);border-color:rgba(201,151,79,.35);color:#9a6b28;}
+.section-light .card,.section-alt .card{background:var(--paper-card);border:1px solid var(--paper-border);box-shadow:0 2px 10px rgba(20,30,60,.05);color:var(--ink-2);}
+.section-light .card:hover,.section-alt .card:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(20,30,60,.1);}
+.section-light .hint,.section-alt .hint{color:var(--ink-3);}
+.section-light .btn-outline,.section-alt .btn-outline{border-color:var(--paper-border);color:var(--ink-1);}
+.section-light .btn-outline:hover,.section-alt .btn-outline:hover{border-color:var(--gold);}
+.section-light a:not(.btn),.section-alt a:not(.btn){color:#9a6b28;}
+.card > i:first-child,.info-card > i:first-child{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(201,151,79,.1);font-size:17px;color:var(--gold);}
+.date-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;}
+.date-card h3{margin:0;}
+.info-card{background:var(--paper-card);border:1px solid var(--paper-border);border-radius:var(--radius);padding:24px;box-shadow:0 2px 10px rgba(20,30,60,.05);transition:transform .25s ease, box-shadow .25s ease;}
+.info-card:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(20,30,60,.1);}
+.info-card h3{color:var(--ink-1);margin-top:14px;font-size:16px;}
+.info-card p,.info-card a{color:var(--ink-2);font-size:14px;}
+.info-card a{color:#9a6b28;}
+
+/* Page header */
+.page-header{padding:52px 0 48px;position:relative;overflow:hidden;}
+.page-header .wrap{position:relative;z-index:1;max-width:900px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);letter-spacing:.4px;margin-bottom:14px;}
+.breadcrumb a{color:var(--text-3);}
+.breadcrumb a:hover{color:var(--gold-light);}
+.breadcrumb .sep{margin:0 6px;color:var(--navy-border);}
+.breadcrumb .current{color:var(--gold-light);}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:8px;}
+
+/* Page-specific: steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:16px;counter-reset:step;}
+.step{display:grid;grid-template-columns:48px 1fr;gap:18px;align-items:start;background:var(--paper-card);border:1px solid var(--paper-border);border-radius:var(--radius);padding:20px 22px;box-shadow:0 2px 10px rgba(20,30,60,.05);position:relative;}
+.step-num{width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;font-family:'IBM Plex Mono',monospace;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.step h3{margin:2px 0 4px;font-size:17px;color:var(--ink-1);}
+.step p{margin:0;font-size:14.5px;color:var(--ink-2);}
+.step .tag{display:inline-block;margin-top:8px;font-size:11.5px;font-family:'IBM Plex Mono',monospace;padding:3px 10px;border-radius:999px;background:rgba(39,156,133,.12);color:#1c7a68;border:1px solid rgba(39,156,133,.3);}
+.step:not(:last-child)::after{content:"";position:absolute;left:42px;bottom:-16px;width:2px;height:16px;background:linear-gradient(var(--gold),transparent);}
+.cta-box{margin-top:22px;background:rgba(201,151,79,.08);border:1px solid rgba(201,151,79,.3);border-radius:var(--radius);padding:18px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+.cta-box p{margin:0;font-size:14.5px;color:var(--ink-1);}
+.cta-box code{font-family:'IBM Plex Mono',monospace;font-size:13px;background:rgba(20,30,60,.06);padding:2px 6px;border-radius:4px;}
+
+/* Specs list */
+.spec-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px;}
+.spec-list li{display:flex;gap:12px;font-size:14.5px;color:var(--ink-2);align-items:flex-start;}
+.spec-list li i{color:var(--teal);margin-top:5px;font-size:13px;flex-shrink:0;}
+.spec-list li b{color:var(--ink-1);}
+.mode-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+.mode-head h3{margin:0;}
+
+/* Template downloads */
+.dl-card{display:flex;align-items:center;gap:16px;}
+.dl-card .dl-icon{width:52px;height:52px;border-radius:12px;background:rgba(216,105,90,.12);color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.dl-card h3{margin:0 0 2px;font-size:16px;}
+.dl-card p{margin:0 0 8px;font-size:13.5px;}
+.dl-card .btn{padding:9px 16px;font-size:13px;}
+
+/* FAQ */
+.faq{display:grid;gap:12px;max-width:860px;margin:0 auto;}
+.faq details{background:var(--paper-card);border:1px solid var(--paper-border);border-radius:var(--radius);padding:0;box-shadow:0 2px 10px rgba(20,30,60,.05);}
+.faq summary{cursor:pointer;list-style:none;padding:16px 20px;font-weight:600;font-size:15px;color:var(--ink-1);display:flex;justify-content:space-between;gap:12px;align-items:center;}
+.faq summary::-webkit-details-marker{display:none;}
+.faq summary::after{content:"+";font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:20px;line-height:1;transition:transform .2s ease;}
+.faq details[open] summary::after{transform:rotate(45deg);}
+.faq details p{padding:0 20px 16px;margin:0;font-size:14.5px;}
+.faq summary:focus-visible,.btn:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+/* Table */
+table{width:100%;border-collapse:collapse;}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--paper-border);font-size:14px;color:var(--ink-2);}
+th{color:#9a6b28;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:500;}
+.table-wrap{overflow-x:auto;}
+
+/* Footer */
+footer{border-top:1px solid var(--navy-border);padding:56px 0 28px;background:var(--navy-950);}
+footer p{font-size:13px;color:var(--text-3);}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px;}
+@media (max-width:800px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:520px){.footer-grid{grid-template-columns:1fr;}}
+.footer-grid h4{color:var(--text-1);font-family:'Fraunces',serif;font-weight:500;font-size:14.5px;margin:0 0 14px;}
+.footer-grid ul{list-style:none;margin:0;padding:0;}
+.footer-grid li{margin-bottom:9px;}
+.footer-grid a{color:var(--text-3);font-size:13.5px;}
+.footer-grid a:hover{color:var(--gold-light);}
+.footer-bottom{border-top:1px solid var(--navy-border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--text-3);text-align:center;}
+.social-row{display:flex;gap:10px;}
+.social-row a{width:34px;height:34px;border:1px solid var(--navy-border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-2);transition:transform .2s ease;}
+.social-row a:hover{color:var(--gold-light);border-color:var(--gold);transform:translateY(-2px);}
+
+/* Floating buttons (back-to-top + mail only; no anthem) */
+.float-actions{position:fixed;right:22px;bottom:22px;z-index:150;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.fab{box-sizing:border-box;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;box-shadow:0 10px 26px rgba(0,0,0,.35);border:none;margin:0;padding:0;cursor:pointer;flex-shrink:0;transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease;text-decoration:none;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;}
+.fab:hover{transform:scale(1.08);text-decoration:none;color:#241a06;}
+.fab-top{opacity:0;pointer-events:none;transform:translateY(8px) scale(.9);}
+.fab-top.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+@media (max-width:600px){.float-actions{right:16px;bottom:16px;gap:10px;}.fab{width:46px;height:46px;font-size:19px;}}
+
+.contact-cta{display:flex;align-items:center;gap:13px;background:rgba(201,151,79,.08);border:1px solid rgba(201,151,79,.3);border-radius:var(--radius);padding:16px 18px;}
+.contact-cta i{font-size:22px;color:var(--gold);flex-shrink:0;}
+.contact-cta b{display:block;color:var(--ink-1);font-size:14px;}
+.contact-cta span{font-size:12.5px;color:var(--ink-3);}
+
+
+/* Themes page */
+.search-panel{background:var(--paper-card);border:1px solid var(--paper-border);border-radius:14px;padding:22px;box-shadow:0 2px 10px rgba(20,30,60,.05);max-width:860px;margin:0 auto;}
+.search-box{position:relative;}
+.search-box > i.fa-magnifying-glass{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-size:15px;pointer-events:none;}
+.search-box input{width:100%;background:#fff;border:1px solid rgba(20,30,60,.22);color:var(--ink-1);border-radius:10px;padding:14px 46px 14px 44px;font-family:'Inter',sans-serif;font-size:16px;}
+.search-box input:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:0;border-radius:8px;background:transparent;color:var(--ink-3);cursor:pointer;font-size:15px;display:none;align-items:center;justify-content:center;}
+.search-clear.show{display:flex;}
+.search-clear:hover{color:var(--ink-1);background:rgba(20,30,60,.06);}
+.search-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;}
+.search-count{font-size:13.5px;color:var(--ink-2);}
+.search-count b{color:var(--ink-1);}
+.toggle-all{background:transparent;border:1px solid var(--paper-border);color:var(--ink-1);border-radius:8px;padding:8px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;gap:8px;align-items:center;}
+.toggle-all:hover{border-color:var(--gold);}
+.try-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;font-size:13px;color:var(--ink-3);}
+.try-chip{border:1px solid var(--paper-border);background:#fff;color:var(--ink-1);border-radius:999px;padding:6px 13px;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;}
+.try-chip:hover{border-color:var(--gold);background:rgba(201,151,79,.08);}
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start;}
+@media (max-width:1000px){.theme-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:680px){.theme-grid{grid-template-columns:1fr;}}
+.theme-card{padding:24px;}
+.theme-card[hidden]{display:none;}
+.track-num{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#9a6b28;letter-spacing:1px;display:block;margin-bottom:10px;}
+.theme-card h3{font-size:17px;line-height:1.3;margin:0 0 10px;}
+.theme-desc{font-size:14px;margin:0 0 14px;}
+.theme-details{border-top:1px solid var(--paper-border);padding-top:12px;}
+.theme-details summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:14px;color:var(--ink-1);gap:10px;}
+.theme-details summary::-webkit-details-marker{display:none;}
+.theme-details summary::after{content:"+";font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:20px;line-height:1;margin-left:auto;transition:transform .2s ease;}
+.theme-details[open] summary::after{transform:rotate(45deg);}
+.theme-details summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px;}
+.topic-count{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;background:rgba(201,151,79,.14);color:#9a6b28;border-radius:999px;padding:2px 8px;}
+.topic-list{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:8px;}
+.topic-list li{position:relative;padding-left:18px;font-size:13.5px;color:var(--ink-2);line-height:1.5;}
+.topic-list li::before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--teal));}
+.sdg-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+.sdg{font-family:'IBM Plex Mono',monospace;font-size:11px;padding:3px 9px;border-radius:999px;background:rgba(39,156,133,.1);color:#1c7a68;border:1px solid rgba(39,156,133,.28);}
+mark{background:rgba(232,201,131,.55);color:inherit;border-radius:3px;padding:0 2px;}
+.no-results{display:none;text-align:center;max-width:520px;margin:10px auto 0;padding:34px 22px;background:var(--paper-card);border:1px dashed rgba(20,30,60,.25);border-radius:var(--radius);}
+.no-results.show{display:block;}
+.no-results i{font-size:26px;color:var(--gold);margin-bottom:10px;}
+.no-results h3{margin:0 0 6px;font-size:18px;}
+.no-results p{margin:0 0 14px;font-size:14.5px;}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none !important;}}
+</style>
+<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<!-- Clock bar -->
+<div class="utcbar">
+  <div class="utcbar-inner">
+    <i class="fa-regular fa-clock"></i>
+    <span id="utc-clock"><b>Loading time…</b></span>
+  </div>
+</div>
+
+<!-- Logo strip -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo-slots" id="logo-slots">
+      <div class="logo-slot" title="Indian Academy of Environmental Science logo">
+        <img src="assets/iaes-logo.png" alt="IAES logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))">
+      </div>
+      <div class="logo-slot" title="Absolute Human Care Foundation logo">
+        <img src="assets/ahcf-logo.png" alt="AHCF logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))">
+      </div>
+      <div class="logo-slot" title="Loyola College Centenary Logo">
+        <img src="assets/centenary-logo.png" alt="Centenary Logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))">
+      </div>
+    </div>
+    <span class="topbar-text">Loyola College (Autonomous), Chennai · Est. 1925 &nbsp;·&nbsp; CIMSER — Centre for Insect Molecular Studies and Environmental Research &nbsp;·&nbsp; PG &amp; Research Department of Advanced Zoology and Biotechnology</span>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand" title="4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment">
+      <a href="index.html" class="brand-logo-link" title="Loyola College">
+        <img src="assets/loyola-crest.png" alt="Loyola College" class="brand-logo-img" onerror="this.style.display='none'">
+      </a>
+      <a href="index.html" class="brand-logo-link" title="CIMSER">
+        <img src="assets/cimser-logo.png" alt="CIMSER" class="brand-logo-img" onerror="this.style.display='none'">
+      </a>
+      <a href="index.html" style="text-decoration:none;">
+        <span class="brand-title">VRMIC 2026</span>
+      </a>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="committee.html">Committee</a></li>
+      <li class="has-dropdown">
+        <a href="#" class="dropdown-toggle">About <i class="fa-solid fa-chevron-down caret"></i></a>
+        <ul class="dropdown">
+          <li><a href="about/college.html">About the College</a></li>
+          <li><a href="about/department.html">About the Department</a></li>
+          <li><a href="about/cimser.html">About CIMSER</a></li>
+          <li><a href="about/iaes.html">About IAES</a></li>
+          <li><a href="about/conference.html">About the Conference</a></li>
+        </ul>
+      </li>
+      <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
+      <li><a href="themes.html" class="active">Themes</a></li>
+      <li><a href="iaes-award.html">IAES Award</a></li>
+      <li class="has-dropdown">
+        <a href="#" class="dropdown-toggle">Register / Login <i class="fa-solid fa-chevron-down caret"></i></a>
+        <ul class="dropdown">
+          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference"><i class="fa-solid fa-user-plus"></i>&nbsp; Participant Registration</a></li>
+          <li><a href="participant-login.html"><i class="fa-solid fa-user"></i>&nbsp; Participant Login</a></li>
+          <li><a href="admin-login.html"><i class="fa-solid fa-user-shield"></i>&nbsp; Admin Login</a></li>
+        </ul>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Page header -->
+<header class="page-header">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span class="current">Themes</span></div>
+    <span class="eyebrow"><i class="fa-solid fa-diagram-project"></i>&nbsp; Technical programme · 26–28 Nov 2026</span>
+    <h1>Conference themes</h1>
+    <div class="helix-rule helix-rule-center"></div>
+    <p style="max-width:680px;font-size:16.5px;">Papers, abstracts and posters are invited under (but not limited to) the 15 themes below. Search by keyword to find the theme that fits your work.</p>
+    <div class="pill-row" style="justify-content:center;">
+      <div class="pill"><i class="fa-solid fa-layer-group"></i> <b>15 themes</b></div>
+      <div class="pill"><i class="fa-regular fa-file-lines"></i> <b>Abstract: max 250 words</b></div>
+      <div class="pill"><i class="fa-solid fa-globe"></i> <b>Online &amp; offline</b></div>
+    </div>
+  </div>
+</header>
+
+<!-- Search -->
+<section class="section-light section-tight" id="search-section">
+  <div class="wrap">
+    <div class="search-panel">
+      <label for="theme-search">Search themes and topics</label>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input type="search" id="theme-search" placeholder="Try &quot;mosquito&quot;, &quot;nanoparticles&quot; or &quot;climate&quot;" autocomplete="off" aria-controls="theme-grid">
+        <button type="button" class="search-clear" id="search-clear" aria-label="Clear search"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="try-row">
+        <span>Try:</span>
+        <button type="button" class="try-chip" data-q="mosquito">mosquito</button>
+        <button type="button" class="try-chip" data-q="dengue">dengue</button>
+        <button type="button" class="try-chip" data-q="climate">climate</button>
+        <button type="button" class="try-chip" data-q="nano">nano</button>
+        <button type="button" class="try-chip" data-q="AI">AI</button>
+        <button type="button" class="try-chip" data-q="SDG 3">SDG 3</button>
+      </div>
+      <div class="search-meta">
+        <span class="search-count" id="search-count" role="status" aria-live="polite">Showing <b>15</b> of <b>15</b> themes</span>
+        <button type="button" class="toggle-all" id="toggle-all"><i class="fa-solid fa-angles-down"></i> <span>Expand all topics</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Themes -->
+<section class="section-light section" style="padding-top:20px;" id="themes">
+  <div class="wrap">
+    <div class="theme-grid" id="theme-grid">
+      <article class="card theme-card" id="theme-01" data-theme>
+        <span class="track-num">THEME 01</span>
+        <h3 class="hl">Life Sciences for a Sustainable Healthy Environment</h3>
+        <p class="theme-desc hl">Looks at how discoveries across the biological sciences can protect ecosystems and community health at the same time. The theme connects basic research with practical, low-impact solutions that communities can adopt.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Ecosystem services and human wellbeing</li>
+            <li class="hl">Bioremediation and green technologies</li>
+            <li class="hl">Sustainable agriculture, aquaculture and sericulture</li>
+            <li class="hl">Biological indicators for environmental monitoring</li>
+            <li class="hl">Biodiversity-based livelihoods</li>
+            <li class="hl">Community-based environmental health programmes</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 13</span><span class="sdg">SDG 15</span></div>
+      </article>
+      <article class="card theme-card" id="theme-02" data-theme>
+        <span class="track-num">THEME 02</span>
+        <h3 class="hl">Vector Biology, Ecology and Integrated Management</h3>
+        <p class="theme-desc hl">Covers the biology, behaviour and ecology of disease-carrying insects and other arthropods, and how this knowledge is used to reduce their impact. Contributions on field-ready and community-friendly control strategies are especially welcome.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Biology of mosquitoes, sandflies, ticks, flies and mites</li>
+            <li class="hl">Breeding habitats, host-seeking and feeding behaviour</li>
+            <li class="hl">Insecticide resistance and its mechanisms</li>
+            <li class="hl">Integrated vector management (IVM)</li>
+            <li class="hl">Biological control, larvicides and botanical insecticides</li>
+            <li class="hl">Vector surveillance, mapping and risk stratification</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 6</span><span class="sdg">SDG 11</span></div>
+      </article>
+      <article class="card theme-card" id="theme-03" data-theme>
+        <span class="track-num">THEME 03</span>
+        <h3 class="hl">Emerging and Re-emerging Infectious Diseases</h3>
+        <p class="theme-desc hl">Addresses diseases that are newly appearing or returning to places where they had declined, with a focus on vector-borne infections. Papers on early detection, outbreak response and the drivers of disease spread are invited.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Dengue, chikungunya and Zika</li>
+            <li class="hl">Malaria and lymphatic filariasis</li>
+            <li class="hl">Japanese encephalitis, scrub typhus and leptospirosis</li>
+            <li class="hl">Outbreak investigation and rapid response</li>
+            <li class="hl">Epidemiological modelling and early warning systems</li>
+            <li class="hl">Antimicrobial and antiparasitic resistance</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 17</span></div>
+      </article>
+      <article class="card theme-card" id="theme-04" data-theme>
+        <span class="track-num">THEME 04</span>
+        <h3 class="hl">One Health: Human, Animal and Environmental Health</h3>
+        <p class="theme-desc hl">Treats the health of people, animals and the environment as one connected system. The theme welcomes work that brings together medicine, veterinary science, ecology and public policy.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Zoonotic spillover and reservoir hosts</li>
+            <li class="hl">Integrated human–animal–environment surveillance</li>
+            <li class="hl">Veterinary public health</li>
+            <li class="hl">Water, sanitation and waste-related health risks</li>
+            <li class="hl">Cross-sector collaboration and One Health policy</li>
+            <li class="hl">Case studies of One Health in practice</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 6</span><span class="sdg">SDG 15</span></div>
+      </article>
+      <article class="card theme-card" id="theme-05" data-theme>
+        <span class="track-num">THEME 05</span>
+        <h3 class="hl">Climate Change, Biodiversity and Ecosystem Health</h3>
+        <p class="theme-desc hl">Examines how a changing climate affects species, habitats and the diseases linked to them. Research on adaptation, restoration and the shifting range of vectors and hosts is encouraged.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Climate effects on vector distribution and disease transmission</li>
+            <li class="hl">Habitat loss and land-use change</li>
+            <li class="hl">Freshwater, coastal and marine ecosystem health</li>
+            <li class="hl">Invasive species and biodiversity loss</li>
+            <li class="hl">Restoration ecology and nature-based solutions</li>
+            <li class="hl">Climate adaptation and community resilience</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 13</span><span class="sdg">SDG 14</span><span class="sdg">SDG 15</span></div>
+      </article>
+      <article class="card theme-card" id="theme-06" data-theme>
+        <span class="track-num">THEME 06</span>
+        <h3 class="hl">Biotechnology and Molecular Innovations in Healthcare</h3>
+        <p class="theme-desc hl">Highlights molecular and biotechnological tools that improve diagnosis, treatment and prevention. The theme includes laboratory advances as well as those moving towards clinical or field use.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Recombinant proteins, vaccines and biologics</li>
+            <li class="hl">Molecular diagnostics: PCR, LAMP and biosensors</li>
+            <li class="hl">Genome editing and gene-based vector control</li>
+            <li class="hl">Molecular markers and DNA barcoding</li>
+            <li class="hl">Cell culture and tissue engineering</li>
+            <li class="hl">Translational and applied biotechnology</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 9</span></div>
+      </article>
+      <article class="card theme-card" id="theme-07" data-theme>
+        <span class="track-num">THEME 07</span>
+        <h3 class="hl">Microbiology, Immunology and Infectious Disease Research</h3>
+        <p class="theme-desc hl">Focuses on how pathogens cause disease and how the host responds. Studies on infection mechanisms, immunity and the microbes living in and on hosts and vectors fit here.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Host–pathogen interactions and pathogenesis</li>
+            <li class="hl">Immune responses to vector-borne infections</li>
+            <li class="hl">Vaccine immunology and immunotherapy</li>
+            <li class="hl">Microbiome of humans, vectors and the environment</li>
+            <li class="hl">Clinical and environmental microbiology</li>
+            <li class="hl">Diagnostic microbiology and drug resistance</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span></div>
+      </article>
+      <article class="card theme-card" id="theme-08" data-theme>
+        <span class="track-num">THEME 08</span>
+        <h3 class="hl">Environmental Pollution, Toxicology and Risk Assessment</h3>
+        <p class="theme-desc hl">Deals with pollutants, their effects on living organisms and how risks are measured and managed. Work on pesticides, metals, plastics and emerging contaminants is invited.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Pesticide and insecticide residues</li>
+            <li class="hl">Heavy metals and persistent organic pollutants</li>
+            <li class="hl">Microplastics and emerging contaminants</li>
+            <li class="hl">Ecotoxicology and biomarkers of exposure</li>
+            <li class="hl">Water, soil and air quality assessment</li>
+            <li class="hl">Health and environmental risk assessment</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 6</span><span class="sdg">SDG 12</span></div>
+      </article>
+      <article class="card theme-card" id="theme-09" data-theme>
+        <span class="track-num">THEME 09</span>
+        <h3 class="hl">Genomics, Bioinformatics and Precision Medicine</h3>
+        <p class="theme-desc hl">Brings together sequence-based science and computational analysis for health and vector research. The theme covers both the generation of genomic data and the methods used to interpret it.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Next-generation sequencing and metagenomics</li>
+            <li class="hl">Population genomics of vectors and pathogens</li>
+            <li class="hl">Comparative and functional genomics</li>
+            <li class="hl">Computational biology and databases</li>
+            <li class="hl">Machine learning for biological data</li>
+            <li class="hl">Pharmacogenomics and personalised medicine</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 9</span></div>
+      </article>
+      <article class="card theme-card" id="theme-10" data-theme>
+        <span class="track-num">THEME 10</span>
+        <h3 class="hl">Natural Products, Medicinal Plants and Drug Discovery</h3>
+        <p class="theme-desc hl">Explores compounds from plants, microbes and other natural sources for medicine and pest control. Contributions may range from traditional knowledge to laboratory screening and computer-aided design.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Phytochemistry and bioactive compounds</li>
+            <li class="hl">Plant-based larvicides, repellents and insecticides</li>
+            <li class="hl">Antimicrobial, antiparasitic and anticancer screening</li>
+            <li class="hl">In silico docking and drug design</li>
+            <li class="hl">Ethnopharmacology and traditional knowledge</li>
+            <li class="hl">Standardisation and safety of herbal products</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 15</span></div>
+      </article>
+      <article class="card theme-card" id="theme-11" data-theme>
+        <span class="track-num">THEME 11</span>
+        <h3 class="hl">Nanotechnology and Advanced Therapeutics</h3>
+        <p class="theme-desc hl">Looks at nanoscale materials and new therapeutic approaches in health and vector control. Studies on safety and environmental impact are as welcome as those on performance.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Green synthesis of nanoparticles</li>
+            <li class="hl">Nano-formulations for vector control</li>
+            <li class="hl">Nano-based drug and vaccine delivery</li>
+            <li class="hl">Nanosensors and diagnostics</li>
+            <li class="hl">Toxicity and environmental safety of nanomaterials</li>
+            <li class="hl">Biomaterials and regenerative approaches</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 9</span></div>
+      </article>
+      <article class="card theme-card" id="theme-12" data-theme>
+        <span class="track-num">THEME 12</span>
+        <h3 class="hl">Artificial Intelligence and Digital Technologies in Life Sciences</h3>
+        <p class="theme-desc hl">Covers the use of data-driven and digital tools in biology and public health. The theme includes disease forecasting, automated identification and technologies that put information in people&#x27;s hands.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Machine learning for disease prediction</li>
+            <li class="hl">Remote sensing and GIS for vector mapping</li>
+            <li class="hl">Image-based identification of insects and pathogens</li>
+            <li class="hl">Mobile apps, drones and citizen science</li>
+            <li class="hl">Big data and digital health platforms</li>
+            <li class="hl">Ethics and responsible use of AI in health</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 9</span><span class="sdg">SDG 11</span></div>
+      </article>
+      <article class="card theme-card" id="theme-13" data-theme>
+        <span class="track-num">THEME 13</span>
+        <h3 class="hl">Food Safety, Nutrition and Public Health</h3>
+        <p class="theme-desc hl">Addresses how what we eat and drink affects health, from contamination to nutrition. Research on prevention, monitoring and community-level intervention is invited.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Foodborne and waterborne pathogens</li>
+            <li class="hl">Chemical contaminants and adulteration</li>
+            <li class="hl">Nutrition, immunity and disease resistance</li>
+            <li class="hl">Functional foods and nutraceuticals</li>
+            <li class="hl">Food security and sustainable food systems</li>
+            <li class="hl">Hygiene, sanitation and community nutrition</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 2</span><span class="sdg">SDG 3</span><span class="sdg">SDG 6</span></div>
+      </article>
+      <article class="card theme-card" id="theme-14" data-theme>
+        <span class="track-num">THEME 14</span>
+        <h3 class="hl">Wildlife Conservation, Zoonoses and Environmental Sustainability</h3>
+        <p class="theme-desc hl">Connects the protection of wild species with the prevention of diseases shared between animals and people. Papers on field studies, conservation policy and wildlife health are welcome.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Wildlife disease and health monitoring</li>
+            <li class="hl">Human–wildlife interface and zoonotic risk</li>
+            <li class="hl">Conservation of threatened species and habitats</li>
+            <li class="hl">Protected-area management</li>
+            <li class="hl">Reservoir hosts and disease ecology</li>
+            <li class="hl">Sustainable use of natural resources</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 14</span><span class="sdg">SDG 15</span></div>
+      </article>
+      <article class="card theme-card" id="theme-15" data-theme>
+        <span class="track-num">THEME 15</span>
+        <h3 class="hl">Sustainable Development Goals (SDGs) and Global Health</h3>
+        <p class="theme-desc hl">Links research and practice to the United Nations Sustainable Development Goals, especially those on health, water, climate and partnerships. The theme welcomes policy, education and community perspectives alongside science.</p>
+        <details class="theme-details">
+          <summary>Topics of interest <span class="topic-count">6</span></summary>
+          <ul class="topic-list">
+            <li class="hl">Health and wellbeing (SDG 3) and universal access</li>
+            <li class="hl">Clean water and sanitation (SDG 6)</li>
+            <li class="hl">Climate action and life on land and below water (SDGs 13–15)</li>
+            <li class="hl">Partnerships for the goals (SDG 17)</li>
+            <li class="hl">Health equity and vulnerable communities</li>
+            <li class="hl">Capacity building, education and policy translation</li>
+          </ul>
+        </details>
+        <div class="sdg-row" aria-label="Related Sustainable Development Goals"><span class="sdg">SDG 3</span><span class="sdg">SDG 6</span><span class="sdg">SDG 13</span><span class="sdg">SDG 17</span></div>
+      </article>
+    </div>
+    <div class="no-results" id="no-results">
+      <i class="fa-regular fa-face-frown-open"></i>
+      <h3>No themes match your search</h3>
+      <p>Try a shorter or more general word. If your work does not fit any theme, you can still write to the organisers, since submissions are welcome beyond the listed themes.</p>
+      <button type="button" class="btn btn-outline" id="reset-search"><i class="fa-solid fa-rotate-left"></i> Show all themes</button>
+    </div>
+  </div>
+</section>
+
+<!-- Submit CTA -->
+<section class="section-alt section-tight" id="submit">
+  <div class="wrap" style="text-align:center;max-width:760px;">
+    <h2 style="font-size:1.5rem;">Found your theme?</h2>
+    <div class="helix-rule helix-rule-center"></div>
+    <p style="font-size:15px;">Read the abstract and poster guidelines, then log in to submit your abstract (maximum 250 words, English only).</p>
+    <div class="hero-actions">
+      <a href="about-paper-poster.html" class="btn btn-gold"><i class="fa-regular fa-file-lines"></i> Call for Papers &amp; Posters</a>
+      <a href="participant-login.html" class="btn btn-outline"><i class="fa-solid fa-file-arrow-up"></i> Participant login</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>CIMSER</h4>
+        <p style="font-size:13px;">4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment. 26–28 November 2026, Loyola College (Autonomous), Chennai. Organised by CIMSER (Centre for Insect Molecular Studies and Environmental Research), PG &amp; Research Department of Advanced Zoology and Biotechnology.</p>
+        <div class="social-row">
+          <a href="https://www.instagram.com/loyola_zoo/" target="_blank" rel="noopener" aria-label="Loyola Zoology on Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.youtube.com/results?search_query=Loyola+College+Chennai" target="_blank" rel="noopener" aria-label="Loyola College on YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="committee.html">Organizing Committee</a></li>
+          <li><a href="about/conference.html">About the Conference</a></li>
+          <li><a href="themes.html">Conference Themes</a></li>
+          <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Register / Login</h4>
+        <ul>
+          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference">Participant Registration</a></li>
+          <li><a href="participant-login.html">Participant Login</a></li>
+          <li><a href="admin-login.html">Admin Login</a></li>
+          <li><a href="about/college.html">About the College</a></li>
+          <li><a href="about/department.html">About the Department</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:conferencecimser@gmail.com"><i class="fa-regular fa-envelope"></i> conferencecimser@gmail.com</a></li>
+          <li><a href="tel:+918838558646"><i class="fa-solid fa-headset"></i> Technical support: +91 88385 58646</a></li>
+          <li><a href="mailto:mounishdesk@gmail.com"><i class="fa-regular fa-envelope"></i> mounishdesk@gmail.com</a></li>
+          <li><a href="#"><i class="fa-solid fa-location-dot"></i> Loyola College, Chennai – 34</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026, CIMSER — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai.</span>
+      <span><em>"Let Your Light Shine"</em></span>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating buttons: back-to-top + mail -->
+<div class="float-actions">
+  <button class="fab fab-top" id="back-to-top-btn" title="Back to top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+</div>
+
+<script>
+// Live IST clock
+function updateClock(){
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB',{weekday:'short',year:'numeric',month:'short',day:'2-digit',timeZone:'Asia/Kolkata',timeZoneName:'short'});
+  const timeStr = now.toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  document.getElementById('utc-clock').innerHTML = `<b>${dateStr} &nbsp;·&nbsp; ${timeStr}</b>`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Nav: mobile toggle + dropdowns
+const navToggle = document.getElementById('nav-toggle');
+const navLinks = document.getElementById('nav-links');
+const navToggleIcon = navToggle.querySelector('i');
+function closeAllDropdowns(){document.querySelectorAll('.has-dropdown.open').forEach(li=>li.classList.remove('open'));}
+function closeMobileMenu(){navLinks.classList.remove('open');document.body.classList.remove('no-scroll');navToggleIcon.className='fa-solid fa-bars';closeAllDropdowns();}
+function openMobileMenu(){navLinks.classList.add('open');document.body.classList.add('no-scroll');navToggleIcon.className='fa-solid fa-xmark';}
+navToggle.addEventListener('click',()=>{navLinks.classList.contains('open')?closeMobileMenu():openMobileMenu();});
+document.querySelectorAll('.dropdown-toggle').forEach(toggle=>{
+  toggle.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const li = toggle.closest('.has-dropdown');
+    const wasOpen = li.classList.contains('open');
+    closeAllDropdowns();
+    if(!wasOpen) li.classList.add('open');
+  });
+});
+navLinks.querySelectorAll('a:not(.dropdown-toggle)').forEach(link=>{
+  link.addEventListener('click',()=>{if(window.innerWidth<=800) closeMobileMenu();});
+});
+window.addEventListener('resize',()=>{if(window.innerWidth>800) closeMobileMenu();});
+
+// Back to top
+const backToTopBtn = document.getElementById('back-to-top-btn');
+function toggleBackToTop(){backToTopBtn.classList.toggle('show', window.scrollY > 420);}
+toggleBackToTop();
+window.addEventListener('scroll',toggleBackToTop,{passive:true});
+backToTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// ---- Theme search ----
+(function(){
+  const input = document.getElementById('theme-search');
+  const clearBtn = document.getElementById('search-clear');
+  const cards = Array.from(document.querySelectorAll('[data-theme]'));
+  const countEl = document.getElementById('search-count');
+  const noRes = document.getElementById('no-results');
+  const toggleAll = document.getElementById('toggle-all');
+  const total = cards.length;
+  let allOpen = false;
+
+  // remember original text of highlightable elements
+  const hlEls = Array.from(document.querySelectorAll('.hl'));
+  hlEls.forEach(el => { el.dataset.orig = el.textContent; });
+
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+
+  function highlight(el, terms){
+    const text = el.dataset.orig;
+    if(!terms.length){ el.textContent = text; return; }
+    const re = new RegExp('(^|[^a-z0-9])(' + terms.map(reEsc).join('|') + ')', 'gi');
+    el.innerHTML = esc(text).replace(re, '$1<mark>$2</mark>');
+  }
+
+  function setToggleLabel(){
+    toggleAll.querySelector('span').textContent = allOpen ? 'Collapse all topics' : 'Expand all topics';
+    toggleAll.querySelector('i').className = allOpen ? 'fa-solid fa-angles-up' : 'fa-solid fa-angles-down';
+  }
+
+  function applySearch(){
+    const q = input.value.trim().toLowerCase();
+    const terms = q ? q.split(/\s+/).filter(Boolean) : [];
+    clearBtn.classList.toggle('show', q.length > 0);
+    let shown = 0;
+    cards.forEach(card => {
+      const hay = card.textContent.toLowerCase().replace(/\s+/g,' ');
+      // match whole phrase, or every term at the start of a word (so "AI" does not match "maintain")
+      const match = !terms.length || hay.includes(q) || terms.every(t => new RegExp('(^|[^a-z0-9])' + reEsc(t)).test(hay));
+      card.hidden = !match;
+      const details = card.querySelector('details');
+      card.querySelectorAll('.hl').forEach(el => highlight(el, match ? terms : []));
+      if(match){
+        shown++;
+        if(terms.length){
+          const topicsText = Array.from(card.querySelectorAll('.topic-list li')).map(li => li.dataset.orig.toLowerCase()).join(' ');
+          details.open = terms.some(t => topicsText.includes(t));
+        } else {
+          details.open = allOpen;
+        }
+      }
+    });
+    countEl.innerHTML = terms.length
+      ? 'Showing <b>' + shown + '</b> of <b>' + total + '</b> themes for “' + esc(input.value.trim()) + '”'
+      : 'Showing <b>' + total + '</b> of <b>' + total + '</b> themes';
+    noRes.classList.toggle('show', shown === 0);
+  }
+
+  function setQuery(v){ input.value = v; applySearch(); }
+
+  input.addEventListener('input', applySearch);
+  input.addEventListener('keydown', e => { if(e.key === 'Escape'){ setQuery(''); } });
+  clearBtn.addEventListener('click', () => { setQuery(''); input.focus(); });
+  document.getElementById('reset-search').addEventListener('click', () => { setQuery(''); input.focus(); });
+  document.querySelectorAll('.try-chip').forEach(btn => {
+    btn.addEventListener('click', () => { setQuery(btn.dataset.q); input.focus(); });
+  });
+  toggleAll.addEventListener('click', () => {
+    allOpen = !allOpen;
+    cards.forEach(c => { if(!c.hidden) c.querySelector('details').open = allOpen; });
+    setToggleLabel();
+  });
+
+  // Allow links like themes.html?q=dengue, and open a theme via #theme-05
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('q')) setQuery(params.get('q'));
+  if(location.hash && /^#theme-\d+$/.test(location.hash)){
+    const target = document.querySelector(location.hash);
+    if(target){ target.querySelector('details').open = true; target.scrollIntoView({block:'center'}); }
+  }
+})();
+</script>
+
+</body>
+</html>
