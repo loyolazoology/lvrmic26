@@ -342,9 +342,9 @@ document.getElementById('admin-position').textContent = localStorage.getItem('vr
     `;
 
     const actions = [];
-    if (pendingAbstracts > 0) actions.push({ icon: 'fa-file-lines', text: `${pendingAbstracts} abstract${pendingAbstracts>1?'s':''} awaiting review`, sub: 'Accept or reject with remarks', href: 'abstracts.html' });
-    if (acceptedOralNoPPT > 0) actions.push({ icon: 'fa-display', text: `${acceptedOralNoPPT} accepted Oral presenter${acceptedOralNoPPT>1?'s':''} yet to upload PPT`, sub: 'Still within the submission window', href: 'participants.html' });
-    if (pendingCerts > 0) actions.push({ icon: 'fa-certificate', text: `${pendingCerts} certificate request${pendingCerts>1?'s':''} pending`, sub: 'Generate and attach the link', href: 'certificates.html' });
+    if (pendingAbstracts > 0) actions.push({ icon: 'fa-file-lines', text: `${pendingAbstracts} abstract${pendingAbstracts>1?'s':''} awaiting review`, sub: 'Accept or reject with remarks', href: 'abstracts-review.html' });
+    if (acceptedOralNoPPT > 0) actions.push({ icon: 'fa-display', text: `${acceptedOralNoPPT} accepted Oral presenter${acceptedOralNoPPT>1?'s':''} yet to upload PPT`, sub: 'Still within the submission window', href: 'participants-report.html' });
+    if (pendingCerts > 0) actions.push({ icon: 'fa-certificate', text: `${pendingCerts} certificate request${pendingCerts>1?'s':''} pending`, sub: 'Generate and attach the link', href: 'certificates-manage.html' });
     if (!actions.length) actions.push({ icon: 'fa-circle-check', text: 'All caught up', sub: 'No pending actions right now', href: '#' });
 
     document.getElementById('action-list').innerHTML = actions.map(a => `
