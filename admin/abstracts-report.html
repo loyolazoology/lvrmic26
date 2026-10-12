@@ -152,6 +152,7 @@ tbody tr:hover{background:rgba(232,201,131,.03);}
         <option value="Not Submitted">Not Submitted</option>
         <option value="Submitted">Submitted (pending)</option>
         <option value="Accepted">Accepted</option>
+        <option value="Revision Requested">Revision Requested</option>
         <option value="Rejected">Rejected</option>
       </select>
       <button class="btn" id="refresh-btn"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
@@ -259,7 +260,7 @@ if (!can('abstract', 'report')) {
 function abstractBadgeKind(status){
   if (status === 'Accepted') return 'success';
   if (status === 'Rejected') return 'danger';
-  if (status === 'Submitted') return 'pending';
+  if (status === 'Submitted' || status === 'Revision Requested') return 'pending';
   return 'neutral';
 }
 function typeBadgeClass(t){ return t === 'Oral' ? 'badge-oral' : 'badge-poster'; }
