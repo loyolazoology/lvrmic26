@@ -120,6 +120,16 @@ input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
 .modal-card p{font-size:13px;color:var(--text-3);margin-bottom:14px;}
 .modal-card textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:13.5px;min-height:90px;resize:vertical;}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
+.rev-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark-box{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:0 0 14px;white-space:pre-wrap;}
+.remark-box b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.modal-card{max-width:520px !important;}
+.chk{display:none;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;}
+.chk.show{display:flex;}
+.chk input{width:auto;}
+.badge-pending{background:rgba(219,164,60,.14);color:var(--warn);}
 </style>
 </head>
 <body>
@@ -164,6 +174,9 @@ input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
     <div id="loader" class="loader"><div class="spinner-lg"></div>Loading submissions…</div>
     <div id="queue-area"></div>
 
+    <div class="section-title" style="margin-top:34px;"><i class="fa-solid fa-rotate"></i><h2>Awaiting revised file from participant</h2></div>
+    <div id="revision-area"></div>
+
     <!-- Manual upload on behalf of a participant -->
     <div class="card">
       <h3><i class="fa-solid fa-upload"></i> Manual abstract upload</h3>
@@ -171,7 +184,7 @@ input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
       <div class="field">
         <label>Participant <span style="color:var(--danger);">*</span></label>
         <select id="m-participant"><option value="">Loading participants…</option></select>
-        <p class="hint">Only Oral/Poster participants without an existing abstract are listed.</p>
+        <p class="hint">Oral/Poster participants with no abstract yet, or who were asked to revise, are listed.</p>
       </div>
       <div class="field">
         <label>Title <span style="color:var(--danger);">*</span></label>
@@ -191,15 +204,16 @@ input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
 </div>
 </div>
 
-<!-- Reject reason modal -->
-<div class="modal-overlay" id="reject-modal">
+<!-- Decision / remarks modal -->
+<div class="modal-overlay" id="dec-modal">
   <div class="modal-card">
-    <h3><i class="fa-solid fa-circle-xmark" style="color:var(--danger);"></i> Reject abstract</h3>
-    <p>Optionally add a note explaining the decision — this is included in the rejection email.</p>
-    <textarea id="reject-remarks" placeholder="e.g. Outside conference scope / duplicate submission"></textarea>
+    <h3 id="dec-title"></h3>
+    <p id="dec-help"></p>
+    <textarea id="dec-remarks" placeholder="Remarks for the participant"></textarea>
+    <label class="chk" id="dec-notify-wrap"><input type="checkbox" id="dec-notify" checked> E-mail this remark to the participant</label>
     <div class="modal-actions">
-      <button class="btn" id="reject-cancel">Cancel</button>
-      <button class="btn btn-danger" id="reject-confirm"><i class="fa-solid fa-xmark"></i> Confirm reject</button>
+      <button class="btn" id="dec-cancel">Cancel</button>
+      <button class="btn" id="dec-confirm"></button>
     </div>
   </div>
 </div>
@@ -287,72 +301,100 @@ if (!can('abstract', 'transaction')) {
 } else {
 
 let allParticipants = [];
-let pendingRow = null; // used by reject modal
+let decRow = null, decMode = null;
 
 function typeBadgeClass(t){ return t === 'Oral' ? 'badge-oral' : 'badge-poster'; }
+function revTag(p){ const n = Number(p.AbstractRevision) || 1; return n > 1 ? `<span class="rev-tag">VERSION ${n}</span>` : ''; }
 
 function renderQueue(){
   const pending = allParticipants.filter(p => p.AbstractStatus === 'Submitted');
   const area = document.getElementById('queue-area');
   if (!pending.length) {
     area.innerHTML = `<div class="empty-note"><i class="fa-solid fa-circle-check"></i>No abstracts are currently awaiting review.</div>`;
-    return;
-  }
-  area.innerHTML = pending.map(p => `
-    <div class="queue-item" data-row="${p.row}">
+  } else {
+    area.innerHTML = pending.map(p => `
+    <div class="queue-item">
       <div class="qi-top">
         <div>
-          <div class="qi-name">${escapeHtml(p.Name)}</div>
+          <div class="qi-name">${escapeHtml(p.Name)}${revTag(p)}</div>
           <div class="qi-meta"><span class="mono">${escapeHtml(p.ID)}</span> &middot; ${escapeHtml(p.Institution || '—')}</div>
         </div>
         <span class="badge ${typeBadgeClass(p.ParticipantType)}">${escapeHtml(p.ParticipantType)}</span>
       </div>
       <div class="qi-title">${escapeHtml(p.AbstractTitle)}</div>
       <div class="qi-theme"><i class="fa-solid fa-tag"></i> ${escapeHtml(p.AbstractTheme)}</div>
+      ${p.AbstractRemarks ? `<div class="remark-box"><b>Previous remarks</b>${escapeHtml(p.AbstractRemarks)}</div>` : ''}
       <div class="qi-actions">
-        <a class="view-link" href="${p.AbstractLink}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View file</a>
-        <button class="btn btn-success" data-action="accept" data-row="${p.row}"><i class="fa-solid fa-check"></i> Accept</button>
-        <button class="btn btn-danger" data-action="reject" data-row="${p.row}"><i class="fa-solid fa-xmark"></i> Reject</button>
+        <a class="view-link" href="${escapeHtml(p.AbstractLink)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> View file</a>
+        <button class="btn" data-act="remark" data-row="${p.row}"><i class="fa-solid fa-comment-dots"></i> Add remark</button>
+        <button class="btn btn-warn" data-act="revise" data-row="${p.row}"><i class="fa-solid fa-rotate"></i> Request revision</button>
+        <button class="btn btn-success" data-act="accept" data-row="${p.row}"><i class="fa-solid fa-check"></i> Accept</button>
+        <button class="btn btn-danger" data-act="reject" data-row="${p.row}"><i class="fa-solid fa-xmark"></i> Reject</button>
+      </div>
+    </div>`).join('');
+  }
+
+  const waiting = allParticipants.filter(p => p.AbstractStatus === 'Revision Requested');
+  const rarea = document.getElementById('revision-area');
+  rarea.innerHTML = !waiting.length
+    ? `<div class="empty-note"><i class="fa-solid fa-inbox"></i>No participants are currently asked to revise.</div>`
+    : waiting.map(p => `
+    <div class="queue-item">
+      <div class="qi-top">
+        <div><div class="qi-name">${escapeHtml(p.Name)}${revTag(p)}</div>
+        <div class="qi-meta"><span class="mono">${escapeHtml(p.ID)}</span> &middot; ${escapeHtml(p.Email)}</div></div>
+        <span class="badge badge-pending">Revision requested</span>
+      </div>
+      <div class="qi-title">${escapeHtml(p.AbstractTitle)}</div>
+      <div class="remark-box"><b>Remarks sent</b>${escapeHtml(p.AbstractRemarks || '')}</div>
+      <div class="qi-actions">
+        <a class="view-link" href="${escapeHtml(p.AbstractLink)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Current file</a>
+        <span class="hint">Use "Manual abstract upload" below if they send the revised file by e-mail.</span>
       </div>
     </div>`).join('');
 
-  area.querySelectorAll('button[data-action="accept"]').forEach(btn => btn.addEventListener('click', () => decide(btn, 'Accepted')));
-  area.querySelectorAll('button[data-action="reject"]').forEach(btn => btn.addEventListener('click', () => {
-    pendingRow = btn.dataset.row;
-    document.getElementById('reject-remarks').value = '';
-    document.getElementById('reject-modal').classList.add('show');
-  }));
+  document.querySelectorAll('#queue-area button[data-act]').forEach(btn => btn.addEventListener('click', () => openDecision(btn.dataset.row, btn.dataset.act)));
 }
 
-async function decide(btn, decision, remarks){
+const MODES = {
+  accept: { title: '<i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> Accept abstract', help: 'Optionally add remarks (e.g. suggestions for the final presentation). They are stored and included in the acceptance e-mail.', btn: '<i class="fa-solid fa-check"></i> Confirm accept', cls: 'btn btn-success', required: false },
+  reject: { title: '<i class="fa-solid fa-circle-xmark" style="color:var(--danger);"></i> Reject abstract', help: 'Optionally explain the decision. It is stored and included in the rejection e-mail.', btn: '<i class="fa-solid fa-xmark"></i> Confirm reject', cls: 'btn btn-danger', required: false },
+  revise: { title: '<i class="fa-solid fa-rotate" style="color:var(--warn);"></i> Request revision', help: 'Remarks are required. The participant is e-mailed and can upload a new file from their dashboard; it then returns to this queue.', btn: '<i class="fa-solid fa-paper-plane"></i> Send remarks &amp; request revision', cls: 'btn btn-warn', required: true },
+  remark: { title: '<i class="fa-solid fa-comment-dots" style="color:var(--gold-light);"></i> Add remark', help: 'Saves a remark without changing the abstract status.', btn: '<i class="fa-solid fa-floppy-disk"></i> Save remark', cls: 'btn btn-gold', required: true }
+};
+
+function openDecision(row, mode){
+  decRow = row; decMode = mode;
+  const m = MODES[mode], p = allParticipants.find(x => String(x.row) === String(row));
+  document.getElementById('dec-title').innerHTML = m.title;
+  document.getElementById('dec-help').textContent = m.help;
+  document.getElementById('dec-remarks').value = (mode === 'remark' && p && p.AbstractRemarks) ? p.AbstractRemarks : '';
+  const cb = document.getElementById('dec-confirm'); cb.className = m.cls; cb.innerHTML = m.btn; cb.disabled = false;
+  document.getElementById('dec-notify-wrap').classList.toggle('show', mode === 'remark');
+  document.getElementById('dec-modal').classList.add('show');
+}
+document.getElementById('dec-cancel').addEventListener('click', () => document.getElementById('dec-modal').classList.remove('show'));
+document.getElementById('dec-confirm').addEventListener('click', async function(){
   hideAlerts();
-  const row = btn ? btn.dataset.row : pendingRow;
-  const originalHtml = btn ? btn.innerHTML : null;
-  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>'; }
+  const m = MODES[decMode], remarks = document.getElementById('dec-remarks').value.trim();
+  if (m.required && !remarks) { document.getElementById('dec-remarks').focus(); document.getElementById('dec-help').textContent = 'Remarks are required for this action.'; return; }
+  const btn = this, old = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
   try {
-    const res = await callApi('adminVerifyAbstract', { row, decision, remarks: remarks || '' });
-    if (!res.ok) {
-      showErr(res.error || 'Could not update this abstract.');
-      if (btn) { btn.disabled = false; btn.innerHTML = originalHtml; }
-      return;
-    }
-    showOk(`Abstract ${decision.toLowerCase()} — notification email sent to the participant.`);
+    let res;
+    if (decMode === 'remark') res = await callApi('adminSaveAbstractRemarks', { row: decRow, remarks, notify: document.getElementById('dec-notify').checked });
+    else res = await callApi('adminVerifyAbstract', { row: decRow, decision: ({accept:'Accepted',reject:'Rejected',revise:'Revision Requested'})[decMode], remarks });
+    document.getElementById('dec-modal').classList.remove('show');
+    if (!res.ok) { showErr(res.error || 'Could not update this abstract.'); return; }
+    const mailNote = res.mailSent === false ? ' (the notification e-mail could NOT be sent — contact them directly)' : (res.mailSent ? ' — participant notified by e-mail.' : '.');
+    showOk(({accept:'Abstract accepted',reject:'Abstract rejected',revise:'Revision requested',remark:'Remark saved'})[decMode] + mailNote);
     loadData();
-  } catch (err) {
-    showErr('Could not reach the server. Check your connection and try again.');
-    if (btn) { btn.disabled = false; btn.innerHTML = originalHtml; }
-  }
-}
-
-document.getElementById('reject-cancel').addEventListener('click', () => document.getElementById('reject-modal').classList.remove('show'));
-document.getElementById('reject-confirm').addEventListener('click', async function(){
-  document.getElementById('reject-modal').classList.remove('show');
-  await decide(null, 'Rejected', document.getElementById('reject-remarks').value.trim());
+  } catch (err) { showErr('Could not reach the server. Check your connection and try again.'); }
+  finally { btn.disabled = false; btn.innerHTML = old; }
 });
 
 function populateManualUploadSelect(){
   const sel = document.getElementById('m-participant');
-  const eligible = allParticipants.filter(p => (p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster') && !p.AbstractDocId);
+  const eligible = allParticipants.filter(p => (p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster') && (!p.AbstractDocId || p.AbstractStatus === 'Revision Requested'));
   if (!eligible.length) { sel.innerHTML = '<option value="">No eligible participants</option>'; return; }
   sel.innerHTML = '<option value="">Select participant</option>' + eligible.map(p =>
     `<option value="${p.row}">${escapeHtml(p.ID)} — ${escapeHtml(p.Name)} (${p.ParticipantType})</option>`).join('');
