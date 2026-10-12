@@ -101,6 +101,28 @@ tbody tr:hover{background:rgba(232,201,131,.03);}
 .loading-state i,.empty-state i{font-size:26px;color:var(--gold-light);margin-bottom:12px;display:block;}
 .spinner-lg{width:24px;height:24px;border:3px solid rgba(232,201,131,.25);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
 @keyframes spin{to{transform:rotate(360deg);}}
+
+.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
+.btn-sm{padding:6px 10px;font-size:12px;}
+.act-cell{display:flex;gap:6px;}
+.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:16px;border:1px solid transparent;display:none;}
+.alert.show{display:block;}
+.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
+.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
+.modal-overlay{position:fixed;inset:0;background:rgba(6,10,26,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 20px;overflow-y:auto;}
+.modal-overlay.show{display:flex;}
+.modal-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:26px;max-width:640px;width:100%;}
+.modal-card h3{margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.modal-card p.m-note{font-size:13px;color:var(--text-3);margin-bottom:14px;}
+.m-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:600px){.m-grid{grid-template-columns:1fr;}}
+.m-grid .full{grid-column:1/-1;}
+.m-grid label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 5px;}
+.m-grid input,.m-grid select,.modal-card input.confirm{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:14px;}
+.m-grid input:focus,.m-grid select:focus,.modal-card input.confirm:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap;}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin:12px 0 0;}
+.warn-box{background:rgba(219,164,60,.1);border:1px solid rgba(219,164,60,.35);color:var(--warn);border-radius:8px;padding:10px 12px;font-size:12.5px;margin-top:12px;display:none;}
 </style>
 </head>
 <body>
@@ -138,6 +160,7 @@ tbody tr:hover{background:rgba(232,201,131,.03);}
   </div>
 
   <div class="wrap">
+    <div class="alert" id="msg"></div>
     <div class="stat-strip" id="stat-strip"></div>
 
     <div class="toolbar">
@@ -158,6 +181,7 @@ tbody tr:hover{background:rgba(232,201,131,.03);}
         <option value="Not Submitted">Not Submitted</option>
         <option value="Submitted">Submitted</option>
         <option value="Accepted">Accepted</option>
+        <option value="Revision Requested">Revision Requested</option>
         <option value="Rejected">Rejected</option>
       </select>
       <button class="btn" id="refresh-btn"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
@@ -170,7 +194,7 @@ tbody tr:hover{background:rgba(232,201,131,.03);}
           <thead>
             <tr>
               <th>VRMIC ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Institution</th>
-              <th>Category</th><th>Mode</th><th>Profile</th><th>Abstract</th><th>Created</th>
+              <th>Category</th><th>Mode</th><th>Profile</th><th>Abstract</th><th>Created</th><th class="act-th">Actions</th>
             </tr>
           </thead>
           <tbody id="table-body"></tbody>
@@ -182,6 +206,45 @@ tbody tr:hover{background:rgba(232,201,131,.03);}
   </div>
 </div>
 </div>
+
+
+<!-- Edit participant -->
+<div class="modal-overlay" id="edit-modal"><div class="modal-card">
+  <h3><i class="fa-solid fa-pen" style="color:var(--gold-light);"></i> Edit participant <span class="mono" id="e-id" style="color:var(--gold-light);font-size:14px;"></span></h3>
+  <div class="alert alert-error" id="e-err"></div>
+  <div class="m-grid">
+    <div class="full"><label>Full name *</label><input type="text" id="e-name"></div>
+    <div><label>Email *</label><input type="text" id="e-email"></div>
+    <div><label>Mobile *</label><input type="text" id="e-phone"></div>
+    <div class="full"><label>Institution</label><input type="text" id="e-inst"></div>
+    <div><label>Registration category</label><select id="e-role"><option value="">Not specified</option><option>Student (UG &amp; PG)</option><option>Research Scholar</option><option>Faculty / Scientist</option><option>Industrialist</option><option>Foreign Delegate</option></select></div>
+    <div><label>Food preference</label><select id="e-food"><option value="">Not specified</option><option>Vegetarian</option><option>Non-Vegetarian</option></select></div>
+    <div><label>Amount paid (₹)</label><input type="text" id="e-amount"></div>
+    <div><label>Registration status</label><select id="e-status"><option>Registered</option><option>Pending</option><option>Cancelled</option></select></div>
+    <div><label>Presentation category</label><select id="e-type"><option>Oral</option><option>Poster</option><option>Participant</option></select></div>
+    <div><label>Mode</label><select id="e-mode"><option>Offline</option><option>Online</option></select></div>
+    <div class="full" id="e-loc-wrap"><label>Venue / location</label><input type="text" id="e-loc"></div>
+    <div class="full" id="e-link-wrap" style="display:none;"><label>Meeting link</label><input type="text" id="e-link"></div>
+  </div>
+  <div class="warn-box" id="e-email-warn"><i class="fa-solid fa-triangle-exclamation"></i> Changing the email resets the participant's password to their mobile number and e-mails them the new login details.</div>
+  <div class="modal-actions">
+    <button class="btn" id="e-cancel">Cancel</button>
+    <button class="btn btn-gold" id="e-save"><i class="fa-solid fa-floppy-disk"></i> Save changes</button>
+  </div>
+</div></div>
+
+<!-- Delete participant -->
+<div class="modal-overlay" id="del-modal"><div class="modal-card" style="max-width:480px;">
+  <h3><i class="fa-solid fa-trash" style="color:var(--danger);"></i> Delete participant</h3>
+  <p class="m-note">This permanently removes <b id="d-name"></b> (<span class="mono" id="d-id"></span>) from the sheet. Type the VRMIC ID to confirm.</p>
+  <div class="alert alert-error" id="d-err"></div>
+  <input type="text" class="confirm" id="d-confirm" placeholder="VRMIC26-0000" autocomplete="off">
+  <label class="chk"><input type="checkbox" id="d-files"> Also move their Drive folder (photo, abstract, PPT) to trash</label>
+  <div class="modal-actions">
+    <button class="btn" id="d-cancel">Cancel</button>
+    <button class="btn btn-danger" id="d-go"><i class="fa-solid fa-trash"></i> Delete permanently</button>
+  </div>
+</div></div>
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
@@ -265,7 +328,7 @@ if (!can('participants', 'report')) {
 function abstractBadgeKind(status){
   if (status === 'Accepted') return 'success';
   if (status === 'Rejected') return 'danger';
-  if (status === 'Submitted') return 'pending';
+  if (status === 'Submitted' || status === 'Revision Requested') return 'pending';
   return 'neutral';
 }
 function typeBadgeClass(t){ return t === 'Oral' ? 'badge-oral' : t === 'Poster' ? 'badge-poster' : 'badge-participant'; }
@@ -306,6 +369,10 @@ function renderTable(){
       <td>${String(r.ProfileCompleted).toUpperCase() === 'TRUE' ? '<span class="badge badge-success">Complete</span>' : '<span class="badge badge-pending">Incomplete</span>'}</td>
       <td><span class="badge badge-${abstractBadgeKind(r.AbstractStatus)}">${escapeHtml(r.AbstractStatus || 'Not Submitted')}</span></td>
       <td>${r.CreatedAt ? new Date(r.CreatedAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—'}</td>
+      <td>${can('participants','transaction') ? `<div class="act-cell">
+        <button class="btn btn-sm" data-act="edit" data-row="${r.row}" title="Edit"><i class="fa-solid fa-pen"></i> Edit</button>
+        <button class="btn btn-sm" data-act="reset" data-row="${r.row}" title="Reset password"><i class="fa-solid fa-key"></i></button>
+        <button class="btn btn-sm btn-danger" data-act="delete" data-row="${r.row}" title="Delete"><i class="fa-solid fa-trash"></i></button></div>` : '—'}</td>
     </tr>`).join('');
 }
 
@@ -352,6 +419,112 @@ document.getElementById('export-btn').addEventListener('click', function(){
   a.href = url; a.download = 'VRMIC2026_Participants_' + new Date().toISOString().slice(0,10) + '.csv';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
+});
+
+
+// ---------------- Edit / reset / delete ----------------
+function showMsg(text, kind){ const el=document.getElementById('msg'); el.textContent=text; el.className='alert show alert-'+(kind||'success'); window.scrollTo({top:0,behavior:'smooth'}); }
+function rowRec(row){ return allRows.find(r => String(r.row) === String(row)); }
+let editing = null, deleting = null;
+
+function syncEditMode(){
+  const online = document.getElementById('e-mode').value === 'Online';
+  document.getElementById('e-loc-wrap').style.display = online ? 'none' : 'block';
+  document.getElementById('e-link-wrap').style.display = online ? 'block' : 'none';
+}
+function syncEmailWarn(){
+  const changed = editing && document.getElementById('e-email').value.trim().toLowerCase() !== String(editing.Email||'').trim().toLowerCase();
+  document.getElementById('e-email-warn').style.display = changed ? 'block' : 'none';
+}
+function setSelect(id, val){
+  const sel = document.getElementById(id); val = val || '';
+  if (val && ![...sel.options].some(o => o.value === val || o.text === val)) sel.add(new Option(val, val));
+  sel.value = val;
+}
+document.getElementById('e-mode').addEventListener('change', syncEditMode);
+document.getElementById('e-email').addEventListener('input', syncEmailWarn);
+
+function openEdit(r){
+  editing = r;
+  document.getElementById('e-err').classList.remove('show');
+  document.getElementById('e-id').textContent = r.ID;
+  document.getElementById('e-name').value = r.Name || '';
+  document.getElementById('e-email').value = r.Email || '';
+  document.getElementById('e-phone').value = r.Phone || '';
+  document.getElementById('e-inst').value = r.Institution || '';
+  setSelect('e-role', r.Role); setSelect('e-food', r.FoodPreference);
+  document.getElementById('e-amount').value = r.AmountPaid || '';
+  setSelect('e-status', r.RegistrationStatus || 'Registered');
+  setSelect('e-type', r.ParticipantType || 'Participant');
+  setSelect('e-mode', r.Mode || 'Offline');
+  document.getElementById('e-loc').value = r.Location || '';
+  document.getElementById('e-link').value = r.MeetingLink || '';
+  syncEditMode(); syncEmailWarn();
+  document.getElementById('edit-modal').classList.add('show');
+}
+document.getElementById('e-cancel').addEventListener('click', () => document.getElementById('edit-modal').classList.remove('show'));
+document.getElementById('e-save').addEventListener('click', async function(){
+  const btn = this, err = document.getElementById('e-err');
+  err.classList.remove('show');
+  btn.disabled = true; const old = btn.innerHTML; btn.innerHTML = 'Saving…';
+  try {
+    const res = await callApi('adminUpdateParticipant', {
+      row: editing.row, id: editing.ID,
+      name: document.getElementById('e-name').value.trim(),
+      email: document.getElementById('e-email').value.trim(),
+      phone: document.getElementById('e-phone').value.trim(),
+      institution: document.getElementById('e-inst').value.trim(),
+      role: document.getElementById('e-role').value, foodPreference: document.getElementById('e-food').value,
+      amountPaid: document.getElementById('e-amount').value.trim(),
+      registrationStatus: document.getElementById('e-status').value,
+      participantType: document.getElementById('e-type').value,
+      mode: document.getElementById('e-mode').value,
+      location: document.getElementById('e-loc').value.trim(), meetingLink: document.getElementById('e-link').value.trim()
+    });
+    if (!res.ok) { err.textContent = res.error || 'Could not save.'; err.classList.add('show'); return; }
+    document.getElementById('edit-modal').classList.remove('show');
+    showMsg('Participant updated.' + (res.credentialsReset ? ' Login email changed — password reset to their mobile number' + (res.mailSent ? ' and new details e-mailed.' : ' (e-mail could not be sent — tell them directly).') : ''));
+    loadData();
+  } catch (e) { err.textContent = 'Could not reach the server.'; err.classList.add('show'); }
+  finally { btn.disabled = false; btn.innerHTML = old; }
+});
+
+document.getElementById('d-cancel').addEventListener('click', () => document.getElementById('del-modal').classList.remove('show'));
+document.getElementById('d-go').addEventListener('click', async function(){
+  const btn = this, err = document.getElementById('d-err');
+  err.classList.remove('show');
+  if (document.getElementById('d-confirm').value.trim() !== deleting.ID) { err.textContent = 'The ID you typed does not match.'; err.classList.add('show'); return; }
+  btn.disabled = true; const old = btn.innerHTML; btn.innerHTML = 'Deleting…';
+  try {
+    const res = await callApi('adminDeleteParticipant', { row: deleting.row, id: deleting.ID, confirmId: deleting.ID, deleteFiles: document.getElementById('d-files').checked });
+    if (!res.ok) { err.textContent = res.error || 'Could not delete.'; err.classList.add('show'); return; }
+    document.getElementById('del-modal').classList.remove('show');
+    showMsg(deleting.ID + ' deleted.' + (res.filesTrashed ? ' Drive folder moved to trash.' : ''));
+    loadData();
+  } catch (e) { err.textContent = 'Could not reach the server.'; err.classList.add('show'); }
+  finally { btn.disabled = false; btn.innerHTML = old; }
+});
+
+document.getElementById('table-body').addEventListener('click', async function(e){
+  const btn = e.target.closest('button[data-act]'); if (!btn) return;
+  const r = rowRec(btn.dataset.row); if (!r) return;
+  if (btn.dataset.act === 'edit') openEdit(r);
+  else if (btn.dataset.act === 'delete') {
+    deleting = r;
+    document.getElementById('d-name').textContent = r.Name; document.getElementById('d-id').textContent = r.ID;
+    document.getElementById('d-confirm').value = ''; document.getElementById('d-files').checked = false;
+    document.getElementById('d-err').classList.remove('show');
+    document.getElementById('del-modal').classList.add('show');
+  } else if (btn.dataset.act === 'reset') {
+    if (!confirm('Reset the password for ' + r.Name + '? A temporary password will be e-mailed to them.')) return;
+    btn.disabled = true;
+    try {
+      const res = await callApi('adminResetParticipantPassword', { row: r.row, id: r.ID });
+      if (!res.ok) showMsg(res.error || 'Could not reset.', 'error');
+      else showMsg('Temporary password for ' + r.ID + ': ' + res.tempPassword + (res.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.'));
+    } catch (er) { showMsg('Could not reach the server.', 'error'); }
+    finally { btn.disabled = false; }
+  }
 });
 
 loadData();
