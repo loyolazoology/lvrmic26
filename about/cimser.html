@@ -3,37 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About CIMSER — Centre for Insect Molecular Studies and Environmental Research | Loyola College</title>
-<meta name="description" content="CIMSER, established 19 December 2018 at Loyola College (Autonomous), Chennai — insect molecular studies, vector-borne disease research, conferences and the M-BEAT initiative.">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>About CIMSER — Centre for Insect Molecular Studies and Environmental Research | VRMIC 2026 · Loyola College</title>
+<meta name="description" content="CIMSER, established 19 December 2018 at Loyola College (Autonomous), Chennai — insect molecular studies, vector-borne disease research, conferences and the M-BEAT initiative. Host of VRMIC 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png" />
+<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
 <style>
-:root{
-  --navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;
-  --navy-border:rgba(226,187,120,.24);
-  --gold:#c9974f;--gold-light:#e8c983;--gold-dim:#b8863b;
-  --teal:#279c85;--teal-light:#6fc9b6;
-  --text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--text-4:#000;
-  --danger:#d8695a;--success:#4fa980;
-  --radius:10px;--maxw:1180px;
-  --paper:#faf8f3;--paper-alt:#f0eee7;--paper-card:#ffffff;--paper-border:rgba(20,30,60,.10);
-  --ink-1:#151c33;--ink-2:#4b5573;--ink-3:#7c869f;
-  --shadow-soft:0 10px 30px rgba(0,0,0,.08);
-  --shadow-lift:0 16px 40px rgba(0,0,0,.12);
-}
+:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal:#279c85;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--radius:10px;--maxw:1180px;--paper:#faf8f3;--paper-alt:#f0eee7;--paper-card:#fff;--paper-border:rgba(20,30,60,.10);--ink-1:#151c33;--ink-2:#4b5573;--ink-3:#7c869f;}
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 html,body{overflow-x:hidden;max-width:100%;}
-body{
-  margin:0;
-  background:
-    radial-gradient(1200px 700px at 85% -10%, #12234f 0%, transparent 55%),
-    radial-gradient(900px 500px at -10% 10%, #0f1d42 0%, transparent 50%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%23cda355' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M60 0 90 17.3 90 51.9 60 69.2 30 51.9 30 17.3Z'/%3E%3C/g%3E%3C/svg%3E") 0 0/120px 104px,
-    var(--navy-950);
-  color:var(--text-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;
-}
+body{margin:0;background:radial-gradient(1200px 700px at 85% -10%,#12234f 0%,transparent 55%),radial-gradient(900px 500px at -10% 10%,#0f1d42 0%,transparent 50%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%23cda355' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M60 0 90 17.3 90 51.9 60 69.2 30 51.9 30 17.3Z'/%3E%3C/g%3E%3C/svg%3E") 0 0/120px 104px,var(--navy-950);color:var(--text-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
 body.no-scroll{overflow:hidden;}
 h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:500;letter-spacing:.2px;margin:0 0 .4em;color:var(--text-1);}
 h1{font-size:clamp(2rem,4vw,3.2rem);font-weight:600;line-height:1.12;}
@@ -42,52 +24,33 @@ h3{font-size:1.2rem;}
 p{color:var(--text-2);margin:0 0 1em;}
 a{color:var(--gold-light);text-decoration:none;}
 a:hover{text-decoration:underline;}
-.mono{font-family:'IBM Plex Mono',monospace;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
 .section{padding:72px 0;}
-.section-tight{padding:40px 0;}
-@media (max-width:600px){.wrap{padding:0 18px;}.section{padding:48px 0;}.section-tight{padding:30px 0;}}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dim);border:1px solid rgba(201,151,79,.35);background:rgba(201,151,79,.08);padding:6px 14px;border-radius:999px;margin-bottom:16px;}
-.dark .eyebrow{color:var(--gold-light);border-color:var(--navy-border);background:rgba(205,163,85,.08);}
-.section-title{font-size:clamp(26px,4vw,44px);font-weight:600;line-height:1.14;margin-bottom:16px;}
-.section-title em{color:var(--text-4);}
-.dark .section-title{color:var(--text-1);}
-.dark .section-title em{color:var(--gold-light);}
-.section-desc{font-size:clamp(14.5px,1.6vw,16.5px);line-height:1.8;color:var(--ink-2);}
-.dark .section-desc{color:var(--text-2);}
-.center{text-align:center;}
-.helix-rule{height:2px;width:56px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:2px;margin:0 0 20px;}
-.center .helix-rule{margin-left:auto;margin-right:auto;}
- 
-/* Clock bar */
+@media(max-width:600px){.wrap{padding:0 18px;}.section{padding:48px 0;}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);border:1px solid var(--navy-border);background:rgba(205,163,85,.08);padding:6px 14px;border-radius:999px;margin-bottom:18px;}
 .utcbar{background:#070c22;border-bottom:1px solid var(--navy-border);}
-.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);letter-spacing:.4px;text-align:center;flex-wrap:wrap;}
+.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);flex-wrap:wrap;}
 .utcbar i{color:var(--gold-light);font-size:11px;}
 .utcbar b{color:var(--text-2);font-weight:500;}
-@media (min-width:701px){.utcbar-inner{justify-content:flex-end;}}
-
-/* Logo strip */
+@media(min-width:701px){.utcbar-inner{justify-content:flex-end;}}
 .topbar{background:var(--navy-950);border-bottom:1px solid var(--navy-border);}
 .topbar-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;}
-@media (min-width:701px){.topbar-inner{justify-content:space-between;}}
+@media(min-width:701px){.topbar-inner{justify-content:space-between;}}
 .logo-slots{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
-.logo-slot{height:52px;min-width:52px;width:auto;border-radius:8px;border:1px solid var(--paper-border);display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:14px;background:#fff;padding:6px 10px;flex-shrink:0;transition:transform .2s ease, box-shadow .2s ease;}
+.logo-slot{height:52px;min-width:52px;border-radius:8px;border:1px solid var(--paper-border);display:flex;align-items:center;justify-content:center;color:var(--ink-3);background:#fff;padding:6px 10px;transition:transform .2s,box-shadow .2s;}
 .logo-slot:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.18);}
-.logo-slot img{width:auto;height:100%;max-width:90px;object-fit:contain;display:block;}
+.logo-slot img{height:100%;max-width:90px;object-fit:contain;display:block;}
 .logo-slot.empty{border-style:dashed;background:rgba(255,255,255,.03);color:var(--text-3);}
-@media (max-width:800px){.logo-slot{height:40px;min-width:40px;}}
-.topbar-text{font-size:12px;color:var(--text-1);font-family:'IBM Plex Mono',monospace;letter-spacing:.3px;text-align:center;max-width:560px;line-height:1.6;}
-@media (max-width:900px){.topbar-text{display:none;}}
-
-/* Nav */
+@media(max-width:800px){.logo-slot{height:40px;min-width:40px;}}
+.topbar-text{font-size:12px;color:var(--text-1);font-family:'IBM Plex Mono',monospace;text-align:center;max-width:560px;line-height:1.6;}
+@media(max-width:900px){.topbar-text{display:none;}}
 .nav{position:sticky;top:0;z-index:100;background:rgba(6,11,28,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--navy-border);width:100%;}
-.nav-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:18px;width:100%;}
-.nav-brand{display:flex;align-items:center;gap:14px;flex-shrink:1;min-width:0;overflow:hidden;}
-.brand-logo-link{display:flex;align-items:center;height:100%;flex-shrink:0;}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;}
+.nav-brand{display:flex;align-items:center;gap:14px;min-width:0;overflow:hidden;}
+.brand-logo-link{display:flex;align-items:center;flex-shrink:0;}
 .brand-logo-img{height:52px;width:auto;max-width:100px;object-fit:contain;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));}
-.brand-title{font-family:'Fraunces',serif;font-weight:700;font-size:23px;letter-spacing:.4px;color:var(--text-1);white-space:nowrap;}
+.brand-title{font-family:'Fraunces',serif;font-weight:700;font-size:23px;color:var(--text-1);white-space:nowrap;}
 @media(max-width:1080px){.brand-logo-img{height:44px;}.brand-title{font-size:20px;}}
-@media(max-width:992px){.brand-logo-img{height:40px;}}
 @media(max-width:700px){.brand-logo-img{height:34px;}.brand-title{font-size:18px;}}
 @media(max-width:480px){.brand-title{font-size:16px;}.brand-logo-img{height:30px;}.nav-brand{gap:8px;}}
 .nav-links{display:flex;align-items:center;gap:2px;list-style:none;padding:0;margin:0;flex-shrink:0;}
@@ -98,218 +61,164 @@ a:hover{text-decoration:underline;}
 .has-dropdown>a .caret{font-size:10px;transition:.25s;}
 .has-dropdown.open>a .caret{transform:rotate(180deg);}
 .dropdown{position:absolute;left:0;top:calc(100% + 8px);min-width:250px;padding:8px;list-style:none;background:var(--navy-850);border:1px solid var(--navy-border);border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(8px);transition:.25s;z-index:999;}
-.dropdown a{display:block;padding:10px 12px;border-radius:6px;color:var(--text-2);white-space:normal;}
-.dropdown a:hover,.dropdown a.active{background:rgba(232,201,131,.08);color:var(--gold-light);}
-.has-dropdown:hover .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:translateY(0);}
-.nav-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--navy-border);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:18px;flex-shrink:0;appearance:none;-webkit-appearance:none;line-height:1;}
-@media(max-width:1200px){.nav-links a{font-size:12.5px;padding:9px 9px;}}
+.dropdown a{display:block;padding:10px 12px;color:var(--text-2);white-space:normal;}
+.has-dropdown:hover .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:none;}
+.nav-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--navy-border);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:18px;line-height:1;}
+@media(max-width:1200px){.nav-links a{font-size:12.5px;padding:9px;}}
 @media(max-width:800px){
-  .nav-toggle{display:block;position:relative;z-index:101;}
-  .nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;margin-left:0;}
-  .nav-links.open{transform:translateX(0);visibility:visible;}
-  .nav-links>li{width:100%;}
-  .nav-links>li>a{width:100%;justify-content:space-between;font-size:14.5px;padding:12px 12px;}
-  .dropdown{position:static;opacity:1;visibility:visible;transform:none;display:none;background:rgba(255,255,255,.04);border:none;box-shadow:none;margin-top:4px;}
-  .has-dropdown.open .dropdown{display:block;}
-}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;padding:13px 24px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:transform .15s ease,box-shadow .15s ease;}
-.btn:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.18);}
+.nav-toggle{display:block;position:relative;z-index:101;}
+.nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;}
+.nav-links.open{transform:none;visibility:visible;}
+.nav-links>li>a{justify-content:space-between;font-size:14.5px;padding:12px;}
+.dropdown{position:static;opacity:1;visibility:visible;transform:none;display:none;background:rgba(255,255,255,.04);border:none;box-shadow:none;margin-top:4px;}
+.has-dropdown.open .dropdown{display:block;}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:14.5px;padding:13px 24px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:transform .15s,box-shadow .15s;}
+.btn:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.2);}
 .btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;}
-.btn-outline{background:transparent;border-color:var(--navy-border);color:var(--text-1);}
-.btn-outline:hover{border-color:var(--gold);}
-
-/* ── hero ── */
-.hero-banner{background:radial-gradient(1100px 640px at 85% -10%,#152750 0%,transparent 55%),radial-gradient(900px 480px at -10% 10%,#0f1d42 0%,transparent 50%),var(--navy-950);padding:clamp(46px,7vw,88px) 0 clamp(40px,6vw,70px);text-align:center;position:relative;overflow:hidden;}
-.hero-banner::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%23cda355' stroke-opacity='0.06' stroke-width='1'%3E%3Cpath d='M60 0 90 17.3 90 51.9 60 69.2 30 51.9 30 17.3Z'/%3E%3C/g%3E%3C/svg%3E") 0 0/120px 104px;pointer-events:none;}
-.bio-float{position:absolute;font-size:22px;opacity:.14;animation:floatIcon 6s ease-in-out infinite;pointer-events:none;color:var(--gold-light);}
-.bio-float:nth-child(1){top:10%;left:2%;}
-.bio-float:nth-child(2){top:60%;left:1%;animation-delay:1s;color:var(--teal-light);}
-.bio-float:nth-child(3){top:20%;right:2%;animation-delay:2s;}
-.bio-float:nth-child(4){top:70%;right:3%;animation-delay:3s;color:var(--teal-light);}
-@keyframes floatIcon{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
-.hero-inner{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 24px;}
-.dept-pill{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--navy-850),var(--navy-800));border:1px solid var(--navy-border);border-radius:100px;padding:9px 22px;margin-bottom:26px;box-shadow:0 8px 24px rgba(0,0,0,.25);}
-.dept-pill span{color:var(--gold-light);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;}
-.dpill-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.8s ease infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.5);}}
-.hero-logo{width:clamp(84px,11vw,120px);height:clamp(84px,11vw,120px);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:18px;padding:12px;box-shadow:0 14px 34px rgba(0,0,0,.3);}
-.hero-logo img{width:100%;height:100%;object-fit:contain;}
-.dept-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,151,79,.1);border:1px solid rgba(201,151,79,.3);border-radius:10px;padding:8px 18px;margin-bottom:16px;font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-family:'IBM Plex Mono',monospace;}
-.hero-h1{font-size:clamp(28px,5vw,52px);font-weight:600;color:var(--text-1);line-height:1.1;letter-spacing:-.3px;margin-bottom:12px;}
-.hero-h1 em{color:var(--gold-light);}
-.hero-h2sub{font-family:'Fraunces',serif;font-size:clamp(15px,2.2vw,21px);font-weight:500;color:var(--teal-light);margin-bottom:28px;font-style:italic;}
-.hero-stats{display:flex;justify-content:center;flex-wrap:wrap;border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;background:var(--navy-900);}
-.hero-stat{padding:20px 24px;text-align:center;flex:1 1 130px;border-right:1px solid var(--navy-border);transition:background .3s;}
-.hero-stat:last-child{border-right:none;}
-.hero-stat:hover{background:rgba(201,151,79,.06);}
-.hero-stat .num{font-family:'Fraunces',serif;font-size:clamp(22px,3.2vw,30px);font-weight:600;color:var(--gold-light);line-height:1;margin-bottom:5px;}
-.hero-stat .lbl{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-3);}
-@media (max-width:480px){.hero-stats{flex-direction:column;}.hero-stat{border-right:none;border-bottom:1px solid var(--navy-border);}.hero-stat:last-child{border-bottom:none;}}
-
-/* Page header */
+.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:var(--radius);padding:26px;transition:transform .25s,box-shadow .25s;}
+.grid{display:grid;gap:20px;}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr;}}
+@media(max-width:520px){.grid-4{grid-template-columns:1fr;}}
+.helix-rule{height:2px;width:56px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:2px;margin:0 0 20px;}
+.helix-rule-center{margin-left:auto;margin-right:auto;}
+.section-light{background:var(--paper);color:var(--ink-2);}
+.section-alt{background:var(--paper-alt);color:var(--ink-2);}
+.section-light h2,.section-light h3,.section-light h4,.section-alt h2,.section-alt h3,.section-alt h4{color:var(--ink-1);}
+.section-light p,.section-alt p{color:var(--ink-2);}
+.section-light .eyebrow,.section-alt .eyebrow{background:rgba(201,151,79,.1);border-color:rgba(201,151,79,.35);color:#9a6b28;}
+.section-light .card,.section-alt .card{background:var(--paper-card);border:1px solid var(--paper-border);box-shadow:0 2px 10px rgba(20,30,60,.05);color:var(--ink-2);}
+.section-light .card:hover,.section-alt .card:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(20,30,60,.1);}
+.section-light a:not(.btn):not(.sc-link),.section-alt a:not(.btn):not(.sc-link){color:#9a6b28;}
+.card>i:first-child{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(201,151,79,.1);font-size:17px;color:var(--gold);}
+.card h3{margin-top:14px;font-size:17px;}
+.card p{font-size:14px;margin:0;}
+.section-head{margin-bottom:34px;}
+.section-head.center{text-align:center;display:flex;flex-direction:column;align-items:center;}
+.section-head .lead{max-width:680px;font-size:15.5px;}
 .page-header{padding:52px 0 48px;position:relative;overflow:hidden;}
-.page-header .wrap{position:relative;z-index:1;max-width:900px;text-align:center;display:flex;flex-direction:column;align-items:center;}
-.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);letter-spacing:.4px;margin-bottom:14px;}
+.page-header .wrap{max-width:900px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);margin-bottom:14px;}
 .breadcrumb a{color:var(--text-3);}
 .breadcrumb a:hover{color:var(--gold-light);}
 .breadcrumb .sep{margin:0 6px;color:var(--navy-border);}
 .breadcrumb .current{color:var(--gold-light);}
-.hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:8px;}
 .motto-box{display:inline-block;border:1px solid var(--navy-border);border-radius:12px;padding:12px 30px;margin:6px 0 10px;background:rgba(205,163,85,.06);}
 .motto-latin{font-family:'Fraunces',serif;font-style:italic;font-size:20px;color:var(--gold-light);letter-spacing:1.5px;}
-.motto-eng{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);}
-.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);width:100%;max-width:640px;margin-top:22px;border:1px solid var(--navy-border);border-radius:var(--radius);overflow:hidden;background:rgba(255,255,255,.03);}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);width:100%;max-width:800px;margin-top:22px;border:1px solid var(--navy-border);border-radius:var(--radius);overflow:hidden;background:rgba(255,255,255,.03);}
 .hero-stat{padding:18px 12px;border-right:1px solid var(--navy-border);}
 .hero-stat:last-child{border-right:0;}
-.hero-stat .num{font-family:'Fraunces',serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:600;color:var(--gold-light);line-height:1;}
+.hero-stat .num{font-family:'Fraunces',serif;font-size:clamp(1.3rem,2.6vw,1.9rem);font-weight:600;color:var(--gold-light);line-height:1;}
 .hero-stat .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);margin-top:6px;}
-@media(max-width:520px){.hero-stats{grid-template-columns:1fr;}.hero-stat{border-right:0;border-bottom:1px solid var(--navy-border);}.hero-stat:last-child{border-bottom:0;}}
-
-/* ── about ── */
-.about-section{padding:clamp(52px,7vw,92px) 0;background:var(--paper);}
-.split{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,64px);align-items:center;}
-.split p + p{margin-top:14px;}
-@media (max-width:900px){.split{grid-template-columns:1fr;}}
-
-/* Image frames & placeholders */
-.img-frame{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--paper-border);box-shadow:var(--shadow-soft);background:var(--paper-alt);}
-.img-slot{position:relative;width:100%;overflow:hidden;background:var(--paper-alt);display:flex;align-items:center;justify-content:center;}
-.img-slot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
-.img-slot.has-img img{opacity:1;}
-.img-slot .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--ink-3);font-size:13px;padding:20px;text-align:center;background:var(--paper-alt);}
-.img-slot .ph i{font-size:28px;color:var(--gold-dim);}
-.img-slot .ph span{font-family:'IBM Plex Mono',monospace;font-size:11px;word-break:break-all;}
-.img-frame:hover img{transform:scale(1.03);}
-
-/* Reveal & Layout Animations */
-.reveal,.reveal-left,.reveal-right{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);}
-.reveal-left{transform:translateX(-30px);}
-.reveal-right{transform:translateX(30px);}
-.reveal.visible,.reveal-left.visible,.reveal-right.visible{opacity:1;transform:translate(0);}
-
-/* ── timeline ── */
-.history-section{padding:clamp(52px,7vw,92px) 0;background:linear-gradient(150deg,var(--navy-950) 0%,var(--navy-900) 60%,var(--navy-850) 100%);}
-.timeline{position:relative;padding-left:48px;max-width:760px;margin:44px auto 0;}
-.timeline::before{content:'';position:absolute;left:18px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),rgba(201,151,79,.1));}
+@media(max-width:800px){.hero-stats{grid-template-columns:repeat(2,1fr);}.hero-stat{border-bottom:1px solid var(--navy-border);}}
+@media(max-width:520px){.hero-stats{grid-template-columns:1fr;}.hero-stat{border-right:0;}}
+.hero-logo{width:104px;height:104px;margin:0 auto 18px;background:#fff;border-radius:16px;padding:10px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;}
+.hero-logo img{width:100%;height:100%;object-fit:contain;}
+.hero-sub{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(15px,2vw,20px);color:var(--teal-light);margin:0 0 8px;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+.section-dark{background:linear-gradient(180deg,var(--navy-900),var(--navy-950));border-top:1px solid var(--navy-border);border-bottom:1px solid var(--navy-border);position:relative;overflow:hidden;}
+.cent-watermark{position:absolute;right:-30px;top:50%;transform:translateY(-50%);font-family:'Fraunces',serif;font-size:clamp(160px,24vw,320px);font-weight:600;color:rgba(232,201,131,.04);line-height:1;pointer-events:none;user-select:none;}
+.cent-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;}
+@media(max-width:900px){.cent-grid{grid-template-columns:1fr;gap:36px;}}
+.timeline{position:relative;padding-left:56px;}
+.timeline::before{content:'';position:absolute;left:21px;top:0;bottom:0;width:2px;background:linear-gradient(var(--gold),var(--teal),transparent);}
 .tl-item{position:relative;margin-bottom:26px;}
 .tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-48px;top:2px;width:36px;height:36px;border-radius:50%;background:var(--navy-900);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--gold-light);z-index:1;}
-.tl-year{font-size:10px;font-weight:700;color:var(--gold-light);letter-spacing:1.6px;margin-bottom:4px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;}
-.tl-text{font-size:13.5px;color:var(--text-2);line-height:1.7;}
-
-/* ── guests ── */
-.guests-section{padding:clamp(52px,7vw,92px) 0;background:var(--paper-alt);}
-.guest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:44px;}
-.guest-card{background:var(--paper-card);border-radius:16px;padding:28px 22px;border:1px solid var(--paper-border);position:relative;overflow:hidden;transition:all .3s;}
-.guest-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--navy-900),var(--gold),var(--teal));}
-.guest-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lift);}
-.g-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--navy-900),var(--navy-800));display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:18px;margin-bottom:14px;}
-.guest-card h4{font-size:16px;margin-bottom:6px;}
-.guest-card .role{font-size:12.5px;color:var(--ink-3);line-height:1.65;}
-.guest-card .tag{display:inline-block;margin-top:12px;padding:3px 10px;border-radius:100px;font-size:9.5px;font-weight:700;letter-spacing:.5px;background:rgba(201,151,79,.1);color:var(--gold-dim);}
-
-/* ── director ── */
-.director-section{padding:clamp(52px,7vw,92px) 0;background:var(--paper);}
-.dir-grid{display:grid;grid-template-columns:340px 1fr;gap:clamp(30px,5vw,60px);align-items:start;margin-top:44px;}
-@media (max-width:900px){.dir-grid{grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto;}}
-.dir-card{background:var(--paper-card);border-radius:20px;overflow:hidden;border:1px solid var(--paper-border);box-shadow:var(--shadow-soft);}
-.dir-top{background:linear-gradient(135deg,var(--navy-950),var(--navy-850));padding:30px 20px 34px;text-align:center;position:relative;}
-.dir-top::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:20px;background:var(--paper-card);clip-path:ellipse(55% 100% at 50% 100%);}
-.dir-avatar{width:170px;height:170px;border-radius:50%;margin:0 auto 16px;border:4px solid var(--gold);overflow:hidden;background:rgba(201,151,79,.15);display:flex;align-items:center;justify-content:center;}
-.dir-avatar img{width:100%;height:100%;object-fit:cover;object-position:top;}
-.dir-avatar .sc-initials{font-family:'Fraunces',serif;font-size:48px;font-weight:600;color:var(--gold-light);}
-.dir-name{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--text-1);}
-.dir-desig{font-size:10px;color:var(--gold-light);font-weight:700;letter-spacing:1.3px;text-transform:uppercase;margin-top:5px;}
-.dir-body{padding:24px 22px 22px;}
-.dir-quals{font-size:12.2px;color:var(--ink-2);line-height:1.8;margin-bottom:14px;}
-.dir-quals b{color:var(--ink-1);}
-.dir-links{display:flex;gap:8px;flex-wrap:wrap;}
-.sc-link{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-size:10.5px;font-weight:700;letter-spacing:.3px;text-decoration:none;transition:all .25s;}
-.sc-link.resume{background:var(--navy-900);color:#fff;}
-.sc-link.email{background:rgba(20,30,60,.06);color:var(--ink-1);}
-.sc-link.email:hover{background:var(--navy-900);color:#fff;}
-.sc-link.IRINS{background:rgba(201,151,79,.12);color:var(--gold-dim);}
-.sc-link.IRINS:hover{background:var(--gold-dim);color:#fff;}
-.role-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:26px;}
-.role-card{background:var(--paper-alt);border:1px solid var(--paper-border);border-left:4px solid var(--gold);border-radius:13px;padding:18px 18px;}
-.role-card i{color:var(--gold-dim);font-size:18px;margin-bottom:8px;}
-.role-card h4{font-size:15px;margin-bottom:5px;}
-.role-card p{font-size:12.3px;color:var(--ink-3);line-height:1.7;}
-.focus-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
-.chip{padding:6px 14px;border-radius:100px;font-size:11.5px;font-weight:600;background:rgba(39,156,133,.1);color:var(--teal);}
-
-/* ── conference ── */
-.conf-section{padding:clamp(52px,7vw,92px) 0;background:linear-gradient(135deg,var(--navy-950) 0%,var(--navy-900) 55%,var(--navy-850) 100%);}
-.conf-box{max-width:900px;margin:40px auto 0;background:rgba(255,255,255,.04);border:1px solid var(--navy-border);border-radius:20px;padding:clamp(24px,4vw,44px);text-align:center;}
-.conf-box .theme{font-family:'Fraunces',serif;font-size:clamp(20px,3vw,30px);font-style:italic;color:var(--gold-light);line-height:1.35;margin:10px 0 16px;}
-.conf-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:22px 0 0;}
-.conf-meta span{font-size:12.5px;color:var(--text-2);border:1px solid var(--navy-border);border-radius:100px;padding:7px 16px;background:rgba(255,255,255,.03);}
-.conf-meta i{color:var(--gold-light);margin-right:6px;}
-.conf-convener{margin-top:26px;font-size:13.5px;color:var(--text-2);line-height:1.8;}
-.conf-convener strong{color:var(--gold-light);}
-
-/* ── M-BEAT ── */
-.mbeat-section{padding:clamp(52px,7vw,92px) 0;background:var(--paper);}
-.mbeat-hero{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,48px);align-items:center;background:linear-gradient(135deg,var(--navy-950),var(--navy-850));border:1px solid var(--navy-border);border-radius:22px;padding:clamp(26px,4vw,48px);box-shadow:var(--shadow-lift);}
-@media (max-width:700px){.mbeat-hero{grid-template-columns:1fr;text-align:center;}}
-.mbeat-logo{width:clamp(120px,16vw,180px);background:#fff;border-radius:20px;padding:14px;box-shadow:0 14px 34px rgba(0,0,0,.3);margin:0 auto;}
-.mbeat-logo img{width:100%;height:auto;display:block;}
-.mbeat-hero .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);margin-bottom:8px;}
-.mbeat-hero h2{color:var(--text-1);font-size:clamp(28px,4.4vw,46px);font-weight:600;line-height:1.1;margin-bottom:10px;}
-.mbeat-hero h2 em{color:var(--gold-light);}
-.mbeat-hero .tagline{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(17px,2.4vw,23px);color:var(--teal-light);margin-bottom:12px;}
-.mbeat-hero p{color:var(--text-2);font-size:14.5px;line-height:1.8;margin-bottom:20px;}
-.mbeat-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:34px;}
-@media (max-width:900px){.mbeat-cols{grid-template-columns:1fr;}}
-.mb-card{background:var(--paper-card);border:1px solid var(--paper-border);border-radius:18px;padding:clamp(22px,3vw,32px);box-shadow:0 2px 10px rgba(20,30,60,.05);}
-.mb-card h3{font-size:21px;margin-bottom:6px;}
-.mb-card .sub{font-size:13px;color:var(--ink-3);margin-bottom:16px;line-height:1.7;}
-.check-list{list-style:none;}
-.check-list li{display:flex;gap:11px;align-items:flex-start;font-size:13.3px;color:var(--ink-2);line-height:1.65;padding:8px 0;border-bottom:1px dashed var(--paper-border);}
-.check-list li:last-child{border-bottom:none;}
+.tl-dot{position:absolute;left:-56px;top:0;width:44px;height:44px;border-radius:50%;background:var(--navy-950);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gold-light);}
+.tl-year{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:1.4px;color:var(--gold-light);margin-bottom:3px;text-transform:uppercase;}
+.tl-text{font-size:14px;color:var(--text-2);}
+.staff-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
+.staff-card{flex:0 1 340px;padding:0 !important;overflow:hidden;}
+.sc-top{background:linear-gradient(135deg,var(--navy-900),var(--navy-800));padding:26px 18px 22px;text-align:center;border-bottom:2px solid var(--gold);position:relative;}
+.sc-avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 12px;border:2px solid var(--gold);overflow:hidden;background:rgba(232,201,131,.12);display:flex;align-items:center;justify-content:center;}
+.sc-avatar img{width:100%;height:100%;object-fit:cover;object-position:top;}
+.sc-initials{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--gold-light);}
+.sc-name{font-family:'Fraunces',serif;font-size:17px;color:var(--text-1);margin-bottom:4px;}
+.sc-desig{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--gold-light);margin-bottom:3px;}
+.sc-qual{font-size:12px;color:var(--text-3);font-style:italic;}
+.hod-crown{position:absolute;top:10px;right:12px;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:999px;}
+.sc-body{padding:20px;}
+.sc-body p{font-size:13px !important;margin:0 0 10px !important;}
+.sc-spec{font-size:12.5px;font-weight:600;color:#9a6b28;margin-bottom:8px;}
+.sc-spec i{margin-right:6px;}
+.sc-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.sc-badge,.prog-badge,.ev-tag{padding:3px 10px;border-radius:999px;font-size:11px;font-family:'IBM Plex Mono',monospace;}
+.sc-badge{background:rgba(39,156,133,.12);color:#1c7a68;border:1px solid rgba(39,156,133,.3);}
+.sc-links{display:flex;flex-wrap:wrap;gap:8px;}
+.sc-link{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;transition:.2s;}
+.sc-link:hover{text-decoration:none;transform:translateY(-1px);}
+.sc-link.resume{background:var(--navy-900);color:#fff !important;}
+.sc-link.email{background:rgba(20,30,60,.06);color:var(--ink-1) !important;}
+.sc-link.irins{background:rgba(201,151,79,.14);color:#9a6b28 !important;}
+.dir-grid{display:grid;grid-template-columns:340px 1fr;gap:48px;align-items:start;}
+@media(max-width:900px){.dir-grid{grid-template-columns:1fr;}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;}
+.chip{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(39,156,133,.1);color:var(--teal);}
+.pill-row{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 0;justify-content:center;}
+.pill{border:1px solid var(--navy-border);border-radius:999px;padding:9px 16px;font-size:13px;color:var(--text-2);display:inline-flex;align-items:center;gap:8px;line-height:1;}
+.pill i{color:var(--gold-light);}
+.conf-theme{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(20px,3vw,28px);color:var(--gold-light);line-height:1.35;margin:10px 0 16px;}
+.mb-hero{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;background:linear-gradient(135deg,var(--navy-950),var(--navy-850));border:1px solid var(--navy-border);border-radius:var(--radius);padding:36px;margin-bottom:20px;}
+@media(max-width:700px){.mb-hero{grid-template-columns:1fr;text-align:center;}}
+.mb-logo{width:150px;background:#fff;border-radius:16px;padding:12px;margin:0 auto;}
+.mb-logo img{width:100%;display:block;}
+.mb-hero h2{color:var(--text-1) !important;font-size:clamp(1.8rem,4vw,2.8rem);}
+.mb-hero h2 em{color:var(--gold-light);font-style:normal;}
+.mb-hero p{color:var(--text-2) !important;font-size:14.5px;}
+.mb-hero strong{color:var(--gold-light);}
+.check-list{list-style:none;margin:0;padding:0;}
+.check-list li{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;color:var(--ink-2);padding:8px 0;border-bottom:1px dashed var(--paper-border);}
+.check-list li:last-child{border-bottom:0;}
 .check-list i{color:var(--teal);margin-top:4px;font-size:12px;flex-shrink:0;}
-.gain-list i{color:var(--gold-dim);}
-.join-box{margin-top:26px;background:linear-gradient(90deg,rgba(201,151,79,.12),rgba(39,156,133,.10));border:1px solid rgba(201,151,79,.35);border-radius:18px;padding:clamp(22px,3.5vw,36px);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-.join-box h3{font-size:22px;margin-bottom:6px;}
-.join-box p{font-size:13.5px;color:var(--ink-2);max-width:620px;line-height:1.75;}
-.join-box .note{font-size:12.5px;color:var(--ink-3);margin-top:8px;}
-@media (max-width:600px){.join-box .btn{width:100%;}}
-.partners{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;justify-content:center;}
-.partners span{font-size:11.5px;font-weight:600;color:var(--gold-dim);border:1px solid rgba(201,151,79,.35);background:rgba(201,151,79,.07);padding:6px 14px;border-radius:100px;}
-
-/* ── gallery ── */
-.gallery-section{padding:clamp(52px,7vw,92px) 0;background:var(--paper-alt);}
-.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:44px;}
-@media (max-width:700px){.gallery-grid{grid-template-columns:1fr;}}
-.gallery-grid figure{margin:0;}
-.gallery-grid .img-slot{aspect-ratio:16/10;}
-.gallery-grid figcaption{font-size:12.5px;color:var(--ink-3);margin-top:10px;text-align:center;font-style:italic;}
-
-/* ── CTA + footer ── */
+.section-alt .card h3{margin-top:0;}
+.join-box{margin-top:20px;background:linear-gradient(90deg,rgba(201,151,79,.12),rgba(39,156,133,.10));border:1px solid rgba(201,151,79,.35);border-radius:var(--radius);padding:28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.join-box h3{margin:0 0 6px;}
+.join-box p{font-size:14px;max-width:620px;margin:0 0 6px;}
+@media(max-width:600px){.join-box .btn,.cta-strip-inner .btn{width:100%;}}
+.swiper{padding:6px 4px 40px;}
+.ev-card{height:330px;display:flex;flex-direction:column;overflow:hidden;padding:0 !important;}
+.ev-date{background:linear-gradient(135deg,var(--navy-900),var(--navy-800));padding:14px 10px;text-align:center;border-bottom:2px solid var(--gold);}
+.ev-day{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--gold-light);line-height:1;}
+.ev-month{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.5px;color:var(--gold-light);}
+.ev-year{font-size:10.5px;color:var(--text-3);}
+.ev-body{padding:16px 18px;flex-grow:1;display:flex;flex-direction:column;gap:8px;}
+.ev-tag{width:fit-content;background:rgba(201,151,79,.1);color:#9a6b28;border:1px solid rgba(201,151,79,.3);font-size:10px;text-transform:uppercase;letter-spacing:.8px;}
+.ev-title{font-family:'Fraunces',serif;font-size:15.5px;color:var(--ink-1);line-height:1.25;}
+.ev-desc{font-size:12.5px;color:var(--ink-3);line-height:1.55;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;}
+.ev-more{margin-top:auto;font-size:12px;font-weight:600;}
+.swiper-button-next,.swiper-button-prev{color:#9a6b28 !important;}
+.ev-empty{text-align:center;color:var(--ink-3);font-size:14px;padding:20px;}
+.gal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+@media(max-width:700px){.gal-grid{grid-template-columns:1fr;}}
+.gal-grid figure{margin:0;}
+.gal-img{aspect-ratio:16/10;border-radius:var(--radius);overflow:hidden;border:1px solid var(--paper-border);background:var(--paper-card);display:flex;align-items:center;justify-content:center;font-size:32px;color:rgba(154,107,40,.3);position:relative;}
+.gal-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.gal-grid figcaption{font-size:12.5px;color:var(--ink-3);margin-top:8px;text-align:center;font-style:italic;}
 .cta-strip{padding:34px 0;background:linear-gradient(90deg,var(--navy-900),var(--navy-850));border-top:1px solid var(--navy-border);border-bottom:1px solid var(--navy-border);}
 .cta-strip-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
-@media (max-width:600px){.cta-strip-inner{flex-direction:column;align-items:flex-start;}.cta-strip-inner .btn{width:100%;}}
-.cta-strip h3{color:var(--text-1);margin-bottom:4px;font-size:19px;}
+.cta-strip h3{margin-bottom:4px;font-size:19px;}
 .cta-strip p{margin:0;font-size:14px;color:var(--text-3);}
-
-footer{border-top:1px solid var(--navy-border);padding:52px 0 26px;background:var(--navy-950);}
-.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;margin-bottom:30px;}
-@media (max-width:800px){.footer-grid{grid-template-columns:1fr 1fr;}}
-@media (max-width:520px){.footer-grid{grid-template-columns:1fr;}}
-.footer-grid h4{color:var(--text-1);font-family:'Fraunces',serif;font-weight:500;font-size:14.5px;margin-bottom:14px;}
-.footer-grid p{font-size:13px;color:var(--text-3);}
-.footer-grid ul{list-style:none;}
+@media(max-width:600px){.cta-strip-inner{flex-direction:column;align-items:flex-start;}}
+footer{border-top:1px solid var(--navy-border);padding:56px 0 28px;background:var(--navy-950);}
+footer p{font-size:13px;color:var(--text-3);}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px;}
+@media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.footer-grid{grid-template-columns:1fr;}}
+.footer-grid h4{font-size:14.5px;margin:0 0 14px;}
+.footer-grid ul{list-style:none;margin:0;padding:0;}
 .footer-grid li{margin-bottom:9px;}
 .footer-grid a{color:var(--text-3);font-size:13.5px;}
 .footer-grid a:hover{color:var(--gold-light);}
-.footer-bottom{border-top:1px solid var(--navy-border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--text-3);text-align:center;}
-.social-row{display:flex;gap:10px;margin-top:14px;}
-.social-row a{width:34px;height:34px;border:1px solid var(--navy-border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-2);transition:transform .2s ease;}
-.social-row a:hover{color:var(--gold-light);border-color:var(--gold);transform:translateY(-2px);}
-.btt{position:fixed;bottom:22px;left:22px;z-index:150;width:44px;height:44px;border-radius:11px;background:var(--navy-900);color:var(--gold-light);font-size:16px;border:1px solid var(--navy-border);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .3s;}
-.btt.visible{opacity:1;visibility:visible;}
-.btt:hover{background:var(--gold);color:#241a06;}
+.footer-bottom{border-top:1px solid var(--navy-border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--text-3);}
+.social-row{display:flex;gap:10px;}
+.social-row a{width:34px;height:34px;border:1px solid var(--navy-border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-2);}
+.fab{position:fixed;right:22px;bottom:22px;z-index:150;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 26px rgba(0,0,0,.35);border:0;cursor:pointer;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;opacity:0;pointer-events:none;transform:translateY(8px);transition:.2s;}
+.fab.show{opacity:1;pointer-events:auto;transform:none;}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none !important;animation:none !important;}.reveal{opacity:1;transform:none;}}
 </style>
 </head>
 <body>
@@ -319,29 +228,20 @@ footer{border-top:1px solid var(--navy-border);padding:52px 0 26px;background:va
 <div class="topbar">
   <div class="topbar-inner">
     <div class="logo-slots">
-      <div class="logo-slot" title="Loyola College"><img src="assets/loyola-crest.png" alt="Loyola College" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
-      <div class="logo-slot" title="CIMSER logo"><img src="assets/cimser-logo.png" alt="CIMSER logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
-      <div class="logo-slot" title="Indian Academy of Environmental Science logo"><img src="assets/iaes-logo.png" alt="IAES logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
-      <div class="logo-slot" title="Absolute Human Care Foundation logo"><img src="assets/ahcf-logo.png" alt="AHCF logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
-      <div class="logo-slot" title="Loyola College Centenary Logo"><img src="assets/centenary-logo.png" alt="Centenary Logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
+      <div class="logo-slot" title="Indian Academy of Environmental Science logo"><img src="../assets/iaes-logo.png" alt="IAES logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
+      <div class="logo-slot" title="Absolute Human Care Foundation logo"><img src="../assets/ahcf-logo.png" alt="AHCF logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
+      <div class="logo-slot" title="Loyola College Centenary Logo"><img src="../assets/centenary-logo.png" alt="Centenary Logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
     </div>
-    <span class="topbar-text">Loyola College (Autonomous), Chennai · Est. 1925</span>
+    <span class="topbar-text">Loyola College (Autonomous), Chennai · Est. 1925 &nbsp;·&nbsp; CIMSER — Centre for Insect Molecular Studies and Environmental Research &nbsp;·&nbsp; PG &amp; Research Department of Advanced Zoology and Biotechnology</span>
   </div>
 </div>
 
-<!-- Nav -->
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-brand" title="4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment">
-      <a href="../index.html" class="brand-logo-link" title="Loyola College">
-        <img src="../assets/loyola-crest.png" alt="Loyola College" class="brand-logo-img" onerror="this.style.display='none'">
-      </a>
-      <a href="../index.html" class="brand-logo-link" title="CIMSER">
-        <img src="../assets/cimser-logo.png" alt="CIMSER" class="brand-logo-img" onerror="this.style.display='none'">
-      </a>
-      <a href="../index.html" style="text-decoration:none;">
-        <span class="brand-title">VRMIC 2026</span>
-      </a>
+      <a href="../index.html" class="brand-logo-link" title="Loyola College"><img src="../assets/loyola-crest.png" alt="Loyola College" class="brand-logo-img" onerror="this.style.display='none'"></a>
+      <a href="../index.html" class="brand-logo-link" title="CIMSER"><img src="../assets/cimser-logo.png" alt="CIMSER" class="brand-logo-img" onerror="this.style.display='none'"></a>
+      <a href="../index.html" style="text-decoration:none;"><span class="brand-title">VRMIC 2026</span></a>
     </div>
     <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
     <ul class="nav-links" id="nav-links">
@@ -351,8 +251,8 @@ footer{border-top:1px solid var(--navy-border);padding:52px 0 26px;background:va
         <a href="#" class="dropdown-toggle active">About <i class="fa-solid fa-chevron-down caret"></i></a>
         <ul class="dropdown">
           <li><a href="college.html">About the College</a></li>
-          <li><a href="department.html" class="active">About the Department</a></li>
-          <li><a href="cimser.html">About CIMSER</a></li>
+          <li><a href="department.html">About the Department</a></li>
+          <li><a href="cimser.html" class="active">About CIMSER</a></li>
           <li><a href="iaes.html">About IAES</a></li>
           <li><a href="conference.html">About the Conference</a></li>
         </ul>
@@ -373,231 +273,219 @@ footer{border-top:1px solid var(--navy-border);padding:52px 0 26px;background:va
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero-banner">
-  <div class="bio-float"><i class="fas fa-bug"></i></div>
-  <div class="bio-float"><i class="fas fa-dna"></i></div>
-  <div class="bio-float"><i class="fas fa-microscope"></i></div>
-  <div class="bio-float"><i class="fas fa-leaf"></i></div>
-  <div class="hero-inner">
-    <div class="dept-pill"><span class="dpill-dot"></span><span>Established 19 December 2018</span><span class="dpill-dot"></span></div>
-    <div class="hero-logo"><img src="assets/cimser-logo.png" alt="CIMSER logo" onerror="this.src='https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png'"></div>
-    <div class="dept-badge">PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology</div>
-    <h1 class="hero-h1"><em>Centre for Insect Molecular Studies</em><br>&amp; Environmental Research</h1>
-    <p class="hero-h2sub">CIMSER · Loyola College (Autonomous), Chennai</p>
+<header class="page-header">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><a href="conference.html">About</a><span class="sep">/</span><span class="current">CIMSER</span></div>
+    <span class="eyebrow"><i class="fa-solid fa-flag"></i>&nbsp; Established 19 December 2018</span>
+    <div class="hero-logo"><img src="../assets/cimser-logo.png" alt="CIMSER logo" onerror="this.src='https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png'"></div>
+    <h1>Centre for Insect Molecular Studies &amp; Environmental Research</h1>
+    <div class="helix-rule helix-rule-center"></div>
+    <p class="hero-sub">CIMSER · Loyola College (Autonomous), Chennai</p>
+    <p style="max-width:640px;font-size:16px;margin-bottom:10px;">PG &amp; Research Department of Advanced Zoology and Biotechnology</p>
+    <div class="motto-box"><div class="motto-latin">Let Your Light Shine</div></div>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="num">2018</div><div class="lbl"><i class="fas fa-flag" style="margin-right:4px;"></i>Established</div></div>
-      <div class="hero-stat"><div class="num">4</div><div class="lbl"><i class="fas fa-user-graduate" style="margin-right:4px;"></i>Ph.D. Scholars Graduated</div></div>
-      <div class="hero-stat"><div class="num">3 Levels</div><div class="lbl"><i class="fas fa-globe" style="margin-right:4px;"></i>State · National · International</div></div>
-      <div class="hero-stat"><div class="num">M-BEAT</div><div class="lbl"><i class="fas fa-shield-virus" style="margin-right:4px;"></i>New Initiative</div></div>
+      <div class="hero-stat"><div class="num">2018</div><div class="lbl">Established</div></div>
+      <div class="hero-stat"><div class="num">4</div><div class="lbl">Ph.D. Scholars Graduated</div></div>
+      <div class="hero-stat"><div class="num">3 Levels</div><div class="lbl">State · National · Intl.</div></div>
+      <div class="hero-stat"><div class="num">M-BEAT</div><div class="lbl">New Initiative</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="section-light section" id="about">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow"><i class="fa-solid fa-circle-info"></i>&nbsp; About CIMSER</span>
+      <h2>Where insect science meets the environment</h2>
+      <div class="helix-rule helix-rule-center"></div>
+      <p class="lead">The Centre for Insect Molecular Studies and Environmental Research (CIMSER) was established on 19 December 2018 with the blessings of Rev. Dr. F. Andrew, S.J. Under the leadership of its Director, Dr. M. Raja, CIMSER has successfully conducted many State, National and International level seminars and conferences.</p>
+    </div>
+    <div class="grid grid-4">
+      <div class="card reveal"><i class="fa-solid fa-bug"></i><h3>Insect Molecular Biology</h3><p>Research on insect biology at the molecular level, supporting biocontrol and sustainable pest management.</p></div>
+      <div class="card reveal"><i class="fa-solid fa-leaf"></i><h3>Biocontrol &amp; Biopesticides</h3><p>Eco-friendly alternatives that reduce dependence on chemical pesticides in agriculture and public health.</p></div>
+      <div class="card reveal"><i class="fa-solid fa-mosquito"></i><h3>Vector-Borne Diseases</h3><p>Work towards the prevention and control of vector-borne diseases through research, outreach and community action.</p></div>
+      <div class="card reveal"><i class="fa-solid fa-people-group"></i><h3>Seminars &amp; Conferences</h3><p>A regular programme of State, National and International seminars and conferences for researchers and students.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ABOUT -->
-<section class="about-section" id="about">
+<section class="section-dark section" id="journey">
+  <div class="cent-watermark">2018</div>
   <div class="wrap">
-    <div class="split">
-      <div class="reveal-left">
-        <div class="eyebrow"><i class="fas fa-info-circle"></i> About CIMSER</div>
-        <h2 class="section-title">Where Insect Science <em>Meets the Environment</em></h2>
+    <div class="cent-grid">
+      <div class="reveal">
+        <span class="eyebrow"><i class="fa-solid fa-clock-rotate-left"></i>&nbsp; Our journey</span>
+        <h2>Milestones of CIMSER</h2>
         <div class="helix-rule"></div>
-        <p class="section-desc">The Centre for Insect Molecular Studies and Environmental Research (CIMSER) was established on <strong>19 December 2018</strong> with the blessings of <strong>Rev. Dr. F. Andrew, S.J.</strong></p>
-        <p class="section-desc"><strong>Dr. B. Vasantharaj David</strong>, Chairman of the Scientific/Academic Board, International Institute of Biotechnology and Toxicology, unveiled the CIMSER logo. The occasion was graced by <strong>Dr. M. G. Ragunathan</strong>, Assistant Professor, Gurunanak College, Chennai, and <strong>Dr. J. Mary Vimala Kalaiarasi</strong>, Head of the Department, PG and Research Department of Advanced Zoology and Biotechnology, Loyola College.</p>
-        <p class="section-desc">Under the leadership of its Director, <strong>Dr. M. Raja</strong>, CIMSER has successfully conducted many State, National and International level seminars and conferences.</p>
+        <p>From its founding in December 2018 to the hosting of VRMIC 2026, CIMSER has grown into an active centre for insect molecular studies, environmental research and public-health outreach.</p>
+        <p style="font-size:14.5px;">Four research scholars have completed their Ph.D. degrees under the guidance of the Director, Dr. M. Raja.</p>
       </div>
-      <div class="reveal-right">
-        <div class="img-frame">
-          <div class="img-slot" data-slot>
-            <img src="assets/cimser-lab.png" alt="CIMSER laboratory" onerror="this.remove()">
-            <div class="ph"><i class="fa-regular fa-image"></i><span>assets/cimser-lab.png</span><span>CIMSER laboratory</span></div>
-          </div>
-        </div>
+      <div class="timeline reveal">
+        <div class="tl-item"><div class="tl-dot"><i class="fa-solid fa-flag"></i></div><div class="tl-year">19 December 2018 · Founded</div><div class="tl-text">CIMSER is established at Loyola College with the blessings of Rev. Dr. F. Andrew, S.J.</div></div>
+        <div class="tl-item"><div class="tl-dot"><i class="fa-solid fa-pen-nib"></i></div><div class="tl-year">2018 · Logo unveiling</div><div class="tl-text">Dr. B. Vasantharaj David, Chairman of the Scientific/Academic Board, International Institute of Biotechnology and Toxicology, unveils the CIMSER logo.</div></div>
+        <div class="tl-item"><div class="tl-dot"><i class="fa-solid fa-people-group"></i></div><div class="tl-year">Seminars &amp; conferences</div><div class="tl-text">Many State, National and International level seminars and conferences are conducted under the Directorship of Dr. M. Raja.</div></div>
+        <div class="tl-item"><div class="tl-dot"><i class="fa-solid fa-user-graduate"></i></div><div class="tl-year">Research guidance</div><div class="tl-text">Four research scholars complete their Ph.D. degrees under the guidance of Dr. M. Raja.</div></div>
+        <div class="tl-item"><div class="tl-dot"><i class="fa-solid fa-calendar-check"></i></div><div class="tl-year">26–28 November 2026 · VRMIC 2026</div><div class="tl-text">CIMSER hosts the 4th International Conference on Life Sciences &amp; Vector Risk Management.</div></div>
+        <div class="tl-item"><div class="tl-dot"><i class="fa-solid fa-shield-virus"></i></div><div class="tl-year">2026 · New initiative</div><div class="tl-text">Launch of M-BEAT — Mosquito Breeding Site Elimination and Assessment Team — with Greater Chennai Corporation and AHC Foundation.</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TIMELINE -->
-<section class="history-section dark" id="journey">
+<section class="section-alt section" id="blessings">
   <div class="wrap">
-    <div class="center reveal">
-      <div class="eyebrow"><i class="fas fa-history"></i> Our Journey</div>
-      <h2 class="section-title">Milestones of <em>CIMSER</em></h2>
-      <div class="helix-rule"></div>
+    <div class="section-head center reveal">
+      <span class="eyebrow"><i class="fa-solid fa-hands"></i>&nbsp; Blessings &amp; presence</span>
+      <h2>The founding occasion</h2>
+      <div class="helix-rule helix-rule-center"></div>
+      <p class="lead">CIMSER was inaugurated with the blessings and presence of distinguished academics and leaders.</p>
     </div>
-    <div class="timeline reveal">
-      <div class="tl-item"><div class="tl-dot"><i class="fas fa-flag"></i></div><div class="tl-year">19 December 2018 · Founded</div><div class="tl-text">CIMSER is established at Loyola College with the blessings of Rev. Dr. F. Andrew, S.J.</div></div>
-      <div class="tl-item"><div class="tl-dot"><i class="fas fa-pen-nib"></i></div><div class="tl-year">2018 · Logo Unveiling</div><div class="tl-text">Dr. B. Vasantharaj David, Chairman of the Scientific/Academic Board, International Institute of Biotechnology and Toxicology, unveils the CIMSER logo.</div></div>
-      <div class="tl-item"><div class="tl-dot"><i class="fas fa-people-group"></i></div><div class="tl-year">Seminars &amp; Conferences</div><div class="tl-text">Many State, National and International level seminars and conferences are conducted under the Directorship of Dr. M. Raja.</div></div>
-      <div class="tl-item"><div class="tl-dot"><i class="fas fa-user-graduate"></i></div><div class="tl-year">Research Guidance</div><div class="tl-text">Four research scholars complete their Ph.D. degrees under the guidance of Dr. M. Raja.</div></div>
-      <div class="tl-item"><div class="tl-dot"><i class="fas fa-mosquito"></i></div><div class="tl-year">Milestone Conference</div><div class="tl-text">“Emerging Challenges in the Prevention and Control of Vector-Borne Diseases” — yet another milestone achieved by CIMSER.</div></div>
-      <div class="tl-item"><div class="tl-dot"><i class="fas fa-shield-virus"></i></div><div class="tl-year">2026 · New Initiative</div><div class="tl-text">Launch of M-BEAT — Mosquito Breeding Site Elimination and Assessment Team — with Greater Chennai Corporation and AHC Foundation.</div></div>
+    <div class="grid grid-4">
+      <div class="card reveal"><i class="fa-solid fa-cross"></i><h3>Rev. Dr. F. Andrew, S.J.</h3><p>Whose blessings marked the establishment of CIMSER.</p><span class="prog-badge" style="display:inline-block;margin-top:12px;background:rgba(201,151,79,.1);color:#9a6b28;border:1px solid rgba(201,151,79,.3);">Blessings</span></div>
+      <div class="card reveal"><i class="fa-solid fa-flask"></i><h3>Dr. B. Vasantharaj David</h3><p>Chairman, Scientific/Academic Board, International Institute of Biotechnology and Toxicology.</p><span class="prog-badge" style="display:inline-block;margin-top:12px;background:rgba(201,151,79,.1);color:#9a6b28;border:1px solid rgba(201,151,79,.3);">Unveiled the logo</span></div>
+      <div class="card reveal"><i class="fa-solid fa-chalkboard-user"></i><h3>Dr. M. G. Ragunathan</h3><p>Assistant Professor, Gurunanak College, Chennai.</p><span class="prog-badge" style="display:inline-block;margin-top:12px;background:rgba(201,151,79,.1);color:#9a6b28;border:1px solid rgba(201,151,79,.3);">Graced the occasion</span></div>
+      <div class="card reveal"><i class="fa-solid fa-user-tie"></i><h3>Dr. J. Mary Vimala Kalaiarasi</h3><p>Head of the Department, PG &amp; Research Dept. of Advanced Zoology and Biotechnology, Loyola College.</p><span class="prog-badge" style="display:inline-block;margin-top:12px;background:rgba(201,151,79,.1);color:#9a6b28;border:1px solid rgba(201,151,79,.3);">Graced the occasion</span></div>
     </div>
   </div>
 </section>
 
-<!-- FOUNDING GUESTS -->
-<section class="guests-section" id="blessings">
+<section class="section-light section" id="director">
   <div class="wrap">
-    <div class="center reveal">
-      <div class="eyebrow"><i class="fas fa-hands"></i> Blessings &amp; Presence</div>
-      <h2 class="section-title">The <em>Founding Occasion</em></h2>
-      <div class="helix-rule"></div>
-      <p class="section-desc" style="max-width:660px;margin:0 auto;">CIMSER was inaugurated with the blessings and presence of distinguished academics and leaders.</p>
-    </div>
-    <div class="guest-grid">
-      <div class="guest-card reveal"><div class="g-icon"><i class="fas fa-cross"></i></div><h4>Rev. Dr. F. Andrew, S.J.</h4><p class="role">Whose blessings marked the establishment of CIMSER.</p><span class="tag">Blessings</span></div>
-      <div class="guest-card reveal"><div class="g-icon"><i class="fas fa-flask"></i></div><h4>Dr. B. Vasantharaj David</h4><p class="role">Chairman, Scientific/Academic Board, International Institute of Biotechnology and Toxicology.</p><span class="tag">Unveiled the Logo</span></div>
-      <div class="guest-card reveal"><div class="g-icon"><i class="fas fa-chalkboard-teacher"></i></div><h4>Dr. M. G. Ragunathan</h4><p class="role">Assistant Professor, Gurunanak College, Chennai.</p><span class="tag">Graced the Occasion</span></div>
-      <div class="guest-card reveal"><div class="g-icon"><i class="fas fa-user-tie"></i></div><h4>Dr. J. Mary Vimala Kalaiarasi</h4><p class="role">Head of the Department, PG &amp; Research Dept. of Advanced Zoology and Biotechnology, Loyola College.</p><span class="tag">Graced the Occasion</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- DIRECTOR -->
-<section class="director-section" id="director">
-  <div class="wrap">
-    <div class="center reveal">
-      <div class="eyebrow"><i class="fas fa-user-tie"></i> Leadership</div>
-      <h2 class="section-title">Director, <em>CIMSER</em></h2>
-      <div class="helix-rule"></div>
+    <div class="section-head center reveal">
+      <span class="eyebrow"><i class="fa-solid fa-user-tie"></i>&nbsp; Leadership</span>
+      <h2>Director, CIMSER</h2>
+      <div class="helix-rule helix-rule-center"></div>
     </div>
     <div class="dir-grid">
-      <div class="dir-card reveal-left">
-        <div class="dir-top">
-          <div class="dir-avatar"><img src="https://lh3.googleusercontent.com/d/1_w5BL8uThxGa5t-okHaMW6ClpcZUsL9h=w600?authuser=0" alt="Dr. M. Raja" onerror="this.style.display='none';this.parentNode.innerHTML='<span class=&quot;sc-initials&quot;>MR</span>'"></div>
-          <div class="dir-name">Dr. M. Raja</div>
-          <div class="dir-desig">Director – CIMSER · Assistant Professor</div>
+      <div class="card staff-card reveal" style="max-width:380px;margin:0 auto;">
+        <div class="sc-top"><div class="hod-crown">Director</div>
+          <div class="sc-avatar"><img src="https://lh3.googleusercontent.com/d/1_w5BL8uThxGa5t-okHaMW6ClpcZUsL9h" alt="Dr. M. Raja" onerror="this.style.display='none';this.parentNode.innerHTML='<span class=&quot;sc-initials&quot;>MR</span>'"></div>
+          <div class="sc-name">Dr. M. Raja</div>
+          <div class="sc-desig">Director – CIMSER · Assistant Professor</div>
+          <div class="sc-qual">M.Sc., M.Phil., Ph.D., M.B.A. (HR), F.E.S.I., F.R.E.S (London)</div>
         </div>
-        <div class="dir-body">
-          <div class="dir-quals"><b>M.Sc., M.Phil., Ph.D., M.B.A. (HR)., F.E.S.I., F.R.E.S (London)</b><br>Research Supervisor &amp; Convener of the Conference<br>Specialisation: Insect Molecular Biology, Biocontrol, Biopesticide</div>
-          <div class="dir-links">
-            <a href="https://www.loyolacollege.edu/profile/zoology/profile.html?file=DrRaja.pdf" class="sc-link resume"><i class="fas fa-file-alt"></i>CV</a>
-            <a href="mailto:loyo_raja2003@loyolacollege.edu" class="sc-link email"><i class="fas fa-envelope"></i>Email</a>
-            <a href="https://loyolacollege.irins.org/profile/329203" class="sc-link IRINS"><i class="fas fa-graduation-cap"></i>IRINS</a>
+        <div class="sc-body">
+          <div class="sc-spec"><i class="fa-solid fa-bug"></i>Insect Molecular Biology, Biocontrol, Biopesticide</div>
+          <div class="sc-badges"><span class="sc-badge">Research Supervisor, CIMSER</span></div>
+          <div class="sc-links">
+            <a href="https://www.loyolacollege.edu/profile/zoology/profile.html?file=DrRaja.pdf" class="sc-link resume"><i class="fa-solid fa-file-lines"></i>CV</a>
+            <a href="mailto:loyo_raja2003@loyolacollege.edu" class="sc-link email"><i class="fa-solid fa-envelope"></i>Email</a>
+            <a href="https://loyolacollege.irins.org/profile/329203" class="sc-link irins"><i class="fa-solid fa-graduation-cap"></i>IRINS</a>
           </div>
         </div>
       </div>
-      <div class="reveal-right">
-        <h3 style="font-size:clamp(22px,3vw,30px);margin-bottom:12px;">Research Supervisor &amp; Conference Convener</h3>
+      <div class="reveal">
+        <h3 style="font-size:clamp(1.3rem,2.6vw,1.8rem);">Research supervisor &amp; conference convener</h3>
         <div class="helix-rule"></div>
-        <p class="section-desc">Dr. M. Raja is an Assistant Professor at Loyola College and the Director of CIMSER. With around 14 years of academic experience, his expertise spans entomology, biocontrol and insect molecular biology. He is a Research Supervisor at CIMSER and has guided and supervised many students and research scholars — <strong>four scholars have so far completed their Ph.D. degrees under his guideship.</strong></p>
-        <p class="section-desc" style="margin-top:14px;">He has successfully conducted many State, National and International level seminars and conferences, and serves as the <strong>Convener of the Conference</strong> “Emerging Challenges in the Prevention and Control of Vector-Borne Diseases”.</p>
-        <div class="role-cards">
-          <div class="role-card"><i class="fas fa-microscope"></i><h4>Research Supervisor</h4><p>Guides Ph.D. scholars and students in insect molecular biology, biocontrol and biopesticide research at CIMSER.</p></div>
-          <div class="role-card"><i class="fas fa-bullhorn"></i><h4>Conference Convener</h4><p>Convenes the conference on vector-borne diseases and leads CIMSER's seminar and conference programme.</p></div>
-          <div class="role-card"><i class="fas fa-award"></i><h4>Fellowships</h4><p>Fellow of the Entomological Society of India (F.E.S.I.) and the Royal Entomological Society, London (F.R.E.S).</p></div>
-        </div>
-        <div class="focus-chips">
-          <span class="chip">Insect Molecular Biology</span><span class="chip">Biocontrol</span><span class="chip">Biopesticides</span><span class="chip">Entomology</span><span class="chip">Vector-Borne Diseases</span>
-        </div>
+        <p>Dr. M. Raja is an Assistant Professor at Loyola College and the Director of CIMSER. With around 14 years of academic experience, his expertise spans entomology, biocontrol and insect molecular biology. He has guided many students and research scholars — four scholars have so far completed their Ph.D. degrees under his guidance.</p>
+        <p>He has successfully conducted many State, National and International level seminars and conferences, and serves as the Convener of VRMIC 2026. He is a Fellow of the Entomological Society of India (F.E.S.I.) and of the Royal Entomological Society, London (F.R.E.S).</p>
+        <div class="chips"><span class="chip">Insect Molecular Biology</span><span class="chip">Biocontrol</span><span class="chip">Biopesticides</span><span class="chip">Entomology</span><span class="chip">Vector-Borne Diseases</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CONFERENCE -->
-<section class="conf-section dark" id="conference">
-  <div class="wrap">
-    <div class="center reveal">
-      <div class="eyebrow"><i class="fas fa-calendar-check"></i> A CIMSER Milestone</div>
-      <h2 class="section-title">Conference on <em>Vector-Borne Diseases</em></h2>
-      <div class="helix-rule"></div>
-    </div>
-    <div class="conf-box reveal">
-      <div class="eyebrow" style="margin:0;"><i class="fas fa-mosquito"></i> Conference Theme</div>
-      <div class="theme">“Emerging Challenges in the Prevention and Control of Vector-Borne Diseases”</div>
-      <p class="section-desc">Yet another milestone achieved by CIMSER — bringing together researchers, academicians, students and public-health stakeholders to address the prevention and control of vector-borne diseases.</p>
-      <div class="conf-meta">
-        <span><i class="fas fa-building-columns"></i>Loyola College (Autonomous), Chennai</span>
-        <span><i class="fas fa-user-tie"></i>Convener: Dr. M. Raja</span>
+<section class="section-dark section" id="conference">
+  <div class="wrap" style="max-width:900px;text-align:center;">
+    <div class="reveal">
+      <span class="eyebrow"><i class="fa-solid fa-calendar-check"></i>&nbsp; A CIMSER milestone</span>
+      <h2>Our conference</h2>
+      <div class="helix-rule helix-rule-center"></div>
+      <div class="conf-theme">4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</div>
+      <p>Organised by CIMSER, bringing together researchers, academicians, students and public-health stakeholders to address vector risk management and a sustainable, healthy environment.</p>
+      <div class="pill-row">
+        <span class="pill"><i class="fa-regular fa-calendar"></i>26–28 November 2026</span>
+        <span class="pill"><i class="fa-solid fa-building-columns"></i>Loyola College (Autonomous), Chennai</span>
+        <span class="pill"><i class="fa-solid fa-user-tie"></i>Convener: Dr. M. Raja</span>
       </div>
-      <div class="conf-convener">Organised by <strong>CIMSER</strong>. See the <a href="about-conference.html" style="color:var(--gold-light);text-decoration:underline;">About the Conference</a> page for the 4th International Conference on Life Sciences &amp; Vector Risk Management.</div>
+      <div style="margin-top:24px;"><a href="conference.html" class="btn btn-gold">About the Conference <i class="fa-solid fa-arrow-right"></i></a></div>
     </div>
   </div>
 </section>
 
-<!-- M-BEAT -->
-<section class="mbeat-section" id="mbeat">
+<section class="section-alt section" id="mbeat">
   <div class="wrap">
-    <div class="center reveal">
-      <div class="eyebrow"><i class="fas fa-rocket"></i> New Initiative by CIMSER</div>
-      <h2 class="section-title">M-BEAT: <em>Student-Led Mosquito Control</em></h2>
-      <div class="helix-rule"></div>
+    <div class="section-head center reveal">
+      <span class="eyebrow"><i class="fa-solid fa-rocket"></i>&nbsp; New initiative by CIMSER</span>
+      <h2>M-BEAT: student-led mosquito control</h2>
+      <div class="helix-rule helix-rule-center"></div>
     </div>
-
-    <div class="mbeat-hero reveal">
-      <div class="mbeat-logo"><img src="https://mbeat2026.github.io/loyolacollege/assets/mbeat-logo.png" alt="M-BEAT logo" onerror="this.parentNode.innerHTML='<i class=&quot;fas fa-shield-virus&quot; style=&quot;font-size:64px;color:#9a6b28;display:block;text-align:center;padding:20px;&quot;></i>'"></div>
+    <div class="mb-hero reveal">
+      <div class="mb-logo"><img src="https://mbeat2026.github.io/loyolacollege/assets/mbeat-logo.png" alt="M-BEAT logo" onerror="this.parentNode.innerHTML='<i class=&quot;fa-solid fa-shield-virus&quot; style=&quot;font-size:64px;color:#9a6b28;display:block;text-align:center;padding:20px;&quot;></i>'"></div>
       <div>
-        <div class="kicker">Loyola College · CIMSER</div>
         <h2>M-<em>BEAT</em></h2>
-        <div class="tagline">Stop mosquitoes where they start.</div>
-        <p><strong style="color:var(--gold-light);">M</strong>osquito <strong style="color:var(--gold-light);">B</strong>reeding Site <strong style="color:var(--gold-light);">E</strong>limination and <strong style="color:var(--gold-light);">A</strong>ssessment <strong style="color:var(--gold-light);">T</strong>eam — student-led teams that find and remove breeding sources on Chennai college campuses.</p>
-        <a href="https://mbeat-registration.vercel.app/" target="_blank" rel="noopener" class="btn btn-gold"><i class="fas fa-user-plus"></i> Register as a student</a>
+        <p style="font-family:'Fraunces',serif;font-style:italic;font-size:20px;color:var(--teal-light) !important;margin-bottom:10px;">Stop mosquitoes where they start.</p>
+        <p><strong>M</strong>osquito <strong>B</strong>reeding Site <strong>E</strong>limination and <strong>A</strong>ssessment <strong>T</strong>eam — student-led teams that find and remove breeding sources on Chennai college campuses.</p>
+        <a href="https://mbeat-registration.vercel.app/" target="_blank" rel="noopener" class="btn btn-gold"><i class="fa-solid fa-user-plus"></i> Register as a student</a>
       </div>
     </div>
-
-    <div class="mbeat-cols">
-      <div class="mb-card reveal">
+    <div class="grid grid-2">
+      <div class="card reveal">
         <h3>What M-BEAT sets out to do</h3>
-        <p class="sub">An initiative by CIMSER, PG &amp; Research Department of Advanced Zoology and Biotechnology, Loyola College (Autonomous), Chennai, with Greater Chennai Corporation and AHC Foundation.</p>
+        <p style="margin-bottom:12px;">An initiative by CIMSER, Loyola College (Autonomous), with Greater Chennai Corporation and AHC Foundation.</p>
         <ul class="check-list">
-          <li><i class="fas fa-check-circle"></i>Identify and eliminate mosquito breeding sources within participating college premises through regular surveillance and source-reduction activities by student-led teams.</li>
-          <li><i class="fas fa-check-circle"></i>Establish Standard Operating Procedures (SOPs) for maintaining mosquito-breeding-free campuses.</li>
-          <li><i class="fas fa-check-circle"></i>Promote Behaviour Change Communication (BCC) activities to update college authorities, faculty, students and support staff on vector surveillance, source reduction and preventive measures.</li>
-          <li><i class="fas fa-check-circle"></i>Institutionalize periodic inspections, self-monitoring and reporting mechanisms in collaboration with Corporation officials.</li>
-          <li><i class="fas fa-check-circle"></i>Recognize and certify colleges that consistently maintain breeding-free premises based on predefined criteria.</li>
-          <li><i class="fas fa-check-circle"></i>Develop participating colleges as model institutions that can help replicate this initiative across other educational institutions in Chennai.</li>
+          <li><i class="fa-solid fa-circle-check"></i>Identify and eliminate mosquito breeding sources within participating college premises through regular surveillance and source reduction by student-led teams.</li>
+          <li><i class="fa-solid fa-circle-check"></i>Establish Standard Operating Procedures (SOPs) for mosquito-breeding-free campuses.</li>
+          <li><i class="fa-solid fa-circle-check"></i>Promote Behaviour Change Communication (BCC) on vector surveillance, source reduction and preventive measures.</li>
+          <li><i class="fa-solid fa-circle-check"></i>Institutionalize periodic inspections, self-monitoring and reporting with Corporation officials.</li>
+          <li><i class="fa-solid fa-circle-check"></i>Recognize and certify colleges that consistently maintain breeding-free premises.</li>
+          <li><i class="fa-solid fa-circle-check"></i>Develop model institutions to replicate the initiative across Chennai.</li>
         </ul>
       </div>
-      <div class="mb-card reveal">
+      <div class="card reveal">
         <h3>What students gain</h3>
-        <p class="sub">Practical exposure that encourages you to take an active role in environmental health, vector surveillance and community service.</p>
-        <ul class="check-list gain-list">
-          <li><i class="fas fa-certificate"></i>M-BEAT Membership Certificate</li>
-          <li><i class="fas fa-leaf"></i>Environmental Volunteer Recognition</li>
-          <li><i class="fas fa-bug"></i>Mosquito &amp; Vector-Control Field Experience</li>
-          <li><i class="fas fa-clipboard-check"></i>Practical Field Assessment Experience</li>
-          <li><i class="fas fa-handshake"></i>Greater Chennai Corporation Collaboration Experience</li>
-          <li><i class="fas fa-file-lines"></i>CV / Resume Enhancement</li>
-          <li><i class="fas fa-people-roof"></i>Community Service Experience</li>
+        <p style="margin-bottom:12px;">Practical exposure to environmental health, vector surveillance and community service.</p>
+        <ul class="check-list">
+          <li><i class="fa-solid fa-certificate"></i>M-BEAT Membership Certificate</li>
+          <li><i class="fa-solid fa-leaf"></i>Environmental Volunteer Recognition</li>
+          <li><i class="fa-solid fa-bug"></i>Mosquito &amp; Vector-Control Field Experience</li>
+          <li><i class="fa-solid fa-clipboard-check"></i>Practical Field Assessment Experience</li>
+          <li><i class="fa-solid fa-handshake"></i>Greater Chennai Corporation Collaboration Experience</li>
+          <li><i class="fa-solid fa-file-lines"></i>CV / Resume Enhancement</li>
+          <li><i class="fa-solid fa-people-roof"></i>Community Service Experience</li>
         </ul>
-        <div class="partners">
-          <span>CIMSER</span><span>Loyola College</span><span>Greater Chennai Corporation</span><span>AHC Foundation</span>
-        </div>
       </div>
     </div>
-
     <div class="join-box reveal">
       <div>
-        <h3><i class="fas fa-door-open" style="color:var(--gold-dim);"></i>&nbsp; Ready to join?</h3>
-        <p><strong>Colleges around Chennai can register and become members.</strong> Interested students can register online — confirmation is sent by email, and you will be added to the WhatsApp group.</p>
-        <p class="note">To college administration: please circulate the registration link among interested students and encourage their participation in this initiative.</p>
+        <h3><i class="fa-solid fa-door-open" style="color:var(--gold);"></i>&nbsp; Ready to join?</h3>
+        <p><strong>Colleges around Chennai can register and become members.</strong> Students can register online — confirmation is sent by email and you will be added to the WhatsApp group.</p>
+        <p style="font-size:12.5px;color:var(--ink-3);">College administration: please circulate the registration link among interested students.</p>
       </div>
       <a href="https://mbeat-registration.vercel.app/" target="_blank" rel="noopener" class="btn btn-gold">Open the registration form <i class="fa-solid fa-arrow-right"></i></a>
     </div>
   </div>
 </section>
 
-<!-- GALLERY -->
-<section class="gallery-section" id="gallery">
+<section class="section-light section" id="events">
   <div class="wrap">
-    <div class="center reveal">
-      <div class="eyebrow"><i class="fas fa-images"></i> Gallery</div>
-      <h2 class="section-title">CIMSER <em>in Pictures</em></h2>
-      <div class="helix-rule"></div>
-      <p class="section-desc" style="max-width:620px;margin:0 auto;">Moments from our laboratories, seminars, conferences and field activities.</p>
+    <div class="section-head center reveal">
+      <span class="eyebrow"><i class="fa-regular fa-calendar"></i>&nbsp; M-BEAT events</span>
+      <h2>M-BEAT activities &amp; events</h2>
+      <div class="helix-rule helix-rule-center"></div>
     </div>
-    <div class="gallery-grid">
-      <figure class="reveal">
-        <div class="img-slot"><img src="assets/cimser-gallery1.jpeg" alt="CIMSER gallery 1" onerror="this.remove()"><div class="ph"><i class="fa-regular fa-image"></i><span>assets/cimser-gallery1.png</span></div></div>
-        <figcaption>CIMSER gallery — image 1</figcaption>
-      </figure>
-      <figure class="reveal">
-        <div class="img-slot"><img src="assets/cimser-gallery2.jpeg" alt="CIMSER gallery 2" onerror="this.remove()"><div class="ph"><i class="fa-regular fa-image"></i><span>assets/cimser-gallery2.jpeg</span></div></div>
-        <figcaption>CIMSER gallery — image 2</figcaption>
-      </figure>
+    <div class="swiper eventSwiper">
+      <div class="swiper-wrapper" id="event-wrapper"><div class="ev-empty" style="width:100%;">Loading events…</div></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+    <div style="text-align:center;margin-top:10px;">
+      <a href="https://loyolazoology.github.io/home/events/portals.html?type=M-BEAT" class="btn btn-gold" style="color:#241a06;">See all M-BEAT events</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt section" id="gallery">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow"><i class="fa-solid fa-images"></i>&nbsp; Gallery</span>
+      <h2>CIMSER in pictures</h2>
+      <div class="helix-rule helix-rule-center"></div>
+      <p class="lead">Moments from our laboratories, seminars, conferences and field activities.</p>
+    </div>
+    <div class="gal-grid">
+      <figure class="reveal"><div class="gal-img"><img src="../assets/cimser-gallery1.jpeg" alt="CIMSER gallery 1" onerror="this.style.display='none'"><i class="fa-regular fa-image"></i></div></figure>
+      <figure class="reveal"><div class="gal-img"><img src="../assets/cimser-gallery2.jpeg" alt="CIMSER gallery 2" onerror="this.style.display='none'"><i class="fa-regular fa-image"></i></div></figure>
     </div>
   </div>
 </section>
@@ -608,17 +496,16 @@ footer{border-top:1px solid var(--navy-border);padding:52px 0 26px;background:va
       <h3><i class="fa-solid fa-dna" style="color:var(--gold-light);"></i>&nbsp; Join the CIMSER community</h3>
       <p>Register for the conference or become an M-BEAT member from your college.</p>
     </div>
-    <a href="index.html" class="btn btn-gold">Back to conference home <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="../index.html" class="btn btn-gold">Back to conference home <i class="fa-solid fa-arrow-right"></i></a>
   </div>
 </section>
 
-<!-- Footer -->
 <footer>
   <div class="wrap">
     <div class="footer-grid">
       <div>
         <h4>CIMSER</h4>
-        <p style="font-size:13px;">4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment. 26–28 November 2026, Loyola College (Autonomous), Chennai. Organised by CIMSER (Centre for Insect Molecular Studies and Environmental Research), PG &amp; Research Department of Advanced Zoology and Biotechnology.</p>
+        <p>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment. 26–28 November 2026, Loyola College (Autonomous), Chennai. Organised by CIMSER (Centre for Insect Molecular Studies and Environmental Research), PG &amp; Research Department of Advanced Zoology and Biotechnology.</p>
         <div class="social-row">
           <a href="https://www.instagram.com/loyola_zoo/" target="_blank" rel="noopener" aria-label="Loyola Zoology on Instagram"><i class="fa-brands fa-instagram"></i></a>
           <a href="https://www.youtube.com/results?search_query=Loyola+College+Chennai" target="_blank" rel="noopener" aria-label="Loyola College on YouTube"><i class="fa-brands fa-youtube"></i></a>
@@ -662,55 +549,69 @@ footer{border-top:1px solid var(--navy-border);padding:52px 0 26px;background:va
   </div>
 </footer>
 
+<button class="fab" id="back-to-top-btn" title="Back to top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
-<button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
-
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-// IST clock
 function updateClock(){
-  const now = new Date();
-  const d = now.toLocaleDateString('en-GB',{weekday:'short',year:'numeric',month:'short',day:'2-digit',timeZone:'Asia/Kolkata',timeZoneName:'short'});
-  const t = now.toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-  document.getElementById('utc-clock').innerHTML = `<b>${d} &nbsp;·&nbsp; ${t}</b>`;
+  const now=new Date();
+  const d=now.toLocaleDateString('en-GB',{weekday:'short',year:'numeric',month:'short',day:'2-digit',timeZone:'Asia/Kolkata',timeZoneName:'short'});
+  const t=now.toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  document.getElementById('utc-clock').innerHTML=`<b>${d} &nbsp;·&nbsp; ${t}</b>`;
 }
-updateClock(); setInterval(updateClock,1000);
+updateClock();setInterval(updateClock,1000);
 
-// Nav
-const navToggle = document.getElementById('nav-toggle');
-const navLinks = document.getElementById('nav-links');
-const navToggleIcon = navToggle.querySelector('i');
+const navToggle=document.getElementById('nav-toggle'),navLinks=document.getElementById('nav-links'),navIcon=navToggle.querySelector('i');
 function closeAllDropdowns(){document.querySelectorAll('.has-dropdown.open').forEach(li=>li.classList.remove('open'));}
-function closeMobileMenu(){navLinks.classList.remove('open');document.body.classList.remove('no-scroll');navToggleIcon.className='fa-solid fa-bars';closeAllDropdowns();}
-function openMobileMenu(){navLinks.classList.add('open');document.body.classList.add('no-scroll');navToggleIcon.className='fa-solid fa-xmark';}
+function closeMobileMenu(){navLinks.classList.remove('open');document.body.classList.remove('no-scroll');navIcon.className='fa-solid fa-bars';closeAllDropdowns();}
+function openMobileMenu(){navLinks.classList.add('open');document.body.classList.add('no-scroll');navIcon.className='fa-solid fa-xmark';}
 navToggle.addEventListener('click',()=>{navLinks.classList.contains('open')?closeMobileMenu():openMobileMenu();});
-document.querySelectorAll('.dropdown-toggle').forEach(toggle=>{
-  toggle.addEventListener('click',(e)=>{
-    e.preventDefault();
-    const li = toggle.closest('.has-dropdown');
-    const wasOpen = li.classList.contains('open');
-    closeAllDropdowns();
-    if(!wasOpen) li.classList.add('open');
-  });
-});
-navLinks.querySelectorAll('a:not(.dropdown-toggle)').forEach(link=>{
-  link.addEventListener('click',()=>{if(window.innerWidth<=800) closeMobileMenu();});
-});
-window.addEventListener('resize',()=>{if(window.innerWidth>800) closeMobileMenu();});
+document.querySelectorAll('.dropdown-toggle').forEach(t=>{t.addEventListener('click',e=>{e.preventDefault();const li=t.closest('.has-dropdown'),was=li.classList.contains('open');closeAllDropdowns();if(!was)li.classList.add('open');});});
+navLinks.querySelectorAll('a:not(.dropdown-toggle)').forEach(l=>l.addEventListener('click',()=>{if(window.innerWidth<=800)closeMobileMenu();}));
+window.addEventListener('resize',()=>{if(window.innerWidth>800)closeMobileMenu();});
 
-// Reveal
-const io=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*60);});},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>io.observe(el));
+const btt=document.getElementById('back-to-top-btn');
+function toggleBtt(){btt.classList.toggle('show',window.scrollY>420);}
+toggleBtt();window.addEventListener('scroll',toggleBtt,{passive:true});
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
-// Image slots: hide placeholder once a real image loads
-document.querySelectorAll('.img-slot img').forEach(img=>{
-  const slot=img.closest('.img-slot');
-  const ok=()=>slot.classList.add('has-img');
-  if(img.complete&&img.naturalWidth)ok(); else img.addEventListener('load',ok);
-});
+const observer=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*60);observer.unobserve(e.target);}});},{threshold:.07,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-// Back to top
-const btt=document.getElementById('btt');
-window.addEventListener('scroll',()=>btt.classList.toggle('visible',window.scrollY>400));
+// M-BEAT events from the department's published sheet (category = M-BEAT)
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+async function loadEvents(){
+  const csvUrl='https://docs.google.com/spreadsheets/d/e/2PACX-1vR2sifWviROUpjQfbjn_ZI04ZQANvYwcPSBSJTuYFSSzdtUL20La-d5UvJV85CE-_0PXdqKCGFxF0Yv/pub?gid=0&single=true&output=csv';
+  const months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  const wrapper=document.getElementById('event-wrapper');
+  const portal='https://loyolazoology.github.io/home/events/portals.html?type=M-BEAT';
+  try{
+    const res=await fetch(csvUrl);
+    const rows=(await res.text()).split('\n').slice(1);
+    const events=rows.map(row=>{
+      const cols=row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      if(cols.length<9)return null;
+      if(!cols[2].replace(/"/g,'').toLowerCase().includes('m-beat'))return null;
+      const [d,m,y]=cols[4].trim().split('-');
+      return{date:new Date(y,m-1,d),cols,day:d,month:months[parseInt(m)-1],year:y};
+    }).filter(Boolean).sort((a,b)=>b.date-a.date);
+    if(!events.length)throw new Error('no events');
+    wrapper.innerHTML=events.map(e=>`
+      <div class="swiper-slide"><div class="card ev-card">
+        <div class="ev-date"><div class="ev-day">${esc(e.day)}</div><div class="ev-month">${esc(e.month)}</div><div class="ev-year">${esc(e.year)}</div></div>
+        <div class="ev-body">
+          <span class="ev-tag">${esc(e.cols[2].replace(/"/g,''))}</span>
+          <div class="ev-title">${esc(e.cols[1].replace(/"/g,''))}</div>
+          <div class="ev-desc">${esc(e.cols[8].replace(/"/g,''))}</div>
+          <a class="ev-more" href="${portal}">View details →</a>
+        </div></div></div>`).join('');
+    new Swiper('.eventSwiper',{slidesPerView:1,spaceBetween:20,loop:false,autoplay:{delay:3500,disableOnInteraction:false},breakpoints:{768:{slidesPerView:2},1024:{slidesPerView:3}},navigation:{nextEl:'.swiper-button-next',prevEl:'.swiper-button-prev'}});
+  }catch(err){
+    console.error('Event load error:',err);
+    wrapper.innerHTML='<div class="ev-empty" style="width:100%;">M-BEAT events could not be loaded right now. Please use the button below to see all M-BEAT events.</div>';
+  }
+}
+loadEvents();
 </script>
 </body>
 </html>
