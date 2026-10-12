@@ -1,1 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery — Previous &amp; Current Conference | VRMIC 2026 · CIMSER, Loyola College</title>
+<meta name="description" content="Photo gallery of the CIMSER international conferences at Loyola College, Chennai — browse by conference, search and view full-size photos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
+<style>
+:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal:#279c85;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--radius:10px;--maxw:1180px;--paper:#faf8f3;--paper-alt:#f0eee7;--paper-card:#fff;--paper-border:rgba(20,30,60,.10);--ink-1:#151c33;--ink-2:#4b5573;--ink-3:#7c869f;}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html,body{overflow-x:hidden;max-width:100%;}
+body{margin:0;background:radial-gradient(1200px 700px at 85% -10%,#12234f 0%,transparent 55%),radial-gradient(900px 500px at -10% 10%,#0f1d42 0%,transparent 50%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%23cda355' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M60 0 90 17.3 90 51.9 60 69.2 30 51.9 30 17.3Z'/%3E%3C/g%3E%3C/svg%3E") 0 0/120px 104px,var(--navy-950);color:var(--text-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body.no-scroll{overflow:hidden;}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:500;letter-spacing:.2px;margin:0 0 .4em;color:var(--text-1);}
+h1{font-size:clamp(2rem,4vw,3.2rem);font-weight:600;line-height:1.12;}
+h2{font-size:clamp(1.5rem,2.6vw,2.1rem);}
+p{color:var(--text-2);margin:0 0 1em;}
+a{color:var(--gold-light);text-decoration:none;}
+a:hover{text-decoration:underline;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.section{padding:56px 0 72px;}
+@media(max-width:600px){.wrap{padding:0 18px;}.section{padding:40px 0 52px;}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);border:1px solid var(--navy-border);background:rgba(205,163,85,.08);padding:6px 14px;border-radius:999px;margin-bottom:18px;}
+.utcbar{background:#070c22;border-bottom:1px solid var(--navy-border);}
+.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);flex-wrap:wrap;}
+.utcbar i{color:var(--gold-light);font-size:11px;}
+.utcbar b{color:var(--text-2);font-weight:500;}
+@media(min-width:701px){.utcbar-inner{justify-content:flex-end;}}
+.topbar{background:var(--navy-950);border-bottom:1px solid var(--navy-border);}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;}
+@media(min-width:701px){.topbar-inner{justify-content:space-between;}}
+.logo-slots{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
+.logo-slot{height:52px;min-width:52px;border-radius:8px;border:1px solid var(--paper-border);display:flex;align-items:center;justify-content:center;color:var(--ink-3);background:#fff;padding:6px 10px;transition:transform .2s,box-shadow .2s;}
+.logo-slot:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.18);}
+.logo-slot img{height:100%;max-width:90px;object-fit:contain;display:block;}
+.logo-slot.empty{border-style:dashed;background:rgba(255,255,255,.03);color:var(--text-3);}
+@media(max-width:800px){.logo-slot{height:40px;min-width:40px;}}
+.topbar-text{font-size:12px;color:var(--text-1);font-family:'IBM Plex Mono',monospace;text-align:center;max-width:560px;line-height:1.6;}
+@media(max-width:900px){.topbar-text{display:none;}}
+.nav{position:sticky;top:0;z-index:100;background:rgba(6,11,28,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--navy-border);width:100%;}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;}
+.nav-brand{display:flex;align-items:center;gap:14px;min-width:0;overflow:hidden;}
+.brand-logo-link{display:flex;align-items:center;flex-shrink:0;}
+.brand-logo-img{height:52px;width:auto;max-width:100px;object-fit:contain;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));}
+.brand-title{font-family:'Fraunces',serif;font-weight:700;font-size:23px;color:var(--text-1);white-space:nowrap;}
+@media(max-width:1080px){.brand-logo-img{height:44px;}.brand-title{font-size:20px;}}
+@media(max-width:700px){.brand-logo-img{height:34px;}.brand-title{font-size:18px;}}
+@media(max-width:480px){.brand-title{font-size:16px;}.brand-logo-img{height:30px;}.nav-brand{gap:8px;}}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;padding:0;margin:0;flex-shrink:0;}
+.nav-links>li{position:relative;}
+.nav-links a{display:flex;align-items:center;gap:6px;padding:10px 11px;border-radius:6px;color:var(--text-2);font-size:13px;font-weight:500;white-space:nowrap;transition:.25s;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold-light);background:rgba(232,201,131,.08);text-decoration:none;}
+.dropdown-toggle{cursor:pointer;}
+.has-dropdown>a .caret{font-size:10px;transition:.25s;}
+.has-dropdown.open>a .caret{transform:rotate(180deg);}
+.dropdown{position:absolute;left:0;top:calc(100% + 8px);min-width:250px;padding:8px;list-style:none;background:var(--navy-850);border:1px solid var(--navy-border);border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(8px);transition:.25s;z-index:999;}
+.dropdown a{display:block;padding:10px 12px;color:var(--text-2);white-space:normal;}
+.has-dropdown:hover .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:none;}
+.nav-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--navy-border);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:18px;line-height:1;}
+@media(max-width:1200px){.nav-links a{font-size:12.5px;padding:9px;}}
+@media(max-width:800px){
+.nav-toggle{display:block;position:relative;z-index:101;}
+.nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;}
+.nav-links.open{transform:none;visibility:visible;}
+.nav-links>li>a{justify-content:space-between;font-size:14.5px;padding:12px;}
+.dropdown{position:static;opacity:1;visibility:visible;transform:none;display:none;background:rgba(255,255,255,.04);border:none;box-shadow:none;margin-top:4px;}
+.has-dropdown.open .dropdown{display:block;}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:14.5px;padding:13px 24px;border-radius:8px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:transform .15s,box-shadow .15s;}
+.btn:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.2);}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;}
+.btn-outline{background:transparent;border-color:var(--navy-border);color:var(--text-1);}
+.helix-rule{height:2px;width:56px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:2px;margin:0 0 20px;}
+.helix-rule-center{margin-left:auto;margin-right:auto;}
+.page-header{padding:52px 0 44px;}
+.page-header .wrap{max-width:900px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);margin-bottom:14px;}
+.breadcrumb a{color:var(--text-3);}
+.breadcrumb a:hover{color:var(--gold-light);}
+.breadcrumb .sep{margin:0 6px;color:var(--navy-border);}
+.breadcrumb .current{color:var(--gold-light);}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);width:100%;max-width:560px;margin-top:22px;border:1px solid var(--navy-border);border-radius:var(--radius);overflow:hidden;background:rgba(255,255,255,.03);}
+.hero-stat{padding:16px 10px;border-right:1px solid var(--navy-border);}
+.hero-stat:last-child{border-right:0;}
+.hero-stat .num{font-family:'Fraunces',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:600;color:var(--gold-light);line-height:1;}
+.hero-stat .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);margin-top:6px;}
+.section-light{background:var(--paper);color:var(--ink-2);}
+/* controls */
+.controls{background:var(--paper-card);border:1px solid var(--paper-border);border-radius:var(--radius);box-shadow:0 2px 10px rgba(20,30,60,.05);padding:18px;margin-bottom:22px;}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.tab{padding:8px 16px;border-radius:999px;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--paper-border);color:var(--ink-1);background:#fff;transition:.2s;display:inline-flex;align-items:center;gap:8px;}
+.tab:hover,.tab.active{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:var(--gold);}
+.tab .n{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:rgba(20,30,60,.08);padding:1px 7px;border-radius:999px;}
+.tab .live{font-size:9px;background:var(--teal);color:#fff;padding:1px 7px;border-radius:999px;letter-spacing:.5px;text-transform:uppercase;}
+.search-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.search-box{position:relative;flex:1 1 260px;}
+.search-box i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-3);}
+.search-box input{width:100%;border:1px solid var(--paper-border);border-radius:8px;padding:11px 14px 11px 38px;font-family:'Inter',sans-serif;font-size:14px;color:var(--ink-1);background:var(--paper);}
+.search-box input:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.result-count{font-size:13px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.chip{padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid rgba(39,156,133,.3);background:rgba(39,156,133,.08);color:#1c7a68;font-family:inherit;}
+.chip.active{background:#1c7a68;color:#fff;}
+.conf-intro{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:18px;}
+.conf-intro h2{margin:0;color:var(--ink-1);font-size:1.4rem;}
+.conf-intro span{font-size:13.5px;color:var(--ink-3);}
+/* masonry */
+.masonry{columns:4 250px;column-gap:14px;}
+.photo{break-inside:avoid;margin:0 0 14px;position:relative;border-radius:10px;overflow:hidden;background:#e6e2d8;border:1px solid var(--paper-border);cursor:zoom-in;display:block;width:100%;padding:0;text-align:left;font-family:inherit;min-height:120px;}
+.photo img{width:100%;height:auto;display:block;opacity:0;transition:opacity .5s ease,transform .4s ease;}
+.photo img.loaded{opacity:1;}
+.photo:hover img{transform:scale(1.04);}
+.photo .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 10px;background:linear-gradient(0deg,rgba(10,18,48,.85),transparent);color:#fff;font-size:12px;opacity:0;transition:opacity .25s;}
+.photo:hover .cap,.photo:focus-visible .cap{opacity:1;}
+.photo .cap small{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.6px;color:var(--gold-light);text-transform:uppercase;margin-bottom:2px;}
+.photo .badge{position:absolute;top:8px;left:8px;background:rgba(10,18,48,.78);color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:999px;}
+.skeleton{break-inside:avoid;margin:0 0 14px;border-radius:10px;background:linear-gradient(90deg,#e9e5db 25%,#f4f1ea 50%,#e9e5db 75%);background-size:200% 100%;animation:sk 1.3s infinite;}
+@keyframes sk{from{background-position:200% 0;}to{background-position:-200% 0;}}
+.state{text-align:center;padding:48px 20px;color:var(--ink-2);background:var(--paper-card);border:1px dashed var(--paper-border);border-radius:var(--radius);}
+.state i{font-size:30px;color:var(--gold);margin-bottom:10px;display:block;}
+.state h3{color:var(--ink-1);margin-bottom:6px;}
+.state code{font-family:'IBM Plex Mono',monospace;font-size:12.5px;background:rgba(20,30,60,.06);padding:2px 6px;border-radius:4px;}
+.more-wrap{text-align:center;margin-top:20px;}
+.more-wrap .btn-outline{border-color:var(--paper-border);color:var(--ink-1);}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:300;background:rgba(5,9,24,.94);backdrop-filter:blur(6px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:56px 16px 20px;}
+.lb.open{display:flex;}
+.lb-img{max-width:min(1200px,100%);max-height:calc(100vh - 170px);object-fit:contain;border-radius:8px;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+.lb-info{margin-top:14px;text-align:center;max-width:760px;}
+.lb-info p{margin:0;color:var(--text-1);font-size:14.5px;}
+.lb-info small{font-family:'IBM Plex Mono',monospace;color:var(--gold-light);font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;}
+.lb-btn{position:absolute;background:rgba(255,255,255,.08);border:1px solid var(--navy-border);color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.lb-btn:hover{border-color:var(--gold);color:var(--gold-light);}
+.lb-close{top:14px;right:16px;}
+.lb-prev{left:16px;top:50%;}
+.lb-next{right:16px;top:50%;}
+.lb-tools{position:absolute;top:18px;left:18px;display:flex;gap:10px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-2);}
+.lb-tools a{color:var(--text-2);border:1px solid var(--navy-border);padding:5px 10px;border-radius:8px;}
+.lb-tools a:hover{color:var(--gold-light);text-decoration:none;border-color:var(--gold);}
+@media(max-width:600px){.lb-prev,.lb-next{top:auto;bottom:18px;}.lb-img{max-height:calc(100vh - 220px);}}
+.cta-strip{padding:34px 0;background:linear-gradient(90deg,var(--navy-900),var(--navy-850));border-top:1px solid var(--navy-border);border-bottom:1px solid var(--navy-border);}
+.cta-strip-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.cta-strip h3{margin-bottom:4px;font-size:19px;}
+.cta-strip p{margin:0;font-size:14px;color:var(--text-3);}
+@media(max-width:600px){.cta-strip-inner{flex-direction:column;align-items:flex-start;}.cta-strip-inner .btn{width:100%;}}
+footer{border-top:1px solid var(--navy-border);padding:56px 0 28px;background:var(--navy-950);}
+footer p{font-size:13px;color:var(--text-3);}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px;}
+@media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.footer-grid{grid-template-columns:1fr;}}
+.footer-grid h4{font-size:14.5px;margin:0 0 14px;}
+.footer-grid ul{list-style:none;margin:0;padding:0;}
+.footer-grid li{margin-bottom:9px;}
+.footer-grid a{color:var(--text-3);font-size:13.5px;}
+.footer-grid a:hover{color:var(--gold-light);}
+.footer-bottom{border-top:1px solid var(--navy-border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--text-3);}
+.social-row{display:flex;gap:10px;}
+.social-row a{width:34px;height:34px;border:1px solid var(--navy-border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-2);}
+.fab{position:fixed;right:22px;bottom:22px;z-index:150;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 26px rgba(0,0,0,.35);border:0;cursor:pointer;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;opacity:0;pointer-events:none;transform:translateY(8px);transition:.2s;}
+.fab.show{opacity:1;pointer-events:auto;transform:none;}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none !important;animation:none !important;}}
+</style>
+</head>
+<body>
 
+<div class="utcbar"><div class="utcbar-inner"><i class="fa-regular fa-clock"></i><span id="utc-clock"><b>Loading time…</b></span></div></div>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo-slots">
+      <div class="logo-slot" title="Indian Academy of Environmental Science logo"><img src="assets/iaes-logo.png" alt="IAES logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
+      <div class="logo-slot" title="Absolute Human Care Foundation logo"><img src="assets/ahcf-logo.png" alt="AHCF logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
+      <div class="logo-slot" title="Loyola College Centenary Logo"><img src="assets/centenary-logo.png" alt="Centenary Logo" onerror="this.closest('.logo-slot').classList.add('empty');this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-regular fa-image'}))"></div>
+    </div>
+    <span class="topbar-text">Loyola College (Autonomous), Chennai · Est. 1925 &nbsp;·&nbsp; CIMSER — Centre for Insect Molecular Studies and Environmental Research &nbsp;·&nbsp; PG &amp; Research Department of Advanced Zoology and Biotechnology</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand" title="4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment">
+      <a href="index.html" class="brand-logo-link" title="Loyola College"><img src="assets/loyola-crest.png" alt="Loyola College" class="brand-logo-img" onerror="this.style.display='none'"></a>
+      <a href="index.html" class="brand-logo-link" title="CIMSER"><img src="assets/cimser-logo.png" alt="CIMSER" class="brand-logo-img" onerror="this.style.display='none'"></a>
+      <a href="index.html" style="text-decoration:none;"><span class="brand-title">VRMIC 2026</span></a>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="committee.html">Committee</a></li>
+      <li class="has-dropdown">
+        <a href="#" class="dropdown-toggle">About <i class="fa-solid fa-chevron-down caret"></i></a>
+        <ul class="dropdown">
+          <li><a href="about/college.html">About the College</a></li>
+          <li><a href="about/department.html">About the Department</a></li>
+          <li><a href="about/cimser.html">About CIMSER</a></li>
+          <li><a href="about/iaes.html">About IAES</a></li>
+          <li><a href="about/conference.html">About the Conference</a></li>
+        </ul>
+      </li>
+      <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="iaes-award.html">IAES Award</a></li>
+      <li class="has-dropdown">
+        <a href="#" class="dropdown-toggle">Register / Login <i class="fa-solid fa-chevron-down caret"></i></a>
+        <ul class="dropdown">
+          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference"><i class="fa-solid fa-user-plus"></i>&nbsp; Participant Registration</a></li>
+          <li><a href="participant-login.html"><i class="fa-solid fa-user"></i>&nbsp; Participant Login</a></li>
+          <li><a href="admin-login.html"><i class="fa-solid fa-user-shield"></i>&nbsp; Admin Login</a></li>
+        </ul>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span class="current">Gallery</span></div>
+    <span class="eyebrow"><i class="fa-solid fa-images"></i>&nbsp; Moments that matter</span>
+    <h1>Conference Gallery</h1>
+    <div class="helix-rule helix-rule-center"></div>
+    <p style="max-width:620px;font-size:16px;">Relive the CIMSER international conferences at Loyola College, Chennai — from the first edition to VRMIC 2026. Browse by conference, search by keyword and open any photo full-size.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="st-photos">–</div><div class="lbl">Photos</div></div>
+      <div class="hero-stat"><div class="num" id="st-confs">–</div><div class="lbl">Conferences</div></div>
+      <div class="hero-stat"><div class="num" id="st-cats">–</div><div class="lbl">Categories</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="section-light section" id="gallery">
+  <div class="wrap">
+    <div class="controls">
+      <div class="tabs" id="tabs" role="tablist" aria-label="Conference"></div>
+      <div class="search-row">
+        <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="search" placeholder="Search photos — e.g. inauguration, poster, award…" aria-label="Search photos"></div>
+        <span class="result-count" id="count"></span>
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="conf-intro" id="intro"></div>
+    <div id="grid" class="masonry"></div>
+    <div id="state"></div>
+    <div class="more-wrap"><button class="btn btn-outline" id="more" style="display:none;">Load more photos <i class="fa-solid fa-chevron-down"></i></button></div>
+  </div>
+</section>
+
+<section class="cta-strip">
+  <div class="wrap cta-strip-inner">
+    <div>
+      <h3><i class="fa-solid fa-calendar-days" style="color:var(--gold-light);"></i>&nbsp; Be part of the next gallery</h3>
+      <p>Join the 4th International Conference — 26–28 November 2026, Loyola College, Chennai.</p>
+    </div>
+    <a href="https://erp.loyolacollege.edu/loyolaonline/conference" class="btn btn-gold"><i class="fa-solid fa-user-plus"></i> Register now</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>CIMSER</h4>
+        <p>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment. 26–28 November 2026, Loyola College (Autonomous), Chennai. Organised by CIMSER (Centre for Insect Molecular Studies and Environmental Research), PG &amp; Research Department of Advanced Zoology and Biotechnology.</p>
+        <div class="social-row">
+          <a href="https://www.instagram.com/loyola_zoo/" target="_blank" rel="noopener" aria-label="Loyola Zoology on Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.youtube.com/results?search_query=Loyola+College+Chennai" target="_blank" rel="noopener" aria-label="Loyola College on YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="committee.html">Organizing Committee</a></li>
+          <li><a href="about/conference.html">About the Conference</a></li>
+          <li><a href="themes.html">Conference Themes</a></li>
+          <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Register / Login</h4>
+        <ul>
+          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference">Participant Registration</a></li>
+          <li><a href="participant-login.html">Participant Login</a></li>
+          <li><a href="admin-login.html">Admin Login</a></li>
+          <li><a href="about/college.html">About the College</a></li>
+          <li><a href="about/department.html">About the Department</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:conferencecimser@gmail.com"><i class="fa-regular fa-envelope"></i> conferencecimser@gmail.com</a></li>
+          <li><a href="tel:+918838558646"><i class="fa-solid fa-headset"></i> Technical support: +91 88385 58646</a></li>
+          <li><a href="mailto:mounishdesk@gmail.com"><i class="fa-regular fa-envelope"></i> mounishdesk@gmail.com</a></li>
+          <li><a href="#"><i class="fa-solid fa-location-dot"></i> Loyola College, Chennai – 34</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026, CIMSER — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai.</span>
+      <span><em>"Let Your Light Shine"</em></span>
+    </div>
+  </div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div class="lb-tools"><span id="lb-count"></span><a id="lb-open" href="#" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Drive</a><a id="lb-dl" href="#" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> Download</a></div>
+  <button class="lb-btn lb-close" id="lb-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+  <button class="lb-btn lb-prev" id="lb-prev" aria-label="Previous photo"><i class="fa-solid fa-chevron-left"></i></button>
+  <button class="lb-btn lb-next" id="lb-next" aria-label="Next photo"><i class="fa-solid fa-chevron-right"></i></button>
+  <img class="lb-img" id="lb-img" alt="">
+  <div class="lb-info"><small id="lb-tag"></small><p id="lb-cap"></p></div>
+</div>
+
+<button class="fab" id="back-to-top-btn" title="Back to top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script>
+/* =====================  SETTINGS — edit here  ===================== */
+// 1) Paste your Google Sheet "Publish to web" CSV link here:
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVvPAFZbhZ2r8qTpH-k1lxGW1qkVpN3bVm7-FZpxQW3ZchVWJk5MSFCbZvWdeAIU51V41XYSleh82b/pub?gid=0&single=true&output=csv';
+// 2) Conference names/years (key = number typed in the sheet's "Conference" column):
+const CONFERENCES = {
+  1: { label: '1st Conference', year: '' },
+  2: { label: '2nd Conference', year: '' },
+  3: { label: '3rd Conference', year: '2023' },
+  4: { label: '4th Conference', year: '2026', current: true }
+};
+const PAGE_SIZE = 24;
+/* ================================================================= */
+
+// Clock
+function updateClock(){const n=new Date();const d=n.toLocaleDateString('en-GB',{weekday:'short',year:'numeric',month:'short',day:'2-digit',timeZone:'Asia/Kolkata',timeZoneName:'short'});const t=n.toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});document.getElementById('utc-clock').innerHTML=`<b>${d} &nbsp;·&nbsp; ${t}</b>`;}
+updateClock();setInterval(updateClock,1000);
+// Nav
+const navToggle=document.getElementById('nav-toggle'),navLinks=document.getElementById('nav-links'),navIcon=navToggle.querySelector('i');
+function closeAllDropdowns(){document.querySelectorAll('.has-dropdown.open').forEach(li=>li.classList.remove('open'));}
+function closeMobileMenu(){navLinks.classList.remove('open');document.body.classList.remove('no-scroll');navIcon.className='fa-solid fa-bars';closeAllDropdowns();}
+function openMobileMenu(){navLinks.classList.add('open');document.body.classList.add('no-scroll');navIcon.className='fa-solid fa-xmark';}
+navToggle.addEventListener('click',()=>{navLinks.classList.contains('open')?closeMobileMenu():openMobileMenu();});
+document.querySelectorAll('.dropdown-toggle').forEach(t=>t.addEventListener('click',e=>{e.preventDefault();const li=t.closest('.has-dropdown'),was=li.classList.contains('open');closeAllDropdowns();if(!was)li.classList.add('open');}));
+navLinks.querySelectorAll('a:not(.dropdown-toggle)').forEach(l=>l.addEventListener('click',()=>{if(window.innerWidth<=800)closeMobileMenu();}));
+window.addEventListener('resize',()=>{if(window.innerWidth>800)closeMobileMenu();});
+const btt=document.getElementById('back-to-top-btn');
+window.addEventListener('scroll',()=>btt.classList.toggle('show',window.scrollY>420),{passive:true});
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// ---------- Gallery ----------
+const $=id=>document.getElementById(id);
+let ALL=[],view=[],shown=0,activeConf='all',activeCat='',query='';
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function parseCSV(t){const rows=[];let r=[],c='',q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++;}else q=false;}else c+=ch;}else if(ch==='"')q=true;else if(ch===','){r.push(c);c='';}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;r.push(c);rows.push(r);r=[];c='';}else c+=ch;}if(c||r.length){r.push(c);rows.push(r);}return rows;}
+function driveId(u){const m=String(u||'').match(/\/d\/([\w-]+)/)||String(u||'').match(/[?&]id=([\w-]+)/);return m?m[1]:'';}
+const thumb=(id,w)=>`https://lh3.googleusercontent.com/d/${id}=w${w}`;
+const thumbAlt=(id,w)=>`https://drive.google.com/thumbnail?id=${id}&sz=w${w}`;
+function confInfo(n){return CONFERENCES[n]||{label:`Conference ${n}`,year:''};}
+function confTitle(n){const c=confInfo(n);return c.label+(c.year?` · ${c.year}`:'');}
+
+async function load(){
+  showSkeleton();
+  if(!SHEET_CSV_URL||SHEET_CSV_URL.startsWith('PASTE_')){return showState('fa-table','Connect your Google Sheet','Publish your sheet as CSV and paste the link into <code>SHEET_CSV_URL</code> at the top of the script in this page.');}
+  try{
+    const res=await fetch(SHEET_CSV_URL,{cache:'no-store'});
+    if(!res.ok)throw new Error(res.status);
+    const rows=parseCSV(await res.text()).filter(r=>r.some(c=>c.trim()));
+    const head=rows.shift().map(h=>h.trim().toLowerCase().replace(/[^a-z]/g,''));
+    const col=n=>head.indexOf(n);
+    const iC=col('conference'),iL=col('imagelink'),iA=col('alttext'),iCap=col('caption'),iCat=col('category'),iS=col('show');
+    if(iC<0||iL<0)throw new Error('Header row must include "Conference" and "Image Link"');
+    ALL=rows.map((r,idx)=>{
+      const id=driveId(r[iL]);const conf=parseInt((r[iC]||'').match(/\d+/));
+      const show=iS>=0?(r[iS]||'').trim().toLowerCase():'';
+      if(!id||!conf||['no','n','false','hide'].includes(show))return null;
+      return{id,conf,alt:(r[iA]||'').trim()||'Conference photo',cap:iCap>=0?(r[iCap]||'').trim():'',cat:iCat>=0?(r[iCat]||'').trim():'',order:idx};
+    }).filter(Boolean);
+    if(!ALL.length)return showState('fa-image','No photos yet','Add rows to the Google Sheet (Conference, Image Link, Alt Text) and refresh.');
+    initUI();
+  }catch(e){console.error(e);showState('fa-triangle-exclamation','Gallery could not be loaded','Check that the sheet is <b>Published to web as CSV</b> and the link in <code>SHEET_CSV_URL</code> is correct.');}
+}
+function showSkeleton(){$('grid').innerHTML=[180,240,200,150,260,190,220,170].map(h=>`<div class="skeleton" style="height:${h}px"></div>`).join('');}
+function showState(icon,title,msg){$('grid').innerHTML='';$('more').style.display='none';$('state').innerHTML=`<div class="state"><i class="fa-solid ${icon}"></i><h3>${title}</h3><p style="margin:0;">${msg}</p></div>`;}
+
+function initUI(){
+  $('state').innerHTML='';
+  const confs=[...new Set(ALL.map(p=>p.conf))].sort((a,b)=>a-b);
+  const cats=new Set(ALL.map(p=>p.cat).filter(Boolean));
+  $('st-photos').textContent=ALL.length;$('st-confs').textContent=confs.length;$('st-cats').textContent=cats.size||'–';
+  const hash=(location.hash.match(/c=(\d+)/)||[])[1];
+  activeConf=hash&&confs.includes(+hash)?hash:'all';
+  const tab=(k,label,n,live)=>`<button class="tab${String(k)===String(activeConf)?' active':''}" role="tab" data-c="${k}">${label}${live?' <span class="live">Current</span>':''} <span class="n">${n}</span></button>`;
+  $('tabs').innerHTML=tab('all','All photos',ALL.length)+confs.map(c=>tab(c,confInfo(c).label.replace(' Conference',''),ALL.filter(p=>p.conf===c).length,confInfo(c).current)).join('');
+  $('tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;activeConf=b.dataset.c;activeCat='';document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===b));history.replaceState(null,'',activeConf==='all'?location.pathname:'#c='+activeConf);apply();};
+  let tm;$('search').oninput=e=>{clearTimeout(tm);tm=setTimeout(()=>{query=e.target.value.trim().toLowerCase();apply();},180);};
+  $('more').onclick=()=>render(false);
+  apply();
+}
+function apply(){
+  let base=ALL.filter(p=>activeConf==='all'||String(p.conf)===String(activeConf));
+  const cats=[...new Set(base.map(p=>p.cat).filter(Boolean))].sort();
+  $('chips').innerHTML=cats.length?`<button class="chip${activeCat===''?' active':''}" data-k="">All categories</button>`+cats.map(c=>`<button class="chip${activeCat===c?' active':''}" data-k="${esc(c)}">${esc(c)}</button>`).join(''):'';
+  $('chips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;activeCat=b.dataset.k;apply();};
+  view=base.filter(p=>(!activeCat||p.cat===activeCat)&&(!query||(p.alt+' '+p.cap+' '+p.cat+' '+confTitle(p.conf)).toLowerCase().includes(query)));
+  if(activeConf==='all')view.sort((a,b)=>b.conf-a.conf||a.order-b.order);
+  $('intro').innerHTML=activeConf==='all'?'':`<h2>${esc(confTitle(+activeConf))}</h2>${confInfo(+activeConf).current?'<span>Current conference · Loyola College, Chennai</span>':''}`;
+  $('count').textContent=`${view.length} photo${view.length===1?'':'s'}`;
+  render(true);
+}
+function render(reset){
+  if(reset){shown=0;$('grid').innerHTML='';$('state').innerHTML='';}
+  if(!view.length){showState('fa-magnifying-glass','No photos found','Try a different keyword or clear the filters.');return;}
+  const next=view.slice(shown,shown+PAGE_SIZE);
+  $('grid').insertAdjacentHTML('beforeend',next.map((p,i)=>{const n=shown+i;return`<button class="photo" data-i="${n}" aria-label="${esc(p.alt)}"><img src="${thumb(p.id,600)}" alt="${esc(p.alt)}" loading="lazy" onload="this.classList.add('loaded')" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${thumbAlt(p.id,600)}';}else{this.classList.add('loaded');}">${activeConf==='all'?`<span class="badge">${esc(confInfo(p.conf).label.split(' ')[0])}</span>`:''}${(p.cap||p.cat)?`<span class="cap">${p.cat?`<small>${esc(p.cat)}</small>`:''}${esc(p.cap)}</span>`:''}</button>`;}).join(''));
+  shown+=next.length;$('more').style.display=shown<view.length?'':'none';
+}
+$('grid').addEventListener('click',e=>{const b=e.target.closest('.photo');if(b)openLB(+b.dataset.i);});
+
+// ---------- Lightbox ----------
+let cur=0;const lb=$('lb'),lbImg=$('lb-img');
+function showLB(){const p=view[cur];if(!p)return;lbImg.src=thumb(p.id,1600);lbImg.alt=p.alt;lbImg.onerror=()=>{lbImg.onerror=null;lbImg.src=thumbAlt(p.id,1600);};
+  $('lb-cap').textContent=p.cap||p.alt;$('lb-tag').textContent=[confTitle(p.conf),p.cat].filter(Boolean).join(' · ');$('lb-count').textContent=`${cur+1} / ${view.length}`;
+  $('lb-open').href=`https://drive.google.com/file/d/${p.id}/view`;$('lb-dl').href=`https://drive.google.com/uc?export=download&id=${p.id}`;
+  [cur-1,cur+1].forEach(i=>{if(view[i])new Image().src=thumb(view[i].id,1600);});}
+function openLB(i){cur=i;lb.classList.add('open');document.body.classList.add('no-scroll');showLB();}
+function closeLB(){lb.classList.remove('open');document.body.classList.remove('no-scroll');lbImg.src='';}
+function step(d){cur=(cur+d+view.length)%view.length;showLB();}
+$('lb-close').onclick=closeLB;$('lb-prev').onclick=()=>step(-1);$('lb-next').onclick=()=>step(1);
+lb.addEventListener('click',e=>{if(e.target===lb)closeLB();});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')closeLB();if(e.key==='ArrowLeft')step(-1);if(e.key==='ArrowRight')step(1);});
+let sx=0;lb.addEventListener('touchstart',e=>{sx=e.changedTouches[0].clientX;},{passive:true});
+lb.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)step(dx<0?1:-1);},{passive:true});
+
+load();
+</script>
+</body>
+</html>
