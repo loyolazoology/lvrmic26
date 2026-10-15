@@ -202,6 +202,8 @@ let permissions = {};
 try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
 
 function can(moduleKey, action) { return !!(permissions[moduleKey] && permissions[moduleKey][action]); }
+// Volunteers have no dashboard: send them straight to their presentation list.
+if (can('presentationAccess', 'report') && !Object.keys(permissions).some(k => k !== 'presentationAccess' && permissions[k] && (permissions[k].report || permissions[k].transaction))) { window.location.replace('presentation-access.html'); }
 
 function logout(){
   localStorage.removeItem('vrmic_admin_token');
