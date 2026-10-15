@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assign Volunteers | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
+<style>
+:root{
+  --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
+  --navy-border:rgba(226,187,120,.24);
+  --gold:#c9974f; --gold-light:#e8c983;
+  --teal:#279c85; --teal-light:#6fc9b6;
+  --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
+  --danger:#d8695a; --warn:#dba43c; --success:#4fa980;
+  --sidebar-w:250px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;background:var(--navy-950);display:flex;flex-direction:column;min-height:100vh;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 4px;}
+a{color:var(--gold-light);text-decoration:none;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+
+.masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);flex-shrink:0;}
+.masthead-inner{padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+.masthead-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.masthead-logos img{height:52px;width:auto;object-fit:contain;}
+@media(max-width:700px){.masthead-logos img{height:40px;}}
+.masthead-text{flex:1;min-width:220px;}
+.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-light);font-weight:700;margin-bottom:2px;}
+.masthead-text h1{font-size:clamp(.92rem,1.7vw,1.15rem);line-height:1.25;margin:0;color:var(--text-1);}
+.masthead-text .m-sub{font-size:11px;color:var(--text-3);margin:0;}
+
+.body-row{flex:1;display:flex;min-height:0;}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);display:flex;flex-direction:column;overflow-y:auto;}
+.sidebar-brand{padding:22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--navy-border);}
+.sidebar-brand img{height:36px;width:auto;}
+.sidebar-brand div{font-family:'Fraunces',serif;font-size:14px;line-height:1.3;}
+.sidebar-brand small{display:block;color:var(--text-3);font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px;}
+.sidebar-nav{flex:1;padding:14px 12px;}
+.nav-section{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);padding:14px 12px 6px;}
+.nav-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;margin-bottom:2px;cursor:pointer;transition:.15s;}
+.nav-link i{width:16px;text-align:center;color:var(--text-3);font-size:13px;}
+.nav-link:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
+.nav-link.active{background:rgba(232,201,131,.1);color:var(--gold-light);}
+.nav-link.active i{color:var(--gold-light);}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--navy-border);}
+.sidebar-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:14px;flex-shrink:0;}
+.sidebar-user div{min-width:0;}
+.sidebar-user b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-user span{font-size:11px;color:var(--text-3);}
+.logout-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:8px;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);font-size:12.5px;cursor:pointer;}
+.logout-btn:hover{border-color:var(--gold);color:var(--gold-light);}
+.sidebar-toggle{display:none;position:fixed;top:70px;left:16px;z-index:60;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;}
+@media(max-width:960px){
+  .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:70;transform:translateX(-100%);width:min(280px,85vw);transition:transform .3s ease;}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-toggle{display:block;}
+}
+.main{flex:1;min-width:0;overflow-y:auto;}
+.topbar{background:rgba(6,11,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--navy-border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
+.topbar h1{font-size:1.3rem;}
+.topbar .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-3);letter-spacing:.4px;}
+.wrap{padding:28px;max-width:1000px;}
+
+.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:26px;margin-bottom:22px;}
+.card h3{font-size:1.05rem;display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.card h3 i{color:var(--gold-light);font-size:15px;}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:640px){.field-grid{grid-template-columns:1fr;}}
+.field{margin-bottom:0;}
+.field.full{grid-column:1/-1;}
+label{display:block;font-size:13px;font-weight:600;color:var(--text-2);margin:0 0 6px;}
+label .req{color:var(--danger);}
+label .hint-inline{font-weight:400;color:var(--text-3);font-size:11.5px;margin-left:6px;}
+input[type="text"],input[type="email"],input[type="url"],input[type="number"],select{
+  width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:14.5px;
+}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.hint{font-size:12px;color:var(--text-3);margin-top:6px;}
+.type-radio-row{display:flex;gap:10px;flex-wrap:wrap;}
+.type-radio{flex:1;min-width:140px;}
+.type-radio input{display:none;}
+.type-radio label{
+  display:flex;flex-direction:column;gap:4px;padding:13px 14px;border:1.5px solid var(--navy-border);border-radius:10px;
+  background:var(--navy-950);cursor:pointer;font-weight:600;font-size:13.5px;color:var(--text-2);transition:.15s;margin:0;
+}
+.type-radio label small{font-weight:400;color:var(--text-3);font-size:11px;}
+.type-radio input:checked + label{border-color:var(--gold);background:rgba(232,201,131,.08);color:var(--gold-light);}
+.mode-fields{display:none;}
+.mode-fields.show{display:block;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:14.5px;padding:13px 26px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.2);}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;}
+.btn-outline{background:transparent;border-color:var(--navy-border);color:var(--text-1);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
+.submit-row{display:flex;justify-content:flex-end;gap:10px;margin-top:6px;flex-wrap:wrap;}
+.alert{border-radius:8px;padding:14px 16px;font-size:14px;margin-bottom:18px;border:1px solid transparent;display:none;}
+.alert.show{display:block;}
+.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
+.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
+.spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.25);border-top-color:#241a06;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.success-panel{text-align:center;padding:20px 10px;}
+.success-panel i{font-size:36px;color:var(--success);margin-bottom:12px;display:block;}
+.id-chip{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--gold-light);background:var(--navy-950);border:1px solid var(--navy-border);padding:10px 20px;border-radius:999px;margin:10px 0 18px;font-weight:700;}
+.cred-row{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;font-size:13px;color:var(--text-2);margin-bottom:20px;}
+.cred-row b{color:var(--text-1);}
+
+.wrap{max-width:1250px !important;}
+textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:14px;min-height:80px;}
+.btn-sm{padding:7px 11px !important;font-size:12px !important;}
+.btn-danger{background:rgba(216,105,90,.12);border:1px solid rgba(216,105,90,.4);color:#e8988c;}
+.btn-warn{background:rgba(219,164,60,.12);border:1px solid rgba(219,164,60,.45);color:var(--warn);}
+.btn-plain{background:transparent;border:1px solid var(--navy-border);color:var(--text-2);}
+.inline{display:flex;gap:8px;}
+.inline input{flex:1;}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;}
+.chip{background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit;}
+.chip:hover{border-color:var(--gold);color:var(--gold-light);}
+.perm-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+.perm-table th{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);text-align:center;padding:8px;border-bottom:1px solid var(--navy-border);}
+.perm-table th:first-child{text-align:left;}
+.perm-table td{padding:9px 8px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);text-align:center;}
+.perm-table td:first-child{text-align:left;color:var(--text-1);}
+.perm-table td small{display:block;color:var(--text-3);font-size:11px;}
+.perm-table input[type=checkbox]{width:17px;height:17px;accent-color:#c9974f;cursor:pointer;}
+.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
+.scroll-x{overflow-x:auto;}
+table.list{width:100%;border-collapse:collapse;font-size:13px;}
+table.list thead th{text-align:left;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;}
+table.list tbody td{padding:11px 14px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;}
+table.list tbody tr:last-child td{border-bottom:none;}
+.id-cell{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;}
+.name-cell{color:var(--text-1);font-weight:600;}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
+.badge-success{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.badge-danger{background:rgba(216,105,90,.14);color:#e8988c;}
+.badge-neutral{background:rgba(179,188,214,.1);color:var(--text-2);}
+.mchip{display:inline-block;background:rgba(232,201,131,.08);border:1px solid var(--navy-border);color:var(--text-2);border-radius:6px;padding:2px 7px;font-size:11px;margin:0 4px 4px 0;white-space:nowrap;}
+.mchip b{color:var(--gold-light);font-weight:600;}
+.act-cell{display:flex;gap:6px;flex-wrap:wrap;}
+.modal-overlay{position:fixed;inset:0;background:rgba(6,10,26,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 20px;overflow-y:auto;}
+.modal-overlay.show{display:flex;}
+.modal-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:26px;max-width:760px;width:100%;}
+.modal-card h3{margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap;}
+.loading-state,.empty-state{padding:50px 20px;text-align:center;color:var(--text-3);}
+.spinner-lg{width:24px;height:24px;border:3px solid rgba(232,201,131,.25);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
+.sub-title{font-family:'Fraunces',serif;font-size:1rem;margin:20px 0 10px;color:var(--text-1);}
+
+.badge-oral{background:rgba(232,201,131,.14);color:var(--gold-light);}
+.badge-poster{background:rgba(120,160,230,.14);color:#9db8ee;}
+.badge-pending{background:rgba(219,164,60,.14);color:var(--warn);}
+.row-flex{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.vol-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:6px;}
+.vol-head h3{margin:0 !important;}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px;}
+.stat{background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;padding:10px 14px;min-width:120px;}
+.stat b{display:block;font-size:1.25rem;color:var(--gold-light);font-family:'Fraunces',serif;}
+.stat span{font-size:11.5px;color:var(--text-3);}
+.as-item{display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+.as-item .t{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--gold-light);margin-right:8px;}
+.as-item .d{color:var(--text-1);font-size:13.5px;word-break:break-word;}
+.as-item .lg{font-size:11px;color:var(--warn);margin-left:8px;}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.tab{background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:7px 15px;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);}
+select.big,input.big{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:14px;}
+.pick{display:flex;justify-content:space-between;gap:10px;align-items:center;border-bottom:1px solid rgba(226,187,120,.08);padding:8px 2px;font-size:13px;color:var(--text-2);}
+.pick:last-child{border-bottom:none;}
+.pick b{color:var(--text-1);}
+.savebar{position:sticky;bottom:0;z-index:25;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:12px;padding:12px 16px;margin-top:16px;}
+.grp{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;background:rgba(232,201,131,.06);border-bottom:1px solid var(--navy-border);}
+.grp h4{margin:0;font-size:14px;color:var(--gold-light);}
+.grp small{color:var(--text-3);font-size:12px;margin-left:8px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.achip{background:rgba(232,201,131,.08);border:1px solid var(--navy-border);border-radius:999px;padding:5px 12px;font-size:12.5px;color:var(--text-1);}
+.dl-ok{font-size:11.5px;color:var(--teal-light);display:block;margin-top:4px;}
+.fn{font-size:11.5px;color:var(--text-3);display:block;margin-top:4px;word-break:break-all;}
+tr.detail td{background:rgba(255,255,255,.02);}
+.toolbar-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.toolbar-row input,.toolbar-row select{background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-size:13.5px;font-family:'Inter',sans-serif;}
+.toolbar-row input{flex:1;min-width:200px;}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-logos">
+      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
+      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
+    </div>
+    <div class="masthead-text">
+      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
+      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
+      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
+    </div>
+  </div>
+</div>
+
+<button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+
+<div class="body-row">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div>VRMIC 2026<small>ADMIN CONTROL PANEL</small></div></div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="admin-name">—</b><span id="admin-position">—</span></div></div>
+    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="breadcrumb">ADMIN / VOLUNTEERS</div><h1>Assign Volunteers</h1></div>
+    <a href="volunteers-report.html" class="btn btn-outline"><i class="fa-solid fa-table-list"></i> Volunteer report</a>
+  </div>
+  <div class="wrap">
+    <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+
+    <div class="card">
+      <h3><i class="fa-solid fa-user-group"></i> Choose a volunteer</h3>
+      <div class="row-flex"><select class="big" id="vol-select" style="max-width:460px;"><option value="">Loading…</option></select></div>
+      <p class="hint" id="vol-hint">Volunteers are admin accounts with category <b>Volunteer</b>. Create one in <a href="admin-users-manage.html" style="color:var(--gold-light);">Manage Admin Users</a>. They can only open the Presentation Access page.</p>
+    </div>
+
+    <div id="panel" style="display:none;">
+      <div class="card">
+        <div class="vol-head"><h3 id="p-name"></h3><span id="p-status"></span></div>
+        <div class="stats" id="p-stats"></div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fa-solid fa-list-check"></i> Current assignments</h3>
+        <div id="as-list"></div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fa-solid fa-plus"></i> Add assignment</h3>
+        <div class="tabs" id="tabs">
+          <button class="tab on" data-tab="venue">Whole venue</button>
+          <button class="tab" data-tab="slot">One slot</button>
+          <button class="tab" data-tab="participant">Individual participants</button>
+        </div>
+        <div id="tab-venue">
+          <p class="hint" style="margin:0 0 10px;">Includes every presenter allotted to the venue, on all days.</p>
+          <div class="row-flex"><select class="big" id="venue-pick" style="max-width:460px;"></select><button class="btn btn-gold" id="venue-add"><i class="fa-solid fa-plus"></i> Add venue</button></div>
+        </div>
+        <div id="tab-slot" style="display:none;">
+          <p class="hint" style="margin:0 0 10px;">Includes everyone allotted to that venue, room, day and time.</p>
+          <div class="row-flex"><select class="big" id="slot-pick" style="max-width:640px;"></select><button class="btn btn-gold" id="slot-add"><i class="fa-solid fa-plus"></i> Add slot</button></div>
+        </div>
+        <div id="tab-participant" style="display:none;">
+          <input class="big" id="pp-search" placeholder="Search presenters by name, ID or institution…" style="margin-bottom:10px;">
+          <div id="pp-results"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fa-solid fa-users"></i> Participants this volunteer will see <span id="inc-count" style="color:var(--gold-light);font-size:.9rem;"></span></h3>
+        <div class="scroll-x"><table class="list"><thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Slot</th><th>PPT</th></tr></thead><tbody id="inc-body"></tbody></table></div>
+        <div class="empty-state" id="inc-empty" style="display:none;">Nothing assigned yet.</div>
+      </div>
+
+      <div class="savebar">
+        <span id="dirty-msg" class="hint" style="margin:0;">No unsaved changes</span>
+        <span><button class="btn btn-plain" id="reset-btn" disabled>Discard</button> <button class="btn btn-gold" id="save-btn" disabled><i class="fa-solid fa-floppy-disk"></i> Save assignments</button></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
+const token = localStorage.getItem('vrmic_admin_token');
+if (!token) window.location.href = '../admin-login.html';
+let permissions = {};
+try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
+function can(k, a){ return !!(permissions[k] && permissions[k][a]); }
+function logout(){ localStorage.removeItem('vrmic_admin_token'); localStorage.removeItem('vrmic_admin_name'); localStorage.removeItem('vrmic_admin_position'); localStorage.removeItem('vrmic_admin_permissions'); window.location.href = '../admin-login.html'; }
+document.getElementById('sidebar-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+
+async function callApi(action, payload) {
+  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, token }, payload)) });
+  return res.json();
+}
+
+const NAV_ITEMS = [
+  { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'home.html', always: true },
+  { section: 'Participants' },
+  { key: 'participants', sub: 'transaction', label: 'Manage Participants', icon: 'fa-user-plus', href: 'participants-manage.html' },
+  { key: 'participants', sub: 'report', label: 'Participant Report', icon: 'fa-table-list', href: 'participants-report.html' },
+  { section: 'Abstract Review' },
+  { key: 'abstract', sub: 'transaction', label: 'Review Abstracts', icon: 'fa-file-circle-check', href: 'abstracts-review.html' },
+  { key: 'abstract', sub: 'report', label: 'Abstract Report', icon: 'fa-table-list', href: 'abstracts-report.html' },
+  { section: 'Slot Allotment' },
+  { key: 'slot', sub: 'transaction', label: 'Allot Slots', icon: 'fa-location-crosshairs', href: 'slots-manage.html' },
+  { key: 'slot', sub: 'report', label: 'Slot Report', icon: 'fa-table-list', href: 'slots-report.html' },
+  { section: 'Attendance' },
+  { key: 'attendance', sub: 'transaction', label: 'Mark Attendance', icon: 'fa-calendar-check', href: 'attendance-mark.html' },
+  { key: 'attendance', sub: 'report', label: 'Attendance Report', icon: 'fa-table-list', href: 'attendance-report.html' },
+  { section: 'Presentation Access' },
+  { key: 'presentationAccess', sub: 'report', label: 'Venue Presentation List', icon: 'fa-display', href: 'presentation-access.html' },
+  { section: 'Certificates' },
+  { key: 'certificates', sub: 'transaction', label: 'Generate Certificate', icon: 'fa-certificate', href: 'certificates-manage.html' },
+  { key: 'certificates', sub: 'report', label: 'Certificate Report', icon: 'fa-table-list', href: 'certificates-report.html' },
+  { section: 'Receipts' },
+  { key: 'receipts', sub: 'transaction', label: 'Fulfill Receipt', icon: 'fa-receipt', href: 'receipts-manage.html' },
+  { key: 'receipts', sub: 'report', label: 'Receipt Report', icon: 'fa-table-list', href: 'receipts-report.html' },
+  { section: 'Feedback' },
+  { key: 'feedback', sub: 'report', label: 'Feedback Report', icon: 'fa-comment-dots', href: 'feedback-report.html' },
+  { section: 'Schedule' },
+  { key: 'schedule', sub: 'transaction', label: 'Edit Schedule', icon: 'fa-calendar-days', href: 'schedule-manage.html' },
+  { key: 'schedule', sub: 'report', label: 'Schedule Report', icon: 'fa-table-list', href: 'schedule-report.html' },
+  { section: 'Announcements' },
+  { key: 'announcements', sub: 'transaction', label: 'Post Announcement', icon: 'fa-bullhorn', href: 'announcements-manage.html' },
+  { key: 'announcements', sub: 'report', label: 'Announcement Report', icon: 'fa-table-list', href: 'announcements-report.html' },
+  { section: 'Mail' },
+  { key: 'mail', sub: 'transaction', label: 'Send Invite', icon: 'fa-paper-plane', href: 'mail-send.html' },
+  { key: 'mail', sub: 'report', label: 'Mail Report', icon: 'fa-table-list', href: 'mail-report.html' },
+  { section: 'Volunteer Management' },
+  { key: 'volunteers', sub: 'transaction', label: 'Assign Volunteers', icon: 'fa-user-group', href: 'volunteers-manage.html' },
+  { key: 'volunteers', sub: 'report', label: 'Volunteer Report', icon: 'fa-table-list', href: 'volunteers-report.html' },
+  { section: 'Settings' },
+  { key: 'settings', sub: 'transaction', label: 'Edit Settings', icon: 'fa-sliders', href: 'settings-manage.html' },
+  { key: 'settings', sub: 'report', label: 'Current Settings', icon: 'fa-table-list', href: 'settings-report.html' },
+  { section: 'Admin Users' },
+  { key: 'adminUsers', sub: 'transaction', label: 'Manage Admin Users', icon: 'fa-user-shield', href: 'admin-users-manage.html' },
+  { key: 'adminUsers', sub: 'report', label: 'Admin User Report', icon: 'fa-table-list', href: 'admin-users-report.html' }
+];
+function renderSidebar(){
+  const nav = document.getElementById('sidebar-nav');
+  let html = '', pendingSection = null;
+  NAV_ITEMS.forEach(item => {
+    if (item.section) { pendingSection = item.section; return; }
+    if (!item.always && !can(item.key, item.sub)) return;
+    if (pendingSection) { html += `<div class="nav-section">${pendingSection}</div>`; pendingSection = null; }
+    const activeClass = item.href === 'volunteers-manage.html' ? 'active' : '';
+    html += `<a class="nav-link ${activeClass}" href="${item.href}"><i class="fa-solid ${item.icon}"></i> ${item.label}</a>`;
+  });
+  nav.innerHTML = html || `<p style="padding:14px 12px;font-size:12.5px;color:var(--text-3);">No modules assigned yet.</p>`;
+}
+renderSidebar();
+document.getElementById('admin-name').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
+document.getElementById('admin-position').textContent = localStorage.getItem('vrmic_admin_position') || '';
+
+
+const MODULES = [
+  ['participants','Participants','Create / edit / delete accounts; participant report'],
+  ['abstract','Abstracts','Review, remarks, revision requests, manual upload'],
+  ['slot','Slots','Allot venue / room / time / token'],
+  ['attendance','Attendance','Mark and view day-wise attendance'],
+  ['presentationAccess','Presentation access','Venue-wise PPT list (uses Assigned venue)'],
+  ['certificates','Certificates','Generate and attach attendance certificates'],
+  ['receipts','Receipts','Payment receipt requests'],
+  ['feedback','Feedback','View participant feedback'],
+  ['schedule','Schedule','Edit the common conference schedule'],
+  ['announcements','Announcements','Post / delete announcements'],
+  ['settings','Settings','Deadlines and feedback window'],
+  ['mail','Mail','Send invitations; mail log'],
+  ['volunteers','Volunteers','Assign venues to volunteers'],
+  ['adminUsers','Admin users','Create admins and grant access  (high privilege)']
+];
+const PRESETS = {
+  full:      { label: 'Full access',            all: true },
+  registration:{ label: 'Registration desk',    perms: { participants:[1,1], receipts:[1,1], certificates:[1,1], attendance:[1,1] } },
+  reviewer:  { label: 'Abstract reviewer',      perms: { abstract:[1,1], participants:[0,1] } },
+  venue:     { label: 'Venue volunteer',        perms: { presentationAccess:[0,1], attendance:[1,1], slot:[0,1] } },
+  attendance:{ label: 'Attendance only',        perms: { attendance:[1,1] } },
+  readonly:  { label: 'Read-only (all reports)',perms: 'report' },
+  none:      { label: 'Clear all',              perms: {} }
+};
+function buildMatrix(containerId){
+  const el = document.getElementById(containerId);
+  el.innerHTML = `<div class="presets">${Object.keys(PRESETS).map(k => `<button type="button" class="chip" data-preset="${k}">${PRESETS[k].label}</button>`).join('')}</div>
+  <table class="perm-table"><thead><tr><th>Module</th><th>View (report)</th><th>Edit (transaction)</th></tr></thead><tbody>
+  ${MODULES.map(m => `<tr><td>${m[1]}<small>${m[2]}</small></td>
+    <td><input type="checkbox" data-m="${m[0]}" data-a="report"></td>
+    <td><input type="checkbox" data-m="${m[0]}" data-a="transaction"></td></tr>`).join('')}
+  </tbody></table>`;
+  // Edit implies View
+  el.addEventListener('change', e => {
+    const c = e.target; if (c.type !== 'checkbox') return;
+    if (c.dataset.a === 'transaction' && c.checked) el.querySelector(`input[data-m="${c.dataset.m}"][data-a="report"]`).checked = true;
+    if (c.dataset.a === 'report' && !c.checked) el.querySelector(`input[data-m="${c.dataset.m}"][data-a="transaction"]`).checked = false;
+  });
+  el.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => applyPreset(containerId, b.dataset.preset)));
+}
+function setPerms(containerId, perms){
+  perms = perms || {};
+  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(c => {
+    c.checked = !!(perms[c.dataset.m] && perms[c.dataset.m][c.dataset.a]);
+  });
+}
+function getPerms(containerId){
+  const out = {};
+  MODULES.forEach(m => out[m[0]] = { transaction: false, report: false });
+  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(c => { out[c.dataset.m][c.dataset.a] = c.checked; });
+  return out;
+}
+function applyPreset(containerId, key){
+  const pr = PRESETS[key], perms = {};
+  MODULES.forEach(m => {
+    let t = 0, r = 0;
+    if (pr.all) { t = 1; r = 1; }
+    else if (pr.perms === 'report') { r = m[0] === 'adminUsers' ? 0 : 1; }
+    else if (pr.perms[m[0]]) { t = pr.perms[m[0]][0]; r = pr.perms[m[0]][1]; }
+    perms[m[0]] = { transaction: !!t, report: !!r };
+  });
+  setPerms(containerId, perms);
+}
+function genPassword(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+  let s = ''; const a = new Uint32Array(10); crypto.getRandomValues(a);
+  a.forEach(v => s += chars[v % chars.length]); return s;
+}
+function permSummary(perms){
+  perms = perms || {};
+  const chips = MODULES.map(m => {
+    const p = perms[m[0]] || {};
+    if (!p.transaction && !p.report) return '';
+    return `<span class="mchip">${m[1]}: <b>${p.transaction ? 'Edit' : 'View'}</b></span>`;
+  }).join('');
+  return chips || '<span style="color:var(--text-3);">No access</span>';
+}
+function showErr(msg){ const el=document.getElementById('err'); el.textContent=msg; el.className='alert alert-error show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function showOk(msg){ const el=document.getElementById('ok'); el.textContent=msg; el.className='alert alert-success show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function hideAlerts(){ document.getElementById('err').classList.remove('show'); document.getElementById('ok').classList.remove('show'); }
+function escapeHtml(str){ return String(str==null?'':str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+const IP_PROMISE = (async () => { try { const r = await fetch('https://api.ipify.org?format=json'); const j = await r.json(); return j.ip || ''; } catch (e) { return ''; } })();
+async function api(action, payload){ const ip = await Promise.race([IP_PROMISE, new Promise(r => setTimeout(() => r(''), 1500))]); return callApi(action, Object.assign({ ip }, payload || {})); }
+function esc(s){ return escapeHtml(s); }
+function fmtWhen(v){ if (!v) return ''; const d = new Date(v); if (isNaN(d)) return String(v); return d.toLocaleString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true}); }
+function nz(v){ return String(v == null ? '' : v).replace(/\s+/g,' ').trim().toLowerCase(); }
+function slotText(x){ return [x.venue, x.room ? 'Room ' + x.room : '', x.date, x.time].filter(Boolean).join(' · '); }
+function matches(r, a){
+  if (a.type === 'participant') return nz(r.id) === nz(a.participantId);
+  if (!nz(r.venue) || nz(r.venue) !== nz(a.venue)) return false;
+  if (a.type === 'venue') return true;
+  if (a.date && nz(r.date) !== nz(a.date)) return false;
+  if (a.time && nz(r.time) !== nz(a.time)) return false;
+  if (a.room && nz(r.room) !== nz(a.room)) return false;
+  return true;
+}
+
+if (!can('volunteers', 'transaction')) {
+  document.querySelector('.wrap').innerHTML = `<div class="alert alert-error show">You do not have permission to assign volunteers. <a href="volunteers-report.html" style="color:var(--gold-light);">View the volunteer report</a> instead.</div>`;
+} else {
+let vols = [], opts = { venues: [], slots: [], participants: [] }, selId = '', assigns = [], saved = '';
+const keyOf = a => [a.type, nz(a.venue), nz(a.room), nz(a.date), nz(a.time), nz(a.participantId)].join('|');
+const sig = () => JSON.stringify(assigns.map(keyOf).sort());
+const clean = a => ({ type: a.type, venue: a.venue || '', room: a.room || '', date: a.date || '', time: a.time || '', participantId: a.participantId || '' });
+const included = () => opts.participants.filter(p => assigns.some(a => matches(p, a)));
+
+function setDirty(){
+  const d = sig() !== saved;
+  document.getElementById('dirty-msg').textContent = d ? 'You have unsaved changes' : 'No unsaved changes';
+  document.getElementById('save-btn').disabled = !d; document.getElementById('reset-btn').disabled = !d;
+}
+function addAssign(a){
+  if (assigns.some(x => keyOf(x) === keyOf(a))) { showErr('That assignment is already in the list.'); return; }
+  hideAlerts(); assigns.push(a); renderPanel();
+}
+function renderPanel(){
+  const v = vols.find(x => String(x.id) === String(selId));
+  document.getElementById('panel').style.display = v ? 'block' : 'none';
+  if (!v) return;
+  document.getElementById('p-name').textContent = v.name + ' (' + v.id + ')';
+  document.getElementById('p-status').innerHTML = v.active ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Disabled</span>';
+  const inc = included();
+  document.getElementById('p-stats').innerHTML = `<div class="stat"><b>${assigns.length}</b><span>assignments</span></div><div class="stat"><b>${inc.length}</b><span>presenters included</span></div><div class="stat"><b>${inc.filter(p => p.hasPPT).length}</b><span>PPTs uploaded</span></div>`;
+  document.getElementById('as-list').innerHTML = assigns.length ? assigns.map((a, i) => `
+    <div class="as-item"><div><span class="t">${a.type === 'venue' ? 'Venue' : a.type === 'slot' ? 'Slot' : 'Person'}</span><span class="d">${esc(a.type === 'participant' ? (opts.participants.find(p => nz(p.id) === nz(a.participantId)) || { name: a.participantId }).name + ' (' + a.participantId + ')' : a.type === 'venue' ? a.venue : slotText(a))}</span>${a.legacy ? '<span class="lg">from Admin Users — saved here on next save</span>' : ''}</div>
+      <button class="btn btn-danger btn-sm" data-rm="${i}" title="Remove"><i class="fa-solid fa-xmark"></i></button></div>`).join('')
+    : '<div class="empty-state" style="padding:18px;">No assignments yet. Add a venue, a slot or individual participants below.</div>';
+  document.getElementById('inc-count').textContent = inc.length ? '(' + inc.length + ')' : '';
+  document.getElementById('inc-empty').style.display = inc.length ? 'none' : 'block';
+  document.getElementById('inc-body').innerHTML = inc.map(p => `<tr><td class="id-cell">${esc(p.id)}</td><td class="name-cell">${esc(p.name)}</td><td><span class="badge ${p.type==='Oral'?'badge-oral':'badge-poster'}">${esc(p.type)}</span></td><td>${esc(slotText(p) || 'No slot yet')}</td><td>${p.hasPPT ? '<span class="badge badge-success">Uploaded</span>' : (p.type === 'Poster' ? '<span class="badge badge-neutral">Printed poster</span>' : '<span class="badge badge-pending">Not uploaded</span>')}</td></tr>`).join('');
+  renderPickers(); setDirty();
+}
+function renderPickers(){
+  document.getElementById('venue-pick').innerHTML = opts.venues.length
+    ? opts.venues.map(v => `<option value="${esc(v.name)}">${esc(v.name)}${v.inSettings ? '' : '  (not in Settings list)'}</option>`).join('')
+    : '<option value="">No venues yet — add them in Settings or allot slots first</option>';
+  document.getElementById('slot-pick').innerHTML = opts.slots.length
+    ? opts.slots.map((s, i) => `<option value="${i}">${esc(slotText(s))} — ${s.count} presenter${s.count > 1 ? 's' : ''}</option>`).join('')
+    : '<option value="">No slots allotted yet</option>';
+  renderPeople();
+}
+function renderPeople(){
+  const q = nz(document.getElementById('pp-search').value);
+  const list = opts.participants.filter(p => !q || nz(p.name).includes(q) || nz(p.id).includes(q) || nz(p.institution).includes(q)).slice(0, 30);
+  document.getElementById('pp-results').innerHTML = list.length ? list.map(p => {
+    const has = assigns.some(a => a.type === 'participant' && nz(a.participantId) === nz(p.id));
+    return `<div class="pick"><span><b>${esc(p.name)}</b> · ${esc(p.id)} · ${esc(p.type)}<br><span style="font-size:11.5px;">${esc(p.institution || '')}${p.venue ? ' · ' + esc(slotText(p)) : ''}</span></span>${has ? '<span class="badge badge-success">Added</span>' : `<button class="btn btn-plain btn-sm" data-addp="${esc(p.id)}">Add</button>`}</div>`;
+  }).join('') + (opts.participants.length > 30 && !q ? '<p class="hint">Showing 30 — search to narrow down.</p>' : '') : '<div class="empty-state" style="padding:14px;">No presenters match.</div>';
+}
+
+document.getElementById('as-list').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (b) { assigns.splice(+b.dataset.rm, 1); renderPanel(); } });
+document.getElementById('pp-results').addEventListener('click', e => { const b = e.target.closest('[data-addp]'); if (b) addAssign({ type: 'participant', participantId: b.dataset.addp }); });
+document.getElementById('pp-search').addEventListener('input', renderPeople);
+document.getElementById('venue-add').addEventListener('click', () => { const v = document.getElementById('venue-pick').value; if (v) addAssign({ type: 'venue', venue: v }); });
+document.getElementById('slot-add').addEventListener('click', () => { const s = opts.slots[+document.getElementById('slot-pick').value]; if (s) addAssign({ type: 'slot', venue: s.venue, room: s.room, date: s.date, time: s.time }); });
+document.getElementById('tabs').addEventListener('click', e => {
+  const t = e.target.closest('.tab'); if (!t) return;
+  document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === t));
+  ['venue','slot','participant'].forEach(k => document.getElementById('tab-' + k).style.display = k === t.dataset.tab ? 'block' : 'none');
+});
+
+function pick(id, keepDirtyCheck){
+  const v = vols.find(x => String(x.id) === String(id));
+  selId = v ? v.id : '';
+  assigns = v ? v.assignments.map(a => Object.assign({}, a)) : [];
+  saved = v ? JSON.stringify(v.assignments.filter(a => !a.legacy).map(keyOf).sort()) : '';
+  // legacy venue (from Admin Users) is not "saved" yet, so it correctly shows as a pending change
+  renderPanel();
+}
+document.getElementById('vol-select').addEventListener('change', function(){
+  if (selId && sig() !== saved && !confirm('Discard unsaved changes for the current volunteer?')) { this.value = selId; return; }
+  hideAlerts(); pick(this.value);
+});
+document.getElementById('reset-btn').addEventListener('click', () => { if (confirm('Discard unsaved changes?')) pick(selId); });
+window.addEventListener('beforeunload', e => { if (selId && sig() !== saved) { e.preventDefault(); e.returnValue = ''; } });
+
+document.getElementById('save-btn').addEventListener('click', async function(){
+  hideAlerts(); const btn = this, old = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving…';
+  try {
+    const res = await api('adminSaveVolunteerAssignments', { volunteerId: selId, assignments: assigns.map(clean) });
+    if (!res.ok) { if (/session/i.test(res.error||'')) { logout(); return; } showErr(res.error || 'Could not save.'); btn.innerHTML = old; setDirty(); return; }
+    showOk('Saved. This volunteer can now see ' + res.participants + ' presenter' + (res.participants === 1 ? '' : 's') + '. Changes apply immediately.');
+    const keep = selId; await loadVols(); pick(keep);
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+  finally { btn.innerHTML = old; setDirty(); }
+});
+
+async function loadVols(){
+  const res = await api('adminListVolunteers', {});
+  if (!res.ok) { if (/session/i.test(res.error||'')) { logout(); return false; } showErr(res.error || 'Could not load volunteers.'); return false; }
+  vols = res.volunteers;
+  const sel = document.getElementById('vol-select');
+  sel.innerHTML = vols.length ? '<option value="">Select a volunteer…</option>' + vols.map(v => `<option value="${esc(v.id)}">${esc(v.name)} (${esc(v.id)}) — ${v.stats.participants} presenters${v.active ? '' : ' · disabled'}</option>`).join('') : '<option value="">No volunteer accounts yet</option>';
+  if (selId) sel.value = selId;
+  if (!vols.length) document.getElementById('vol-hint').innerHTML = 'No volunteer accounts yet. Create one in <a href="admin-users-manage.html" style="color:var(--gold-light);">Manage Admin Users</a> with category <b>Volunteer</b>, then come back here.';
+  return true;
+}
+(async function(){
+  try {
+    const [ok, o] = await Promise.all([loadVols(), api('adminVolunteerOptions', {})]);
+    if (!o.ok) { showErr(o.error || 'Could not load venues and slots.'); return; }
+    opts = o; renderPickers();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+})();
+}
+
+</script>
+</body>
+</html>
