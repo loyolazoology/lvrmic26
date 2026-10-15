@@ -201,7 +201,7 @@ table.list tbody tr:last-child td{border-bottom:none;}
         <div class="field"><label>Position / role title</label><input type="text" id="n-position" placeholder="e.g. Volunteer, Abstract Reviewer"></div>
         <div class="field"><label>Category</label>
           <select id="n-category"><option>Admin</option><option>Staff</option><option>Reviewer</option><option>Volunteer</option></select></div>
-        <div class="field"><label>Assigned venue <span class="hint-inline">(volunteers)</span></label><input type="text" id="n-venue" placeholder="Must match the Slot venue exactly"><p class="hint">Scopes the "Venue Presentation List" to this venue.</p></div>
+        <div class="field"><label>Assigned venue <span class="hint-inline">(volunteers)</span></label><input type="text" id="n-venue" placeholder="Must match the Slot venue exactly"><p class="hint">Legacy field. Use Volunteers &gt; Assign for venues, slots and individual participants.</p></div>
         <div class="field full"><label>Initial password <span class="req">*</span></label>
           <div class="inline"><input type="text" id="n-pass" autocomplete="off"><button type="button" class="btn btn-plain" id="n-gen"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button></div>
           <p class="hint">The admin must change it at first login. Share it securely.</p></div>
@@ -420,6 +420,17 @@ if (!can('adminUsers', 'transaction')) {
   document.querySelector('.wrap').innerHTML = `<div class="alert alert-error show">You do not have permission to manage admin users.</div>`;
 } else {
 buildMatrix('n-matrix'); buildMatrix('ed-matrix');
+// Volunteer is a locked role: Presentation Access (view) only, everything else disabled.
+function applyVolLock(p){
+  const locked = document.getElementById(p + '-category').value === 'Volunteer', m = document.getElementById(p + '-matrix');
+  if (locked) setPerms(p + '-matrix', { presentationAccess: { report: true, transaction: false } });
+  m.querySelectorAll('input,button').forEach(el => el.disabled = locked);
+  let note = document.getElementById(p + '-lock-note');
+  if (!note) { note = document.createElement('p'); note.id = p + '-lock-note'; note.className = 'hint'; m.parentNode.insertBefore(note, m); }
+  note.textContent = locked ? 'Volunteer is a locked role: it can only open Presentation Access. Choose their venues, slots or participants in Volunteers > Assign.' : '';
+}
+document.getElementById('n-category').addEventListener('change', () => applyVolLock('n'));
+document.getElementById('ed-category').addEventListener('change', () => applyVolLock('ed'));
 const myId = localStorage.getItem('vrmic_admin_id') || '';
 let admins = [], editing = null, target = null;
 
@@ -442,7 +453,7 @@ document.getElementById('n-create').addEventListener('click', async function(){
     if (!res.ok) { showErr(res.error || 'Could not create the admin.'); return; }
     showOk(`Admin "${res.id}" created. Initial password: ${pw}` + (v('n-email') ? (res.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.') : ' — share it securely.'));
     ['n-id','n-name','n-email','n-position','n-venue'].forEach(i => document.getElementById(i).value = '');
-    document.getElementById('n-pass').value = genPassword(); setPerms('n-matrix', {});
+    document.getElementById('n-pass').value = genPassword(); setPerms('n-matrix', {}); applyVolLock('n');
     loadAdmins();
   } catch (e) { showErr('Could not reach the server.'); }
   finally { btn.disabled = false; btn.innerHTML = old; }
@@ -489,7 +500,7 @@ document.getElementById('a-body').addEventListener('click', async function(e){
     document.getElementById('ed-position').value = a.position || ''; document.getElementById('ed-venue').value = a.assignedVenue || '';
     const cat = document.getElementById('ed-category'); if (a.category && ![...cat.options].some(o => o.value === a.category)) cat.add(new Option(a.category));
     cat.value = a.category || 'Admin';
-    setPerms('ed-matrix', a.permissions);
+    setPerms('ed-matrix', a.permissions); applyVolLock('ed');
     document.getElementById('ed-modal').classList.add('show');
   } else if (b.dataset.act === 'reset') {
     document.getElementById('rp-who').textContent = `${a.name} (${a.id})`;
