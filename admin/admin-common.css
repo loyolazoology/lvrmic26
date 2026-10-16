@@ -1,0 +1,37 @@
+/* VRMIC 2026 admin — styles used by several pages that were missing from the page-level CSS.
+   Linked after each page's own <style>. */
+
+/* ---- dashboard ---- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.stats{grid-template-columns:1fr;}}
+.stats .empty{grid-column:1/-1;}
+.sc{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:20px;}
+.sc > i{width:38px;height:38px;border-radius:10px;background:rgba(205,163,85,.1);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:15px;margin-bottom:14px;}
+.sc h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);margin:0 0 6px;font-weight:600;}
+.sc .v{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--text-1);line-height:1.2;}
+.sc .s{font-size:12px;color:var(--text-3);margin-top:4px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:800px){.two{grid-template-columns:1fr;}}
+.two .card{margin-bottom:0;}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--navy-border);font-size:13.5px;}
+.row:last-child{border-bottom:none;}
+.row b{color:var(--text-1);}
+.act{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;margin-bottom:10px;}
+.act:last-child{margin-bottom:0;}
+.act b{font-size:13.5px;color:var(--text-1);display:block;}
+.act span{font-size:12px;color:var(--text-3);display:block;margin-top:2px;}
+.act a{font-size:12.5px;font-weight:600;white-space:nowrap;}
+
+/* ---- participant individual view ---- */
+.head{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;padding-bottom:18px;margin-bottom:6px;border-bottom:1px solid var(--navy-border);}
+.head h2{font-size:1.5rem;margin:0 0 2px;}
+.ph{width:112px;height:140px;border-radius:10px;border:2px solid var(--gold);background:var(--navy-800);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-family:'Fraunces',serif;font-size:2rem;color:var(--gold-light);}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;}
+.sec{margin-top:20px;}
+.sec h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold-light);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--navy-border);font-weight:500;}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px 22px;}
+.kv > div span{display:block;font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
+.kv > div b{display:block;font-size:13.5px;font-weight:500;color:var(--text-1);word-break:break-word;}
+
+@media print{.card{background:#fff !important;border-color:#bbb !important;color:#000}.kv b,.head h2{color:#000 !important}}
