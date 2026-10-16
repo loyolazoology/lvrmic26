@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard | VRMIC 2026 Admin</title>
+<title>Admin Portal | VRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
@@ -12,355 +12,286 @@
   --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
   --navy-border:rgba(226,187,120,.24);
   --gold:#c9974f; --gold-light:#e8c983;
-  --teal:#279c85; --teal-light:#6fc9b6;
+  --teal-light:#6fc9b6;
   --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
-  --danger:#d8695a; --warn:#dba43c; --success:#4fa980;
-  --sidebar-w:250px;
+  --danger:#d8695a;
+  --sidebar-w:272px; --top-h:60px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
-body{
-  font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;
-  background:var(--navy-950);
-  display:flex;flex-direction:column;min-height:100vh;
-}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 4px;}
-a{color:var(--gold-light);text-decoration:none;}
+body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.5;background:var(--navy-950);display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;}
+button{font-family:inherit;}
 .mono{font-family:'IBM Plex Mono',monospace;}
 
-/* ---- Masthead: full institutional branding, spans the whole page ---- */
-.masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);flex-shrink:0;}
-.masthead-inner{padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.masthead-logos img{height:52px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:40px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-light);font-weight:700;margin-bottom:2px;}
-.masthead-text h1{font-size:clamp(.92rem,1.7vw,1.15rem);line-height:1.25;margin:0;color:var(--text-1);}
-.masthead-text .m-sub{font-size:11px;color:var(--text-3);margin:0;}
-
-.body-row{flex:1;display:flex;min-height:0;}
-
-/* ---- Sidebar ---- */
-.sidebar{
-  width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);
-  display:flex;flex-direction:column;overflow-y:auto;
-}
-.sidebar-brand{padding:22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--navy-border);}
-.sidebar-brand img{height:36px;width:auto;}
-.sidebar-brand div{font-family:'Fraunces',serif;font-size:14px;line-height:1.3;}
-.sidebar-brand small{display:block;color:var(--text-3);font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px;}
-.sidebar-nav{flex:1;padding:14px 12px;}
-.nav-section{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);padding:14px 12px 6px;}
-.nav-link{
-  display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:var(--text-2);
-  font-size:13.5px;font-weight:500;margin-bottom:2px;cursor:pointer;transition:.15s;
-}
-.nav-link i{width:16px;text-align:center;color:var(--text-3);font-size:13px;}
-.nav-link:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
-.nav-link.active{background:rgba(232,201,131,.1);color:var(--gold-light);}
-.nav-link.active i{color:var(--gold-light);}
-.nav-sub{padding-left:30px;}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--navy-border);}
-.sidebar-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:14px;flex-shrink:0;}
-.sidebar-user div{min-width:0;}
-.sidebar-user b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-user span{font-size:11px;color:var(--text-3);}
-.logout-btn{
-  width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:8px;
-  border:1px solid var(--navy-border);background:transparent;color:var(--text-2);font-size:12.5px;cursor:pointer;
-}
-.logout-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-
-.sidebar-toggle{display:none;position:fixed;top:70px;left:16px;z-index:60;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;}
-@media(max-width:960px){
-  .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:70;transform:translateX(-100%);width:min(280px,85vw);transition:transform .3s ease;}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-toggle{display:block;}
-}
-
-/* ---- Main content ---- */
-.main{flex:1;min-width:0;overflow-y:auto;}
-.topbar{
-  background:rgba(6,11,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--navy-border);
-  padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
-  position:sticky;top:0;z-index:40;
-}
-.topbar h1{font-size:1.3rem;}
-.topbar .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-3);letter-spacing:.4px;}
-.wrap{padding:28px;max-width:1280px;}
-
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
-@media(max-width:1100px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:560px){.stat-grid{grid-template-columns:1fr;}}
-.stat-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:20px;}
-.stat-card .sc-icon{width:38px;height:38px;border-radius:10px;background:rgba(205,163,85,.1);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:15px;margin-bottom:14px;}
-.stat-card h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);margin:0 0 6px;font-weight:600;}
-.stat-card .sc-value{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--text-1);}
-.stat-card .sc-sub{font-size:12px;color:var(--text-3);margin-top:4px;}
-
-.section-title{display:flex;align-items:center;gap:10px;margin:8px 0 16px;}
-.section-title i{color:var(--gold-light);font-size:15px;}
-.section-title h2{font-size:1.05rem;margin:0;}
-
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-@media(max-width:800px){.grid-2{grid-template-columns:1fr;}}
-.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:22px;}
-.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--navy-border);font-size:13.5px;}
-.breakdown-row:last-child{border-bottom:none;}
-.breakdown-row b{color:var(--text-1);}
-.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;}
-.badge-oral{background:rgba(31,122,104,.14);color:var(--teal-light);}
-.badge-poster{background:rgba(205,163,85,.14);color:var(--gold-light);}
-.badge-participant{background:rgba(179,188,214,.1);color:var(--text-2);}
-.badge-pending{background:rgba(219,164,60,.14);color:var(--warn);}
-
-.action-list{display:flex;flex-direction:column;gap:10px;}
-.action-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;}
-.action-item .ai-left{display:flex;align-items:center;gap:12px;}
-.action-item i{color:var(--gold-light);font-size:15px;}
-.action-item b{font-size:13.5px;color:var(--text-1);}
-.action-item span{font-size:12px;color:var(--text-3);display:block;}
-.action-item a{font-size:12.5px;font-weight:600;color:var(--gold-light);white-space:nowrap;}
-
-.loader{text-align:center;padding:80px 0;color:var(--text-3);}
-.spinner-lg{width:28px;height:28px;border:3px solid rgba(232,201,131,.15);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
+/* ---------- top bar ---------- */
+.top{height:var(--top-h);flex-shrink:0;background:var(--navy-900);border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:14px;padding:0 16px;z-index:50;}
+.icon-btn{width:38px;height:38px;border-radius:9px;border:1px solid var(--navy-border);background:var(--navy-850);color:var(--text-2);cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
+.icon-btn:hover{border-color:var(--gold);color:var(--gold-light);}
+.icon-btn.spin i{animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;}
+.brand img{height:34px;width:auto;object-fit:contain;}
+.brand b{font-family:'Fraunces',serif;font-weight:500;font-size:15px;white-space:nowrap;}
+.brand small{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.6px;color:var(--text-3);}
+.spacer{flex:1;}
+.clock{text-align:right;line-height:1.25;white-space:nowrap;}
+.clock .t{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:var(--gold-light);}
+.clock .d{font-size:11px;color:var(--text-3);}
+.last{font-size:11.5px;color:var(--text-3);line-height:1.3;text-align:right;max-width:260px;}
+.last b{color:var(--text-2);font-weight:600;display:block;font-size:10px;letter-spacing:.5px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;}
+.user{display:flex;align-items:center;gap:9px;min-width:0;padding-left:12px;border-left:1px solid var(--navy-border);}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:13px;flex-shrink:0;}
+.user b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;}
+.user span{display:block;font-size:10.5px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;}
+.logout{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:9px;border:1px solid rgba(216,105,90,.4);background:rgba(216,105,90,.1);color:#e8988c;font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0;}
+.logout:hover{background:rgba(216,105,90,.2);}
+@media(max-width:1180px){.last{display:none;}}
+@media(max-width:820px){.user div,.clock .d,.brand small,.logout span{display:none;}.user{padding-left:0;border:none;}.top{gap:8px;padding:0 10px;}}
+@media(max-width:520px){.brand b{display:none;}}
+
+/* ---------- body ---------- */
+.row{flex:1;display:flex;min-height:0;position:relative;}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);overflow-y:auto;padding:12px 10px 24px;transition:margin .25s ease;}
+body.collapsed .sidebar{margin-left:calc(-1 * var(--sidebar-w));}
+.scrim{display:none;}
+@media(max-width:960px){
+  .sidebar{position:absolute;top:0;bottom:0;left:0;z-index:40;margin-left:calc(-1 * var(--sidebar-w));box-shadow:0 0 40px rgba(0,0,0,.5);}
+  body.collapsed .sidebar{margin-left:calc(-1 * var(--sidebar-w));}
+  body.navopen .sidebar{margin-left:0;}
+  body.navopen .scrim{display:block;position:absolute;inset:0;background:rgba(6,10,26,.55);z-index:35;}
+}
+.nav-link,.grp-h,.sub-h{display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;background:none;border:none;cursor:pointer;text-align:left;text-decoration:none;transition:.15s;}
+.nav-link i.ic,.grp-h i.ic,.sub-h i.ic{width:16px;text-align:center;color:var(--text-3);font-size:13px;flex-shrink:0;}
+.nav-link:hover,.grp-h:hover,.sub-h:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
+.nav-link.active{background:rgba(232,201,131,.12);color:var(--gold-light);}
+.nav-link.active i.ic{color:var(--gold-light);}
+.chev{margin-left:auto;font-size:10px;color:var(--text-3);transition:transform .2s;}
+.open > .grp-h .chev,.open > .sub-h .chev{transform:rotate(180deg);}
+.grp{margin:2px 0;}
+.grp-h{font-weight:600;color:var(--text-1);}
+.grp.has-active > .grp-h{color:var(--gold-light);}
+.grp.has-active > .grp-h i.ic{color:var(--gold-light);}
+.grp-b,.sub-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease;}
+.open > .grp-b,.open > .sub-b{grid-template-rows:1fr;}
+.grp-b > div,.sub-b > div{overflow:hidden;min-height:0;}
+.grp-b > div{margin-left:18px;border-left:1px solid var(--navy-border);padding-left:6px;}
+.sub-h{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--text-3);padding:8px 10px;}
+.sub-b > div{padding-left:6px;}
+.sub-b .nav-link{font-size:13px;padding:8px 10px;}
+.empty-nav{padding:14px 12px;font-size:12.5px;color:var(--text-3);}
+
+/* ---------- content ---------- */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;}
+.crumb{flex-shrink:0;padding:7px 18px;border-bottom:1px solid var(--navy-border);background:rgba(6,11,28,.6);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.4px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.crumb b{color:var(--gold-light);font-weight:500;}
+.frame-wrap{flex:1;position:relative;min-height:0;}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--navy-950);}
+.loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--navy-950);color:var(--text-3);font-size:13px;gap:10px;z-index:5;transition:opacity .2s;}
+.loading.hide{opacity:0;pointer-events:none;}
+.sp{width:18px;height:18px;border:2px solid rgba(232,201,131,.2);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;}
 </style>
 </head>
 <body>
 
-<button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
-
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
-    </div>
-  </div>
-</div>
-
-<div class="body-row">
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand">
+<header class="top">
+  <button class="icon-btn" id="navBtn" title="Show or hide menu" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+  <div class="brand">
     <img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'">
-    <div>VRMIC 2026<small>ADMIN CONTROL PANEL</small></div>
+    <div><b id="shortName">VRMIC 2026</b><small>ADMIN PORTAL</small></div>
   </div>
-  <nav class="sidebar-nav" id="sidebar-nav"><!-- populated by JS based on permissions --></nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-user">
-      <div class="avatar"><i class="fa-solid fa-user-shield"></i></div>
-      <div><b id="admin-name">—</b><span id="admin-position">—</span></div>
-    </div>
-    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
-  </div>
-</aside>
+  <div class="spacer"></div>
+  <div class="last" id="lastLogin"><b>Last login</b><span>—</span></div>
+  <div class="clock" title="Indian Standard Time"><div class="t" id="clockT">--:--:--</div><div class="d" id="clockD">&nbsp;</div></div>
+  <button class="icon-btn" id="refreshBtn" title="Refresh this page and your permissions" aria-label="Refresh"><i class="fa-solid fa-rotate"></i></button>
+  <button class="icon-btn" id="fsBtn" title="Full screen" aria-label="Full screen"><i class="fa-solid fa-expand"></i></button>
+  <div class="user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="uName">Admin</b><span id="uPos"></span></div></div>
+  <button class="logout" id="logoutBtn" title="Log out"><i class="fa-solid fa-right-from-bracket"></i><span>Log out</span></button>
+</header>
 
-<div class="main">
-  <div class="topbar">
-    <div>
-      <div class="breadcrumb">ADMIN / DASHBOARD</div>
-      <h1>Dashboard</h1>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <div id="loader" class="loader"><div class="spinner-lg"></div>Loading dashboard…</div>
-
-    <div id="content" style="display:none;">
-      <div class="stat-grid" id="stat-grid"></div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="section-title"><i class="fa-solid fa-chart-pie"></i><h2>Participants by category</h2></div>
-          <div id="type-breakdown"></div>
-        </div>
-        <div class="card">
-          <div class="section-title"><i class="fa-solid fa-list-check"></i><h2>Needs attention</h2></div>
-          <div class="action-list" id="action-list"></div>
-        </div>
-      </div>
+<div class="row">
+  <aside class="sidebar" id="sidebar"><nav id="nav"></nav></aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="main">
+    <div class="crumb" id="crumb">Dashboard</div>
+    <div class="frame-wrap">
+      <div class="loading" id="loading"><div class="sp"></div> Loading…</div>
+      <iframe id="frame" title="Admin page" allow="camera; fullscreen; clipboard-write" referrerpolicy="same-origin"></iframe>
     </div>
   </div>
 </div>
-</div>
 
+<script src="admin-common.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
+const $ = id => document.getElementById(id), esc = VR.esc;
+if (!VR.token()) location.replace(VR.LOGIN_URL);
 
-const token = localStorage.getItem('vrmic_admin_token');
-if (!token) window.location.href = '../admin-login.html';
-
-let permissions = {};
-try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
-
-function can(moduleKey, action) { return !!(permissions[moduleKey] && permissions[moduleKey][action]); }
-// Volunteers have no dashboard: send them straight to their presentation list.
-if (can('presentationAccess', 'report') && !Object.keys(permissions).some(k => k !== 'presentationAccess' && permissions[k] && (permissions[k].report || permissions[k].transaction))) { window.location.replace('presentation-access.html'); }
-
-function logout(){
-  localStorage.removeItem('vrmic_admin_token');
-  localStorage.removeItem('vrmic_admin_name');
-  localStorage.removeItem('vrmic_admin_position');
-  localStorage.removeItem('vrmic_admin_permissions');
-  window.location.href = '../admin-login.html';
-}
-
-document.getElementById('sidebar-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
-
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action, token }, payload))
-  });
-  return res.json();
-}
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-// ---- Sidebar nav: every module gets a Transaction entry (action/edit) and a
-// Report entry (view list/log), same pattern as Mail. Each only renders if the
-// admin has that specific permission — a Volunteer with only attendance.transaction
-// sees just "Mark Attendance", never "Attendance Report", unless also granted.
-const NAV_ITEMS = [
-  { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'home.html', always: true },
-
-  { section: 'Participants' },
-  { key: 'participants', sub: 'transaction', label: 'Manage Participants', icon: 'fa-user-plus', href: 'participants-manage.html' },
-  { key: 'participants', sub: 'report', label: 'Participant Report', icon: 'fa-table-list', href: 'participants-report.html' },
-
-  { section: 'Abstract Review' },
-  { key: 'abstract', sub: 'transaction', label: 'Review Abstracts', icon: 'fa-file-circle-check', href: 'abstracts-review.html' },
-  { key: 'abstract', sub: 'report', label: 'Abstract Report', icon: 'fa-table-list', href: 'abstracts-report.html' },
-
-  { section: 'Slot Allotment' },
-  { key: 'slot', sub: 'transaction', label: 'Allot Slots', icon: 'fa-location-crosshairs', href: 'slots-manage.html' },
-  { key: 'slot', sub: 'report', label: 'Slot Report', icon: 'fa-table-list', href: 'slots-report.html' },
-
-  { section: 'Attendance' },
-  { key: 'attendance', sub: 'transaction', label: 'Mark Attendance', icon: 'fa-calendar-check', href: 'attendance-mark.html' },
-  { key: 'attendance', sub: 'report', label: 'Attendance Report', icon: 'fa-table-list', href: 'attendance-report.html' },
-
-  { section: 'Presentation Access' },
-  { key: 'presentationAccess', sub: 'report', label: 'Venue Presentation List', icon: 'fa-display', href: 'presentation-access.html' },
-
-  { section: 'Certificates' },
-  { key: 'certificates', sub: 'transaction', label: 'Generate Certificate', icon: 'fa-certificate', href: 'certificates-manage.html' },
-  { key: 'certificates', sub: 'report', label: 'Certificate Report', icon: 'fa-table-list', href: 'certificates-report.html' },
-
-  { section: 'Receipts' },
-  { key: 'receipts', sub: 'transaction', label: 'Fulfill Receipt', icon: 'fa-receipt', href: 'receipts-manage.html' },
-  { key: 'receipts', sub: 'report', label: 'Receipt Report', icon: 'fa-table-list', href: 'receipts-report.html' },
-
-  { section: 'Feedback' },
-  { key: 'feedback', sub: 'report', label: 'Feedback Report', icon: 'fa-comment-dots', href: 'feedback-report.html' },
-
-  { section: 'Schedule' },
-  { key: 'schedule', sub: 'transaction', label: 'Edit Schedule', icon: 'fa-calendar-days', href: 'schedule-manage.html' },
-  { key: 'schedule', sub: 'report', label: 'Schedule Report', icon: 'fa-table-list', href: 'schedule-report.html' },
-
-  { section: 'Announcements' },
-  { key: 'announcements', sub: 'transaction', label: 'Post Announcement', icon: 'fa-bullhorn', href: 'announcements-manage.html' },
-  { key: 'announcements', sub: 'report', label: 'Announcement Report', icon: 'fa-table-list', href: 'announcements-report.html' },
-
-  { section: 'Mail' },
-  { key: 'mail', sub: 'transaction', label: 'Send Invite', icon: 'fa-paper-plane', href: 'mail-send.html' },
-  { key: 'mail', sub: 'report', label: 'Mail Report', icon: 'fa-table-list', href: 'mail-report.html' },
-
-  { section: 'Volunteer Management' },
-  { key: 'volunteers', sub: 'transaction', label: 'Assign Volunteers', icon: 'fa-user-group', href: 'volunteers-manage.html' },
-  { key: 'volunteers', sub: 'report', label: 'Volunteer Report', icon: 'fa-table-list', href: 'volunteers-report.html' },
-
-  { section: 'Settings' },
-  { key: 'settings', sub: 'transaction', label: 'Edit Settings', icon: 'fa-sliders', href: 'settings-manage.html' },
-  { key: 'settings', sub: 'report', label: 'Current Settings', icon: 'fa-table-list', href: 'settings-report.html' },
-
-  { section: 'Admin Users' },
-  { key: 'adminUsers', sub: 'transaction', label: 'Manage Admin Users', icon: 'fa-user-shield', href: 'admin-users-manage.html' },
-  { key: 'adminUsers', sub: 'report', label: 'Admin User Report', icon: 'fa-table-list', href: 'admin-users-report.html' }
+/* ================= MENU: defined once. To add a page, add one line here. =================
+   tx = Transaction items (need <mod>.transaction), rp = Report items (need <mod>.report). */
+const MENU = [
+  { id: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'dashboard.html', always: true },
+  { id: 'participants', label: 'Participants', icon: 'fa-users', mod: 'participants',
+    tx: [['Participant master', 'participants-manage.html', 'fa-user-plus'], ['Participant details', 'participants-details.html', 'fa-user-pen']],
+    rp: [['List view', 'participants-report.html', 'fa-table-list'], ['Individual view', 'participants-individual.html', 'fa-id-card']] },
+  { id: 'abstract', label: 'Abstract', icon: 'fa-file-lines', mod: 'abstract',
+    tx: [['Review', 'abstracts-review.html', 'fa-file-circle-check']],
+    rp: [['Abstract status', 'abstracts-report.html', 'fa-table-list']] },
+  { id: 'slot', label: 'Slot allotment', icon: 'fa-location-crosshairs', mod: 'slot',
+    tx: [['Allot slots', 'slots-manage.html', 'fa-location-crosshairs']],
+    rp: [['Slot report', 'slots-report.html', 'fa-table-list']] },
+  { id: 'attendance', label: 'Attendance', icon: 'fa-calendar-check', mod: 'attendance',
+    tx: [['Mark attendance', 'attendance-mark.html', 'fa-calendar-check']],
+    rp: [['Attendance report', 'attendance-report.html', 'fa-table-list']] },
+  { id: 'presentationAccess', label: 'Presentation access', icon: 'fa-display', mod: 'presentationAccess',
+    rp: [['Venue presentation list', 'presentation-access.html', 'fa-display']] },
+  { id: 'certificates', label: 'Certificates', icon: 'fa-certificate', mod: 'certificates',
+    tx: [['Generate certificate', 'certificates-manage.html', 'fa-certificate']],
+    rp: [['Certificate report', 'certificates-report.html', 'fa-table-list']] },
+  { id: 'receipts', label: 'Receipts', icon: 'fa-receipt', mod: 'receipts',
+    tx: [['Fulfil receipt', 'receipts-manage.html', 'fa-receipt']],
+    rp: [['Receipt report', 'receipts-report.html', 'fa-table-list']] },
+  { id: 'feedback', label: 'Feedback', icon: 'fa-comment-dots', mod: 'feedback',
+    rp: [['Feedback report', 'feedback-report.html', 'fa-comment-dots']] },
+  { id: 'schedule', label: 'Schedule', icon: 'fa-calendar-days', mod: 'schedule',
+    tx: [['Edit schedule', 'schedule-manage.html', 'fa-calendar-days']],
+    rp: [['Schedule report', 'schedule-report.html', 'fa-table-list']] },
+  { id: 'announcements', label: 'Announcements', icon: 'fa-bullhorn', mod: 'announcements',
+    tx: [['Post announcement', 'announcements-manage.html', 'fa-bullhorn']],
+    rp: [['Announcement report', 'announcements-report.html', 'fa-table-list']] },
+  { id: 'mail', label: 'Mail', icon: 'fa-paper-plane', mod: 'mail',
+    tx: [['Send invite', 'mail-send.html', 'fa-paper-plane']],
+    rp: [['Mail log', 'mail-report.html', 'fa-table-list']] },
+  { id: 'volunteers', label: 'Volunteers', icon: 'fa-user-group', mod: 'volunteers',
+    tx: [['Assign volunteers', 'volunteers-manage.html', 'fa-user-group']],
+    rp: [['Volunteer report', 'volunteers-report.html', 'fa-table-list']] },
+  { id: 'settings', label: 'Settings', icon: 'fa-sliders', mod: 'settings',
+    tx: [['Edit settings', 'settings-manage.html', 'fa-sliders']],
+    rp: [['Current settings', 'settings-report.html', 'fa-table-list']] },
+  { id: 'adminUsers', label: 'Admin users', icon: 'fa-user-shield', mod: 'adminUsers',
+    tx: [['Manage admin users', 'admin-users-manage.html', 'fa-user-shield']],
+    rp: [['Admin user report', 'admin-users-report.html', 'fa-table-list']] }
 ];
 
-function renderSidebar(){
-  const nav = document.getElementById('sidebar-nav');
-  let html = '';
-  let pendingSection = null;
-  NAV_ITEMS.forEach(item => {
-    if (item.section) { pendingSection = item.section; return; }
-    if (!item.always && !can(item.key, item.sub)) return;
-    if (pendingSection) { html += `<div class="nav-section">${pendingSection}</div>`; pendingSection = null; }
-    const activeClass = item.href === 'home.html' ? 'active' : '';
-    html += `<a class="nav-link ${activeClass}" href="${item.href}"><i class="fa-solid ${item.icon}"></i> ${item.label}</a>`;
-  });
-  nav.innerHTML = html || `<p style="padding:14px 12px;font-size:12.5px;color:var(--text-3);">No modules assigned yet. Contact the administrator.</p>`;
+/* ================= helpers ================= */
+const perms = () => { try { return JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch (e) { return {}; } };
+const onlyPresentation = () => { const p = perms(), ks = Object.keys(p).filter(k => p[k] && (p[k].report || p[k].transaction)); return ks.length > 0 && ks.every(k => k === 'presentationAccess'); };
+const DEFAULT_PAGE = () => onlyPresentation() ? 'presentation-access.html' : 'dashboard.html';
+const SAFE_PAGE = /^[a-z0-9][a-z0-9_-]*\.html(\?[A-Za-z0-9_=&%.\-]*)?$/i;   // only our own pages can be framed
+const OPEN_KEY = 'vrmic_admin_menu_open';
+const openSet = () => { try { return new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || '[]')); } catch (e) { return new Set(); } };
+const saveOpen = () => { try { localStorage.setItem(OPEN_KEY, JSON.stringify([...openState])); } catch (e) {} };
+let openState = openSet();
+
+/* ================= menu ================= */
+function section(g, kind, items) {
+  const key = g.id + ':' + kind, label = kind === 'tx' ? 'Transaction' : 'Report', icon = kind === 'tx' ? 'fa-pen-to-square' : 'fa-chart-column';
+  return `<div class="sub ${openState.has(key) ? 'open' : ''}" data-key="${key}">
+    <button class="sub-h" aria-expanded="${openState.has(key)}"><i class="fa-solid ${icon} ic"></i>${label}<i class="fa-solid fa-chevron-down chev"></i></button>
+    <div class="sub-b"><div>${items.map(i => `<a class="nav-link" href="#${i[1]}" data-page="${i[1]}"><i class="fa-solid ${i[2]} ic"></i>${esc(i[0])}</a>`).join('')}</div></div></div>`;
 }
-renderSidebar();
-
-document.getElementById('admin-name').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-document.getElementById('admin-position').textContent = localStorage.getItem('vrmic_admin_position') || '';
-
-(async function init(){
-  try {
-    const res = await callApi('adminListParticipants', {});
-    if (!res.ok) {
-      if (/session|permission/i.test(res.error || '')) {
-        if (/session/i.test(res.error)) { logout(); return; }
-        // no participants permission — still show a minimal dashboard
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
-        document.getElementById('stat-grid').innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;color:var(--text-3);">You don't have access to participant statistics. Use the sidebar to access your assigned modules.</div>`;
-        return;
-      }
-    }
-    const participants = res.ok ? res.participants : [];
-
-    const total = participants.length;
-    const profileComplete = participants.filter(p => String(p.ProfileCompleted).toUpperCase() === 'TRUE').length;
-    const oral = participants.filter(p => p.ParticipantType === 'Oral').length;
-    const poster = participants.filter(p => p.ParticipantType === 'Poster').length;
-    const delegate = participants.filter(p => p.ParticipantType === 'Participant').length;
-    const online = participants.filter(p => p.Mode === 'Online').length;
-    const offline = total - online;
-    const pendingAbstracts = participants.filter(p => p.AbstractStatus === 'Submitted').length;
-    const pendingCerts = participants.filter(p => String(p.CertificateRequested).toUpperCase() === 'TRUE' && !p.CertificateLink).length;
-    const acceptedOralNoPPT = participants.filter(p => p.ParticipantType === 'Oral' && p.AbstractStatus === 'Accepted' && !p.PPTLink).length;
-
-    document.getElementById('stat-grid').innerHTML = `
-      <div class="stat-card"><div class="sc-icon"><i class="fa-solid fa-users"></i></div><h4>Total Participants</h4><div class="sc-value">${total}</div><div class="sc-sub">${online} online &middot; ${offline} offline</div></div>
-      <div class="stat-card"><div class="sc-icon"><i class="fa-solid fa-user-check"></i></div><h4>Profile Complete</h4><div class="sc-value">${profileComplete}</div><div class="sc-sub">of ${total} registered</div></div>
-      <div class="stat-card"><div class="sc-icon"><i class="fa-solid fa-file-lines"></i></div><h4>Abstracts Pending Review</h4><div class="sc-value">${pendingAbstracts}</div><div class="sc-sub">awaiting decision</div></div>
-      <div class="stat-card"><div class="sc-icon"><i class="fa-solid fa-certificate"></i></div><h4>Certificate Requests</h4><div class="sc-value">${pendingCerts}</div><div class="sc-sub">awaiting generation</div></div>
-    `;
-
-    document.getElementById('type-breakdown').innerHTML = `
-      <div class="breakdown-row"><span><span class="badge badge-oral">Oral</span></span><b>${oral}</b></div>
-      <div class="breakdown-row"><span><span class="badge badge-poster">Poster</span></span><b>${poster}</b></div>
-      <div class="breakdown-row"><span><span class="badge badge-participant">Delegate only</span></span><b>${delegate}</b></div>
-    `;
-
-    const actions = [];
-    if (pendingAbstracts > 0) actions.push({ icon: 'fa-file-lines', text: `${pendingAbstracts} abstract${pendingAbstracts>1?'s':''} awaiting review`, sub: 'Accept or reject with remarks', href: 'abstracts-review.html' });
-    if (acceptedOralNoPPT > 0) actions.push({ icon: 'fa-display', text: `${acceptedOralNoPPT} accepted Oral presenter${acceptedOralNoPPT>1?'s':''} yet to upload PPT`, sub: 'Still within the submission window', href: 'participants-report.html' });
-    if (pendingCerts > 0) actions.push({ icon: 'fa-certificate', text: `${pendingCerts} certificate request${pendingCerts>1?'s':''} pending`, sub: 'Generate and attach the link', href: 'certificates-manage.html' });
-    if (!actions.length) actions.push({ icon: 'fa-circle-check', text: 'All caught up', sub: 'No pending actions right now', href: '#' });
-
-    document.getElementById('action-list').innerHTML = actions.map(a => `
-      <div class="action-item">
-        <div class="ai-left"><i class="fa-solid ${a.icon}"></i><div><b>${escapeHtml(a.text)}</b><span>${escapeHtml(a.sub)}</span></div></div>
-        <a href="${a.href}">View <i class="fa-solid fa-arrow-right"></i></a>
-      </div>`).join('');
-
-    document.getElementById('loader').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-  } catch (err) {
-    document.getElementById('loader').innerHTML = '<p style="color:var(--danger);">Could not reach the server. Check your connection and reload.</p>';
+function renderMenu() {
+  const can = VR.can;
+  let html = '';
+  MENU.forEach(g => {
+    if (g.always) { if (!onlyPresentation()) html += `<a class="nav-link" href="#${g.href}" data-page="${g.href}"><i class="fa-solid ${g.icon} ic"></i>${g.label}</a>`; return; }
+    const tx = g.tx && can(g.mod, 'transaction') ? g.tx : null, rp = g.rp && can(g.mod, 'report') ? g.rp : null;
+    if (!tx && !rp) return;
+    html += `<div class="grp ${openState.has(g.id) ? 'open' : ''}" data-key="${g.id}">
+      <button class="grp-h" aria-expanded="${openState.has(g.id)}"><i class="fa-solid ${g.icon} ic"></i>${g.label}<i class="fa-solid fa-chevron-down chev"></i></button>
+      <div class="grp-b"><div>${tx ? section(g, 'tx', tx) : ''}${rp ? section(g, 'rp', rp) : ''}</div></div></div>`;
+  });
+  $('nav').innerHTML = html || '<div class="empty-nav">No modules assigned yet. Contact the administrator.</div>';
+  mark(currentPage());
+}
+$('nav').addEventListener('click', e => {
+  const h = e.target.closest('.grp-h, .sub-h');
+  if (h) {
+    const box = h.parentElement, k = box.dataset.key, on = !box.classList.contains('open');
+    box.classList.toggle('open', on); h.setAttribute('aria-expanded', on); on ? openState.add(k) : openState.delete(k); saveOpen(); return;
   }
-})();
+  if (e.target.closest('.nav-link') && innerWidth <= 960) document.body.classList.remove('navopen');   // close the drawer on phones
+});
+function findItem(base) {
+  for (const g of MENU) {
+    if (g.href === base) return { g, kind: '', label: g.label };
+    for (const kind of ['tx', 'rp']) for (const i of (g[kind] || [])) if (i[1] === base) return { g, kind, label: i[0] };
+  }
+  return null;
+}
+function mark(page) {
+  const base = String(page || '').split('?')[0], hit = findItem(base);
+  document.querySelectorAll('.nav-link.active').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.grp.has-active').forEach(a => a.classList.remove('has-active'));
+  const a = document.querySelector(`.nav-link[data-page="${CSS.escape(base)}"]`);
+  if (a) { a.classList.add('active'); const sub = a.closest('.sub'), grp = a.closest('.grp');
+    [sub, grp].forEach(x => { if (x) { x.classList.add('open'); openState.add(x.dataset.key); } }); if (grp) grp.classList.add('has-active'); }
+  $('crumb').innerHTML = hit ? (hit.kind ? `${esc(hit.g.label)} › ${hit.kind === 'tx' ? 'Transaction' : 'Report'} › <b>${esc(hit.label)}</b>` : `<b>${esc(hit.label)}</b>`) : esc(base);
+  document.title = (hit ? hit.label + ' | ' : '') + 'VRMIC 2026 Admin';
+}
+
+/* ================= frame / routing ================= */
+const frame = $('frame');
+const currentPage = () => { const h = decodeURIComponent(location.hash.slice(1)); return SAFE_PAGE.test(h) ? h : DEFAULT_PAGE(); };
+function load(page) { $('loading').classList.remove('hide'); frame.src = page; }
+frame.addEventListener('load', () => {
+  $('loading').classList.add('hide');
+  try {   // keep the address bar, menu highlight and breadcrumb in step with links clicked inside the page
+    const l = frame.contentWindow.location, rel = l.pathname.split('/').pop() + l.search;
+    if (SAFE_PAGE.test(rel)) { history.replaceState(null, '', '#' + rel); mark(rel); }
+  } catch (e) {}
+});
+window.addEventListener('hashchange', () => { const p = currentPage(); let cur = ''; try { cur = frame.contentWindow.location.pathname.split('/').pop() + frame.contentWindow.location.search; } catch (e) {} if (p !== cur) load(p); mark(p); });
+
+/* ================= top bar ================= */
+const IST = { timeZone: 'Asia/Kolkata' };
+function tick() {
+  const n = new Date();
+  $('clockT').textContent = n.toLocaleTimeString('en-GB', Object.assign({ hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }, IST));
+  $('clockD').textContent = n.toLocaleDateString('en-GB', Object.assign({ weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }, IST)) + ' · IST';
+}
+tick(); setInterval(tick, 1000);
+
+function showLastLogin() {
+  let l = {}; try { l = JSON.parse(localStorage.getItem('vrmic_admin_last_login') || '{}') || {}; } catch (e) {}
+  const d = l.at ? new Date(l.at) : null;
+  $('lastLogin').innerHTML = '<b>Last login</b>' + (d && !isNaN(d)
+    ? esc(d.toLocaleString('en-GB', Object.assign({ day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }, IST))) + (l.ip ? ' · IP ' + esc(l.ip) : '')
+    : 'First login on this account');
+}
+function showUser() {
+  $('uName').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
+  $('uPos').textContent = localStorage.getItem('vrmic_admin_position') || localStorage.getItem('vrmic_admin_category') || '';
+}
+async function syncSelf() {   // permissions are re-read from the server so changes by the Convener apply without a new login
+  const r = await VR.api('adminGetSelf', {});
+  if (!r.ok) return false;
+  const a = r.admin;
+  localStorage.setItem('vrmic_admin_name', a.name || ''); localStorage.setItem('vrmic_admin_position', a.position || '');
+  localStorage.setItem('vrmic_admin_category', a.category || ''); localStorage.setItem('vrmic_admin_permissions', JSON.stringify(a.permissions || {}));
+  showUser(); renderMenu(); return true;
+}
+
+$('refreshBtn').onclick = async function () {
+  const b = this; b.classList.add('spin'); sessionStorage.removeItem('vrmic_pub');
+  try { await syncSelf(); } catch (e) {}
+  try { frame.contentWindow.location.reload(); } catch (e) { load(currentPage()); }
+  $('loading').classList.remove('hide');
+  setTimeout(() => b.classList.remove('spin'), 700);
+  b.title = 'Refreshed at ' + VR.now();
+};
+function fsState() { const on = !!document.fullscreenElement; $('fsBtn').innerHTML = `<i class="fa-solid ${on ? 'fa-compress' : 'fa-expand'}"></i>`; $('fsBtn').title = on ? 'Exit full screen' : 'Full screen'; }
+if (!document.fullscreenEnabled) $('fsBtn').style.display = 'none';
+$('fsBtn').onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); };
+document.addEventListener('fullscreenchange', fsState);
+$('logoutBtn').onclick = () => { if (confirm('Log out of the admin portal?')) VR.logout(); };
+$('navBtn').onclick = () => { if (innerWidth <= 960) document.body.classList.toggle('navopen'); else document.body.classList.toggle('collapsed'); };
+$('scrim').onclick = () => document.body.classList.remove('navopen');
+
+/* ================= start ================= */
+VR.settings().then(s => { if (s['conf.shortName']) $('shortName').textContent = s['conf.shortName']; });
+showUser(); showLastLogin(); renderMenu();
+load(currentPage());
+syncSelf();
 </script>
 </body>
 </html>
