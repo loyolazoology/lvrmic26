@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Participant Individual View | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--danger:#d8695a;--warn:#dba43c;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.55;background:var(--navy-950);min-height:100vh;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;}
+a{color:var(--gold-light);text-decoration:none;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.topbar{padding:14px 24px;border-bottom:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:rgba(6,11,28,.85);position:sticky;top:0;z-index:30;}
+.topbar h1{font-size:1.25rem;}
+.wrap{padding:22px 24px;max-width:1300px;}
+.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:22px;margin-bottom:18px;}
+.card h3{font-size:1rem;margin-bottom:14px;display:flex;gap:9px;align-items:center;}
+.card h3 i{color:var(--gold-light);}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:8px;border:1px solid var(--navy-border);background:var(--navy-850);color:var(--text-1);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;}
+.btn:hover{border-color:var(--gold);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
+.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
+.btn-sm{padding:7px 11px;font-size:12px;}
+input,select,textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:14px;}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 5px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid .full{grid-column:1/-1;}
+@media(max-width:700px){.grid{grid-template-columns:1fr;}}
+.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;border:1px solid transparent;display:none;}
+.alert.show{display:block;}
+.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
+.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+.btn-gold .spinner{border-color:rgba(36,26,6,.3);border-top-color:#241a06;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{padding:40px 18px;text-align:center;color:var(--text-3);}
+.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
+.scroll-x{overflow-x:auto;}
+table.list{width:100%;border-collapse:collapse;font-size:13px;}
+table.list th{text-align:left;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;position:sticky;top:0;background:var(--navy-900);}
+table.list td{padding:10px 13px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;}
+table.list tr:hover td{background:rgba(232,201,131,.03);}
+.id{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;}
+.nm{color:var(--text-1);font-weight:600;}
+.badge{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-ok{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.b-warn{background:rgba(219,164,60,.14);color:var(--warn);}
+.b-bad{background:rgba(216,105,90,.14);color:#e8988c;}
+.b-neu{background:rgba(179,188,214,.1);color:var(--text-2);}
+.b-oral{background:rgba(232,201,131,.14);color:var(--gold-light);}
+.b-poster{background:rgba(120,160,230,.14);color:#9db8ee;}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.toolbar input{flex:1;min-width:200px;}
+.toolbar select{width:auto;min-width:150px;}
+.modal{position:fixed;inset:0;background:rgba(6,10,26,.72);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 18px;overflow-y:auto;}
+.modal.show{display:flex;}
+.modal .box{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:24px;max-width:480px;width:100%;}
+@media print{body{background:#fff;color:#000}.topbar,.toolbar,.noprint{display:none !important}}
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-id-card" style="color:var(--gold-light);"></i> Participants — Individual View</h1><div id="xp"></div></div>
+<div class="wrap">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="card noprint"><label>Search by name or VRMIC ID</label><input id="q" placeholder="e.g. Riya or VRMIC26-0001" autocomplete="off"><div id="results" style="margin-top:8px;"></div></div>
+  <div id="sheet"><div class="empty">Search for a participant above to see their full details.</div></div>
+</div>
+
+<script src="admin-common.js"></script>
+<script>
+
+const $ = id => document.getElementById(id), esc = VR.esc;
+if (!VR.token()) (window.top || window).location.replace('../admin-login.html');
+function showErr(m){ const e = $('err'); e.textContent = m; e.className = 'alert alert-error show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function showOk(m){ const e = $('ok'); e.textContent = m; e.className = 'alert alert-success show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function hideAlerts(){ $('err').classList.remove('show'); $('ok').classList.remove('show'); }
+const fmtD = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }); };
+const fmtDT = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const yes = v => String(v).toUpperCase() === 'TRUE';
+const typeBadge = t => t === 'Oral' ? 'b-oral' : t === 'Poster' ? 'b-poster' : 'b-neu';
+const absBadge = s => s === 'Accepted' ? 'b-ok' : s === 'Rejected' ? 'b-bad' : (s === 'Submitted' || s === 'Revision Requested') ? 'b-warn' : 'b-neu';
+
+if (!VR.can('participants', 'report')) document.querySelector('.wrap').innerHTML = '<div class="alert alert-error show">You do not have permission to view participant details.</div>';
+else {
+let all = [], cur = null;
+const hay = p => [p.ID, p.Name, p.Email, p.Phone].join(' ').toLowerCase();
+function results(){
+  const q = $('q').value.trim().toLowerCase(); if (!q) { $('results').innerHTML = ''; return; }
+  const l = all.filter(p => hay(p).includes(q)).slice(0, 8);
+  $('results').innerHTML = l.length ? l.map(p => `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(226,187,120,.08);cursor:pointer;" data-pick="${esc(p.ID)}"><span><span class="id">${esc(p.ID)}</span> &nbsp;<b class="nm">${esc(p.Name)}</b> <span style="font-size:12px;color:var(--text-3);">· ${esc(p.Institution || '')}</span></span><span class="badge ${typeBadge(p.ParticipantType)}">${esc(p.ParticipantType)}</span></div>`).join('') : '<div class="empty" style="padding:12px;">No match.</div>';
+}
+const kv = (l, v, link) => `<div><span>${l}</span><b>${v ? (link ? `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a>` : esc(v)) : '—'}</b></div>`;
+function show(p, photo){
+  cur = p; history.replaceState(null, '', '?id=' + encodeURIComponent(p.ID));
+  const initials = String(p.Name || '?').replace(/^(Dr|Mr|Ms|Mrs|Prof)\.?\s*/i, '').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  $('sheet').innerHTML = `<div class="card" id="card">
+    <div class="head"><div class="ph" id="ph">${photo ? `<img src="${photo}" alt="Photo of ${esc(p.Name)}">` : (p.PhotoURL ? '<span class="spinner" style="width:22px;height:22px;"></span>' : esc(initials))}</div>
+      <div><h2>${esc(p.Name)}</h2><div class="id" style="font-size:15px;margin-bottom:8px;">${esc(p.ID)}</div>
+        <span class="badge ${typeBadge(p.ParticipantType)}">${esc(p.ParticipantType || 'Participant')}</span> <span class="badge ${p.RegistrationStatus === 'Cancelled' ? 'b-bad' : 'b-ok'}">${esc(p.RegistrationStatus || 'Registered')}</span> <span class="badge ${yes(p.ProfileCompleted) ? 'b-ok' : 'b-warn'}">Profile ${yes(p.ProfileCompleted) ? 'completed' : 'pending'}</span>
+        <div style="margin-top:10px;font-size:13px;color:var(--text-2);">${esc(p.Designation === 'Other' ? (p.DesignationOther || 'Other') : (p.Designation || ''))}${p.Department ? ' · ' + esc(p.Department) : ''}<br>${esc(p.Institution || '')}</div></div></div>
+    <div class="sec"><h4>Contact</h4><div class="kv">${kv('Email', p.Email)}${kv('Phone', p.Phone)}${kv('City', p.City)}${kv('State', p.State)}${kv('Country', p.Country)}</div></div>
+    <div class="sec"><h4>Personal &amp; profile</h4><div class="kv">${kv('Gender', p.Gender)}${kv('Date of birth', p.DOB ? fmtD(p.DOB) : '')}${kv('Category', p.Category)}${kv('Food preference', p.FoodPreference)}${kv('ORCID', p.OrcidId)}${kv('Google Scholar', p.GoogleScholar, 1)}${kv('LinkedIn', p.LinkedIn, 1)}</div></div>
+    <div class="sec"><h4>Registration &amp; payment</h4><div class="kv">${kv('Registration type', p.Role)}${kv('Registered on', fmtDT(p.RegistrationDate || p.CreatedAt))}${kv('Amount paid', p.AmountPaid ? '₹' + p.AmountPaid : '')}${kv('Fee paid', yes(p.FeePaid) ? 'Yes' : 'No')}${kv('Mode', p.Mode)}${kv(p.Mode === 'Online' ? 'Meeting link' : 'Venue', p.Mode === 'Online' ? p.MeetingLink : p.Location, p.Mode === 'Online')}</div></div>
+    <div class="sec"><h4>Abstract &amp; presentation</h4><div class="kv">${kv('Abstract status', p.AbstractStatus || 'Not Submitted')}${kv('Title', p.AbstractTitle)}${kv('Theme', p.AbstractTheme)}${kv('Document ID', p.AbstractDocId)}${kv('Version', p.AbstractRevision)}${kv('Reviewer remarks', p.AbstractRemarks)}${kv('Reviewed on', p.AbstractReviewedAt ? fmtDT(p.AbstractReviewedAt) : '')}${kv('PPT', p.PPTLink ? (p.PPTFileName || 'Uploaded') : '')}${kv('PPT uploaded', p.PPTUploadedAt ? fmtDT(p.PPTUploadedAt) : '')}</div></div>
+    <div class="sec"><h4>Slot &amp; attendance</h4><div class="kv">${kv('Venue', p.SlotVenue)}${kv('Room', p.SlotRoom)}${kv('Date', p.SlotDate ? fmtD(p.SlotDate) : '')}${kv('Time', p.SlotTime)}${kv('Token', p.SlotToken)}${kv('Day 1', yes(p.Day1Attendance) ? 'Present' : 'Absent')}${kv('Day 2', yes(p.Day2Attendance) ? 'Present' : 'Absent')}${kv('Day 3', yes(p.Day3Attendance) ? 'Present' : 'Absent')}</div></div>
+    <div class="sec"><h4>Feedback &amp; certificate</h4><div class="kv">${kv('Feedback submitted', yes(p.FeedbackSubmitted) ? 'Yes' : 'No')}${kv('Certificate requested', yes(p.CertificateRequested) ? 'Yes (' + fmtD(p.CertificateRequestedAt) + ')' : 'No')}${kv('Certificate', p.CertificateLink ? 'Issued' : '')}${kv('WhatsApp group joined', yes(p.WhatsappJoined) ? 'Yes' : 'No')}</div></div>
+  </div>
+  ${VR.can('participants', 'transaction') ? `<p class="noprint" style="margin-top:-4px;"><a class="btn btn-sm" href="participants-details.html?id=${encodeURIComponent(p.ID)}"><i class="fa-solid fa-user-pen"></i> Edit this participant</a></p>` : ''}`;
+  if (!photo && p.PhotoURL) VR.api('adminGetParticipantPhoto', { id: p.ID }).then(r => { if (cur && cur.ID === p.ID && r.ok && r.photo) $('ph').innerHTML = `<img src="${r.photo}" alt="Photo of ${esc(p.Name)}">`; else if (cur && cur.ID === p.ID) $('ph').textContent = initials; });
+}
+function pick(id){ const p = all.find(x => x.ID === id); if (p) { $('results').innerHTML = ''; $('q').value = ''; show(p); } }
+$('results').onclick = e => { const r = e.target.closest('[data-pick]'); if (r) pick(r.dataset.pick); };
+$('q').oninput = results;
+$('q').onkeydown = e => { if (e.key === 'Enter') { const l = all.filter(p => hay(p).includes($('q').value.trim().toLowerCase())); if (l.length) pick(l[0].ID); } };
+
+function flat(p){ return [['VRMIC ID', p.ID], ['Name', p.Name], ['Category', p.ParticipantType], ['Registration status', p.RegistrationStatus], ['Email', p.Email], ['Phone', p.Phone], ['Institution', p.Institution], ['Designation', p.Designation === 'Other' ? p.DesignationOther : p.Designation], ['Department', p.Department], ['City / State / Country', [p.City, p.State, p.Country].filter(Boolean).join(', ')], ['Gender', p.Gender], ['Date of birth', p.DOB ? fmtD(p.DOB) : ''], ['Registration type', p.Role], ['Food preference', p.FoodPreference], ['Amount paid', p.AmountPaid], ['Mode', p.Mode], ['Abstract status', p.AbstractStatus], ['Abstract title', p.AbstractTitle], ['Theme', p.AbstractTheme], ['Reviewer remarks', p.AbstractRemarks], ['Slot', [p.SlotVenue, p.SlotRoom, p.SlotDate ? fmtD(p.SlotDate) : '', p.SlotTime].filter(Boolean).join(' · ')], ['Token', p.SlotToken], ['Attendance', ['Day 1: ' + (yes(p.Day1Attendance) ? 'Present' : 'Absent'), 'Day 2: ' + (yes(p.Day2Attendance) ? 'Present' : 'Absent'), 'Day 3: ' + (yes(p.Day3Attendance) ? 'Present' : 'Absent')].join(', ')]].map(r => [r[0], r[1] == null ? '' : String(r[1])]); }
+VR.exportBar($('xp'), { name: 'Participant', title: 'Participant Details', imageEl: () => $('card'),
+  getData: () => cur ? { headers: ['Field', 'Value'], rows: flat(cur) } : (alert('Select a participant first.'), { headers: [], rows: [] }),
+  pdf: async () => { if (!cur) return alert('Select a participant first.');   // PDF with the photo embedded
+    await VR.load('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); await VR.load('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
+    const s = await VR.settings(), doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' }), W = doc.internal.pageSize.getWidth();
+    doc.setFontSize(12); doc.text(s['conf.name'] || 'VRMIC 2026', 36, 34, { maxWidth: W - 72 }); doc.setFontSize(10); doc.setTextColor(110); doc.text('Participant details · generated ' + VR.now(), 36, 62);
+    const img = $('ph').querySelector('img'); if (img) { try { doc.addImage(img.src, 'JPEG', W - 36 - 100, 74, 100, 126); } catch (e) {} }
+    doc.setTextColor(0); doc.setFontSize(16); doc.text(cur.Name || '', 36, 92, { maxWidth: W - 190 }); doc.setFontSize(11); doc.text(cur.ID, 36, 112);
+    doc.autoTable({ body: flat(cur).slice(2), startY: 210, theme: 'grid', styles: { fontSize: 9, cellPadding: 4 }, columnStyles: { 0: { cellWidth: 130, fontStyle: 'bold', fillColor: [240, 242, 248] } }, margin: { left: 36, right: 36 } });
+    doc.save(VR.fileName('Participant_' + cur.ID, 'pdf')); },
+  print: async () => { if (!cur) return alert('Select a participant first.'); const img = $('ph').querySelector('img');
+    await VR.printHtml('Participant — ' + cur.Name + ' (' + cur.ID + ')', (img ? '<img src="' + img.src + '" style="float:right;width:110px;height:140px;object-fit:cover;border:1px solid #888;margin-left:14px">' : '') + VR.tableHtml(['Field', 'Value'], flat(cur))); } });
+
+(async function(){
+  const r = await VR.api('adminListParticipants', {}); if (!r.ok) { showErr(r.error || 'Could not load participants.'); return; }
+  all = r.participants; const id = new URLSearchParams(location.search).get('id'); if (id) pick(id);
+})();
+}
+
+</script>
+</body>
+</html>

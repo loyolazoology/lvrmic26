@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Participant Details | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--danger:#d8695a;--warn:#dba43c;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.55;background:var(--navy-950);min-height:100vh;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;}
+a{color:var(--gold-light);text-decoration:none;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.topbar{padding:14px 24px;border-bottom:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:rgba(6,11,28,.85);position:sticky;top:0;z-index:30;}
+.topbar h1{font-size:1.25rem;}
+.wrap{padding:22px 24px;max-width:1300px;}
+.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:22px;margin-bottom:18px;}
+.card h3{font-size:1rem;margin-bottom:14px;display:flex;gap:9px;align-items:center;}
+.card h3 i{color:var(--gold-light);}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:8px;border:1px solid var(--navy-border);background:var(--navy-850);color:var(--text-1);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;}
+.btn:hover{border-color:var(--gold);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
+.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
+.btn-sm{padding:7px 11px;font-size:12px;}
+input,select,textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:14px;}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 5px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid .full{grid-column:1/-1;}
+@media(max-width:700px){.grid{grid-template-columns:1fr;}}
+.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;border:1px solid transparent;display:none;}
+.alert.show{display:block;}
+.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
+.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+.btn-gold .spinner{border-color:rgba(36,26,6,.3);border-top-color:#241a06;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{padding:40px 18px;text-align:center;color:var(--text-3);}
+.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
+.scroll-x{overflow-x:auto;}
+table.list{width:100%;border-collapse:collapse;font-size:13px;}
+table.list th{text-align:left;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;position:sticky;top:0;background:var(--navy-900);}
+table.list td{padding:10px 13px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;}
+table.list tr:hover td{background:rgba(232,201,131,.03);}
+.id{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;}
+.nm{color:var(--text-1);font-weight:600;}
+.badge{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-ok{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.b-warn{background:rgba(219,164,60,.14);color:var(--warn);}
+.b-bad{background:rgba(216,105,90,.14);color:#e8988c;}
+.b-neu{background:rgba(179,188,214,.1);color:var(--text-2);}
+.b-oral{background:rgba(232,201,131,.14);color:var(--gold-light);}
+.b-poster{background:rgba(120,160,230,.14);color:#9db8ee;}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.toolbar input{flex:1;min-width:200px;}
+.toolbar select{width:auto;min-width:150px;}
+.modal{position:fixed;inset:0;background:rgba(6,10,26,.72);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 18px;overflow-y:auto;}
+.modal.show{display:flex;}
+.modal .box{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:24px;max-width:480px;width:100%;}
+@media print{body{background:#fff;color:#000}.topbar,.toolbar,.noprint{display:none !important}}
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-user-pen" style="color:var(--gold-light);"></i> Participant Details</h1><span style="font-size:12.5px;color:var(--text-3);">Find a participant, then edit, reset the password or delete.</span></div>
+<div class="wrap">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="card">
+    <label>Search by name, VRMIC ID, email, phone or institution</label>
+    <input id="q" placeholder="Start typing…" autocomplete="off">
+    <div id="results" style="margin-top:10px;"></div>
+  </div>
+  <div class="card" id="form" style="display:none;">
+    <h3><i class="fa-solid fa-pen"></i> Edit <span class="id" id="f-id"></span></h3>
+    <div class="grid">
+      <div class="full"><label>Full name *</label><input id="f-name"></div>
+      <div><label>Email *</label><input id="f-email"></div>
+      <div><label>Mobile *</label><input id="f-phone"></div>
+      <div class="full"><label>Institution</label><input id="f-inst"></div>
+      <div><label>Registration category</label><select id="f-role"><option value="">Not specified</option><option>Student (UG &amp; PG)</option><option>Research Scholar</option><option>Faculty / Scientist</option><option>Industrialist</option><option>Foreign Delegate</option></select></div>
+      <div><label>Food preference</label><select id="f-food"><option value="">Not specified</option><option>Vegetarian</option><option>Non-Vegetarian</option></select></div>
+      <div><label>Amount paid (₹)</label><input id="f-amount"></div>
+      <div><label>Registration status</label><select id="f-status"><option>Registered</option><option>Pending</option><option>Cancelled</option></select></div>
+      <div><label>Presentation category</label><select id="f-type"><option>Oral</option><option>Poster</option><option>Participant</option></select></div>
+      <div><label>Mode</label><select id="f-mode"><option>Offline</option><option>Online</option></select></div>
+      <div class="full" id="w-loc"><label>Venue / location</label><input id="f-loc"></div>
+      <div class="full" id="w-link" style="display:none;"><label>Meeting link</label><input id="f-link"></div>
+    </div>
+    <div class="alert" id="warn" style="display:none;background:rgba(219,164,60,.1);border-color:rgba(219,164,60,.35);color:var(--warn);margin-top:14px;"><i class="fa-solid fa-triangle-exclamation"></i> Changing the email resets the password to the mobile number and e-mails the new login details.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;">
+      <button class="btn btn-gold" id="save"><i class="fa-solid fa-floppy-disk"></i> Save changes</button>
+      <button class="btn" id="reset"><i class="fa-solid fa-key"></i> Reset password</button>
+      <a class="btn" id="view" href="#"><i class="fa-solid fa-id-card"></i> Individual view</a>
+      <button class="btn btn-danger" id="del" style="margin-left:auto;"><i class="fa-solid fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+<div class="modal" id="dm"><div class="box">
+  <h3 style="margin-bottom:10px;"><i class="fa-solid fa-trash" style="color:var(--danger);"></i> Delete participant</h3>
+  <p style="font-size:13px;color:var(--text-3);margin-bottom:12px;">This permanently removes <b id="d-name"></b>. Type <span class="id" id="d-id"></span> to confirm.</p>
+  <div class="alert alert-error" id="d-err"></div>
+  <input id="d-confirm" autocomplete="off">
+  <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:500;"><input type="checkbox" id="d-files" style="width:auto;"> Also move their Drive folder to trash</label>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;"><button class="btn" id="d-cancel">Cancel</button><button class="btn btn-danger" id="d-go">Delete permanently</button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script>
+
+const $ = id => document.getElementById(id), esc = VR.esc;
+if (!VR.token()) (window.top || window).location.replace('../admin-login.html');
+function showErr(m){ const e = $('err'); e.textContent = m; e.className = 'alert alert-error show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function showOk(m){ const e = $('ok'); e.textContent = m; e.className = 'alert alert-success show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function hideAlerts(){ $('err').classList.remove('show'); $('ok').classList.remove('show'); }
+const fmtD = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }); };
+const fmtDT = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const yes = v => String(v).toUpperCase() === 'TRUE';
+const typeBadge = t => t === 'Oral' ? 'b-oral' : t === 'Poster' ? 'b-poster' : 'b-neu';
+const absBadge = s => s === 'Accepted' ? 'b-ok' : s === 'Rejected' ? 'b-bad' : (s === 'Submitted' || s === 'Revision Requested') ? 'b-warn' : 'b-neu';
+
+if (!VR.can('participants', 'transaction')) document.querySelector('.wrap').innerHTML = '<div class="alert alert-error show">You do not have permission to edit participants. Use <a href="participants-individual.html">Individual View</a> to look up details.</div>';
+else {
+let all = [], sel = null;
+const hay = p => [p.ID, p.Name, p.Email, p.Phone, p.Institution].join(' ').toLowerCase();
+function results(){
+  const q = $('q').value.trim().toLowerCase(); if (!q) { $('results').innerHTML = '<div class="empty" style="padding:14px;">Type to search ' + all.length + ' participants.</div>'; return; }
+  const list = all.filter(p => hay(p).includes(q)).slice(0, 12);
+  $('results').innerHTML = list.length ? list.map(p => `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 4px;border-bottom:1px solid rgba(226,187,120,.08);"><span><span class="id">${esc(p.ID)}</span> &nbsp;<b class="nm">${esc(p.Name)}</b><br><span style="font-size:12px;color:var(--text-3);">${esc(p.Email)} · ${esc(p.Institution || '')}</span></span><button class="btn btn-sm" data-pick="${esc(p.ID)}">Edit</button></div>`).join('') : '<div class="empty" style="padding:14px;">No match.</div>';
+}
+function setSel(id, v){ const s = $(id); v = v || ''; if (v && ![...s.options].some(o => o.value === v || o.text === v)) s.add(new Option(v, v)); s.value = v; }
+function pick(id){
+  sel = all.find(p => p.ID === id); if (!sel) return; hideAlerts();
+  $('f-id').textContent = sel.ID; $('f-name').value = sel.Name || ''; $('f-email').value = sel.Email || ''; $('f-phone').value = sel.Phone || ''; $('f-inst').value = sel.Institution || '';
+  setSel('f-role', sel.Role); setSel('f-food', sel.FoodPreference); $('f-amount').value = sel.AmountPaid || ''; setSel('f-status', sel.RegistrationStatus || 'Registered');
+  setSel('f-type', sel.ParticipantType || 'Participant'); setSel('f-mode', sel.Mode || 'Offline'); $('f-loc').value = sel.Location || ''; $('f-link').value = sel.MeetingLink || '';
+  $('view').href = 'participants-individual.html?id=' + encodeURIComponent(sel.ID); sync(); $('form').style.display = 'block'; $('form').scrollIntoView({ behavior: 'smooth' });
+}
+function sync(){ const on = $('f-mode').value === 'Online'; $('w-loc').style.display = on ? 'none' : 'block'; $('w-link').style.display = on ? 'block' : 'none'; $('warn').style.display = sel && $('f-email').value.trim().toLowerCase() !== String(sel.Email).trim().toLowerCase() ? 'block' : 'none'; }
+$('f-mode').onchange = sync; $('f-email').oninput = sync; $('q').oninput = results;
+$('results').onclick = e => { const b = e.target.closest('[data-pick]'); if (b) pick(b.dataset.pick); };
+async function load(keep){
+  const r = await VR.api('adminListParticipants', {}); if (!r.ok) { showErr(r.error || 'Could not load participants.'); return; }
+  all = r.participants; results(); if (keep) { sel = all.find(p => p.ID === keep); if (sel) pick(keep); }
+}
+$('save').onclick = async function(){
+  hideAlerts(); const b = this, o = b.innerHTML; b.disabled = true; b.innerHTML = '<span class="spinner"></span> Saving…';
+  try {
+    const r = await VR.api('adminUpdateParticipant', { row: sel.row, id: sel.ID, name: $('f-name').value.trim(), email: $('f-email').value.trim(), phone: $('f-phone').value.trim(), institution: $('f-inst').value.trim(),
+      role: $('f-role').value, foodPreference: $('f-food').value, amountPaid: $('f-amount').value.trim(), registrationStatus: $('f-status').value, participantType: $('f-type').value, mode: $('f-mode').value, location: $('f-loc').value.trim(), meetingLink: $('f-link').value.trim() });
+    if (!r.ok) { showErr(r.error || 'Could not save.'); return; }
+    showOk('Saved.' + (r.credentialsReset ? ' Login email changed — password reset to the mobile number' + (r.mailSent ? ' and e-mailed.' : ' (e-mail failed — tell them directly).') : '')); await load(sel.ID);
+  } catch (e) { showErr('Could not reach the server.'); } finally { b.disabled = false; b.innerHTML = o; }
+};
+$('reset').onclick = async function(){
+  if (!confirm('Reset the password for ' + sel.Name + '? A temporary password is e-mailed to them.')) return; hideAlerts();
+  const r = await VR.api('adminResetParticipantPassword', { row: sel.row, id: sel.ID });
+  if (!r.ok) showErr(r.error); else showOk('Temporary password: ' + r.tempPassword + (r.mailSent ? ' (also e-mailed).' : ' — e-mail failed, share it directly.'));
+};
+$('del').onclick = () => { $('d-name').textContent = sel.Name; $('d-id').textContent = sel.ID; $('d-confirm').value = ''; $('d-files').checked = false; $('d-err').classList.remove('show'); $('dm').classList.add('show'); };
+$('d-cancel').onclick = () => $('dm').classList.remove('show');
+$('d-go').onclick = async function(){
+  if ($('d-confirm').value.trim() !== sel.ID) { $('d-err').textContent = 'The ID you typed does not match.'; $('d-err').classList.add('show'); return; }
+  const r = await VR.api('adminDeleteParticipant', { row: sel.row, id: sel.ID, confirmId: sel.ID, deleteFiles: $('d-files').checked });
+  if (!r.ok) { $('d-err').textContent = r.error; $('d-err').classList.add('show'); return; }
+  $('dm').classList.remove('show'); $('form').style.display = 'none'; showOk(sel.ID + ' deleted.'); sel = null; load();
+};
+load(new URLSearchParams(location.search).get('id'));
+}
+
+</script>
+</body>
+</html>
