@@ -61,6 +61,8 @@ table.list tr:hover td{background:rgba(232,201,131,.03);}
 .modal.show{display:flex;}
 .modal .box{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:24px;max-width:480px;width:100%;}
 @media print{body{background:#fff;color:#000}.topbar,.toolbar,.noprint{display:none !important}}
+</style>
+<link rel="stylesheet" href="admin-common.css">
 </head>
 <body>
 
@@ -110,7 +112,7 @@ table.list tr:hover td{background:rgba(232,201,131,.03);}
 <script>
 
 const $ = id => document.getElementById(id), esc = VR.esc;
-if (!VR.token()) (window.top || window).location.replace('../admin-login.html');
+if (!VR.token()) (window.top || window).location.replace(VR.LOGIN_URL);
 function showErr(m){ const e = $('err'); e.textContent = m; e.className = 'alert alert-error show'; window.scrollTo({top:0,behavior:'smooth'}); }
 function showOk(m){ const e = $('ok'); e.textContent = m; e.className = 'alert alert-success show'; window.scrollTo({top:0,behavior:'smooth'}); }
 function hideAlerts(){ $('err').classList.remove('show'); $('ok').classList.remove('show'); }
