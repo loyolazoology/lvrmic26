@@ -15,16 +15,12 @@
   --teal:#279c85; --teal-light:#6fc9b6;
   --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
   --danger:#d8695a; --success:#4fa980;
-  --radius:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
-body{
-  font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;min-height:100vh;
-  background:radial-gradient(1200px 700px at 85% -10%, #12234f 0%, transparent 55%),
-             radial-gradient(900px 500px at -10% 10%, #0f1d42 0%, transparent 50%), var(--navy-950);
-  display:flex;flex-direction:column;
-}
+body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;min-height:100vh;
+  background:radial-gradient(1200px 700px at 85% -10%, #12234f 0%, transparent 55%),radial-gradient(900px 500px at -10% 10%, #0f1d42 0%, transparent 50%), var(--navy-950);
+  display:flex;flex-direction:column;}
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 6px;}
 a{color:var(--gold-light);}
 .masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);}
@@ -40,25 +36,18 @@ a{color:var(--gold-light);}
 .topbar a.back{font-size:13px;color:var(--text-3);text-decoration:none;display:flex;align-items:center;gap:6px;}
 .topbar a.back:hover{color:var(--gold-light);}
 .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 18px;}
-.card{
-  width:100%;max-width:420px;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));
-  border:1px solid var(--navy-border);border-radius:16px;padding:36px 32px;box-shadow:0 30px 70px rgba(0,0,0,.4);
-}
+.card{width:100%;max-width:420px;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:36px 32px;box-shadow:0 30px 70px rgba(0,0,0,.4);}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);margin-bottom:6px;display:block;}
 .card p.sub{color:var(--text-3);font-size:13.5px;margin-bottom:24px;}
 label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 6px;}
-input{
-  width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);
-  border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14.5px;margin-bottom:16px;
-}
+input{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14.5px;margin-bottom:16px;}
 input:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.pw{position:relative;}
+.pw input{padding-right:46px;}
+.pw button{position:absolute;right:6px;top:5px;background:none;border:none;color:var(--text-3);cursor:pointer;padding:8px 10px;font-size:14px;}
+.pw button:hover{color:var(--gold-light);}
 .otp-input{letter-spacing:8px;font-size:20px;text-align:center;font-family:'IBM Plex Mono',monospace;}
-.btn{
-  width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
-  font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;padding:13px 20px;border-radius:8px;
-  cursor:pointer;border:none;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;
-  transition:transform .15s ease;
-}
+.btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;padding:13px 20px;border-radius:8px;cursor:pointer;border:none;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;transition:transform .15s ease;}
 .btn:hover{transform:translateY(-2px);}
 .btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 .link-row{text-align:center;margin-top:16px;font-size:13px;color:var(--text-3);}
@@ -67,12 +56,12 @@ input:focus{outline:2px solid var(--gold);outline-offset:1px;}
 .alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:16px;border:1px solid transparent;display:none;}
 .alert.show{display:block;}
 .alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
-.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
 .spinner{width:14px;height:14px;border:2px solid rgba(36,26,6,.3);border-top-color:#241a06;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .view{display:none;}
 .view.active{display:block;}
 .step-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--teal-light);font-family:'IBM Plex Mono',monospace;margin-bottom:10px;}
+.ipnote{margin-top:18px;text-align:center;font-size:11.5px;color:var(--text-3);}
 </style>
 </head>
 <body>
@@ -85,8 +74,8 @@ input:focus{outline:2px solid var(--gold);outline-offset:1px;}
     </div>
     <div class="masthead-text">
       <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
+      <h1 id="conf-name">4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
+      <p class="m-sub"><span id="conf-dates">26&ndash;28 November 2026</span> &middot; CIMSER &middot; Administration Portal</p>
     </div>
   </div>
 </div>
@@ -100,15 +89,16 @@ input:focus{outline:2px solid var(--gold);outline-offset:1px;}
     <div class="view active" id="view-password">
       <span class="eyebrow">Admin Login</span>
       <h2>Sign in</h2>
-      <p class="sub">Enter your Admin ID and password. New accounts use the ID as the initial password unless told otherwise.</p>
+      <p class="sub">Enter your Admin ID and password. If this is a new account, use the initial password given to you by the Convener; you will be asked to change it.</p>
       <div class="alert alert-error" id="password-error"></div>
       <form id="password-form">
         <label for="admin-id">Admin ID</label>
         <input type="text" id="admin-id" required placeholder="e.g. 1001" autocomplete="username">
         <label for="admin-password">Password</label>
-        <input type="password" id="admin-password" required placeholder="Password" autocomplete="current-password">
+        <div class="pw"><input type="password" id="admin-password" required placeholder="Password" autocomplete="current-password"><button type="button" data-eye="admin-password" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>
         <button class="btn" type="submit" id="password-btn"><i class="fa-solid fa-right-to-bracket"></i> Continue</button>
       </form>
+      <div class="ipnote"><i class="fa-solid fa-location-dot"></i> Your IP <span id="my-ip">…</span> is recorded with every login.</div>
     </div>
 
     <div class="view" id="view-otp">
@@ -118,7 +108,7 @@ input:focus{outline:2px solid var(--gold);outline-offset:1px;}
       <div class="alert alert-error" id="otp-error"></div>
       <form id="otp-form">
         <label for="otp-code">One-time code</label>
-        <input type="text" id="otp-code" class="otp-input" required maxlength="6" pattern="[0-9]{6}" placeholder="------">
+        <input type="text" id="otp-code" class="otp-input" required maxlength="6" pattern="[0-9]{6}" inputmode="numeric" placeholder="------" autocomplete="one-time-code">
         <button class="btn" type="submit" id="otp-btn"><i class="fa-solid fa-unlock"></i> Verify &amp; log in</button>
       </form>
       <div class="link-row"><a onclick="backToPassword()">Use a different account</a></div>
@@ -127,13 +117,13 @@ input:focus{outline:2px solid var(--gold);outline-offset:1px;}
     <div class="view" id="view-reset">
       <span class="eyebrow">Set New Password</span>
       <h2>Choose a new password</h2>
-      <p class="sub">For security, please set a new password before continuing to the admin dashboard.</p>
+      <p class="sub">For security, please set a new password before continuing to the admin portal.</p>
       <div class="alert alert-error" id="reset-error"></div>
       <form id="reset-form">
         <label for="reset-password">New password (min. 6 characters)</label>
-        <input type="password" id="reset-password" required minlength="6" placeholder="New password">
+        <div class="pw"><input type="password" id="reset-password" required minlength="6" placeholder="New password" autocomplete="new-password"><button type="button" data-eye="reset-password" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>
         <label for="reset-password2">Confirm new password</label>
-        <input type="password" id="reset-password2" required minlength="6" placeholder="Confirm new password">
+        <input type="password" id="reset-password2" required minlength="6" placeholder="Confirm new password" autocomplete="new-password">
         <button class="btn" type="submit" id="reset-btn"><i class="fa-solid fa-key"></i> Set password &amp; continue</button>
       </form>
     </div>
@@ -145,42 +135,39 @@ input:focus{outline:2px solid var(--gold);outline-offset:1px;}
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
 let pendingId = '';
 
+// The browser looks up its own public IP (Apps Script cannot see it) and sends it with the login for the audit log.
+const IP_PROMISE = (async () => { try { const r = await fetch('https://api.ipify.org?format=json'); return (await r.json()).ip || ''; } catch (e) { return ''; } })();
+IP_PROMISE.then(ip => { document.getElementById('my-ip').textContent = ip || 'unavailable'; });
+const getIp = () => Promise.race([IP_PROMISE, new Promise(r => setTimeout(() => r(''), 2000))]);
+
 async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action: action }, payload))
-  });
+  const ip = await getIp();
+  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, ip }, payload)) });
   return res.json();
 }
-function showView(name) {
-  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
-  document.getElementById('view-' + name).classList.add('active');
-}
-function showAlert(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.classList.add('show');
-}
-function hideAlerts(prefix) {
-  document.querySelectorAll('[id^="' + prefix + '-"]').forEach(function(el){
-    if (el.classList.contains('alert')) el.classList.remove('show');
-  });
-}
-function backToPassword() {
-  showView('password');
-  document.getElementById('otp-code').value = '';
-}
+function showView(name) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('view-' + name).classList.add('active'); }
+function showAlert(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.add('show'); }
+function hideAlerts(prefix) { document.querySelectorAll('[id^="' + prefix + '-"]').forEach(el => { if (el.classList.contains('alert')) el.classList.remove('show'); }); }
+function backToPassword() { showView('password'); document.getElementById('otp-code').value = ''; }
+document.querySelectorAll('[data-eye]').forEach(b => b.addEventListener('click', () => {
+  const i = document.getElementById(b.dataset.eye); const show = i.type === 'password'; i.type = show ? 'text' : 'password';
+  b.innerHTML = '<i class="fa-solid ' + (show ? 'fa-eye-slash' : 'fa-eye') + '"></i>';
+}));
 
 function storeSession(res) {
   localStorage.setItem('vrmic_admin_token', res.token);
+  localStorage.setItem('vrmic_admin_id', res.adminId || pendingId);
   localStorage.setItem('vrmic_admin_name', res.name || '');
   localStorage.setItem('vrmic_admin_position', res.position || '');
+  localStorage.setItem('vrmic_admin_category', res.category || '');
   localStorage.setItem('vrmic_admin_permissions', JSON.stringify(res.permissions || {}));
+  localStorage.setItem('vrmic_admin_last_login', JSON.stringify(res.lastLogin || {}));   // the PREVIOUS login, shown in the top bar
+  sessionStorage.removeItem('vrmic_pub');
 }
+const goHome = () => { window.location.href = 'admin/home.html'; };
 
 document.getElementById('password-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  hideAlerts('password');
+  e.preventDefault(); hideAlerts('password');
   const btn = document.getElementById('password-btn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Checking...';
   try {
@@ -188,59 +175,57 @@ document.getElementById('password-form').addEventListener('submit', async functi
     const res = await callApi('adminLogin', { id: id, password: document.getElementById('admin-password').value });
     if (!res.ok) { showAlert('password-error', res.error || 'Login failed.'); return; }
     pendingId = id;
-
-    if (res.otpSent) {
-      showView('otp');
-    } else if (res.forceReset) {
-      storeSession(res);
-      showView('reset');
-    } else {
-      storeSession(res);
-      window.location.href = 'admin/home.html';
-    }
+    if (res.otpSent) showView('otp');
+    else if (res.forceReset) { storeSession(res); showView('reset'); }
+    else { storeSession(res); goHome(); }
   } catch (err) {
     showAlert('password-error', 'Could not reach the server. Check your connection and try again.');
-  } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Continue';
-  }
+  } finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Continue'; }
 });
 
 document.getElementById('otp-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  hideAlerts('otp');
+  e.preventDefault(); hideAlerts('otp');
   const btn = document.getElementById('otp-btn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Verifying...';
   try {
     const res = await callApi('adminVerifyOtp', { adminId: pendingId, otp: document.getElementById('otp-code').value });
     if (!res.ok) { showAlert('otp-error', res.error || 'Invalid code.'); return; }
     storeSession(res);
-    if (res.forceReset) { showView('reset'); }
-    else { window.location.href = 'admin/home.html'; }
+    if (res.forceReset) showView('reset'); else goHome();
   } catch (err) {
     showAlert('otp-error', 'Could not reach the server. Check your connection and try again.');
-  } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-unlock"></i> Verify &amp; log in';
-  }
+  } finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-unlock"></i> Verify &amp; log in'; }
 });
 
 document.getElementById('reset-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  hideAlerts('reset');
-  const p1 = document.getElementById('reset-password').value;
-  const p2 = document.getElementById('reset-password2').value;
+  e.preventDefault(); hideAlerts('reset');
+  const p1 = document.getElementById('reset-password').value, p2 = document.getElementById('reset-password2').value;
   if (p1 !== p2) { showAlert('reset-error', 'Passwords do not match.'); return; }
   const btn = document.getElementById('reset-btn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving...';
   try {
     const res = await callApi('adminSetNewPassword', { token: localStorage.getItem('vrmic_admin_token'), newPassword: p1 });
     if (!res.ok) { showAlert('reset-error', res.error || 'Could not set new password.'); return; }
-    window.location.href = 'admin/home.html';
+    goHome();
   } catch (err) {
     showAlert('reset-error', 'Could not reach the server. Check your connection and try again.');
-  } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-key"></i> Set password &amp; continue';
-  }
+  } finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-key"></i> Set password &amp; continue'; }
 });
+
+// Conference name and dates come from Admin > Settings, so a change there shows here too.
+(async function(){
+  try {
+    const r = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'getPublicSettings' }) });
+    const s = (await r.json()).settings || {};
+    if (s['conf.name']) document.getElementById('conf-name').textContent = s['conf.name'];
+    if (s['conf.startDate']) {
+      const f = (d, o) => new Date(d + 'T00:00:00+05:30').toLocaleDateString('en-GB', Object.assign({ timeZone: 'Asia/Kolkata' }, o));
+      const a = s['conf.startDate'], b = s['conf.endDate'] || a;
+      document.getElementById('conf-dates').textContent = f(a, { month: 'long', year: 'numeric' }) === f(b, { month: 'long', year: 'numeric' })
+        ? f(a, { day: 'numeric' }) + '–' + f(b, { day: 'numeric', month: 'long', year: 'numeric' }) : f(a, { day: 'numeric', month: 'long' }) + ' – ' + f(b, { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+  } catch (e) {}
+})();
 </script>
 </body>
 </html>
