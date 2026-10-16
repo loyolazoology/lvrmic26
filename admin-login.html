@@ -164,7 +164,7 @@ function storeSession(res) {
   localStorage.setItem('vrmic_admin_last_login', JSON.stringify(res.lastLogin || {}));   // the PREVIOUS login, shown in the top bar
   sessionStorage.removeItem('vrmic_pub');
 }
-const goHome = () => { window.location.href = 'admin/home.html'; };
+const goHome = () => { window.location.href = '/admin/home.html'; };   // https://vrmic26.vercel.app/admin/home.html
 
 document.getElementById('password-form').addEventListener('submit', async function(e) {
   e.preventDefault(); hideAlerts('password');
