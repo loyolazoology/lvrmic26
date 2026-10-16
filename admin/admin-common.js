@@ -7,13 +7,16 @@
 (function () {
   const VR = (window.VR = {});
   VR.URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
+  // ---- where things live (change here ONLY if the site folders move) ----
+  VR.LOGIN_URL = '/vrmic26/admin-login.html';   // https://vrmic26.vercel.app/vrmic26/admin-login.html
+  VR.HOME_URL  = '/admin/home.html';            // https://vrmic26.vercel.app/admin/home.html
   VR.token = () => localStorage.getItem('vrmic_admin_token') || '';
   VR.esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   VR.can = (m, a) => { try { const p = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); return !!(p[m] && p[m][a]); } catch (e) { return false; } };
 
   const ipP = (async () => { try { const r = await fetch('https://api.ipify.org?format=json'); return (await r.json()).ip || ''; } catch (e) { return ''; } })();
   VR.ip = () => Promise.race([ipP, new Promise(r => setTimeout(() => r(''), 1500))]);
-  VR.logout = () => { ['token', 'name', 'position', 'permissions', 'id', 'category', 'last_login'].forEach(k => localStorage.removeItem('vrmic_admin_' + k)); (window.top || window).location.href = '../admin-login.html'; };
+  VR.logout = () => { ['token', 'name', 'position', 'permissions', 'id', 'category', 'last_login', 'menu_open'].forEach(k => localStorage.removeItem('vrmic_admin_' + k)); sessionStorage.removeItem('vrmic_pub'); (window.top || window).location.href = VR.LOGIN_URL; };
   VR.api = async (action, payload) => {
     const ip = await VR.ip();
     const res = await fetch(VR.URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, token: VR.token(), ip }, payload || {})) });
