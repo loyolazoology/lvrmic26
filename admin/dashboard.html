@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--danger:#d8695a;--warn:#dba43c;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.55;background:var(--navy-950);min-height:100vh;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;}
+a{color:var(--gold-light);text-decoration:none;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.topbar{padding:14px 24px;border-bottom:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:rgba(6,11,28,.85);position:sticky;top:0;z-index:30;}
+.topbar h1{font-size:1.25rem;}
+.wrap{padding:22px 24px;max-width:1300px;}
+.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:22px;margin-bottom:18px;}
+.card h3{font-size:1rem;margin-bottom:14px;display:flex;gap:9px;align-items:center;}
+.card h3 i{color:var(--gold-light);}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:8px;border:1px solid var(--navy-border);background:var(--navy-850);color:var(--text-1);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;}
+.btn:hover{border-color:var(--gold);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
+.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
+.btn-sm{padding:7px 11px;font-size:12px;}
+input,select,textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:14px;}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 5px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid .full{grid-column:1/-1;}
+@media(max-width:700px){.grid{grid-template-columns:1fr;}}
+.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;border:1px solid transparent;display:none;}
+.alert.show{display:block;}
+.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
+.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+.btn-gold .spinner{border-color:rgba(36,26,6,.3);border-top-color:#241a06;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{padding:40px 18px;text-align:center;color:var(--text-3);}
+.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
+.scroll-x{overflow-x:auto;}
+table.list{width:100%;border-collapse:collapse;font-size:13px;}
+table.list th{text-align:left;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;position:sticky;top:0;background:var(--navy-900);}
+table.list td{padding:10px 13px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;}
+table.list tr:hover td{background:rgba(232,201,131,.03);}
+.id{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;}
+.nm{color:var(--text-1);font-weight:600;}
+.badge{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-ok{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.b-warn{background:rgba(219,164,60,.14);color:var(--warn);}
+.b-bad{background:rgba(216,105,90,.14);color:#e8988c;}
+.b-neu{background:rgba(179,188,214,.1);color:var(--text-2);}
+.b-oral{background:rgba(232,201,131,.14);color:var(--gold-light);}
+.b-poster{background:rgba(120,160,230,.14);color:#9db8ee;}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.toolbar input{flex:1;min-width:200px;}
+.toolbar select{width:auto;min-width:150px;}
+.modal{position:fixed;inset:0;background:rgba(6,10,26,.72);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 18px;overflow-y:auto;}
+.modal.show{display:flex;}
+.modal .box{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:24px;max-width:480px;width:100%;}
+@media print{body{background:#fff;color:#000}.topbar,.toolbar,.noprint{display:none !important}}
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-gauge-high" style="color:var(--gold-light);"></i> Dashboard</h1><span style="font-size:12.5px;color:var(--text-3);" id="upd"></span></div>
+<div class="wrap">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"><div class="empty"><span class="spinner"></span> Loading…</div></div>
+  <div class="two">
+    <div class="card"><h3><i class="fa-solid fa-chart-pie"></i> Participants by category</h3><div id="breakdown"></div></div>
+    <div class="card"><h3><i class="fa-solid fa-list-check"></i> Needs attention</h3><div id="actions"></div></div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script>
+
+const $ = id => document.getElementById(id), esc = VR.esc;
+if (!VR.token()) (window.top || window).location.replace('../admin-login.html');
+function showErr(m){ const e = $('err'); e.textContent = m; e.className = 'alert alert-error show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function showOk(m){ const e = $('ok'); e.textContent = m; e.className = 'alert alert-success show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function hideAlerts(){ $('err').classList.remove('show'); $('ok').classList.remove('show'); }
+const fmtD = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }); };
+const fmtDT = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const yes = v => String(v).toUpperCase() === 'TRUE';
+const typeBadge = t => t === 'Oral' ? 'b-oral' : t === 'Poster' ? 'b-poster' : 'b-neu';
+const absBadge = s => s === 'Accepted' ? 'b-ok' : s === 'Rejected' ? 'b-bad' : (s === 'Submitted' || s === 'Revision Requested') ? 'b-warn' : 'b-neu';
+
+// This page only appears inside the portal frame; opened directly it goes back to the portal.
+if (window.self === window.top) location.replace('home.html#dashboard.html');
+(async function(){
+  const r = await VR.api('adminListParticipants', {});
+  if (!r.ok) { $('stats').innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;color:var(--text-3);">' + (/permission/i.test(r.error || '') ? 'You do not have access to participant statistics. Use the menu to open your modules.' : esc(r.error || 'Could not load.')) + '</div>'; return; }
+  const p = r.participants, n = p.length, c = f => p.filter(f).length;
+  const online = c(x => x.Mode === 'Online'), pend = c(x => x.AbstractStatus === 'Submitted'), revs = c(x => x.AbstractStatus === 'Revision Requested'),
+        certs = c(x => yes(x.CertificateRequested) && !x.CertificateLink), noPpt = c(x => x.ParticipantType === 'Oral' && x.AbstractStatus === 'Accepted' && !x.PPTLink), prof = c(x => yes(x.ProfileCompleted));
+  $('stats').innerHTML = [['fa-users','Total participants',n,online + ' online · ' + (n - online) + ' offline'],['fa-user-check','Profile complete',prof,'of ' + n + ' registered'],['fa-file-lines','Abstracts to review',pend,revs + ' awaiting revision'],['fa-certificate','Certificate requests',certs,'awaiting generation']]
+    .map(x => `<div class="sc"><i class="fa-solid ${x[0]}"></i><h4>${x[1]}</h4><div class="v">${x[2]}</div><div class="s">${x[3]}</div></div>`).join('');
+  $('breakdown').innerHTML = [['Oral','b-oral'],['Poster','b-poster'],['Participant','b-neu']].map(t => `<div class="row"><span class="badge ${t[1]}">${t[0] === 'Participant' ? 'Delegate only' : t[0]}</span><b>${c(x => x.ParticipantType === t[0])}</b></div>`).join('');
+  const a = [];
+  if (pend) a.push(['fa-file-lines', pend + ' abstract' + (pend > 1 ? 's' : '') + ' awaiting review', 'Accept, reject or request revision', 'abstracts-review.html']);
+  if (noPpt) a.push(['fa-display', noPpt + ' accepted Oral presenter' + (noPpt > 1 ? 's' : '') + ' without a PPT', 'Follow up before the deadline', 'participants-report.html']);
+  if (certs) a.push(['fa-certificate', certs + ' certificate request' + (certs > 1 ? 's' : '') + ' pending', 'Generate and send', 'certificates-manage.html']);
+  if (!a.length) a.push(['fa-circle-check', 'All caught up', 'Nothing needs action right now', '']);
+  $('actions').innerHTML = a.map(x => `<div class="act"><div><b><i class="fa-solid ${x[0]}" style="color:var(--gold-light);margin-right:8px;"></i>${esc(x[1])}</b><span>${esc(x[2])}</span></div>${x[3] ? `<a href="${x[3]}">Open →</a>` : ''}</div>`).join('');
+  $('upd').textContent = 'Updated ' + VR.now();
+})();
+
+</script>
+</body>
+</html>
