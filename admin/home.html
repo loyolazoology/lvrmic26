@@ -127,21 +127,26 @@ const $ = id => document.getElementById(id), esc = VR.esc;
 if (!VR.token()) location.replace(VR.LOGIN_URL);
 
 /* ================= MENU: defined once. To add a page, add one line here. =================
-   tx = Transaction items (need <mod>.transaction), rp = Report items (need <mod>.report). */
+   cf = Configuration (needs transaction or report), tx = Transaction (needs transaction), rp = Report (needs report).
+   An item may carry a 4th value: the permission module to check instead of the group's own. */
 const MENU = [
   { id: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'dashboard.html', always: true },
   { id: 'participants', label: 'Participants', icon: 'fa-users', mod: 'participants',
-    tx: [['Participant master', 'participants-manage.html', 'fa-user-plus'], ['Participant details', 'participants-details.html', 'fa-user-pen']],
-    rp: [['List view', 'participants-report.html', 'fa-table-list'], ['Individual view', 'participants-individual.html', 'fa-id-card']] },
+    cf: [['Attendance sessions', 'sessions-config.html?kind=participant', 'fa-clock', 'attendanceConfig']],
+    tx: [['Participant master', 'participants-manage.html', 'fa-user-plus'], ['Participant details', 'participants-details.html', 'fa-user-pen'],
+         ['Attendance entry', 'attendance-entry.html?kind=participant', 'fa-calendar-check', 'attendance'], ['Attendance entry by scan', 'attendance-scan.html?kind=participant', 'fa-qrcode', 'attendance']],
+    rp: [['List view', 'participants-report.html', 'fa-table-list'], ['Individual view', 'participants-individual.html', 'fa-id-card'],
+         ['QR codes', 'students-report.html?kind=participant', 'fa-qrcode'], ['Attendance report', 'attendance-report.html?kind=participant', 'fa-clipboard-list', 'attendance']] },
+  { id: 'students', label: 'Students', icon: 'fa-user-graduate', mod: 'studentAttendance',
+    cf: [['Attendance sessions', 'sessions-config.html?kind=student', 'fa-clock', 'studentConfig']],
+    tx: [['Student creation', 'students-manage.html', 'fa-user-plus', 'students'], ['Attendance entry', 'attendance-entry.html?kind=student', 'fa-calendar-check'], ['Attendance entry by scan', 'attendance-scan.html?kind=student', 'fa-qrcode']],
+    rp: [['Student list & QR codes', 'students-report.html?kind=student', 'fa-address-card', 'students'], ['Attendance report', 'attendance-report.html?kind=student', 'fa-clipboard-list']] },
   { id: 'abstract', label: 'Abstract', icon: 'fa-file-lines', mod: 'abstract',
     tx: [['Review', 'abstracts-review.html', 'fa-file-circle-check']],
     rp: [['Abstract status', 'abstracts-report.html', 'fa-table-list']] },
   { id: 'slot', label: 'Slot allotment', icon: 'fa-location-crosshairs', mod: 'slot',
     tx: [['Allot slots', 'slots-manage.html', 'fa-location-crosshairs']],
     rp: [['Slot report', 'slots-report.html', 'fa-table-list']] },
-  { id: 'attendance', label: 'Attendance', icon: 'fa-calendar-check', mod: 'attendance',
-    tx: [['Mark attendance', 'attendance-mark.html', 'fa-calendar-check']],
-    rp: [['Attendance report', 'attendance-report.html', 'fa-table-list']] },
   { id: 'presentationAccess', label: 'Presentation access', icon: 'fa-display', mod: 'presentationAccess',
     rp: [['Venue presentation list', 'presentation-access.html', 'fa-display']] },
   { id: 'certificates', label: 'Certificates', icon: 'fa-certificate', mod: 'certificates',
@@ -183,8 +188,10 @@ const saveOpen = () => { try { localStorage.setItem(OPEN_KEY, JSON.stringify([..
 let openState = openSet();
 
 /* ================= menu ================= */
+const KINDS = { cf: ['Configuration', 'fa-gear'], tx: ['Transaction', 'fa-pen-to-square'], rp: ['Report', 'fa-chart-column'] };
+const itemOk = (g, kind, i) => { const m = i[3] || g.mod; return kind === 'tx' ? VR.can(m, 'transaction') : kind === 'rp' ? VR.can(m, 'report') : (VR.can(m, 'transaction') || VR.can(m, 'report')); };
 function section(g, kind, items) {
-  const key = g.id + ':' + kind, label = kind === 'tx' ? 'Transaction' : 'Report', icon = kind === 'tx' ? 'fa-pen-to-square' : 'fa-chart-column';
+  const key = g.id + ':' + kind, label = KINDS[kind][0], icon = KINDS[kind][1];
   return `<div class="sub ${openState.has(key) ? 'open' : ''}" data-key="${key}">
     <button class="sub-h" aria-expanded="${openState.has(key)}"><i class="fa-solid ${icon} ic"></i>${label}<i class="fa-solid fa-chevron-down chev"></i></button>
     <div class="sub-b"><div>${items.map(i => `<a class="nav-link" href="#${i[1]}" data-page="${i[1]}"><i class="fa-solid ${i[2]} ic"></i>${esc(i[0])}</a>`).join('')}</div></div></div>`;
@@ -194,11 +201,11 @@ function renderMenu() {
   let html = '';
   MENU.forEach(g => {
     if (g.always) { if (!onlyPresentation()) html += `<a class="nav-link" href="#${g.href}" data-page="${g.href}"><i class="fa-solid ${g.icon} ic"></i>${g.label}</a>`; return; }
-    const tx = g.tx && can(g.mod, 'transaction') ? g.tx : null, rp = g.rp && can(g.mod, 'report') ? g.rp : null;
-    if (!tx && !rp) return;
+    const parts = ['cf', 'tx', 'rp'].map(k => [k, (g[k] || []).filter(i => itemOk(g, k, i))]).filter(x => x[1].length);
+    if (!parts.length) return;
     html += `<div class="grp ${openState.has(g.id) ? 'open' : ''}" data-key="${g.id}">
       <button class="grp-h" aria-expanded="${openState.has(g.id)}"><i class="fa-solid ${g.icon} ic"></i>${g.label}<i class="fa-solid fa-chevron-down chev"></i></button>
-      <div class="grp-b"><div>${tx ? section(g, 'tx', tx) : ''}${rp ? section(g, 'rp', rp) : ''}</div></div></div>`;
+      <div class="grp-b"><div>${parts.map(x => section(g, x[0], x[1])).join('')}</div></div></div>`;
   });
   $('nav').innerHTML = html || '<div class="empty-nav">No modules assigned yet. Contact the administrator.</div>';
   mark(currentPage());
@@ -211,21 +218,22 @@ $('nav').addEventListener('click', e => {
   }
   if (e.target.closest('.nav-link') && innerWidth <= 960) document.body.classList.remove('navopen');   // close the drawer on phones
 });
-function findItem(base) {
-  for (const g of MENU) {
-    if (g.href === base) return { g, kind: '', label: g.label };
-    for (const kind of ['tx', 'rp']) for (const i of (g[kind] || [])) if (i[1] === base) return { g, kind, label: i[0] };
+function findItem(page) {   // exact match (page + ?query) first, so ?kind=student and ?kind=participant stay distinct
+  const base = page.split('?')[0];
+  for (const pass of [0, 1]) for (const g of MENU) {
+    if (g.href && (pass ? g.href === base : g.href === page)) return { g, kind: '', label: g.label, page: g.href };
+    for (const kind of ['cf', 'tx', 'rp']) for (const i of (g[kind] || [])) if (pass ? i[1].split('?')[0] === base : i[1] === page) return { g, kind, label: i[0], page: i[1] };
   }
   return null;
 }
 function mark(page) {
-  const base = String(page || '').split('?')[0], hit = findItem(base);
+  page = String(page || ''); const base = page.split('?')[0], hit = findItem(page), key = hit ? hit.page : base;
   document.querySelectorAll('.nav-link.active').forEach(a => a.classList.remove('active'));
   document.querySelectorAll('.grp.has-active').forEach(a => a.classList.remove('has-active'));
-  const a = document.querySelector(`.nav-link[data-page="${CSS.escape(base)}"]`);
+  const a = document.querySelector(`.nav-link[data-page="${CSS.escape(key)}"]`);
   if (a) { a.classList.add('active'); const sub = a.closest('.sub'), grp = a.closest('.grp');
     [sub, grp].forEach(x => { if (x) { x.classList.add('open'); openState.add(x.dataset.key); } }); if (grp) grp.classList.add('has-active'); }
-  $('crumb').innerHTML = hit ? (hit.kind ? `${esc(hit.g.label)} › ${hit.kind === 'tx' ? 'Transaction' : 'Report'} › <b>${esc(hit.label)}</b>` : `<b>${esc(hit.label)}</b>`) : esc(base);
+  $('crumb').innerHTML = hit ? (hit.kind ? `${esc(hit.g.label)} › ${KINDS[hit.kind][0]} › <b>${esc(hit.label)}</b>` : `<b>${esc(hit.label)}</b>`) : esc(base);
   document.title = (hit ? hit.label + ' | ' : '') + 'VRMIC 2026 Admin';
 }
 
