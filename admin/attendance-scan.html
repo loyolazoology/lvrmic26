@@ -102,29 +102,63 @@ function setDir(d) { dir = d; document.querySelectorAll('#seg button').forEach(b
 $('seg').onclick = e => { const b = e.target.closest('button'); if (b) setDir(b.dataset.d); };
 
 /* ---- camera ---- */
+const JSQR_URLS = [JSQR, 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js'];
+let detector = null;
+async function loadDecoder() {
+  if (window.BarcodeDetector) { try { detector = new BarcodeDetector({ formats: ['qr_code'] }); return true; } catch (e) { detector = null; } }
+  if (window.jsQR) return true;
+  for (const u of JSQR_URLS) { try { await VR.load(u); if (window.jsQR) return true; } catch (e) {} }
+  return false;
+}
+function camError(e) {
+  const n = (e && e.name) || 'Error';
+  const tail = ' (' + n + (e && e.message && n === 'Error' ? ': ' + e.message : '') + ')';
+  if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return 'This page is not allowed to use the camera here. Open the portal using its https:// address, in Chrome, Edge, Safari or Firefox (not inside another app\'s built-in browser).' + tail;
+  if (n === 'NotAllowedError' || n === 'SecurityError') return 'The browser blocked the camera. Tap the lock or camera icon beside the address bar, set Camera to Allow for this site, then reload this page. If you already did, check the phone / computer settings (Privacy > Camera) for this browser, and that the site\'s server is not sending a Permissions-Policy header that blocks the camera.' + tail;
+  if (n === 'NotFoundError' || n === 'DevicesNotFoundError') return 'No camera was found on this device. Use Manual entry instead.' + tail;
+  if (n === 'NotReadableError' || n === 'TrackStartError' || n === 'AbortError') return 'The camera is busy or cannot start. Close other apps or browser tabs that are using the camera, then try again.' + tail;
+  return 'Could not start the camera.' + tail;
+}
+async function getStream() {
+  const tries = [{ video: { facingMode: { ideal: facing }, width: { ideal: 1280 } }, audio: false }, { video: { facingMode: facing }, audio: false }, { video: true, audio: false }];
+  let last;
+  for (const c of tries) {
+    try { return await navigator.mediaDevices.getUserMedia(c); }
+    catch (e) { last = e; if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError' || e.name === 'NotFoundError' || e.name === 'NotReadableError')) break; }   // retrying with looser settings cannot fix these
+  }
+  throw last;
+}
 async function start() {
   hideAlerts();
+  if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return showErr(camError(null));
+  try { stream = await getStream(); }
+  catch (e) { return showErr(camError(e)); }
   try {
-    await VR.load(JSQR);
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing, width: { ideal: 1280 } }, audio: false });
     const v = $('v'); v.srcObject = stream; await v.play();
-    $('off').style.display = 'none'; $('fr').style.display = ''; $('start').disabled = true; $('stop').disabled = false;
-    navigator.mediaDevices.enumerateDevices().then(d => { if (d.filter(x => x.kind === 'videoinput').length > 1) $('flip').style.display = ''; });
-    loop();
-  } catch (e) { showErr('Could not open the camera. Allow camera access for this site in the browser, or use Manual entry.'); }
+  } catch (e) { stop(); return showErr('The camera opened but the video could not play. Reload the page and try again. (' + ((e && e.name) || 'Error') + ')'); }
+  $('off').style.display = 'none'; $('fr').style.display = ''; $('start').disabled = true; $('stop').disabled = false;
+  navigator.mediaDevices.enumerateDevices().then(d => { if (d.filter(x => x.kind === 'videoinput').length > 1) $('flip').style.display = ''; }).catch(() => {});
+  if (!(await loadDecoder())) { showErr('The camera is on, but the QR reading tool could not be loaded (check the internet connection or any ad-blocker, then reload). You can still use Manual entry.'); }
+  loop();
 }
 function stop() { cancelAnimationFrame(raf); if (stream) stream.getTracks().forEach(t => t.stop()); stream = null; $('v').srcObject = null; $('off').style.display = ''; $('fr').style.display = 'none'; $('start').disabled = false; $('stop').disabled = true; }
 $('start').onclick = start; $('stop').onclick = stop; $('flip').onclick = () => { facing = facing === 'environment' ? 'user' : 'environment'; stop(); start(); };
 window.addEventListener('pagehide', stop);
 
 const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+let scanning = false;
 function loop() {
   const v = $('v');
-  if (v.readyState === v.HAVE_ENOUGH_DATA && !busy) {
-    const w = v.videoWidth, h = v.videoHeight, sc = Math.min(1, 640 / w); cv.width = Math.round(w * sc); cv.height = Math.round(h * sc);
-    cx.drawImage(v, 0, 0, cv.width, cv.height);
-    const c = window.jsQR && jsQR(cx.getImageData(0, 0, cv.width, cv.height).data, cv.width, cv.height, { inversionAttempts: 'dontInvert' });
-    if (c && c.data) handle(c.data.trim());
+  if (stream && v.readyState === v.HAVE_ENOUGH_DATA && !busy && !scanning) {
+    if (detector) {
+      scanning = true;
+      detector.detect(v).then(r => { if (r && r.length && r[0].rawValue) handle(String(r[0].rawValue).trim()); }).catch(() => {}).finally(() => { scanning = false; });
+    } else if (window.jsQR) {
+      const w = v.videoWidth, h = v.videoHeight, sc = Math.min(1, 640 / w); cv.width = Math.round(w * sc); cv.height = Math.round(h * sc);
+      cx.drawImage(v, 0, 0, cv.width, cv.height);
+      const c = jsQR(cx.getImageData(0, 0, cv.width, cv.height).data, cv.width, cv.height, { inversionAttempts: 'dontInvert' });
+      if (c && c.data) handle(c.data.trim());
+    }
   }
   raf = requestAnimationFrame(loop);
 }
