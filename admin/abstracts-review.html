@@ -6,459 +6,187 @@
 <title>Review Abstracts | VRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
 <style>
-:root{
-  --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
-  --navy-border:rgba(226,187,120,.24);
-  --gold:#c9974f; --gold-light:#e8c983;
-  --teal:#279c85; --teal-light:#6fc9b6;
-  --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
-  --danger:#d8695a; --warn:#dba43c; --success:#4fa980;
-  --sidebar-w:250px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;background:var(--navy-950);display:flex;flex-direction:column;min-height:100vh;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 4px;}
-a{color:var(--gold-light);text-decoration:none;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-
-.masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);flex-shrink:0;}
-.masthead-inner{padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.masthead-logos img{height:52px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:40px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-light);font-weight:700;margin-bottom:2px;}
-.masthead-text h1{font-size:clamp(.92rem,1.7vw,1.15rem);line-height:1.25;margin:0;color:var(--text-1);}
-.masthead-text .m-sub{font-size:11px;color:var(--text-3);margin:0;}
-
-.body-row{flex:1;display:flex;min-height:0;}
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);display:flex;flex-direction:column;overflow-y:auto;}
-.sidebar-brand{padding:22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--navy-border);}
-.sidebar-brand img{height:36px;width:auto;}
-.sidebar-brand div{font-family:'Fraunces',serif;font-size:14px;line-height:1.3;}
-.sidebar-brand small{display:block;color:var(--text-3);font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px;}
-.sidebar-nav{flex:1;padding:14px 12px;}
-.nav-section{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);padding:14px 12px 6px;}
-.nav-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;margin-bottom:2px;cursor:pointer;transition:.15s;}
-.nav-link i{width:16px;text-align:center;color:var(--text-3);font-size:13px;}
-.nav-link:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
-.nav-link.active{background:rgba(232,201,131,.1);color:var(--gold-light);}
-.nav-link.active i{color:var(--gold-light);}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--navy-border);}
-.sidebar-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:14px;flex-shrink:0;}
-.sidebar-user div{min-width:0;}
-.sidebar-user b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-user span{font-size:11px;color:var(--text-3);}
-.logout-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:8px;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);font-size:12.5px;cursor:pointer;}
-.logout-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-.sidebar-toggle{display:none;position:fixed;top:70px;left:16px;z-index:60;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;}
-@media(max-width:960px){
-  .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:70;transform:translateX(-100%);width:min(280px,85vw);transition:transform .3s ease;}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-toggle{display:block;}
-}
-.main{flex:1;min-width:0;overflow-y:auto;}
-.topbar{background:rgba(6,11,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--navy-border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
-.topbar h1{font-size:1.3rem;}
-.topbar .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-3);letter-spacing:.4px;}
-.wrap{padding:28px;max-width:1100px;}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:13px;padding:10px 18px;border-radius:8px;cursor:pointer;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);transition:.2s;}
-.btn:hover:not(:disabled){color:var(--gold-light);border-color:var(--gold);}
-.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
-.btn-gold:hover{color:#241a06;}
 .btn-success{background:rgba(79,169,128,.14);border-color:rgba(79,169,128,.4);color:var(--teal-light);}
-.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
-.btn:disabled{opacity:.5;cursor:not-allowed;}
-.spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-.section-title{display:flex;align-items:center;gap:10px;margin:8px 0 16px;}
-.section-title i{color:var(--gold-light);font-size:15px;}
-.section-title h2{font-size:1.05rem;margin:0;}
-
-.queue-item{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:20px 22px;margin-bottom:16px;}
-.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
-.qi-name{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--text-1);margin-bottom:3px;}
-.qi-meta{font-size:12.5px;color:var(--text-3);}
-.qi-meta .mono{color:var(--gold-light);}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;}
-.badge-oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
-.badge-poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
-.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
-.qi-theme{font-size:12.5px;color:var(--teal-light);margin-bottom:14px;}
-.qi-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-.qi-actions a.view-link{font-size:12.5px;margin-right:auto;display:inline-flex;align-items:center;gap:6px;}
-
-.empty-note{text-align:center;padding:50px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
-.empty-note i{font-size:26px;color:var(--gold-light);margin-bottom:10px;display:block;}
-.loader{text-align:center;padding:60px 0;color:var(--text-3);}
-.spinner-lg{width:24px;height:24px;border:3px solid rgba(232,201,131,.25);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
-
-.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:24px;margin-top:32px;}
-.card h3{font-size:1.02rem;display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.card h3 i{color:var(--gold-light);font-size:14px;}
-.field{margin-bottom:16px;}
-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 6px;}
-input[type=text],select{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 13px;font-family:'Inter',sans-serif;font-size:14px;}
-input[type=file]{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);border-radius:8px;padding:9px;color:var(--text-2);font-size:13px;}
-input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-.hint{font-size:11.5px;color:var(--text-3);margin-top:5px;}
-.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:16px;border:1px solid transparent;display:none;}
-.alert.show{display:block;}
-.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
-.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
-
-.modal-overlay{position:fixed;inset:0;background:rgba(6,10,26,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
-.modal-overlay.show{display:flex;}
-.modal-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:28px;max-width:440px;width:100%;}
-.modal-card h3{margin-bottom:10px;}
-.modal-card p{font-size:13px;color:var(--text-3);margin-bottom:14px;}
-.modal-card textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:13.5px;min-height:90px;resize:vertical;}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
-
 .btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
-.rev-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
-.remark-box{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:0 0 14px;white-space:pre-wrap;}
-.remark-box b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
-.modal-card{max-width:520px !important;}
-.chk{display:none;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;}
-.chk.show{display:flex;}
-.chk input{width:auto;}
-.badge-pending{background:rgba(219,164,60,.14);color:var(--warn);}
+.sec{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+.sec i{color:var(--gold-light);} .sec h2{font-size:1.05rem;margin:0;}
+.sec .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);}
+.qi{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;cursor:pointer;}
+.qi-name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--text-1);}
+.qi-meta{font-size:12.5px;color:var(--text-3);}
+.qi-meta .id{font-size:12.5px;}
+.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
+.qi-theme{font-size:12.5px;color:var(--teal-light);}
+.qi-body{display:none;margin-top:10px;} .qi.open .qi-body{display:block;}
+.rv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:10px 0;white-space:pre-wrap;}
+.remark b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.note{text-align:center;padding:38px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
+.note i{font-size:24px;color:var(--gold-light);display:block;margin-bottom:8px;}
+.chk{display:none;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;} .chk.show{display:flex;} .chk input{width:auto;}
+textarea{width:100%;min-height:96px;resize:vertical;}
 </style>
 </head>
 <body>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
+<div class="topbar"><h1><i class="fa-solid fa-file-circle-check" style="color:var(--gold-light);"></i> Review abstracts</h1><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><span id="xp"></span><a class="btn btn-sm" href="abstracts-report.html"><i class="fa-solid fa-table-list"></i> Abstract status</a></div></div>
+<div class="wrap" style="max-width:1100px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+
+  <div class="toolbar noprint"><input id="q" placeholder="Search the queue by name, ID or title" autocomplete="off"><select id="ft"><option value="">Oral and Poster</option><option>Oral</option><option>Poster</option></select><select id="fh"><option value="">All themes</option></select><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+
+  <div class="sec"><i class="fa-solid fa-hourglass-half"></i><h2>Pending review</h2><span class="n" id="n1"></span></div>
+  <div id="queue"><div class="empty">Loading submissions…</div></div>
+
+  <div class="sec" style="margin-top:30px;"><i class="fa-solid fa-rotate"></i><h2>Awaiting revised file from participant</h2><span class="n" id="n2"></span></div>
+  <div id="revs"></div>
+
+  <div class="card" style="margin-top:30px;">
+    <h3><i class="fa-solid fa-upload"></i> Manual abstract upload</h3>
+    <p class="hint" style="margin-bottom:16px;">Use this if a participant e-mailed their abstract instead of uploading it. It bypasses the deadline but still allows one submission per participant.</p>
+    <div class="grid">
+      <div class="full"><label>Participant *</label><select id="m-p"><option value="">Loading participants…</option></select><div class="hint">Oral / Poster participants with no abstract yet, or who were asked to revise.</div></div>
+      <div class="full"><label>Title *</label><input id="m-title" placeholder="Abstract title" maxlength="300"></div>
+      <div><label>Theme *</label><select id="m-theme"><option value="">Select theme</option></select></div>
+      <div><label>Abstract file (.doc / .docx) *</label><input type="file" id="m-file" accept=".doc,.docx"></div>
     </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
-    </div>
+    <div style="margin-top:16px;"><button class="btn btn-gold" id="m-go"><i class="fa-solid fa-upload"></i> Upload abstract</button></div>
   </div>
 </div>
 
-<button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+<!-- Decision -->
+<div class="modal" id="dm"><div class="box wide">
+  <h3 id="dm-t" style="margin-bottom:8px;"></h3>
+  <p class="hint" id="dm-h" style="margin-bottom:10px;"></p>
+  <div class="alert alert-error" id="dm-err"></div>
+  <textarea id="dm-r" placeholder="Remarks for the participant"></textarea>
+  <label class="chk" id="dm-nw"><input type="checkbox" id="dm-n" checked> E-mail this remark to the participant</label>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;"><button class="btn" id="dm-x">Cancel</button><button class="btn" id="dm-ok"></button></div>
+</div></div>
 
-<div class="body-row">
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div>VRMIC 2026<small>ADMIN CONTROL PANEL</small></div></div>
-  <nav class="sidebar-nav" id="sidebar-nav"></nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="admin-name">—</b><span id="admin-position">—</span></div></div>
-    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div><div class="breadcrumb">ADMIN / ABSTRACT REVIEW</div><h1>Review Abstracts</h1></div>
-    <a href="abstracts-report.html" class="btn"><i class="fa-solid fa-table-list"></i> View report</a>
-  </div>
-
-  <div class="wrap">
-    <div class="alert alert-error" id="err"></div>
-    <div class="alert alert-success" id="ok"></div>
-
-    <div class="section-title"><i class="fa-solid fa-hourglass-half"></i><h2>Pending review</h2></div>
-    <div id="loader" class="loader"><div class="spinner-lg"></div>Loading submissions…</div>
-    <div id="queue-area"></div>
-
-    <div class="section-title" style="margin-top:34px;"><i class="fa-solid fa-rotate"></i><h2>Awaiting revised file from participant</h2></div>
-    <div id="revision-area"></div>
-
-    <!-- Manual upload on behalf of a participant -->
-    <div class="card">
-      <h3><i class="fa-solid fa-upload"></i> Manual abstract upload</h3>
-      <p style="font-size:13px;color:var(--text-3);margin-bottom:18px;">Use this if a participant emailed their abstract instead of uploading it themselves. This bypasses the deadline but still allows only one submission per participant.</p>
-      <div class="field">
-        <label>Participant <span style="color:var(--danger);">*</span></label>
-        <select id="m-participant"><option value="">Loading participants…</option></select>
-        <p class="hint">Oral/Poster participants with no abstract yet, or who were asked to revise, are listed.</p>
-      </div>
-      <div class="field">
-        <label>Title <span style="color:var(--danger);">*</span></label>
-        <input type="text" id="m-title" placeholder="Abstract title">
-      </div>
-      <div class="field">
-        <label>Theme <span style="color:var(--danger);">*</span></label>
-        <select id="m-theme"><option value="">Select theme</option></select>
-      </div>
-      <div class="field">
-        <label>Abstract file (.docx) <span style="color:var(--danger);">*</span></label>
-        <input type="file" id="m-file" accept=".doc,.docx">
-      </div>
-      <button class="btn btn-gold" id="m-submit-btn"><i class="fa-solid fa-upload"></i> Upload abstract</button>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- Decision / remarks modal -->
-<div class="modal-overlay" id="dec-modal">
-  <div class="modal-card">
-    <h3 id="dec-title"></h3>
-    <p id="dec-help"></p>
-    <textarea id="dec-remarks" placeholder="Remarks for the participant"></textarea>
-    <label class="chk" id="dec-notify-wrap"><input type="checkbox" id="dec-notify" checked> E-mail this remark to the participant</label>
-    <div class="modal-actions">
-      <button class="btn" id="dec-cancel">Cancel</button>
-      <button class="btn" id="dec-confirm"></button>
-    </div>
-  </div>
-</div>
-
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
-const token = localStorage.getItem('vrmic_admin_token');
-if (!token) window.location.href = '../admin-login.html';
-let permissions = {};
-try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
-function can(k, a){ return !!(permissions[k] && permissions[k][a]); }
-function logout(){ localStorage.removeItem('vrmic_admin_token'); localStorage.removeItem('vrmic_admin_name'); localStorage.removeItem('vrmic_admin_position'); localStorage.removeItem('vrmic_admin_permissions'); window.location.href = '../admin-login.html'; }
-document.getElementById('sidebar-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('abstract', 'transaction')) { VR.denied('You do not have permission to review abstracts.'); return; }
 
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, token }, payload)) });
-  return res.json();
+let all = [], decRow = null, decMode = null, open = new Set(), file64 = null, fileName = null, shown = [];
+const MAX_MB = 15;
+const url = u => /^https?:\/\//i.test(String(u || '')) ? String(u) : '';
+const ver = p => Number(p.AbstractRevision) || 1;
+const revTag = p => ver(p) > 1 ? '<span class="rv">VERSION ' + ver(p) + '</span>' : '';
+const isAbs = p => p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster';
+
+function match(p) {
+  const q = $('q').value.trim().toLowerCase(), t = $('ft').value, h = $('fh').value;
+  return isAbs(p) && (!q || [p.Name, p.ID, p.AbstractTitle].some(v => String(v || '').toLowerCase().indexOf(q) > -1)) && (!t || p.ParticipantType === t) && (!h || p.AbstractTheme === h);
 }
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function showErr(msg){ const el=document.getElementById('err'); el.textContent=msg; el.classList.add('show'); window.scrollTo({top:0,behavior:'smooth'}); }
-function showOk(msg){ const el=document.getElementById('ok'); el.textContent=msg; el.classList.add('show'); }
-function hideAlerts(){ document.getElementById('err').classList.remove('show'); document.getElementById('ok').classList.remove('show'); }
-
-const NAV_ITEMS = [
-  { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'home.html', always: true },
-  { section: 'Participants' },
-  { key: 'participants', sub: 'transaction', label: 'Manage Participants', icon: 'fa-user-plus', href: 'participants-manage.html' },
-  { key: 'participants', sub: 'report', label: 'Participant Report', icon: 'fa-table-list', href: 'participants-report.html' },
-  { section: 'Abstract Review' },
-  { key: 'abstract', sub: 'transaction', label: 'Review Abstracts', icon: 'fa-file-circle-check', href: 'abstracts-review.html' },
-  { key: 'abstract', sub: 'report', label: 'Abstract Report', icon: 'fa-table-list', href: 'abstracts-report.html' },
-  { section: 'Slot Allotment' },
-  { key: 'slot', sub: 'transaction', label: 'Allot Slots', icon: 'fa-location-crosshairs', href: 'slots-manage.html' },
-  { key: 'slot', sub: 'report', label: 'Slot Report', icon: 'fa-table-list', href: 'slots-report.html' },
-  { section: 'Attendance' },
-  { key: 'attendance', sub: 'transaction', label: 'Mark Attendance', icon: 'fa-calendar-check', href: 'attendance-mark.html' },
-  { key: 'attendance', sub: 'report', label: 'Attendance Report', icon: 'fa-table-list', href: 'attendance-report.html' },
-  { section: 'Presentation Access' },
-  { key: 'presentationAccess', sub: 'report', label: 'Venue Presentation List', icon: 'fa-display', href: 'presentation-access.html' },
-  { section: 'Certificates' },
-  { key: 'certificates', sub: 'transaction', label: 'Generate Certificate', icon: 'fa-certificate', href: 'certificates-manage.html' },
-  { key: 'certificates', sub: 'report', label: 'Certificate Report', icon: 'fa-table-list', href: 'certificates-report.html' },
-  { section: 'Receipts' },
-  { key: 'receipts', sub: 'transaction', label: 'Fulfill Receipt', icon: 'fa-receipt', href: 'receipts-manage.html' },
-  { key: 'receipts', sub: 'report', label: 'Receipt Report', icon: 'fa-table-list', href: 'receipts-report.html' },
-  { section: 'Feedback' },
-  { key: 'feedback', sub: 'report', label: 'Feedback Report', icon: 'fa-comment-dots', href: 'feedback-report.html' },
-  { section: 'Schedule' },
-  { key: 'schedule', sub: 'transaction', label: 'Edit Schedule', icon: 'fa-calendar-days', href: 'schedule-manage.html' },
-  { key: 'schedule', sub: 'report', label: 'Schedule Report', icon: 'fa-table-list', href: 'schedule-report.html' },
-  { section: 'Announcements' },
-  { key: 'announcements', sub: 'transaction', label: 'Post Announcement', icon: 'fa-bullhorn', href: 'announcements-manage.html' },
-  { key: 'announcements', sub: 'report', label: 'Announcement Report', icon: 'fa-table-list', href: 'announcements-report.html' },
-  { section: 'Mail' },
-  { key: 'mail', sub: 'transaction', label: 'Send Invite', icon: 'fa-paper-plane', href: 'mail-send.html' },
-  { key: 'mail', sub: 'report', label: 'Mail Report', icon: 'fa-table-list', href: 'mail-report.html' },
-  { section: 'Volunteer Management' },
-  { key: 'volunteers', sub: 'transaction', label: 'Assign Volunteers', icon: 'fa-user-group', href: 'volunteers-manage.html' },
-  { key: 'volunteers', sub: 'report', label: 'Volunteer Report', icon: 'fa-table-list', href: 'volunteers-report.html' },
-  { section: 'Settings' },
-  { key: 'settings', sub: 'transaction', label: 'Edit Settings', icon: 'fa-sliders', href: 'settings-manage.html' },
-  { key: 'settings', sub: 'report', label: 'Current Settings', icon: 'fa-table-list', href: 'settings-report.html' },
-  { section: 'Admin Users' },
-  { key: 'adminUsers', sub: 'transaction', label: 'Manage Admin Users', icon: 'fa-user-shield', href: 'admin-users-manage.html' },
-  { key: 'adminUsers', sub: 'report', label: 'Admin User Report', icon: 'fa-table-list', href: 'admin-users-report.html' }
-];
-function renderSidebar(){
-  const nav = document.getElementById('sidebar-nav');
-  let html = '', pendingSection = null;
-  NAV_ITEMS.forEach(item => {
-    if (item.section) { pendingSection = item.section; return; }
-    if (!item.always && !can(item.key, item.sub)) return;
-    if (pendingSection) { html += `<div class="nav-section">${pendingSection}</div>`; pendingSection = null; }
-    const activeClass = item.href === 'abstracts-review.html' ? 'active' : '';
-    html += `<a class="nav-link ${activeClass}" href="${item.href}"><i class="fa-solid ${item.icon}"></i> ${item.label}</a>`;
-  });
-  nav.innerHTML = html || `<p style="padding:14px 12px;font-size:12.5px;color:var(--text-3);">No modules assigned yet.</p>`;
+function card(p, kind) {
+  const o = open.has(String(p.row)), link = url(p.AbstractLink);
+  const file = link ? '<a class="btn btn-sm" href="' + esc(link) + '" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> ' + (kind === 'q' ? 'View file' : 'Current file') + '</a>' : '<span class="hint">No file link</span>';
+  return '<div class="qi' + (o ? ' open' : '') + '" data-row="' + esc(p.row) + '">'
+    + '<div class="qi-top" data-tog="1"><div><div class="qi-name"><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);margin-right:8px;"></i>' + esc(p.Name) + revTag(p) + '</div>'
+    + '<div class="qi-meta"><span class="id">' + esc(p.ID) + '</span> · ' + esc(kind === 'q' ? (p.Institution || '—') : (p.Email || '—')) + '</div></div>'
+    + '<span class="badge ' + (kind === 'q' ? 't-' + esc(p.ParticipantType) : 'a-Revision" style="background:rgba(219,164,60,.14);color:var(--warn);') + '">' + (kind === 'q' ? esc(p.ParticipantType) : 'Revision requested') + '</span></div>'
+    + '<div class="qi-title">' + esc(p.AbstractTitle || '—') + '</div>' + (p.AbstractTheme ? '<div class="qi-theme"><i class="fa-solid fa-tag"></i> ' + esc(p.AbstractTheme) + '</div>' : '')
+    + '<div class="qi-body">'
+    + (p.AbstractRemarks ? '<div class="remark"><b>' + (kind === 'q' ? 'Previous remarks' : 'Remarks sent') + '</b>' + esc(p.AbstractRemarks) + '</div>' : '')
+    + '<div class="row-actions" style="margin-top:10px;align-items:center;">' + file
+    + (kind === 'q' ? ' <button class="btn btn-sm" data-act="remark"><i class="fa-solid fa-comment-dots"></i> Add remark</button> <button class="btn btn-sm btn-warn" data-act="revise"><i class="fa-solid fa-rotate"></i> Request revision</button> <button class="btn btn-sm btn-success" data-act="accept"><i class="fa-solid fa-check"></i> Accept</button> <button class="btn btn-sm btn-danger" data-act="reject"><i class="fa-solid fa-xmark"></i> Reject</button>'
+      : ' <span class="hint">If they send the revised file by e-mail, use "Manual abstract upload" below.</span>')
+    + '</div></div></div>';
 }
-renderSidebar();
-document.getElementById('admin-name').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-document.getElementById('admin-position').textContent = localStorage.getItem('vrmic_admin_position') || '';
-
-if (!can('abstract', 'transaction')) {
-  document.querySelector('.wrap').innerHTML = `<div style="color:var(--danger);padding:20px;">You do not have permission to review abstracts. Contact the administrator.</div>`;
-} else {
-
-let allParticipants = [];
-let decRow = null, decMode = null;
-
-function typeBadgeClass(t){ return t === 'Oral' ? 'badge-oral' : 'badge-poster'; }
-function revTag(p){ const n = Number(p.AbstractRevision) || 1; return n > 1 ? `<span class="rev-tag">VERSION ${n}</span>` : ''; }
-
-function renderQueue(){
-  const pending = allParticipants.filter(p => p.AbstractStatus === 'Submitted');
-  const area = document.getElementById('queue-area');
-  if (!pending.length) {
-    area.innerHTML = `<div class="empty-note"><i class="fa-solid fa-circle-check"></i>No abstracts are currently awaiting review.</div>`;
-  } else {
-    area.innerHTML = pending.map(p => `
-    <div class="queue-item">
-      <div class="qi-top">
-        <div>
-          <div class="qi-name">${escapeHtml(p.Name)}${revTag(p)}</div>
-          <div class="qi-meta"><span class="mono">${escapeHtml(p.ID)}</span> &middot; ${escapeHtml(p.Institution || '—')}</div>
-        </div>
-        <span class="badge ${typeBadgeClass(p.ParticipantType)}">${escapeHtml(p.ParticipantType)}</span>
-      </div>
-      <div class="qi-title">${escapeHtml(p.AbstractTitle)}</div>
-      <div class="qi-theme"><i class="fa-solid fa-tag"></i> ${escapeHtml(p.AbstractTheme)}</div>
-      ${p.AbstractRemarks ? `<div class="remark-box"><b>Previous remarks</b>${escapeHtml(p.AbstractRemarks)}</div>` : ''}
-      <div class="qi-actions">
-        <a class="view-link" href="${escapeHtml(p.AbstractLink)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> View file</a>
-        <button class="btn" data-act="remark" data-row="${p.row}"><i class="fa-solid fa-comment-dots"></i> Add remark</button>
-        <button class="btn btn-warn" data-act="revise" data-row="${p.row}"><i class="fa-solid fa-rotate"></i> Request revision</button>
-        <button class="btn btn-success" data-act="accept" data-row="${p.row}"><i class="fa-solid fa-check"></i> Accept</button>
-        <button class="btn btn-danger" data-act="reject" data-row="${p.row}"><i class="fa-solid fa-xmark"></i> Reject</button>
-      </div>
-    </div>`).join('');
-  }
-
-  const waiting = allParticipants.filter(p => p.AbstractStatus === 'Revision Requested');
-  const rarea = document.getElementById('revision-area');
-  rarea.innerHTML = !waiting.length
-    ? `<div class="empty-note"><i class="fa-solid fa-inbox"></i>No participants are currently asked to revise.</div>`
-    : waiting.map(p => `
-    <div class="queue-item">
-      <div class="qi-top">
-        <div><div class="qi-name">${escapeHtml(p.Name)}${revTag(p)}</div>
-        <div class="qi-meta"><span class="mono">${escapeHtml(p.ID)}</span> &middot; ${escapeHtml(p.Email)}</div></div>
-        <span class="badge badge-pending">Revision requested</span>
-      </div>
-      <div class="qi-title">${escapeHtml(p.AbstractTitle)}</div>
-      <div class="remark-box"><b>Remarks sent</b>${escapeHtml(p.AbstractRemarks || '')}</div>
-      <div class="qi-actions">
-        <a class="view-link" href="${escapeHtml(p.AbstractLink)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Current file</a>
-        <span class="hint">Use "Manual abstract upload" below if they send the revised file by e-mail.</span>
-      </div>
-    </div>`).join('');
-
-  document.querySelectorAll('#queue-area button[data-act]').forEach(btn => btn.addEventListener('click', () => openDecision(btn.dataset.row, btn.dataset.act)));
+function render() {
+  const pend = all.filter(p => p.AbstractStatus === 'Submitted' && match(p)), wait = all.filter(p => p.AbstractStatus === 'Revision Requested' && match(p));
+  shown = pend;
+  $('n1').textContent = pend.length ? '(' + pend.length + ')' : ''; $('n2').textContent = wait.length ? '(' + wait.length + ')' : '';
+  $('queue').innerHTML = pend.length ? pend.map(p => card(p, 'q')).join('') : '<div class="note"><i class="fa-solid fa-circle-check"></i>No abstracts are currently awaiting review.</div>';
+  $('revs').innerHTML = wait.length ? wait.map(p => card(p, 'r')).join('') : '<div class="note"><i class="fa-solid fa-inbox"></i>No participants are currently asked to revise.</div>';
 }
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tog]'); if (t && !e.target.closest('a,button')) { const k = t.parentElement.dataset.row; open.has(k) ? open.delete(k) : open.add(k); render(); return; }
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  openDecision(b.closest('.qi').dataset.row, b.dataset.act);
+});
 
 const MODES = {
-  accept: { title: '<i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> Accept abstract', help: 'Optionally add remarks (e.g. suggestions for the final presentation). They are stored and included in the acceptance e-mail.', btn: '<i class="fa-solid fa-check"></i> Confirm accept', cls: 'btn btn-success', required: false },
-  reject: { title: '<i class="fa-solid fa-circle-xmark" style="color:var(--danger);"></i> Reject abstract', help: 'Optionally explain the decision. It is stored and included in the rejection e-mail.', btn: '<i class="fa-solid fa-xmark"></i> Confirm reject', cls: 'btn btn-danger', required: false },
-  revise: { title: '<i class="fa-solid fa-rotate" style="color:var(--warn);"></i> Request revision', help: 'Remarks are required. The participant is e-mailed and can upload a new file from their dashboard; it then returns to this queue.', btn: '<i class="fa-solid fa-paper-plane"></i> Send remarks &amp; request revision', cls: 'btn btn-warn', required: true },
-  remark: { title: '<i class="fa-solid fa-comment-dots" style="color:var(--gold-light);"></i> Add remark', help: 'Saves a remark without changing the abstract status.', btn: '<i class="fa-solid fa-floppy-disk"></i> Save remark', cls: 'btn btn-gold', required: true }
+  accept: { t: '<i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> Accept abstract', h: 'Optional remarks (e.g. suggestions for the final presentation) are stored and included in the acceptance e-mail.', b: '<i class="fa-solid fa-check"></i> Confirm accept', c: 'btn btn-success', req: false },
+  reject: { t: '<i class="fa-solid fa-circle-xmark" style="color:var(--danger);"></i> Reject abstract', h: 'Optionally explain the decision. It is stored and included in the rejection e-mail.', b: '<i class="fa-solid fa-xmark"></i> Confirm reject', c: 'btn btn-danger', req: false },
+  revise: { t: '<i class="fa-solid fa-rotate" style="color:var(--warn);"></i> Request revision', h: 'Remarks are required. The participant is e-mailed and can upload a new file from their dashboard; it then returns to this queue.', b: '<i class="fa-solid fa-paper-plane"></i> Send remarks &amp; request revision', c: 'btn btn-warn', req: true },
+  remark: { t: '<i class="fa-solid fa-comment-dots" style="color:var(--gold-light);"></i> Add remark', h: 'Saves a remark without changing the abstract status.', b: '<i class="fa-solid fa-floppy-disk"></i> Save remark', c: 'btn btn-gold', req: true }
+};
+function openDecision(row, mode) {
+  decRow = row; decMode = mode; const m = MODES[mode], p = all.find(x => String(x.row) === String(row));
+  $('dm-t').innerHTML = m.t + (p ? ' <span class="tiny" style="display:inline;">— ' + esc(p.Name) + ' (' + esc(p.ID) + ')</span>' : ''); $('dm-h').textContent = m.h; $('dm-err').classList.remove('show');
+  $('dm-r').value = (mode === 'remark' && p && p.AbstractRemarks) ? p.AbstractRemarks : '';
+  const ok = $('dm-ok'); ok.className = m.c; ok.innerHTML = m.b; ok.disabled = false;
+  $('dm-nw').classList.toggle('show', mode === 'remark'); $('dm').classList.add('show'); $('dm-r').focus();
+}
+$('dm-x').onclick = () => $('dm').classList.remove('show');
+$('dm-ok').onclick = async function () {
+  hideAlerts(); const m = MODES[decMode], remarks = $('dm-r').value.trim();
+  if (m.req && !remarks) { $('dm-err').textContent = 'Remarks are required for this action.'; $('dm-err').classList.add('show'); return $('dm-r').focus(); }
+  await VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = decMode === 'remark' ? await VR.api('adminSaveAbstractRemarks', { row: decRow, remarks, notify: $('dm-n').checked })
+        : await VR.api('adminVerifyAbstract', { row: decRow, decision: { accept: 'Accepted', reject: 'Rejected', revise: 'Revision Requested' }[decMode], remarks });
+      $('dm').classList.remove('show');
+      if (!r.ok) return showErr(r.error || 'Could not update this abstract.');
+      const note = r.mailSent === false ? ' (the notification e-mail could NOT be sent — contact them directly)' : (r.mailSent ? ' — participant notified by e-mail.' : '.');
+      showOk({ accept: 'Abstract accepted', reject: 'Abstract rejected', revise: 'Revision requested', remark: 'Remark saved' }[decMode] + note); load();
+    } catch (e) { $('dm').classList.remove('show'); showErr('Could not reach the server. Check your connection and try again.'); }
+  });
 };
 
-function openDecision(row, mode){
-  decRow = row; decMode = mode;
-  const m = MODES[mode], p = allParticipants.find(x => String(x.row) === String(row));
-  document.getElementById('dec-title').innerHTML = m.title;
-  document.getElementById('dec-help').textContent = m.help;
-  document.getElementById('dec-remarks').value = (mode === 'remark' && p && p.AbstractRemarks) ? p.AbstractRemarks : '';
-  const cb = document.getElementById('dec-confirm'); cb.className = m.cls; cb.innerHTML = m.btn; cb.disabled = false;
-  document.getElementById('dec-notify-wrap').classList.toggle('show', mode === 'remark');
-  document.getElementById('dec-modal').classList.add('show');
+function fillManual() {
+  const el = all.filter(p => isAbs(p) && (!p.AbstractDocId || p.AbstractStatus === 'Revision Requested'));
+  $('m-p').innerHTML = el.length ? '<option value="">Select participant</option>' + el.map(p => '<option value="' + esc(p.row) + '">' + esc(p.ID) + ' — ' + esc(p.Name) + ' (' + esc(p.ParticipantType) + ')</option>').join('') : '<option value="">No eligible participants</option>';
 }
-document.getElementById('dec-cancel').addEventListener('click', () => document.getElementById('dec-modal').classList.remove('show'));
-document.getElementById('dec-confirm').addEventListener('click', async function(){
-  hideAlerts();
-  const m = MODES[decMode], remarks = document.getElementById('dec-remarks').value.trim();
-  if (m.required && !remarks) { document.getElementById('dec-remarks').focus(); document.getElementById('dec-help').textContent = 'Remarks are required for this action.'; return; }
-  const btn = this, old = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+async function themes() {
+  try { const r = await VR.api('getThemes', {}); if (r.ok) $('m-theme').innerHTML = '<option value="">Select theme</option>' + r.themes.map((t, i) => '<option value="' + esc(t) + '">Theme ' + String(i + 1).padStart(2, '0') + ' — ' + esc(t) + '</option>').join(''); } catch (e) {}
+}
+async function load() {
   try {
-    let res;
-    if (decMode === 'remark') res = await callApi('adminSaveAbstractRemarks', { row: decRow, remarks, notify: document.getElementById('dec-notify').checked });
-    else res = await callApi('adminVerifyAbstract', { row: decRow, decision: ({accept:'Accepted',reject:'Rejected',revise:'Revision Requested'})[decMode], remarks });
-    document.getElementById('dec-modal').classList.remove('show');
-    if (!res.ok) { showErr(res.error || 'Could not update this abstract.'); return; }
-    const mailNote = res.mailSent === false ? ' (the notification e-mail could NOT be sent — contact them directly)' : (res.mailSent ? ' — participant notified by e-mail.' : '.');
-    showOk(({accept:'Abstract accepted',reject:'Abstract rejected',revise:'Revision requested',remark:'Remark saved'})[decMode] + mailNote);
-    loadData();
-  } catch (err) { showErr('Could not reach the server. Check your connection and try again.'); }
-  finally { btn.disabled = false; btn.innerHTML = old; }
+    const r = await VR.api('adminListParticipants', {});
+    if (!r.ok) { $('queue').innerHTML = ''; return showErr(r.error || 'Could not load data.'); }
+    all = r.participants || [];
+    const th = [...new Set(all.map(x => x.AbstractTheme).filter(Boolean))].sort(), cur = $('fh').value;
+    $('fh').innerHTML = '<option value="">All themes</option>' + th.map(x => '<option>' + esc(x) + '</option>').join(''); $('fh').value = cur;
+    render(); fillManual();
+  } catch (e) { $('queue').innerHTML = ''; showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('q').addEventListener('input', render); ['ft', 'fh'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+
+$('m-file').addEventListener('change', function () {
+  file64 = null; fileName = null; const f = this.files[0]; if (!f) return;
+  if (!/\.docx?$/i.test(f.name)) { showErr('Only .doc or .docx files are allowed.'); this.value = ''; return; }
+  if (f.size > MAX_MB * 1024 * 1024) { showErr('The file is larger than ' + MAX_MB + ' MB.'); this.value = ''; return; }
+  const rd = new FileReader(); rd.onload = ev => { file64 = String(ev.target.result).split(',')[1]; fileName = f.name; }; rd.readAsDataURL(f);
 });
+$('m-go').onclick = async function () {
+  hideAlerts(); const row = $('m-p').value, title = $('m-title').value.trim(), theme = $('m-theme').value;
+  if (!row || !title || !theme || !file64) return showErr('Please choose the participant, title, theme and a .doc / .docx file.');
+  await VR.busy(this, 'Uploading…', async () => {
+    try {
+      const r = await VR.api('adminUploadAbstract', { row, title, theme, fileName, fileData: file64 });
+      if (!r.ok) return showErr(r.error || 'Could not upload the abstract.');
+      showOk('Abstract uploaded on behalf of the participant. Document ID: ' + r.docId);
+      $('m-title').value = ''; $('m-theme').value = ''; $('m-file').value = ''; file64 = null; fileName = null; load();
+    } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+  });
+};
 
-function populateManualUploadSelect(){
-  const sel = document.getElementById('m-participant');
-  const eligible = allParticipants.filter(p => (p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster') && (!p.AbstractDocId || p.AbstractStatus === 'Revision Requested'));
-  if (!eligible.length) { sel.innerHTML = '<option value="">No eligible participants</option>'; return; }
-  sel.innerHTML = '<option value="">Select participant</option>' + eligible.map(p =>
-    `<option value="${p.row}">${escapeHtml(p.ID)} — ${escapeHtml(p.Name)} (${p.ParticipantType})</option>`).join('');
-}
+VR.exportBar($('xp'), { name: 'VRMIC2026_Abstracts_Pending', title: 'VRMIC 2026 — Abstracts pending review',
+  getData: () => ({ headers: ['VRMIC ID', 'Name', 'Category', 'Institution', 'Title', 'Theme', 'Version'], rows: shown.map(p => [p.ID, p.Name, p.ParticipantType, p.Institution || '', p.AbstractTitle || '', p.AbstractTheme || '', ver(p)]) }) });
 
-async function loadThemes(){
-  const res = await callApi('getThemes', {});
-  const sel = document.getElementById('m-theme');
-  if (res.ok) {
-    sel.innerHTML = '<option value="">Select theme</option>' + res.themes.map((t,i) =>
-      `<option value="${escapeHtml(t)}">Theme ${String(i+1).padStart(2,'0')} — ${escapeHtml(t)}</option>`).join('');
-  }
-}
-
-async function loadData(){
-  document.getElementById('loader').style.display = 'block';
-  try {
-    const res = await callApi('adminListParticipants', {});
-    if (!res.ok) { if (/session/i.test(res.error||'')) { logout(); return; } showErr(res.error || 'Could not load data.'); return; }
-    allParticipants = res.participants;
-    renderQueue();
-    populateManualUploadSelect();
-  } catch (err) {
-    showErr('Could not reach the server. Check your connection and try again.');
-  } finally {
-    document.getElementById('loader').style.display = 'none';
-  }
-}
-
-let manualFileBase64 = null, manualFileName = null;
-document.getElementById('m-file').addEventListener('change', function(e){
-  const file = e.target.files[0];
-  if (!file) return;
-  if (!/\.(docx?)$/i.test(file.name)) { showErr('Only .doc or .docx files are allowed.'); this.value=''; return; }
-  const reader = new FileReader();
-  reader.onload = ev => { manualFileBase64 = ev.target.result.split(',')[1]; manualFileName = file.name; };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById('m-submit-btn').addEventListener('click', async function(){
-  hideAlerts();
-  const row = document.getElementById('m-participant').value;
-  const title = document.getElementById('m-title').value.trim();
-  const theme = document.getElementById('m-theme').value;
-  if (!row || !title || !theme || !manualFileBase64) { showErr('Please fill in all fields and choose a .docx file.'); return; }
-  const btn = this;
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Uploading...';
-  try {
-    const res = await callApi('adminUploadAbstract', { row, title, theme, fileName: manualFileName, fileData: manualFileBase64 });
-    if (!res.ok) { showErr(res.error || 'Could not upload abstract.'); return; }
-    showOk('Abstract uploaded on behalf of the participant. Document ID: ' + res.docId);
-    document.getElementById('m-title').value = ''; document.getElementById('m-theme').value = ''; document.getElementById('m-file').value = '';
-    manualFileBase64 = null; manualFileName = null;
-    loadData();
-  } catch (err) {
-    showErr('Could not reach the server. Check your connection and try again.');
-  } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload abstract';
-  }
-});
-
-loadThemes();
-loadData();
-}
+themes(); load();
+})();
 </script>
 </body>
 </html>
