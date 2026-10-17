@@ -3,532 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Participant Report | VRMIC 2026 Admin</title>
+<title>Participant List | VRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
 <style>
-:root{
-  --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
-  --navy-border:rgba(226,187,120,.24);
-  --gold:#c9974f; --gold-light:#e8c983;
-  --teal:#279c85; --teal-light:#6fc9b6;
-  --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
-  --danger:#d8695a; --warn:#dba43c; --success:#4fa980;
-  --sidebar-w:250px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;background:var(--navy-950);display:flex;flex-direction:column;min-height:100vh;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 4px;}
-a{color:var(--gold-light);text-decoration:none;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-
-.masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);flex-shrink:0;}
-.masthead-inner{padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.masthead-logos img{height:52px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:40px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-light);font-weight:700;margin-bottom:2px;}
-.masthead-text h1{font-size:clamp(.92rem,1.7vw,1.15rem);line-height:1.25;margin:0;color:var(--text-1);}
-.masthead-text .m-sub{font-size:11px;color:var(--text-3);margin:0;}
-
-.body-row{flex:1;display:flex;min-height:0;}
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);display:flex;flex-direction:column;overflow-y:auto;}
-.sidebar-brand{padding:22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--navy-border);}
-.sidebar-brand img{height:36px;width:auto;}
-.sidebar-brand div{font-family:'Fraunces',serif;font-size:14px;line-height:1.3;}
-.sidebar-brand small{display:block;color:var(--text-3);font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px;}
-.sidebar-nav{flex:1;padding:14px 12px;}
-.nav-section{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);padding:14px 12px 6px;}
-.nav-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;margin-bottom:2px;cursor:pointer;transition:.15s;}
-.nav-link i{width:16px;text-align:center;color:var(--text-3);font-size:13px;}
-.nav-link:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
-.nav-link.active{background:rgba(232,201,131,.1);color:var(--gold-light);}
-.nav-link.active i{color:var(--gold-light);}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--navy-border);}
-.sidebar-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:14px;flex-shrink:0;}
-.sidebar-user div{min-width:0;}
-.sidebar-user b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-user span{font-size:11px;color:var(--text-3);}
-.logout-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:8px;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);font-size:12.5px;cursor:pointer;}
-.logout-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-.sidebar-toggle{display:none;position:fixed;top:70px;left:16px;z-index:60;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;}
-@media(max-width:960px){
-  .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:70;transform:translateX(-100%);width:min(280px,85vw);transition:transform .3s ease;}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-toggle{display:block;}
-}
-.main{flex:1;min-width:0;overflow-y:auto;}
-.topbar{background:rgba(6,11,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--navy-border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
-.topbar h1{font-size:1.3rem;}
-.topbar .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-3);letter-spacing:.4px;}
-.wrap{padding:28px;max-width:1400px;}
-
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
-.toolbar input[type=text]{flex:1;min-width:200px;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:14px;}
-.toolbar select{background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-2);border-radius:8px;padding:10px 12px;font-size:13.5px;}
-.toolbar input:focus,.toolbar select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:13px;padding:10px 16px;border-radius:8px;cursor:pointer;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);transition:.2s;}
-.btn:hover{color:var(--gold-light);border-color:var(--gold);}
-.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
-.btn-gold:hover{color:#241a06;}
-
-.stat-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
-.stat-pill{background:var(--navy-850);border:1px solid var(--navy-border);border-radius:999px;padding:7px 15px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-2);}
-.stat-pill b{color:var(--gold-light);}
-
-.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
-.scroll-x{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead th{text-align:left;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;}
-tbody td{padding:11px 14px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;white-space:nowrap;}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover{background:rgba(232,201,131,.03);}
-.id-cell{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;}
-.name-cell{color:var(--text-1);font-weight:600;}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;}
-.badge-oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
-.badge-poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
-.badge-participant{background:rgba(179,188,214,.1);color:var(--text-2);}
-.badge-success{background:rgba(79,169,128,.14);color:var(--teal-light);}
-.badge-pending{background:rgba(219,164,60,.14);color:var(--warn);}
-.badge-danger{background:rgba(216,105,90,.14);color:#e8988c;}
-.badge-neutral{background:rgba(179,188,214,.1);color:var(--text-2);}
-.loading-state,.empty-state{padding:60px 20px;text-align:center;color:var(--text-3);}
-.loading-state i,.empty-state i{font-size:26px;color:var(--gold-light);margin-bottom:12px;display:block;}
-.spinner-lg{width:24px;height:24px;border:3px solid rgba(232,201,131,.25);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
-.btn-sm{padding:6px 10px;font-size:12px;}
-.act-cell{display:flex;gap:6px;}
-.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:16px;border:1px solid transparent;display:none;}
-.alert.show{display:block;}
-.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
-.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
-.modal-overlay{position:fixed;inset:0;background:rgba(6,10,26,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 20px;overflow-y:auto;}
-.modal-overlay.show{display:flex;}
-.modal-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:26px;max-width:640px;width:100%;}
-.modal-card h3{margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-.modal-card p.m-note{font-size:13px;color:var(--text-3);margin-bottom:14px;}
-.m-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:600px){.m-grid{grid-template-columns:1fr;}}
-.m-grid .full{grid-column:1/-1;}
-.m-grid label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 5px;}
-.m-grid input,.m-grid select,.modal-card input.confirm{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:14px;}
-.m-grid input:focus,.m-grid select:focus,.modal-card input.confirm:focus{outline:2px solid var(--gold);outline-offset:1px;}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap;}
-.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin:12px 0 0;}
-.warn-box{background:rgba(219,164,60,.1);border:1px solid rgba(219,164,60,.35);color:var(--warn);border-radius:8px;padding:10px 12px;font-size:12.5px;margin-top:12px;display:none;}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.t-Participant{background:rgba(179,188,214,.1);color:var(--text-2);}
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+table.list td{white-space:nowrap;}
 </style>
 </head>
 <body>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
-    </div>
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Participant list</h1><a class="btn btn-sm" id="add" href="participants-manage.html"><i class="fa-solid fa-user-plus"></i> Add participant</a></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by name, email, phone or VRMIC ID" autocomplete="off">
+    <select id="ft"><option value="">All categories</option><option>Oral</option><option>Poster</option><option>Participant</option></select>
+    <select id="fm"><option value="">All modes</option><option>Offline</option><option>Online</option></select>
+    <select id="fa"><option value="">All abstract statuses</option><option>Not Submitted</option><option>Submitted</option><option>Accepted</option><option>Revision Requested</option><option>Rejected</option><option>Not Applicable</option></select>
+    <select id="fr"><option value="">Any registration</option><option>Registered</option><option>Pending</option><option>Cancelled</option></select>
+    <select id="fp"><option value="">Any profile</option><option value="y">Profile complete</option><option value="n">Profile incomplete</option></select>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <div id="xp" style="margin-left:auto;"></div>
   </div>
+
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list" id="tbl"><thead><tr><th style="width:26px;"></th><th>VRMIC ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Institution</th><th>Category</th><th>Mode</th><th>Registration</th><th>Profile</th><th>Abstract</th><th>Created</th><th class="noprint"></th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="13">Loading participants…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny noprint" style="margin-top:10px;">Click a row to expand the full record. This is a view-only list; to change a participant, use <b>Participant details</b> (the pencil button on each row opens it).</p>
 </div>
 
-<button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
-
-<div class="body-row">
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div>VRMIC 2026<small>ADMIN CONTROL PANEL</small></div></div>
-  <nav class="sidebar-nav" id="sidebar-nav"></nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="admin-name">—</b><span id="admin-position">—</span></div></div>
-    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div><div class="breadcrumb">ADMIN / PARTICIPANTS</div><h1>Participant Report</h1></div>
-    <a href="participants-manage.html" class="btn btn-gold"><i class="fa-solid fa-user-plus"></i> Add participant</a>
-  </div>
-
-  <div class="wrap">
-    <div class="alert" id="msg"></div>
-    <div class="stat-strip" id="stat-strip"></div>
-
-    <div class="toolbar">
-      <input type="text" id="search-input" placeholder="Search by name, email, or VRMIC ID...">
-      <select id="filter-type">
-        <option value="">All categories</option>
-        <option value="Oral">Oral</option>
-        <option value="Poster">Poster</option>
-        <option value="Participant">Participant</option>
-      </select>
-      <select id="filter-mode">
-        <option value="">All modes</option>
-        <option value="Offline">Offline</option>
-        <option value="Online">Online</option>
-      </select>
-      <select id="filter-abstract">
-        <option value="">All abstract statuses</option>
-        <option value="Not Submitted">Not Submitted</option>
-        <option value="Submitted">Submitted</option>
-        <option value="Accepted">Accepted</option>
-        <option value="Revision Requested">Revision Requested</option>
-        <option value="Rejected">Rejected</option>
-      </select>
-      <button class="btn" id="refresh-btn"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
-      <button class="btn" id="export-btn"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
-    </div>
-
-    <div class="table-card">
-      <div class="scroll-x">
-        <table id="report-table" style="display:none;">
-          <thead>
-            <tr>
-              <th>VRMIC ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Institution</th>
-              <th>Category</th><th>Mode</th><th>Profile</th><th>Abstract</th><th>Created</th><th class="act-th">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="table-body"></tbody>
-        </table>
-      </div>
-      <div class="loading-state" id="loading-state"><div class="spinner-lg"></div>Loading participants...</div>
-      <div class="empty-state" id="empty-state" style="display:none;"><i class="fa-regular fa-folder-open"></i>No participants match your filters.</div>
-    </div>
-  </div>
-</div>
-</div>
-
-
-<!-- Edit participant -->
-<div class="modal-overlay" id="edit-modal"><div class="modal-card">
-  <h3><i class="fa-solid fa-pen" style="color:var(--gold-light);"></i> Edit participant <span class="mono" id="e-id" style="color:var(--gold-light);font-size:14px;"></span></h3>
-  <div class="alert alert-error" id="e-err"></div>
-  <div class="m-grid">
-    <div class="full"><label>Full name *</label><input type="text" id="e-name"></div>
-    <div><label>Email *</label><input type="text" id="e-email"></div>
-    <div><label>Mobile *</label><input type="text" id="e-phone"></div>
-    <div class="full"><label>Institution</label><input type="text" id="e-inst"></div>
-    <div><label>Registration category</label><select id="e-role"><option value="">Not specified</option><option>Student (UG &amp; PG)</option><option>Research Scholar</option><option>Faculty / Scientist</option><option>Industrialist</option><option>Foreign Delegate</option></select></div>
-    <div><label>Food preference</label><select id="e-food"><option value="">Not specified</option><option>Vegetarian</option><option>Non-Vegetarian</option></select></div>
-    <div><label>Amount paid (₹)</label><input type="text" id="e-amount"></div>
-    <div><label>Registration status</label><select id="e-status"><option>Registered</option><option>Pending</option><option>Cancelled</option></select></div>
-    <div><label>Presentation category</label><select id="e-type"><option>Oral</option><option>Poster</option><option>Participant</option></select></div>
-    <div><label>Mode</label><select id="e-mode"><option>Offline</option><option>Online</option></select></div>
-    <div class="full" id="e-loc-wrap"><label>Venue / location</label><input type="text" id="e-loc"></div>
-    <div class="full" id="e-link-wrap" style="display:none;"><label>Meeting link</label><input type="text" id="e-link"></div>
-  </div>
-  <div class="warn-box" id="e-email-warn"><i class="fa-solid fa-triangle-exclamation"></i> Changing the email resets the participant's password to their mobile number and e-mails them the new login details.</div>
-  <div class="modal-actions">
-    <button class="btn" id="e-cancel">Cancel</button>
-    <button class="btn btn-gold" id="e-save"><i class="fa-solid fa-floppy-disk"></i> Save changes</button>
-  </div>
-</div></div>
-
-<!-- Delete participant -->
-<div class="modal-overlay" id="del-modal"><div class="modal-card" style="max-width:480px;">
-  <h3><i class="fa-solid fa-trash" style="color:var(--danger);"></i> Delete participant</h3>
-  <p class="m-note">This permanently removes <b id="d-name"></b> (<span class="mono" id="d-id"></span>) from the sheet. Type the VRMIC ID to confirm.</p>
-  <div class="alert alert-error" id="d-err"></div>
-  <input type="text" class="confirm" id="d-confirm" placeholder="VRMIC26-0000" autocomplete="off">
-  <label class="chk"><input type="checkbox" id="d-files"> Also move their Drive folder (photo, abstract, PPT) to trash</label>
-  <div class="modal-actions">
-    <button class="btn" id="d-cancel">Cancel</button>
-    <button class="btn btn-danger" id="d-go"><i class="fa-solid fa-trash"></i> Delete permanently</button>
-  </div>
-</div></div>
-
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
-const token = localStorage.getItem('vrmic_admin_token');
-if (!token) window.location.href = '../admin-login.html';
-let permissions = {};
-try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
-function can(k, a){ return !!(permissions[k] && permissions[k][a]); }
-function logout(){ localStorage.removeItem('vrmic_admin_token'); localStorage.removeItem('vrmic_admin_name'); localStorage.removeItem('vrmic_admin_position'); localStorage.removeItem('vrmic_admin_permissions'); window.location.href = '../admin-login.html'; }
-document.getElementById('sidebar-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('participants', 'report')) { VR.denied('You do not have permission to view the participant list.'); return; }
+const canEdit = VR.can('participants', 'transaction');
+if (!VR.can('participants', 'transaction')) $('add').style.display = 'none';
 
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, token }, payload)) });
-  return res.json();
-}
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+let all = [], view = [], open = new Set();
+const abs = r => r.AbstractStatus || 'Not Submitted';
+const aCls = s => 'a-' + String(s).split(' ')[0];
+const created = r => r.CreatedAt ? fmtD(String(r.CreatedAt).slice(0, 10)) : '—';
+const profile = r => String(r.ProfileCompleted).toUpperCase() === 'TRUE';
+const reg = r => r.RegistrationStatus || 'Registered';
+const paid = r => r.AmountPaid === '' || r.AmountPaid == null ? '—' : '₹' + r.AmountPaid;
 
-const NAV_ITEMS = [
-  { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'home.html', always: true },
-  { section: 'Participants' },
-  { key: 'participants', sub: 'transaction', label: 'Manage Participants', icon: 'fa-user-plus', href: 'participants-manage.html' },
-  { key: 'participants', sub: 'report', label: 'Participant Report', icon: 'fa-table-list', href: 'participants-report.html' },
-  { section: 'Abstract Review' },
-  { key: 'abstract', sub: 'transaction', label: 'Review Abstracts', icon: 'fa-file-circle-check', href: 'abstracts-review.html' },
-  { key: 'abstract', sub: 'report', label: 'Abstract Report', icon: 'fa-table-list', href: 'abstracts-report.html' },
-  { section: 'Slot Allotment' },
-  { key: 'slot', sub: 'transaction', label: 'Allot Slots', icon: 'fa-location-crosshairs', href: 'slots-manage.html' },
-  { key: 'slot', sub: 'report', label: 'Slot Report', icon: 'fa-table-list', href: 'slots-report.html' },
-  { section: 'Attendance' },
-  { key: 'attendance', sub: 'transaction', label: 'Mark Attendance', icon: 'fa-calendar-check', href: 'attendance-mark.html' },
-  { key: 'attendance', sub: 'report', label: 'Attendance Report', icon: 'fa-table-list', href: 'attendance-report.html' },
-  { section: 'Presentation Access' },
-  { key: 'presentationAccess', sub: 'report', label: 'Venue Presentation List', icon: 'fa-display', href: 'presentation-access.html' },
-  { section: 'Certificates' },
-  { key: 'certificates', sub: 'transaction', label: 'Generate Certificate', icon: 'fa-certificate', href: 'certificates-manage.html' },
-  { key: 'certificates', sub: 'report', label: 'Certificate Report', icon: 'fa-table-list', href: 'certificates-report.html' },
-  { section: 'Receipts' },
-  { key: 'receipts', sub: 'transaction', label: 'Fulfill Receipt', icon: 'fa-receipt', href: 'receipts-manage.html' },
-  { key: 'receipts', sub: 'report', label: 'Receipt Report', icon: 'fa-table-list', href: 'receipts-report.html' },
-  { section: 'Feedback' },
-  { key: 'feedback', sub: 'report', label: 'Feedback Report', icon: 'fa-comment-dots', href: 'feedback-report.html' },
-  { section: 'Schedule' },
-  { key: 'schedule', sub: 'transaction', label: 'Edit Schedule', icon: 'fa-calendar-days', href: 'schedule-manage.html' },
-  { key: 'schedule', sub: 'report', label: 'Schedule Report', icon: 'fa-table-list', href: 'schedule-report.html' },
-  { section: 'Announcements' },
-  { key: 'announcements', sub: 'transaction', label: 'Post Announcement', icon: 'fa-bullhorn', href: 'announcements-manage.html' },
-  { key: 'announcements', sub: 'report', label: 'Announcement Report', icon: 'fa-table-list', href: 'announcements-report.html' },
-  { section: 'Mail' },
-  { key: 'mail', sub: 'transaction', label: 'Send Invite', icon: 'fa-paper-plane', href: 'mail-send.html' },
-  { key: 'mail', sub: 'report', label: 'Mail Report', icon: 'fa-table-list', href: 'mail-report.html' },
-  { section: 'Volunteer Management' },
-  { key: 'volunteers', sub: 'transaction', label: 'Assign Volunteers', icon: 'fa-user-group', href: 'volunteers-manage.html' },
-  { key: 'volunteers', sub: 'report', label: 'Volunteer Report', icon: 'fa-table-list', href: 'volunteers-report.html' },
-  { section: 'Settings' },
-  { key: 'settings', sub: 'transaction', label: 'Edit Settings', icon: 'fa-sliders', href: 'settings-manage.html' },
-  { key: 'settings', sub: 'report', label: 'Current Settings', icon: 'fa-table-list', href: 'settings-report.html' },
-  { section: 'Admin Users' },
-  { key: 'adminUsers', sub: 'transaction', label: 'Manage Admin Users', icon: 'fa-user-shield', href: 'admin-users-manage.html' },
-  { key: 'adminUsers', sub: 'report', label: 'Admin User Report', icon: 'fa-table-list', href: 'admin-users-report.html' }
-];
-function renderSidebar(){
-  const nav = document.getElementById('sidebar-nav');
-  let html = '', pendingSection = null;
-  NAV_ITEMS.forEach(item => {
-    if (item.section) { pendingSection = item.section; return; }
-    if (!item.always && !can(item.key, item.sub)) return;
-    if (pendingSection) { html += `<div class="nav-section">${pendingSection}</div>`; pendingSection = null; }
-    const activeClass = item.href === 'participants-report.html' ? 'active' : '';
-    html += `<a class="nav-link ${activeClass}" href="${item.href}"><i class="fa-solid ${item.icon}"></i> ${item.label}</a>`;
-  });
-  nav.innerHTML = html || `<p style="padding:14px 12px;font-size:12.5px;color:var(--text-3);">No modules assigned yet.</p>`;
-}
-renderSidebar();
-document.getElementById('admin-name').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-document.getElementById('admin-position').textContent = localStorage.getItem('vrmic_admin_position') || '';
-
-if (!can('participants', 'report')) {
-  document.querySelector('.wrap').innerHTML = `<div style="color:var(--danger);padding:20px;">You do not have permission to view this report. Contact the administrator.</div>`;
-} else {
-
-function abstractBadgeKind(status){
-  if (status === 'Accepted') return 'success';
-  if (status === 'Rejected') return 'danger';
-  if (status === 'Submitted' || status === 'Revision Requested') return 'pending';
-  return 'neutral';
-}
-function typeBadgeClass(t){ return t === 'Oral' ? 'badge-oral' : t === 'Poster' ? 'badge-poster' : 'badge-participant'; }
-
-let allRows = [];
-
-function applyFilters(){
-  const q = document.getElementById('search-input').value.trim().toLowerCase();
-  const type = document.getElementById('filter-type').value;
-  const mode = document.getElementById('filter-mode').value;
-  const abs = document.getElementById('filter-abstract').value;
-  return allRows.filter(r => {
-    if (q && !((r.Name||'').toLowerCase().includes(q) || (r.Email||'').toLowerCase().includes(q) || (r.ID||'').toLowerCase().includes(q))) return false;
-    if (type && r.ParticipantType !== type) return false;
-    if (mode && r.Mode !== mode) return false;
-    if (abs && (r.AbstractStatus || 'Not Submitted') !== abs) return false;
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), t = $('ft').value, m = $('fm').value, a = $('fa').value, g = $('fr').value, p = $('fp').value;
+  return all.filter(r => {
+    if (q && ![r.Name, r.Email, r.ID, r.Phone, r.Institution].some(v => String(v || '').toLowerCase().indexOf(q) > -1)) return false;
+    if (t && r.ParticipantType !== t) return false;
+    if (m && r.Mode !== m) return false;
+    if (a && abs(r) !== a) return false;
+    if (g && reg(r) !== g) return false;
+    if (p && (p === 'y') !== profile(r)) return false;
     return true;
   });
 }
+const row = (k, v) => '<div><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
 
-function renderTable(){
-  const rows = applyFilters();
-  const table = document.getElementById('report-table');
-  const empty = document.getElementById('empty-state');
-  document.getElementById('stat-strip').innerHTML = `
-    <div class="stat-pill">Showing: <b>${rows.length}</b> of ${allRows.length}</div>`;
-  if (!rows.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
-  empty.style.display = 'none'; table.style.display = 'table';
-  document.getElementById('table-body').innerHTML = rows.map(r => `
-    <tr>
-      <td class="id-cell">${escapeHtml(r.ID)}</td>
-      <td class="name-cell">${escapeHtml(r.Name)}</td>
-      <td>${escapeHtml(r.Email)}</td>
-      <td>${escapeHtml(r.Phone)}</td>
-      <td>${escapeHtml(r.Institution)}</td>
-      <td><span class="badge ${typeBadgeClass(r.ParticipantType)}">${escapeHtml(r.ParticipantType || '—')}</span></td>
-      <td>${escapeHtml(r.Mode || '—')}</td>
-      <td>${String(r.ProfileCompleted).toUpperCase() === 'TRUE' ? '<span class="badge badge-success">Complete</span>' : '<span class="badge badge-pending">Incomplete</span>'}</td>
-      <td><span class="badge badge-${abstractBadgeKind(r.AbstractStatus)}">${escapeHtml(r.AbstractStatus || 'Not Submitted')}</span></td>
-      <td>${r.CreatedAt ? new Date(r.CreatedAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—'}</td>
-      <td>${can('participants','transaction') ? `<div class="act-cell">
-        <button class="btn btn-sm" data-act="edit" data-row="${r.row}" title="Edit"><i class="fa-solid fa-pen"></i> Edit</button>
-        <button class="btn btn-sm" data-act="reset" data-row="${r.row}" title="Reset password"><i class="fa-solid fa-key"></i></button>
-        <button class="btn btn-sm btn-danger" data-act="delete" data-row="${r.row}" title="Delete"><i class="fa-solid fa-trash"></i></button></div>` : '—'}</td>
-    </tr>`).join('');
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map(r => {
+    const o = open.has(String(r.row));
+    let h = '<tr data-row="' + esc(r.row) + '" style="cursor:pointer;"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td>'
+      + '<td class="id">' + esc(r.ID) + '</td><td class="nm">' + esc(r.Name) + '</td><td>' + esc(r.Email) + '</td><td>' + esc(r.Phone) + '</td><td>' + esc(r.Institution) + '</td>'
+      + '<td><span class="badge t-' + esc(r.ParticipantType || 'Participant') + '">' + esc(r.ParticipantType || '—') + '</span></td><td>' + esc(r.Mode || '—') + '</td><td>' + esc(reg(r)) + '</td>'
+      + '<td>' + (profile(r) ? '<span class="badge s-Present">Complete</span>' : '<span class="badge s-Late">Incomplete</span>') + '</td>'
+      + '<td><span class="badge ' + aCls(abs(r)) + '">' + esc(abs(r)) + '</span></td><td>' + esc(created(r)) + '</td>'
+      + '<td class="noprint">' + (canEdit ? '<a class="btn btn-sm" title="Edit in Participant details" href="participants-details.html?id=' + encodeURIComponent(r.ID) + '"><i class="fa-solid fa-pen"></i></a> ' : '')
+      + '<a class="btn btn-sm" title="Individual view" href="participants-individual.html?id=' + encodeURIComponent(r.ID) + '"><i class="fa-solid fa-id-card"></i></a></td></tr>';
+    if (o) h += '<tr><td></td><td colspan="12" style="background:rgba(232,201,131,.04);"><div class="x-body">'
+      + row('Registration category', r.Role) + row('Food preference', r.FoodPreference) + row('Amount paid', paid(r)) + row('Fee paid', String(r.FeePaid).toUpperCase() === 'TRUE' ? 'Yes' : 'No')
+      + row('Registration date', r.RegistrationDate ? fmtD(String(r.RegistrationDate).slice(0, 10)) : '') + row('Gender', r.Gender) + row('City / State / Country', [r.City, r.State, r.Country].filter(Boolean).join(', '))
+      + row('Designation', r.Designation) + row('Department', r.Department)
+      + row(r.Mode === 'Online' ? 'Meeting link' : 'Venue', r.Mode === 'Online' ? r.MeetingLink : r.Location)
+      + row('Abstract title', r.AbstractTitle) + row('Abstract theme', r.AbstractTheme) + row('Slot venue', r.SlotVenue)
+      + '</div></td></tr>';
+    return h;
+  }).join('') : '<tr><td class="empty" colspan="13">' + (all.length ? 'No participants match these filters.' : 'No participants yet.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length;
+  stats();
 }
 
-async function loadData(){
-  document.getElementById('loading-state').style.display = 'block';
-  document.getElementById('report-table').style.display = 'none';
-  document.getElementById('empty-state').style.display = 'none';
+function stats() {
+  const n = f => view.filter(f).length;
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-users', 'Participants', view.length, 'of ' + all.length + ' in total')
+    + c('fa-display', 'Oral · Poster', n(r => r.ParticipantType === 'Oral') + ' · ' + n(r => r.ParticipantType === 'Poster'), n(r => r.ParticipantType === 'Participant') + ' delegates only')
+    + c('fa-location-dot', 'Offline · Online', n(r => r.Mode === 'Offline') + ' · ' + n(r => r.Mode === 'Online'), n(r => profile(r)) + ' profiles complete')
+    + c('fa-file-circle-check', 'Abstracts accepted', n(r => abs(r) === 'Accepted'), n(r => abs(r) === 'Submitted') + ' awaiting review');
+}
+
+async function load() {
+  $('tb').innerHTML = '<tr><td class="empty" colspan="13">Loading participants…</td></tr>';
   try {
-    const res = await callApi('adminListParticipants', {});
-    if (!res.ok) {
-      if (/session/i.test(res.error||'')) { logout(); return; }
-      alert(res.error || 'Could not load participants.');
-      return;
-    }
-    allRows = res.participants;
-    renderTable();
-  } catch (err) {
-    alert('Could not reach the server. Check your connection and try again.');
-  } finally {
-    document.getElementById('loading-state').style.display = 'none';
-  }
+    const r = await VR.api('adminListParticipants', {});
+    if (!r.ok) { showErr(r.error || 'Could not load participants.'); $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; return; }
+    all = r.participants || []; render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
 }
 
-['search-input'].forEach(id => document.getElementById(id).addEventListener('input', renderTable));
-['filter-type','filter-mode','filter-abstract'].forEach(id => document.getElementById(id).addEventListener('change', renderTable));
-document.getElementById('refresh-btn').addEventListener('click', loadData);
+['q'].forEach(i => $(i).addEventListener('input', render));
+['ft', 'fm', 'fa', 'fr', 'fp'].forEach(i => $(i).addEventListener('change', render));
+$('refresh').onclick = load;
+$('tb').onclick = e => {
+  if (e.target.closest('a,button')) return;
+  const tr = e.target.closest('tr[data-row]'); if (!tr) return;
+  const k = tr.dataset.row; open.has(k) ? open.delete(k) : open.add(k); render();
+};
 
-document.getElementById('export-btn').addEventListener('click', function(){
-  const rows = applyFilters();
-  const headers = ['VRMIC ID','Name','Email','Phone','Institution','Category','Mode','Profile Complete','Abstract Status','Created'];
-  const csvRows = [headers.join(',')];
-  rows.forEach(r => {
-    const line = [
-      r.ID, r.Name, r.Email, r.Phone, r.Institution, r.ParticipantType, r.Mode,
-      String(r.ProfileCompleted).toUpperCase() === 'TRUE' ? 'Yes' : 'No',
-      r.AbstractStatus || 'Not Submitted',
-      r.CreatedAt ? new Date(r.CreatedAt).toLocaleDateString('en-GB') : ''
-    ].map(v => '"' + String(v||'').replace(/"/g,'""') + '"');
-    csvRows.push(line.join(','));
-  });
-  const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'VRMIC2026_Participants_' + new Date().toISOString().slice(0,10) + '.csv';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
+const HEAD = ['VRMIC ID', 'Name', 'Email', 'Phone', 'Institution', 'Category', 'Mode', 'Registration', 'Registration category', 'Food', 'Amount paid', 'Profile', 'Abstract', 'Created'];
+VR.exportBar($('xp'), { name: 'VRMIC2026_Participants', title: 'VRMIC 2026 — Participant list', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: HEAD, rows: view.map(r => [r.ID, r.Name, r.Email, r.Phone, r.Institution, r.ParticipantType || '', r.Mode || '', reg(r), r.Role || '', r.FoodPreference || '', r.AmountPaid === '' || r.AmountPaid == null ? '' : r.AmountPaid, profile(r) ? 'Complete' : 'Incomplete', abs(r), r.CreatedAt ? String(r.CreatedAt).slice(0, 10) : '']) }) });
 
-
-// ---------------- Edit / reset / delete ----------------
-function showMsg(text, kind){ const el=document.getElementById('msg'); el.textContent=text; el.className='alert show alert-'+(kind||'success'); window.scrollTo({top:0,behavior:'smooth'}); }
-function rowRec(row){ return allRows.find(r => String(r.row) === String(row)); }
-let editing = null, deleting = null;
-
-function syncEditMode(){
-  const online = document.getElementById('e-mode').value === 'Online';
-  document.getElementById('e-loc-wrap').style.display = online ? 'none' : 'block';
-  document.getElementById('e-link-wrap').style.display = online ? 'block' : 'none';
-}
-function syncEmailWarn(){
-  const changed = editing && document.getElementById('e-email').value.trim().toLowerCase() !== String(editing.Email||'').trim().toLowerCase();
-  document.getElementById('e-email-warn').style.display = changed ? 'block' : 'none';
-}
-function setSelect(id, val){
-  const sel = document.getElementById(id); val = val || '';
-  if (val && ![...sel.options].some(o => o.value === val || o.text === val)) sel.add(new Option(val, val));
-  sel.value = val;
-}
-document.getElementById('e-mode').addEventListener('change', syncEditMode);
-document.getElementById('e-email').addEventListener('input', syncEmailWarn);
-
-function openEdit(r){
-  editing = r;
-  document.getElementById('e-err').classList.remove('show');
-  document.getElementById('e-id').textContent = r.ID;
-  document.getElementById('e-name').value = r.Name || '';
-  document.getElementById('e-email').value = r.Email || '';
-  document.getElementById('e-phone').value = r.Phone || '';
-  document.getElementById('e-inst').value = r.Institution || '';
-  setSelect('e-role', r.Role); setSelect('e-food', r.FoodPreference);
-  document.getElementById('e-amount').value = r.AmountPaid || '';
-  setSelect('e-status', r.RegistrationStatus || 'Registered');
-  setSelect('e-type', r.ParticipantType || 'Participant');
-  setSelect('e-mode', r.Mode || 'Offline');
-  document.getElementById('e-loc').value = r.Location || '';
-  document.getElementById('e-link').value = r.MeetingLink || '';
-  syncEditMode(); syncEmailWarn();
-  document.getElementById('edit-modal').classList.add('show');
-}
-document.getElementById('e-cancel').addEventListener('click', () => document.getElementById('edit-modal').classList.remove('show'));
-document.getElementById('e-save').addEventListener('click', async function(){
-  const btn = this, err = document.getElementById('e-err');
-  err.classList.remove('show');
-  btn.disabled = true; const old = btn.innerHTML; btn.innerHTML = 'Saving…';
-  try {
-    const res = await callApi('adminUpdateParticipant', {
-      row: editing.row, id: editing.ID,
-      name: document.getElementById('e-name').value.trim(),
-      email: document.getElementById('e-email').value.trim(),
-      phone: document.getElementById('e-phone').value.trim(),
-      institution: document.getElementById('e-inst').value.trim(),
-      role: document.getElementById('e-role').value, foodPreference: document.getElementById('e-food').value,
-      amountPaid: document.getElementById('e-amount').value.trim(),
-      registrationStatus: document.getElementById('e-status').value,
-      participantType: document.getElementById('e-type').value,
-      mode: document.getElementById('e-mode').value,
-      location: document.getElementById('e-loc').value.trim(), meetingLink: document.getElementById('e-link').value.trim()
-    });
-    if (!res.ok) { err.textContent = res.error || 'Could not save.'; err.classList.add('show'); return; }
-    document.getElementById('edit-modal').classList.remove('show');
-    showMsg('Participant updated.' + (res.credentialsReset ? ' Login email changed — password reset to their mobile number' + (res.mailSent ? ' and new details e-mailed.' : ' (e-mail could not be sent — tell them directly).') : ''));
-    loadData();
-  } catch (e) { err.textContent = 'Could not reach the server.'; err.classList.add('show'); }
-  finally { btn.disabled = false; btn.innerHTML = old; }
-});
-
-document.getElementById('d-cancel').addEventListener('click', () => document.getElementById('del-modal').classList.remove('show'));
-document.getElementById('d-go').addEventListener('click', async function(){
-  const btn = this, err = document.getElementById('d-err');
-  err.classList.remove('show');
-  if (document.getElementById('d-confirm').value.trim() !== deleting.ID) { err.textContent = 'The ID you typed does not match.'; err.classList.add('show'); return; }
-  btn.disabled = true; const old = btn.innerHTML; btn.innerHTML = 'Deleting…';
-  try {
-    const res = await callApi('adminDeleteParticipant', { row: deleting.row, id: deleting.ID, confirmId: deleting.ID, deleteFiles: document.getElementById('d-files').checked });
-    if (!res.ok) { err.textContent = res.error || 'Could not delete.'; err.classList.add('show'); return; }
-    document.getElementById('del-modal').classList.remove('show');
-    showMsg(deleting.ID + ' deleted.' + (res.filesTrashed ? ' Drive folder moved to trash.' : ''));
-    loadData();
-  } catch (e) { err.textContent = 'Could not reach the server.'; err.classList.add('show'); }
-  finally { btn.disabled = false; btn.innerHTML = old; }
-});
-
-document.getElementById('table-body').addEventListener('click', async function(e){
-  const btn = e.target.closest('button[data-act]'); if (!btn) return;
-  const r = rowRec(btn.dataset.row); if (!r) return;
-  if (btn.dataset.act === 'edit') openEdit(r);
-  else if (btn.dataset.act === 'delete') {
-    deleting = r;
-    document.getElementById('d-name').textContent = r.Name; document.getElementById('d-id').textContent = r.ID;
-    document.getElementById('d-confirm').value = ''; document.getElementById('d-files').checked = false;
-    document.getElementById('d-err').classList.remove('show');
-    document.getElementById('del-modal').classList.add('show');
-  } else if (btn.dataset.act === 'reset') {
-    if (!confirm('Reset the password for ' + r.Name + '? A temporary password will be e-mailed to them.')) return;
-    btn.disabled = true;
-    try {
-      const res = await callApi('adminResetParticipantPassword', { row: r.row, id: r.ID });
-      if (!res.ok) showMsg(res.error || 'Could not reset.', 'error');
-      else showMsg('Temporary password for ' + r.ID + ': ' + res.tempPassword + (res.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.'));
-    } catch (er) { showMsg('Could not reach the server.', 'error'); }
-    finally { btn.disabled = false; }
-  }
-});
-
-loadData();
-}
+load();
+})();
 </script>
 </body>
 </html>
