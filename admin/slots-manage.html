@@ -6,388 +6,190 @@
 <title>Allot Slots | VRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
 <style>
-:root{
-  --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
-  --navy-border:rgba(226,187,120,.24);
-  --gold:#c9974f; --gold-light:#e8c983;
-  --teal:#279c85; --teal-light:#6fc9b6;
-  --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
-  --danger:#d8695a; --warn:#dba43c; --success:#4fa980;
-  --sidebar-w:250px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;background:var(--navy-950);display:flex;flex-direction:column;min-height:100vh;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 4px;}
-a{color:var(--gold-light);text-decoration:none;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-
-.masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);flex-shrink:0;}
-.masthead-inner{padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.masthead-logos img{height:52px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:40px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-light);font-weight:700;margin-bottom:2px;}
-.masthead-text h1{font-size:clamp(.92rem,1.7vw,1.15rem);line-height:1.25;margin:0;color:var(--text-1);}
-.masthead-text .m-sub{font-size:11px;color:var(--text-3);margin:0;}
-
-.body-row{flex:1;display:flex;min-height:0;}
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);display:flex;flex-direction:column;overflow-y:auto;}
-.sidebar-brand{padding:22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--navy-border);}
-.sidebar-brand img{height:36px;width:auto;}
-.sidebar-brand div{font-family:'Fraunces',serif;font-size:14px;line-height:1.3;}
-.sidebar-brand small{display:block;color:var(--text-3);font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px;}
-.sidebar-nav{flex:1;padding:14px 12px;}
-.nav-section{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);padding:14px 12px 6px;}
-.nav-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;margin-bottom:2px;cursor:pointer;transition:.15s;}
-.nav-link i{width:16px;text-align:center;color:var(--text-3);font-size:13px;}
-.nav-link:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
-.nav-link.active{background:rgba(232,201,131,.1);color:var(--gold-light);}
-.nav-link.active i{color:var(--gold-light);}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--navy-border);}
-.sidebar-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:14px;flex-shrink:0;}
-.sidebar-user div{min-width:0;}
-.sidebar-user b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-user span{font-size:11px;color:var(--text-3);}
-.logout-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:8px;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);font-size:12.5px;cursor:pointer;}
-.logout-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-.sidebar-toggle{display:none;position:fixed;top:70px;left:16px;z-index:60;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;}
-@media(max-width:960px){
-  .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:70;transform:translateX(-100%);width:min(280px,85vw);transition:transform .3s ease;}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-toggle{display:block;}
-}
-.main{flex:1;min-width:0;overflow-y:auto;}
-.topbar{background:rgba(6,11,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--navy-border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
-.topbar h1{font-size:1.3rem;}
-.topbar .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-3);letter-spacing:.4px;}
-.wrap{padding:28px;max-width:1200px;}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:13px;padding:10px 18px;border-radius:8px;cursor:pointer;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);transition:.2s;}
-.btn:hover:not(:disabled){color:var(--gold-light);border-color:var(--gold);}
-.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
-.btn-gold:hover{color:#241a06;}
-.btn:disabled{opacity:.5;cursor:not-allowed;}
-.spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
-.toolbar input[type=text]{flex:1;min-width:200px;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:14px;}
-.toolbar select{background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-2);border-radius:8px;padding:10px 12px;font-size:13.5px;}
-.toolbar input:focus,.toolbar select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-
-.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
-.scroll-x{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead th{text-align:left;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;}
-tbody td{padding:11px 14px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;white-space:nowrap;}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover{background:rgba(232,201,131,.03);}
-.id-cell{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;}
-.name-cell{color:var(--text-1);font-weight:600;}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;}
-.badge-oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
-.badge-poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
-.loading-state,.empty-state{padding:60px 20px;text-align:center;color:var(--text-3);}
-.loading-state i,.empty-state i{font-size:26px;color:var(--gold-light);margin-bottom:12px;display:block;}
-.spinner-lg{width:24px;height:24px;border:3px solid rgba(232,201,131,.25);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
-
-.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:16px;border:1px solid transparent;display:none;}
-.alert.show{display:block;}
-.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
-.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
-
-.modal-overlay{position:fixed;inset:0;background:rgba(6,10,26,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
-.modal-overlay.show{display:flex;}
-.modal-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:28px;max-width:460px;width:100%;}
-.modal-card h3{margin-bottom:4px;}
-.modal-card p.sub{font-size:12.5px;color:var(--text-3);margin-bottom:18px;}
-.field{margin-bottom:14px;}
-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 6px;}
-input[type=text],select{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 13px;font-family:'Inter',sans-serif;font-size:13.5px;}
-input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.quick-venues{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-.quick-venue-btn{font-size:11px;padding:5px 10px;border-radius:999px;border:1px solid var(--navy-border);background:var(--navy-950);color:var(--text-3);cursor:pointer;}
-.quick-venue-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.qv{font-size:11.5px;padding:5px 10px;border-radius:999px;border:1px solid var(--navy-border);background:var(--navy-950);color:var(--text-3);cursor:pointer;font-family:inherit;}
+.qv:hover{border-color:var(--gold);color:var(--gold-light);}
+.bulk{display:none;position:sticky;bottom:0;z-index:25;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:12px;padding:12px 16px;margin-top:14px;}
+.bulk.show{display:flex;}
+.dup{color:var(--warn);font-size:11.5px;display:block;}
+input[type=checkbox]{width:16px;height:16px;accent-color:#c9974f;}
 </style>
 </head>
 <body>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
-    </div>
+<div class="topbar"><h1><i class="fa-solid fa-location-crosshairs" style="color:var(--gold-light);"></i> Allot slots</h1><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><span id="xp"></span><a class="btn btn-sm" href="slots-report.html"><i class="fa-solid fa-table-list"></i> Slot report</a></div></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <p class="hint" style="margin-bottom:14px;">Participants whose abstract is <b>Accepted</b> for an Oral or Poster presentation. Use <b>Set slot</b> for one person, or tick several rows and use <b>Set venue / day / time for selected</b>.</p>
+
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by name, VRMIC ID or token" autocomplete="off">
+    <select id="ft"><option value="">All categories</option><option>Oral</option><option>Poster</option></select>
+    <select id="fs"><option value="">All</option><option value="unset">Not yet allotted</option><option value="set">Already allotted</option></select>
+    <select id="fd"><option value="">All days</option></select>
+    <select id="fv"><option value="">All venues</option></select>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
   </div>
+
+  <div class="table-card"><div class="scroll-x" id="tc">
+    <table class="list"><thead><tr><th style="width:30px;"><input type="checkbox" id="all" aria-label="Select all shown"></th><th>VRMIC ID</th><th>Name</th><th>Category</th><th>Venue</th><th>Room</th><th>Day</th><th>Time</th><th>Token</th><th class="noprint"></th></tr></thead>
+    <tbody id="tb"><tr><td class="empty" colspan="10">Loading accepted presenters…</td></tr></tbody></table>
+  </div></div>
+  <div class="bulk" id="bulk"><span><b id="bn">0</b> selected</span><div class="row-actions"><button class="btn btn-sm" id="bclear">Clear selection</button><button class="btn btn-gold btn-sm" id="bset"><i class="fa-solid fa-layer-group"></i> Set venue / day / time for selected</button></div></div>
 </div>
 
-<button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
-
-<div class="body-row">
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div>VRMIC 2026<small>ADMIN CONTROL PANEL</small></div></div>
-  <nav class="sidebar-nav" id="sidebar-nav"></nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="admin-name">—</b><span id="admin-position">—</span></div></div>
-    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+<!-- Single / bulk slot form -->
+<div class="modal" id="sm"><div class="box wide">
+  <h3 style="margin-bottom:4px;"><i class="fa-solid fa-location-crosshairs" style="color:var(--gold-light);"></i> <span id="sm-t">Set slot</span></h3>
+  <p class="hint" id="sm-sub" style="margin-bottom:14px;"></p>
+  <div class="alert alert-error" id="sm-err"></div>
+  <div class="grid">
+    <div class="full"><label>Venue</label><input id="f-venue" list="dl-venue" placeholder="e.g. Bertram Hall" maxlength="120" autocomplete="off"><datalist id="dl-venue"></datalist><div class="chips" id="qv"></div></div>
+    <div><label>Room number</label><input id="f-room" placeholder="e.g. 204" maxlength="40"></div>
+    <div><label>Day</label><select id="f-date"><option value="">Select day</option></select></div>
+    <div><label>Time</label><input id="f-time" list="dl-time" placeholder="e.g. 10:30 AM" maxlength="20" autocomplete="off"><datalist id="dl-time"></datalist></div>
+    <div id="w-token"><label>Slot / Token no.</label><input id="f-token" placeholder="e.g. OR-014" maxlength="30"><div class="dup" id="dup"></div></div>
+    <div class="full" id="w-map"><label>Custom map link <span class="hint" style="display:inline;">(optional — generated automatically if blank)</span></label><input id="f-map" placeholder="https://maps.google.com/..."></div>
   </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div><div class="breadcrumb">ADMIN / SLOT ALLOTMENT</div><h1>Allot Slots</h1></div>
-    <a href="slots-report.html" class="btn"><i class="fa-solid fa-table-list"></i> View report</a>
+  <p class="hint" id="bulk-note" style="display:none;margin-top:12px;">For several people at once, each person's own token and map link are kept as they are. Only venue, room, day and time are changed (a blank field leaves that part as it is).</p>
+  <div style="display:flex;gap:10px;justify-content:space-between;margin-top:18px;flex-wrap:wrap;">
+    <button class="btn btn-danger btn-sm" id="clear" style="display:none;"><i class="fa-solid fa-eraser"></i> Clear this slot</button>
+    <span style="display:flex;gap:10px;margin-left:auto;"><button class="btn" id="sm-x">Cancel</button><button class="btn btn-gold" id="sm-ok"><i class="fa-solid fa-check"></i> Save slot</button></span>
   </div>
+</div></div>
 
-  <div class="wrap">
-    <div class="alert alert-error" id="err"></div>
-    <div class="alert alert-success" id="ok"></div>
-
-    <p style="font-size:13.5px;color:var(--text-3);margin-bottom:18px;">Showing participants accepted for Oral or Poster presentation. Click "Set slot" to assign a venue, room, date, time and token number.</p>
-
-    <div class="toolbar">
-      <input type="text" id="search-input" placeholder="Search by name or VRMIC ID...">
-      <select id="filter-status">
-        <option value="">All</option>
-        <option value="unset">Not yet allotted</option>
-        <option value="set">Already allotted</option>
-      </select>
-    </div>
-
-    <div class="table-card">
-      <div class="scroll-x">
-        <table id="report-table" style="display:none;">
-          <thead><tr><th>VRMIC ID</th><th>Name</th><th>Category</th><th>Venue</th><th>Room</th><th>Date</th><th>Time</th><th>Token</th><th></th></tr></thead>
-          <tbody id="table-body"></tbody>
-        </table>
-      </div>
-      <div class="loading-state" id="loading-state"><div class="spinner-lg"></div>Loading accepted presenters...</div>
-      <div class="empty-state" id="empty-state" style="display:none;"><i class="fa-regular fa-folder-open"></i>No accepted presenters match your filters.</div>
-    </div>
-  </div>
-</div>
-</div>
-
-<div class="modal-overlay" id="slot-modal">
-  <div class="modal-card">
-    <h3><i class="fa-solid fa-location-crosshairs" style="color:var(--gold-light);"></i> Set slot</h3>
-    <p class="sub" id="modal-sub">—</p>
-    <div class="field">
-      <label>Venue</label>
-      <input type="text" id="f-venue" placeholder="e.g. Bertram Hall">
-      <div class="quick-venues">
-        <button type="button" class="quick-venue-btn" data-v="Bertram Hall">Bertram Hall</button>
-        <button type="button" class="quick-venue-btn" data-v="Seminar Hall - Zoology Block">Seminar Hall - Zoology Block</button>
-        <button type="button" class="quick-venue-btn" data-v="Library Building, Room LB-101">Library LB-101</button>
-        <button type="button" class="quick-venue-btn" data-v="Main Auditorium">Main Auditorium</button>
-      </div>
-    </div>
-    <div class="field-grid">
-      <div class="field"><label>Room number</label><input type="text" id="f-room" placeholder="e.g. 204"></div>
-      <div class="field"><label>Day</label>
-        <select id="f-date">
-          <option value="">Select day</option>
-          <option value="26 Nov 2026">Day 1 — 26 Nov 2026</option>
-          <option value="27 Nov 2026">Day 2 — 27 Nov 2026</option>
-          <option value="28 Nov 2026">Day 3 — 28 Nov 2026</option>
-        </select>
-      </div>
-      <div class="field"><label>Time</label><input type="text" id="f-time" placeholder="e.g. 10:30 AM"></div>
-      <div class="field"><label>Slot / Token no.</label><input type="text" id="f-token" placeholder="e.g. OR-014"></div>
-    </div>
-    <div class="field"><label>Custom map link <span style="font-weight:400;color:var(--text-3);">(optional — auto-generated if blank)</span></label><input type="text" id="f-maplink" placeholder="https://maps.google.com/..."></div>
-    <div class="modal-actions">
-      <button class="btn" id="modal-cancel">Cancel</button>
-      <button class="btn btn-gold" id="modal-save"><i class="fa-solid fa-check"></i> Save slot</button>
-    </div>
-  </div>
-</div>
-
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
-const token = localStorage.getItem('vrmic_admin_token');
-if (!token) window.location.href = '../admin-login.html';
-let permissions = {};
-try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
-function can(k, a){ return !!(permissions[k] && permissions[k][a]); }
-function logout(){ localStorage.removeItem('vrmic_admin_token'); localStorage.removeItem('vrmic_admin_name'); localStorage.removeItem('vrmic_admin_position'); localStorage.removeItem('vrmic_admin_permissions'); window.location.href = '../admin-login.html'; }
-document.getElementById('sidebar-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('slot', 'transaction')) { VR.denied('You do not have permission to allot slots.'); return; }
 
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, token }, payload)) });
-  return res.json();
+const DEFAULT_VENUES = ['Bertram Hall', 'Seminar Hall - Zoology Block', 'Library Building, Room LB-101', 'Main Auditorium'];
+let all = [], view = [], sel = new Set(), cur = null, bulkMode = false, days = [];
+const accepted = r => (r.ParticipantType === 'Oral' || r.ParticipantType === 'Poster') && r.AbstractStatus === 'Accepted';
+const nz = v => String(v == null ? '' : v).replace(/\s+/g, ' ').trim().toLowerCase();
+const has = r => !!r.SlotVenue;
+
+function filtered() {
+  const q = nz($('q').value), t = $('ft').value, s = $('fs').value, d = $('fd').value, v = $('fv').value;
+  return all.filter(r => accepted(r) && (!q || nz(r.Name).includes(q) || nz(r.ID).includes(q) || nz(r.SlotToken).includes(q))
+    && (!t || r.ParticipantType === t) && (s !== 'unset' || !has(r)) && (s !== 'set' || has(r)) && (!d || r.SlotDate === d) && (!v || r.SlotVenue === v));
 }
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function showErr(msg){ const el=document.getElementById('err'); el.textContent=msg; el.classList.add('show'); window.scrollTo({top:0,behavior:'smooth'}); }
-function showOk(msg){ const el=document.getElementById('ok'); el.textContent=msg; el.classList.add('show'); }
-function hideAlerts(){ document.getElementById('err').classList.remove('show'); document.getElementById('ok').classList.remove('show'); }
-
-const NAV_ITEMS = [
-  { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'home.html', always: true },
-  { section: 'Participants' },
-  { key: 'participants', sub: 'transaction', label: 'Manage Participants', icon: 'fa-user-plus', href: 'participants-manage.html' },
-  { key: 'participants', sub: 'report', label: 'Participant Report', icon: 'fa-table-list', href: 'participants-report.html' },
-  { section: 'Abstract Review' },
-  { key: 'abstract', sub: 'transaction', label: 'Review Abstracts', icon: 'fa-file-circle-check', href: 'abstracts-review.html' },
-  { key: 'abstract', sub: 'report', label: 'Abstract Report', icon: 'fa-table-list', href: 'abstracts-report.html' },
-  { section: 'Slot Allotment' },
-  { key: 'slot', sub: 'transaction', label: 'Allot Slots', icon: 'fa-location-crosshairs', href: 'slots-manage.html' },
-  { key: 'slot', sub: 'report', label: 'Slot Report', icon: 'fa-table-list', href: 'slots-report.html' },
-  { section: 'Attendance' },
-  { key: 'attendance', sub: 'transaction', label: 'Mark Attendance', icon: 'fa-calendar-check', href: 'attendance-mark.html' },
-  { key: 'attendance', sub: 'report', label: 'Attendance Report', icon: 'fa-table-list', href: 'attendance-report.html' },
-  { section: 'Presentation Access' },
-  { key: 'presentationAccess', sub: 'report', label: 'Venue Presentation List', icon: 'fa-display', href: 'presentation-access.html' },
-  { section: 'Certificates' },
-  { key: 'certificates', sub: 'transaction', label: 'Generate Certificate', icon: 'fa-certificate', href: 'certificates-manage.html' },
-  { key: 'certificates', sub: 'report', label: 'Certificate Report', icon: 'fa-table-list', href: 'certificates-report.html' },
-  { section: 'Receipts' },
-  { key: 'receipts', sub: 'transaction', label: 'Fulfill Receipt', icon: 'fa-receipt', href: 'receipts-manage.html' },
-  { key: 'receipts', sub: 'report', label: 'Receipt Report', icon: 'fa-table-list', href: 'receipts-report.html' },
-  { section: 'Feedback' },
-  { key: 'feedback', sub: 'report', label: 'Feedback Report', icon: 'fa-comment-dots', href: 'feedback-report.html' },
-  { section: 'Schedule' },
-  { key: 'schedule', sub: 'transaction', label: 'Edit Schedule', icon: 'fa-calendar-days', href: 'schedule-manage.html' },
-  { key: 'schedule', sub: 'report', label: 'Schedule Report', icon: 'fa-table-list', href: 'schedule-report.html' },
-  { section: 'Announcements' },
-  { key: 'announcements', sub: 'transaction', label: 'Post Announcement', icon: 'fa-bullhorn', href: 'announcements-manage.html' },
-  { key: 'announcements', sub: 'report', label: 'Announcement Report', icon: 'fa-table-list', href: 'announcements-report.html' },
-  { section: 'Mail' },
-  { key: 'mail', sub: 'transaction', label: 'Send Invite', icon: 'fa-paper-plane', href: 'mail-send.html' },
-  { key: 'mail', sub: 'report', label: 'Mail Report', icon: 'fa-table-list', href: 'mail-report.html' },
-  { section: 'Volunteer Management' },
-  { key: 'volunteers', sub: 'transaction', label: 'Assign Volunteers', icon: 'fa-user-group', href: 'volunteers-manage.html' },
-  { key: 'volunteers', sub: 'report', label: 'Volunteer Report', icon: 'fa-table-list', href: 'volunteers-report.html' },
-  { section: 'Settings' },
-  { key: 'settings', sub: 'transaction', label: 'Edit Settings', icon: 'fa-sliders', href: 'settings-manage.html' },
-  { key: 'settings', sub: 'report', label: 'Current Settings', icon: 'fa-table-list', href: 'settings-report.html' },
-  { section: 'Admin Users' },
-  { key: 'adminUsers', sub: 'transaction', label: 'Manage Admin Users', icon: 'fa-user-shield', href: 'admin-users-manage.html' },
-  { key: 'adminUsers', sub: 'report', label: 'Admin User Report', icon: 'fa-table-list', href: 'admin-users-report.html' }
-];
-function renderSidebar(){
-  const nav = document.getElementById('sidebar-nav');
-  let html = '', pendingSection = null;
-  NAV_ITEMS.forEach(item => {
-    if (item.section) { pendingSection = item.section; return; }
-    if (!item.always && !can(item.key, item.sub)) return;
-    if (pendingSection) { html += `<div class="nav-section">${pendingSection}</div>`; pendingSection = null; }
-    const activeClass = item.href === 'slots-manage.html' ? 'active' : '';
-    html += `<a class="nav-link ${activeClass}" href="${item.href}"><i class="fa-solid ${item.icon}"></i> ${item.label}</a>`;
-  });
-  nav.innerHTML = html || `<p style="padding:14px 12px;font-size:12.5px;color:var(--text-3);">No modules assigned yet.</p>`;
-}
-renderSidebar();
-document.getElementById('admin-name').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-document.getElementById('admin-position').textContent = localStorage.getItem('vrmic_admin_position') || '';
-
-if (!can('slot', 'transaction')) {
-  document.querySelector('.wrap').innerHTML = `<div style="color:var(--danger);padding:20px;">You do not have permission to allot slots. Contact the administrator.</div>`;
-} else {
-
-let allRows = [];
-function typeBadgeClass(t){ return t === 'Oral' ? 'badge-oral' : 'badge-poster'; }
-
-function applyFilters(){
-  const q = document.getElementById('search-input').value.trim().toLowerCase();
-  const status = document.getElementById('filter-status').value;
-  return allRows
-    .filter(r => (r.ParticipantType === 'Oral' || r.ParticipantType === 'Poster') && r.AbstractStatus === 'Accepted')
-    .filter(r => {
-      if (q && !((r.Name||'').toLowerCase().includes(q) || (r.ID||'').toLowerCase().includes(q))) return false;
-      if (status === 'unset' && r.SlotVenue) return false;
-      if (status === 'set' && !r.SlotVenue) return false;
-      return true;
-    });
+function render() {
+  view = filtered();
+  const pool = all.filter(accepted), done = pool.filter(has).length;
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-user-check', 'Accepted presenters', pool.length, pool.filter(r => r.ParticipantType === 'Oral').length + ' Oral · ' + pool.filter(r => r.ParticipantType === 'Poster').length + ' Poster')
+    + c('fa-location-dot', 'Allotted', done, pool.length ? Math.round(done * 100 / pool.length) + '% done' : '—') + c('fa-hourglass-half', 'Pending', pool.length - done, 'no venue yet')
+    + c('fa-building', 'Venues in use', new Set(pool.map(r => r.SlotVenue).filter(Boolean)).size, 'distinct venues');
+  // tokens used more than once
+  const tc = {}; pool.forEach(r => { const k = nz(r.SlotToken); if (k) tc[k] = (tc[k] || 0) + 1; });
+  $('tb').innerHTML = view.length ? view.map(r => {
+    const dup = nz(r.SlotToken) && tc[nz(r.SlotToken)] > 1;
+    return '<tr><td><input type="checkbox" data-sel="' + esc(r.row) + '"' + (sel.has(String(r.row)) ? ' checked' : '') + ' aria-label="Select ' + esc(r.Name) + '"></td><td class="id">' + esc(r.ID) + '</td><td class="nm">' + esc(r.Name) + '</td>'
+      + '<td><span class="badge t-' + esc(r.ParticipantType) + '">' + esc(r.ParticipantType) + '</span></td><td>' + esc(r.SlotVenue || '—') + '</td><td>' + esc(r.SlotRoom || '—') + '</td><td>' + esc(r.SlotDate || '—') + '</td><td>' + esc(r.SlotTime || '—') + '</td>'
+      + '<td class="id">' + esc(r.SlotToken || '—') + (dup ? '<span class="dup">used more than once</span>' : '') + '</td>'
+      + '<td class="noprint"><button class="btn btn-sm btn-gold" data-edit="' + esc(r.row) + '"><i class="fa-solid fa-pen"></i> ' + (has(r) ? 'Edit' : 'Set slot') + '</button></td></tr>';
+  }).join('') : '<tr><td class="empty" colspan="10">' + (pool.length ? 'No accepted presenters match these filters.' : 'No abstracts have been accepted yet.') + '</td></tr>';
+  $('all').checked = view.length > 0 && view.every(r => sel.has(String(r.row)));
+  $('bn').textContent = sel.size; $('bulk').classList.toggle('show', sel.size > 0);
 }
 
-function renderTable(){
-  const rows = applyFilters();
-  const table = document.getElementById('report-table');
-  const empty = document.getElementById('empty-state');
-  if (!rows.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
-  empty.style.display = 'none'; table.style.display = 'table';
-  document.getElementById('table-body').innerHTML = rows.map(r => `
-    <tr>
-      <td class="id-cell">${escapeHtml(r.ID)}</td>
-      <td class="name-cell">${escapeHtml(r.Name)}</td>
-      <td><span class="badge ${typeBadgeClass(r.ParticipantType)}">${escapeHtml(r.ParticipantType)}</span></td>
-      <td>${escapeHtml(r.SlotVenue || '—')}</td>
-      <td>${escapeHtml(r.SlotRoom || '—')}</td>
-      <td>${escapeHtml(r.SlotDate || '—')}</td>
-      <td>${escapeHtml(r.SlotTime || '—')}</td>
-      <td class="mono">${escapeHtml(r.SlotToken || '—')}</td>
-      <td><button class="btn btn-gold" data-row="${r.row}" onclick="openModal(${r.row})"><i class="fa-solid fa-pen"></i> ${r.SlotVenue ? 'Edit' : 'Set slot'}</button></td>
-    </tr>`).join('');
+function lists() {
+  const pool = all.filter(accepted);
+  const venues = [...new Set(DEFAULT_VENUES.concat(pool.map(r => r.SlotVenue).filter(Boolean)))];
+  const times = [...new Set(pool.map(r => r.SlotTime).filter(Boolean))];
+  $('dl-venue').innerHTML = venues.map(v => '<option value="' + esc(v) + '">').join(''); $('dl-time').innerHTML = times.map(v => '<option value="' + esc(v) + '">').join('');
+  $('qv').innerHTML = venues.slice(0, 8).map(v => '<button type="button" class="qv" data-v="' + esc(v) + '">' + esc(v) + '</button>').join('');
+  const fv = $('fv').value, fd = $('fd').value;
+  $('fv').innerHTML = '<option value="">All venues</option>' + [...new Set(pool.map(r => r.SlotVenue).filter(Boolean))].map(v => '<option>' + esc(v) + '</option>').join(''); $('fv').value = fv;
+  const dset = [...new Set(days.concat(pool.map(r => r.SlotDate).filter(Boolean)))];
+  $('fd').innerHTML = '<option value="">All days</option>' + dset.map(v => '<option>' + esc(v) + '</option>').join(''); $('fd').value = fd;
+  $('f-date').innerHTML = '<option value="">Select day</option>' + dset.map((v, i) => '<option value="' + esc(v) + '">' + (days.indexOf(v) > -1 ? 'Day ' + (days.indexOf(v) + 1) + ' — ' : '') + esc(v) + '</option>').join('');
 }
-
-async function loadData(){
-  document.getElementById('loading-state').style.display = 'block';
+async function load() {
   try {
-    const res = await callApi('adminListParticipants', {});
-    if (!res.ok) { if (/session/i.test(res.error||'')) { logout(); return; } showErr(res.error||'Could not load data.'); return; }
-    allRows = res.participants;
-    renderTable();
-  } catch (err) { showErr('Could not reach the server. Check your connection and try again.'); }
-  finally { document.getElementById('loading-state').style.display = 'none'; }
+    const r = await VR.api('adminListParticipants', {});
+    if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="10">Could not load.</td></tr>'; return showErr(r.error || 'Could not load data.'); }
+    all = r.participants || []; sel = new Set([...sel].filter(k => all.some(x => String(x.row) === k)));
+    lists(); render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
 }
-document.getElementById('search-input').addEventListener('input', renderTable);
-document.getElementById('filter-status').addEventListener('change', renderTable);
 
-let currentRow = null;
-function openModal(row){
-  currentRow = row;
-  const r = allRows.find(x => x.row === row);
-  document.getElementById('modal-sub').textContent = r.ID + ' — ' + r.Name + ' (' + r.ParticipantType + ')';
-  document.getElementById('f-venue').value = r.SlotVenue || '';
-  document.getElementById('f-room').value = r.SlotRoom || '';
-  document.getElementById('f-date').value = r.SlotDate || '';
-  document.getElementById('f-time').value = r.SlotTime || '';
-  document.getElementById('f-token').value = r.SlotToken || '';
-  document.getElementById('f-maplink').value = r.SlotMapUrl || '';
-  document.getElementById('slot-modal').classList.add('show');
-}
-document.querySelectorAll('.quick-venue-btn').forEach(btn => btn.addEventListener('click', () => { document.getElementById('f-venue').value = btn.dataset.v; }));
-document.getElementById('modal-cancel').addEventListener('click', () => document.getElementById('slot-modal').classList.remove('show'));
-document.getElementById('modal-save').addEventListener('click', async function(){
-  hideAlerts();
-  const btn = this;
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving...';
-  try {
-    const res = await callApi('adminSetSlot', {
-      row: currentRow,
-      venue: document.getElementById('f-venue').value.trim(),
-      room: document.getElementById('f-room').value.trim(),
-      date: document.getElementById('f-date').value,
-      time: document.getElementById('f-time').value.trim(),
-      token_no: document.getElementById('f-token').value.trim(),
-      mapUrl: document.getElementById('f-maplink').value.trim()
-    });
-    if (!res.ok) { showErr(res.error || 'Could not save slot.'); return; }
-    document.getElementById('slot-modal').classList.remove('show');
-    showOk('Slot saved successfully.');
-    loadData();
-  } catch (err) {
-    showErr('Could not reach the server. Check your connection and try again.');
-  } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check"></i> Save slot';
+function openForm(row, bulk) {
+  bulkMode = !!bulk; cur = row; $('sm-err').classList.remove('show');
+  $('w-token').style.display = $('w-map').style.display = bulk ? 'none' : ''; $('bulk-note').style.display = bulk ? '' : 'none'; $('clear').style.display = (!bulk && has(row)) ? '' : 'none';
+  if (bulk) { $('sm-t').textContent = 'Set venue / day / time'; $('sm-sub').textContent = sel.size + ' participants selected'; ['f-venue', 'f-room', 'f-date', 'f-time'].forEach(i => $(i).value = ''); }
+  else {
+    $('sm-t').textContent = has(row) ? 'Edit slot' : 'Set slot'; $('sm-sub').textContent = row.ID + ' — ' + row.Name + ' (' + row.ParticipantType + ')';
+    $('f-venue').value = row.SlotVenue || ''; $('f-room').value = row.SlotRoom || ''; $('f-date').value = row.SlotDate || ''; $('f-time').value = row.SlotTime || ''; $('f-token').value = row.SlotToken || ''; $('f-map').value = row.SlotMapUrl || '';
+    if (row.SlotDate && ![...$('f-date').options].some(o => o.value === row.SlotDate)) $('f-date').add(new Option(row.SlotDate, row.SlotDate)), $('f-date').value = row.SlotDate;
+    tokenCheck();
   }
-});
-
-loadData();
+  $('sm').classList.add('show'); $('f-venue').focus();
 }
+function tokenCheck() {
+  const t = nz($('f-token').value); const other = t && all.find(r => accepted(r) && nz(r.SlotToken) === t && (!cur || r.row !== cur.row));
+  $('dup').textContent = other ? 'This token is already used by ' + other.Name + ' (' + other.ID + ').' : '';
+}
+$('f-token').addEventListener('input', tokenCheck);
+$('qv').onclick = e => { const b = e.target.closest('[data-v]'); if (b) $('f-venue').value = b.dataset.v; };
+$('sm-x').onclick = () => $('sm').classList.remove('show');
+
+const mapOk = u => !u || /^https?:\/\//i.test(u);
+function payload(r, o) { return { row: r.row, venue: o.venue, room: o.room, date: o.date, time: o.time, token_no: o.token, mapUrl: o.map }; }
+
+$('sm-ok').onclick = async function () {
+  hideAlerts(); const err = m => { $('sm-err').textContent = m; $('sm-err').classList.add('show'); };
+  const v = { venue: $('f-venue').value.trim(), room: $('f-room').value.trim(), date: $('f-date').value, time: $('f-time').value.trim() };
+  if (!bulkMode) { v.token = $('f-token').value.trim(); v.map = $('f-map').value.trim(); if (!mapOk(v.map)) return err('The map link must start with http:// or https://'); if (!v.venue) return err('Please enter the venue (or use "Clear this slot").'); }
+  else if (!v.venue && !v.room && !v.date && !v.time) return err('Fill at least one field to apply.');
+  await VR.busy(this, 'Saving…', async () => {
+    try {
+      if (!bulkMode) {
+        const r = await VR.api('adminSetSlot', payload(cur, v)); if (!r.ok) return err(r.error || 'Could not save the slot.');
+        $('sm').classList.remove('show'); showOk('Slot saved for ' + cur.Name + '.');
+      } else {
+        const rows = all.filter(r => sel.has(String(r.row))); let n = 0, bad = [];
+        for (const r of rows) {
+          const o = { venue: v.venue || r.SlotVenue || '', room: v.room || r.SlotRoom || '', date: v.date || r.SlotDate || '', time: v.time || r.SlotTime || '', token: r.SlotToken || '', map: r.SlotMapUrl || '' };
+          const x = await VR.api('adminSetSlot', payload(r, o)); if (x.ok) n++; else bad.push(r.ID);
+        }
+        $('sm').classList.remove('show'); sel.clear();
+        if (bad.length) showErr(n + ' updated; ' + bad.length + ' failed (' + bad.join(', ') + ').'); else showOk('Updated ' + n + ' participants.');
+      }
+      load();
+    } catch (e) { err('Could not reach the server. Check your connection and try again.'); }
+  });
+};
+$('clear').onclick = async function () {
+  if (!confirm('Remove the slot for ' + cur.Name + '? They will show as not allotted.')) return;
+  await VR.busy(this, 'Clearing…', async () => {
+    try { const r = await VR.api('adminSetSlot', payload(cur, { venue: '', room: '', date: '', time: '', token: '', map: '' })); if (!r.ok) { $('sm-err').textContent = r.error || 'Could not clear.'; $('sm-err').classList.add('show'); return; } $('sm').classList.remove('show'); showOk('Slot cleared.'); load(); }
+    catch (e) { $('sm-err').textContent = 'Could not reach the server.'; $('sm-err').classList.add('show'); }
+  });
+};
+
+$('tb').onclick = e => {
+  const b = e.target.closest('[data-edit]'); if (b) { const r = all.find(x => String(x.row) === b.dataset.edit); if (r) openForm(r, false); return; }
+  const c = e.target.closest('[data-sel]'); if (c) { c.checked ? sel.add(c.dataset.sel) : sel.delete(c.dataset.sel); render(); }
+};
+$('all').onchange = function () { view.forEach(r => this.checked ? sel.add(String(r.row)) : sel.delete(String(r.row))); render(); };
+$('bclear').onclick = () => { sel.clear(); render(); }; $('bset').onclick = () => openForm(null, true);
+$('q').addEventListener('input', render); ['ft', 'fs', 'fd', 'fv'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+
+VR.exportBar($('xp'), { name: 'VRMIC2026_Slot_Allotment', title: 'VRMIC 2026 — Slot allotment', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['VRMIC ID', 'Name', 'Category', 'Venue', 'Room', 'Day', 'Time', 'Token'], rows: view.map(r => [r.ID, r.Name, r.ParticipantType, r.SlotVenue || '', r.SlotRoom || '', r.SlotDate || '', r.SlotTime || '', r.SlotToken || '']) }) });
+
+VR.confDays().then(d => { days = d || []; if (all.length) lists(); }).catch(() => {});
+load();
+})();
 </script>
 </body>
 </html>
