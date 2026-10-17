@@ -179,8 +179,13 @@ const MENU = [
 
 /* ================= helpers ================= */
 const perms = () => { try { return JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch (e) { return {}; } };
-const onlyPresentation = () => { const p = perms(), ks = Object.keys(p).filter(k => p[k] && (p[k].report || p[k].transaction)); return ks.length > 0 && ks.every(k => k === 'presentationAccess'); };
-const DEFAULT_PAGE = () => onlyPresentation() ? 'presentation-access.html' : 'dashboard.html';
+const FIELD_KEYS = ['presentationAccess', 'attendance', 'studentAttendance'];   // volunteer-type access: no dashboard
+const onlyPresentation = () => { const p = perms(), ks = Object.keys(p).filter(k => p[k] && (p[k].report || p[k].transaction)); return ks.length > 0 && ks.every(k => FIELD_KEYS.indexOf(k) > -1); };
+const DEFAULT_PAGE = () => {
+  if (!onlyPresentation()) return 'dashboard.html';
+  if (VR.can('presentationAccess', 'report')) return 'presentation-access.html';
+  return VR.can('attendance', 'transaction') ? 'attendance-entry.html?kind=participant' : 'attendance-entry.html?kind=student';
+};
 const SAFE_PAGE = /^[a-z0-9][a-z0-9_-]*\.html(\?[A-Za-z0-9_=&%.\-]*)?$/i;   // only our own pages can be framed
 const OPEN_KEY = 'vrmic_admin_menu_open';
 const openSet = () => { try { return new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || '[]')); } catch (e) { return new Set(); } };
