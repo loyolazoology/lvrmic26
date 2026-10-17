@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Configuration | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-sliders" style="color:var(--gold-light);"></i> <span id="ttl">Attendance configuration</span></h1><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"><div id="xp"></div><button class="btn btn-gold" id="add" style="display:none;"><i class="fa-solid fa-plus"></i> Add session</button></div></div>
+<div class="wrap">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="banner"><i class="fa-solid fa-circle-info"></i><div id="rules"></div></div>
+  <div class="toolbar noprint" id="tools" style="display:none;"><button class="btn btn-sm" id="gen"><i class="fa-solid fa-wand-magic-sparkles"></i> Create one session for each conference day</button></div>
+  <div class="table-card" id="tc"><div class="scroll-x"><table class="list" id="tbl"><thead id="th"></thead><tbody id="tb"><tr><td class="empty" colspan="12"><span class="spinner"></span> Loading…</td></tr></tbody></table></div></div>
+</div>
+
+<div class="modal" id="dm"><div class="box wide">
+  <h3 style="margin-bottom:14px;"><i class="fa-solid fa-calendar-plus" style="color:var(--gold-light);"></i> <span id="m-title">Add session</span></h3>
+  <div class="alert alert-error" id="m-err"></div>
+  <div class="grid">
+    <div class="full"><label>Session title *</label><input id="f-title" maxlength="120" placeholder="e.g. Day 1 – Inauguration"></div>
+    <div><label>Date *</label><input type="date" id="f-date"></div>
+    <div><label>Entry time *</label><input type="time" id="f-entry"></div>
+    <div><label>Exit time</label><input type="time" id="f-exit"><div class="hint">Needed only if exit is required.</div></div>
+    <div><label>On-time until</label><input type="time" id="f-ontime"><div class="hint">Entry after this is marked Late.</div></div>
+    <div><label>Entry closes at</label><input type="time" id="f-late"><div class="hint">After this, only the Convener can add entry.</div></div>
+    <div></div>
+    <div class="full" style="display:flex;gap:22px;flex-wrap:wrap;">
+      <label class="chk"><input type="checkbox" id="f-entryreq" checked> Entry required</label>
+      <label class="chk"><input type="checkbox" id="f-exitreq"> Exit required</label>
+      <label class="chk"><input type="checkbox" id="f-counts" checked> Counts in attendance %</label>
+      <label class="chk" id="w-active" style="display:none;"><input type="checkbox" id="f-active" checked> Active</label>
+    </div>
+    <div class="full"><label>Description</label><textarea id="f-desc" rows="2" maxlength="500" placeholder="Optional note"></textarea></div>
+  </div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;"><button class="btn" id="m-cancel">Cancel</button><button class="btn btn-gold" id="m-save"><i class="fa-solid fa-floppy-disk"></i> Save session</button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'studentConfig' : 'attendanceConfig';
+$('ttl').textContent = isStudent ? 'Student attendance sessions' : 'Participant attendance configuration';
+document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
+$('rules').innerHTML = '<b>How the date rule works.</b> You set the days and sessions here. When attendance is taken, <b>scanning works only on the session day</b>. For manual entry, volunteers and other admins can mark <b>only today\'s sessions</b>; the Convener can choose an earlier session date (a reason is mandatory). Future sessions can never be marked.';
+if (!VR.can(MOD, 'report') && !VR.can(MOD, 'transaction')) { VR.denied('You do not have permission to view this configuration.'); return; }
+const canEdit = VR.can(MOD, 'transaction');
+let sessions = [], editing = null;
+
+const H = ['Title', 'Date', 'Entry', 'Exit', 'On-time until', 'Entry closes', 'Entry required', 'Exit required', 'In attendance %', 'Status', 'Records'];
+const yn = b => b ? 'Yes' : 'No';
+const dataRows = () => sessions.map(s => [s.title, fmtD(s.date), hm12(s.entry), s.exit ? hm12(s.exit) : '—', s.onTime ? hm12(s.onTime) : '—', s.lateUntil ? hm12(s.lateUntil) : '—', yn(s.entryRequired), yn(s.exitRequired), yn(s.counts), s.active ? 'Active' : 'Switched off', s.records]);
+
+function draw() {
+  $('th').innerHTML = '<tr>' + H.map(h => '<th>' + h + '</th>').join('') + (canEdit ? '<th class="noprint"></th>' : '') + '</tr>';
+  const today = VR.today();
+  $('tb').innerHTML = sessions.length ? sessions.map((s, i) => {
+    const d = dataRows()[i];
+    return '<tr><td class="nm">' + esc(s.title) + (s.description ? '<span class="tiny">' + esc(s.description) + '</span>' : '') + '</td><td>' + esc(d[1]) + (s.date === today ? ' <span class="badge b-ok">Today</span>' : '') + '</td>' +
+      d.slice(2, 9).map(x => '<td>' + esc(x) + '</td>').join('') + '<td><span class="badge ' + (s.active ? 'b-ok' : 'b-neu') + '">' + d[9] + '</span></td><td>' + s.records + '</td>' +
+      (canEdit ? '<td class="noprint"><div class="row-actions"><button class="btn btn-sm" data-edit="' + i + '"><i class="fa-solid fa-pen"></i> Edit</button><button class="btn btn-sm btn-danger" data-del="' + i + '"><i class="fa-solid fa-trash"></i></button></div></td>' : '') + '</tr>';
+  }).join('') : '<tr><td class="empty" colspan="12">No sessions yet.' + (canEdit ? ' Click "Add session" to create the first one.' : '') + '</td></tr>';
+}
+async function load() {
+  const r = await VR.api('adminListSessions', { kind }); if (!r.ok) { showErr(r.error || 'Could not load sessions.'); return; }
+  sessions = r.sessions; draw();
+}
+if (canEdit) { $('add').style.display = ''; if (!isStudent) $('tools').style.display = ''; }
+
+VR.exportBar($('xp'), { name: isStudent ? 'Student_Sessions' : 'Participant_Attendance_Config', title: $('ttl').textContent, imageEl: () => $('tc'), getData: () => ({ headers: H, rows: dataRows() }), pdfOpts: { orientation: 'landscape' } });
+
+function openForm(s) {
+  editing = s || null; $('m-err').classList.remove('show');
+  $('m-title').textContent = s ? 'Edit session' : 'Add session';
+  $('f-title').value = s ? s.title : ''; $('f-date').value = s ? s.date : ''; $('f-entry').value = s ? s.entry : '09:00'; $('f-exit').value = s ? s.exit : '';
+  $('f-ontime').value = s ? s.onTime : ''; $('f-late').value = s ? s.lateUntil : '';
+  $('f-entryreq').checked = s ? s.entryRequired : true; $('f-exitreq').checked = s ? s.exitRequired : false; $('f-counts').checked = s ? s.counts : true;
+  $('f-desc').value = s ? s.description : ''; $('w-active').style.display = s ? '' : 'none'; $('f-active').checked = s ? s.active : true;
+  $('f-date').disabled = !!(s && s.records); $('f-date').title = s && s.records ? 'Attendance is already recorded, so the date is locked.' : '';
+  $('dm').classList.add('show');
+}
+$('add').onclick = () => openForm(null);
+$('m-cancel').onclick = () => $('dm').classList.remove('show');
+$('tb').onclick = async e => {
+  const ed = e.target.closest('[data-edit]'), dl = e.target.closest('[data-del]');
+  if (ed) openForm(sessions[+ed.dataset.edit]);
+  if (dl) {
+    const s = sessions[+dl.dataset.del]; hideAlerts();
+    if (!confirm(s.records ? 'This session already has ' + s.records + ' attendance record(s). It will be switched off, not deleted. Continue?' : 'Delete the session "' + s.title + '"?')) return;
+    const r = await VR.api('adminDeleteSession', { kind, sessionId: s.id });
+    if (!r.ok) return showErr(r.error); showOk(r.deactivated ? 'Session switched off (its records are kept).' : 'Session deleted.'); load();
+  }
+};
+function payload() {
+  return { kind, sessionId: editing ? editing.id : '', title: $('f-title').value.trim(), date: $('f-date').value, entry: $('f-entry').value, exit: $('f-exit').value, onTime: $('f-ontime').value, lateUntil: $('f-late').value,
+    entryRequired: $('f-entryreq').checked, exitRequired: $('f-exitreq').checked, counts: $('f-counts').checked, description: $('f-desc').value.trim(), active: editing ? $('f-active').checked : undefined };
+}
+$('m-save').onclick = function () {
+  return VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = await VR.api('adminSaveSession', payload());
+      if (!r.ok) { $('m-err').textContent = r.error || 'Could not save.'; $('m-err').classList.add('show'); return; }
+      $('dm').classList.remove('show'); showOk('Session saved.'); load();
+    } catch (e) { $('m-err').textContent = 'Could not reach the server.'; $('m-err').classList.add('show'); }
+  });
+};
+$('gen').onclick = async function () {
+  const s = await VR.settings(); if (!s['conf.startDate'] || !s['conf.endDate']) return showErr('Conference start and end dates are not set in Settings.');
+  const days = []; for (let d = new Date(s['conf.startDate'] + 'T00:00:00+05:30'), end = new Date(s['conf.endDate'] + 'T00:00:00+05:30'); d <= end && days.length < 31; d = new Date(d.getTime() + 864e5)) days.push(d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }));
+  if (!confirm('Create ' + days.length + ' session(s), one for each conference day (09:00 entry, entry required, exit not required)? Existing sessions are kept. You can edit the times afterwards.')) return;
+  hideAlerts(); let made = 0, skipped = 0;
+  await VR.busy(this, 'Creating…', async () => {
+    for (let i = 0; i < days.length; i++) {
+      const r = await VR.api('adminSaveSession', { kind, title: 'Day ' + (i + 1), date: days[i], entry: '09:00', exit: '', entryRequired: true, exitRequired: false, counts: true });
+      r.ok ? made++ : skipped++;
+    }
+  });
+  showOk(made + ' session(s) created' + (skipped ? ', ' + skipped + ' skipped (already exist).' : '.')); load();
+};
+load();
+})();
+</script>
+</body>
+</html>

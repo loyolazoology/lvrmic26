@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Entry | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-calendar-check" style="color:var(--gold-light);"></i> <span id="ttl">Attendance entry</span></h1><a class="btn btn-sm" id="toscan" href="#"><i class="fa-solid fa-qrcode"></i> Switch to QR scan</a></div>
+<div class="wrap">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="banner" id="rule"><i class="fa-solid fa-circle-info"></i><div></div></div>
+
+  <div class="card">
+    <div class="grid">
+      <div><label>Session *</label><select id="sess"></select><div class="hint" id="sess-h"></div></div>
+      <div><label>Mark</label>
+        <div style="display:flex;gap:18px;padding-top:9px;"><label class="chk"><input type="radio" name="dir" value="in" checked> Entry (IN)</label><label class="chk" id="w-out"><input type="radio" name="dir" value="out"> Exit (OUT)</label></div></div>
+      <div class="full"><label>Find person (name or ID) *</label><input id="q" autocomplete="off" placeholder="Type a name or ID, e.g. VRMIC26-S001"><div class="suggest" id="sg" style="display:none;"></div></div>
+      <div class="full" id="picked" style="display:none;"></div>
+      <div class="full"><label>Reason for manual entry * <span class="hint" style="display:inline;">(always required — for example "QR code not available")</span></label><input id="reason" maxlength="300" autocomplete="off"></div>
+    </div>
+    <div style="margin-top:16px;"><button class="btn btn-gold" id="mark" disabled><i class="fa-solid fa-check"></i> Mark attendance</button></div>
+  </div>
+
+  <div class="table-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px 0;"><h3 style="margin:0;font-size:15px;">Records for this session <span class="tiny" id="cnt" style="display:inline;"></span></h3><div id="xp"></div></div>
+    <div class="scroll-x" id="tc"><table class="list"><thead><tr><th>Time</th><th>ID</th><th>Name</th><th>In/Out</th><th>Status</th><th>Source</th><th>Marked by</th></tr></thead><tbody id="tb"><tr><td class="empty" colspan="7">Choose a session.</td></tr></tbody></table></div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'studentAttendance' : 'attendance';
+const label = isStudent ? 'Student' : 'Participant';
+$('ttl').textContent = label + ' attendance entry';
+document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
+$('toscan').href = 'attendance-scan.html?kind=' + kind;
+if (!VR.can(MOD, 'transaction')) { VR.denied('You do not have permission to mark attendance.'); return; }
+
+let ctx = null, people = [], picked = null, logRows = [];
+
+function rule() {
+  const d = $('rule').querySelector('div');
+  d.innerHTML = ctx.canBackdate
+    ? '<b>Today is ' + esc(fmtD(ctx.today)) + '.</b> You may also pick an <b>earlier</b> session date, with a reason. Future sessions cannot be marked.'
+    : '<b>Today is ' + esc(fmtD(ctx.today)) + '.</b> You can mark attendance <b>only for sessions held today</b>. For another day, ask the Convener.';
+}
+const sel = () => ctx.sessions.find(s => s.id === $('sess').value);
+
+async function boot() {
+  const r = await VR.api('adminAttendanceContext', { kind, people: true });
+  if (!r.ok) { showErr(r.error || 'Could not load.'); return; }
+  ctx = r; people = r.people || []; rule();
+  if (!ctx.sessions.length) { $('sess').innerHTML = '<option value="">No session available</option>'; $('sess-h').textContent = ctx.canBackdate ? 'No session has been created for today or earlier.' : 'No session is scheduled for today. Ask the Convener to create one in Configuration.'; return; }
+  const sorted = ctx.sessions.slice().sort((a, b) => (b.date === ctx.today) - (a.date === ctx.today) || b.date.localeCompare(a.date) || a.entry.localeCompare(b.entry));
+  ctx.sessions = sorted;
+  $('sess').innerHTML = sorted.map(s => '<option value="' + esc(s.id) + '">' + esc(s.title) + ' — ' + esc(fmtD(s.date)) + (s.date === ctx.today ? ' (today)' : '') + ' · entry ' + esc(hm12(s.entry)) + '</option>').join('');
+  onSession();
+}
+function onSession() {
+  const s = sel(); if (!s) return;
+  const hasOut = !!(s.exitRequired || s.exit);
+  $('w-out').style.display = hasOut ? '' : 'none'; if (!hasOut) document.querySelector('input[name=dir][value=in]').checked = true;
+  $('sess-h').textContent = 'On time until ' + (s.onTime ? hm12(s.onTime) : '—') + ' · entry closes ' + (s.lateUntil ? hm12(s.lateUntil) : '—') + (s.date !== ctx.today ? ' · EARLIER DATE — back-dated entry' : '');
+  loadLog(); refreshBtn();
+}
+$('sess').onchange = onSession;
+
+async function loadLog() {
+  const s = sel(); if (!s) return;
+  const r = await VR.api('adminAttendanceContext', { kind, sessionId: s.id });
+  if (!r.ok) return showErr(r.error);
+  logRows = r.log || []; $('cnt').textContent = '(' + logRows.length + ')';
+  $('tb').innerHTML = logRows.length ? logRows.map(l => '<tr><td>' + esc(hm12(l.time)) + '</td><td class="id">' + esc(l.id) + '</td><td class="nm">' + esc(l.name) + '</td><td>' + esc(l.direction.toUpperCase()) + '</td><td><span class="badge s-' + esc(l.status) + '">' + esc(l.status) + '</span></td><td>' + esc(l.source) + (l.reason ? '<span class="tiny">' + esc(l.reason) + '</span>' : '') + '</td><td>' + esc(l.by) + '</td></tr>').join('')
+    : '<tr><td class="empty" colspan="7">Nothing recorded yet for this session.</td></tr>';
+}
+VR.exportBar($('xp'), { name: label + '_Attendance_Session', title: label + ' attendance — session log', imageEl: () => $('tc'),
+  getData: () => ({ headers: ['Time', 'ID', 'Name', 'In/Out', 'Status', 'Source', 'Reason', 'Marked by'], rows: logRows.map(l => [hm12(l.time), l.id, l.name, l.direction.toUpperCase(), l.status, l.source, l.reason || '', l.by]) }) });
+
+/* person search */
+function suggest() {
+  const t = $('q').value.trim().toLowerCase(); picked = null; $('picked').style.display = 'none'; refreshBtn();
+  if (t.length < 2) { $('sg').style.display = 'none'; return; }
+  const hits = people.filter(p => p.id.toLowerCase().indexOf(t) > -1 || String(p.name).toLowerCase().indexOf(t) > -1).slice(0, 12);
+  $('sg').innerHTML = hits.length ? hits.map(p => '<div data-id="' + esc(p.id) + '"><b>' + esc(p.name) + '</b> <span class="id">' + esc(p.id) + '</span><span class="tiny">' + esc(p.sub) + '</span></div>').join('') : '<div style="cursor:default;">No match.</div>';
+  $('sg').style.display = '';
+}
+$('q').addEventListener('input', suggest);
+$('sg').onclick = e => {
+  const d = e.target.closest('[data-id]'); if (!d) return;
+  picked = people.find(p => p.id === d.dataset.id); $('sg').style.display = 'none'; $('q').value = picked.name + ' (' + picked.id + ')';
+  $('picked').innerHTML = '<div class="banner" style="margin:0;"><i class="fa-solid fa-user-check"></i><div><b>' + esc(picked.name) + '</b> · <span class="id">' + esc(picked.id) + '</span><br>' + esc(picked.sub) + '</div></div>'; $('picked').style.display = ''; refreshBtn();
+};
+function refreshBtn() { $('mark').disabled = !(picked && sel()); }
+$('reason').addEventListener('keydown', e => { if (e.key === 'Enter' && !$('mark').disabled) $('mark').click(); });
+
+$('mark').onclick = function () {
+  return VR.busy(this, 'Saving…', async () => {
+    hideAlerts();
+    const s = sel(), reason = $('reason').value.trim(), dir = document.querySelector('input[name=dir]:checked').value;
+    if (!reason) return showErr('Enter the reason for marking manually.');
+    if (s.date !== ctx.today && !confirm('This session is on ' + fmtD(s.date) + ', not today. Mark ' + picked.name + ' as a back-dated entry?')) return;
+    const r = await VR.api('adminRecordAttendance', { kind, sessionId: s.id, direction: dir, source: 'manual', personId: picked.id, reason });
+    if (!r.ok) return showErr((r.name ? r.name + ' — ' : '') + (r.error || 'Could not save.'));
+    showOk(r.name + ' marked ' + (dir === 'in' ? 'IN' : 'OUT') + ' — ' + r.status + ' at ' + r.time + '.');
+    picked = null; $('q').value = ''; $('picked').style.display = 'none'; $('q').focus(); refreshBtn(); loadLog();
+  });
+};
+boot();
+})();
+</script>
+</body>
+</html>

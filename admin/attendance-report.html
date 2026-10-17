@@ -6,343 +6,121 @@
 <title>Attendance Report | VRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
-<style>
-:root{
-  --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
-  --navy-border:rgba(226,187,120,.24);
-  --gold:#c9974f; --gold-light:#e8c983;
-  --teal:#279c85; --teal-light:#6fc9b6;
-  --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
-  --danger:#d8695a; --warn:#dba43c; --success:#4fa980;
-  --sidebar-w:250px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;background:var(--navy-950);display:flex;flex-direction:column;min-height:100vh;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 4px;}
-a{color:var(--gold-light);text-decoration:none;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-
-.masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);flex-shrink:0;}
-.masthead-inner{padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.masthead-logos img{height:52px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:40px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-light);font-weight:700;margin-bottom:2px;}
-.masthead-text h1{font-size:clamp(.92rem,1.7vw,1.15rem);line-height:1.25;margin:0;color:var(--text-1);}
-.masthead-text .m-sub{font-size:11px;color:var(--text-3);margin:0;}
-
-.body-row{flex:1;display:flex;min-height:0;}
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);display:flex;flex-direction:column;overflow-y:auto;}
-.sidebar-brand{padding:22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--navy-border);}
-.sidebar-brand img{height:36px;width:auto;}
-.sidebar-brand div{font-family:'Fraunces',serif;font-size:14px;line-height:1.3;}
-.sidebar-brand small{display:block;color:var(--text-3);font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px;}
-.sidebar-nav{flex:1;padding:14px 12px;}
-.nav-section{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);padding:14px 12px 6px;}
-.nav-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;margin-bottom:2px;cursor:pointer;transition:.15s;}
-.nav-link i{width:16px;text-align:center;color:var(--text-3);font-size:13px;}
-.nav-link:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
-.nav-link.active{background:rgba(232,201,131,.1);color:var(--gold-light);}
-.nav-link.active i{color:var(--gold-light);}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--navy-border);}
-.sidebar-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:14px;flex-shrink:0;}
-.sidebar-user div{min-width:0;}
-.sidebar-user b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-user span{font-size:11px;color:var(--text-3);}
-.logout-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:8px;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);font-size:12.5px;cursor:pointer;}
-.logout-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-.sidebar-toggle{display:none;position:fixed;top:70px;left:16px;z-index:60;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;}
-@media(max-width:960px){
-  .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:70;transform:translateX(-100%);width:min(280px,85vw);transition:transform .3s ease;}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-toggle{display:block;}
-}
-.main{flex:1;min-width:0;overflow-y:auto;}
-.topbar{background:rgba(6,11,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--navy-border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
-.topbar h1{font-size:1.3rem;}
-.topbar .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-3);letter-spacing:.4px;}
-.wrap{padding:28px;max-width:1400px;}
-
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
-.toolbar input[type=text]{flex:1;min-width:200px;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:14px;}
-.toolbar select{background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-2);border-radius:8px;padding:10px 12px;font-size:13.5px;}
-.toolbar input:focus,.toolbar select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:13px;padding:10px 16px;border-radius:8px;cursor:pointer;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);transition:.2s;}
-.btn:hover{color:var(--gold-light);border-color:var(--gold);}
-.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
-.btn-gold:hover{color:#241a06;}
-
-.stat-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
-.stat-pill{background:var(--navy-850);border:1px solid var(--navy-border);border-radius:999px;padding:7px 15px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-2);}
-.stat-pill b{color:var(--gold-light);}
-
-.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
-.scroll-x{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead th{text-align:left;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;}
-tbody td{padding:11px 14px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;white-space:nowrap;}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover{background:rgba(232,201,131,.03);}
-.id-cell{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;}
-.name-cell{color:var(--text-1);font-weight:600;}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;}
-.badge-oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
-.badge-poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
-.badge-participant{background:rgba(179,188,214,.1);color:var(--text-2);}
-.badge-success{background:rgba(79,169,128,.14);color:var(--teal-light);}
-.badge-pending{background:rgba(219,164,60,.14);color:var(--warn);}
-.badge-danger{background:rgba(216,105,90,.14);color:#e8988c;}
-.badge-neutral{background:rgba(179,188,214,.1);color:var(--text-2);}
-.loading-state,.empty-state{padding:60px 20px;text-align:center;color:var(--text-3);}
-.loading-state i,.empty-state i{font-size:26px;color:var(--gold-light);margin-bottom:12px;display:block;}
-.spinner-lg{width:24px;height:24px;border:3px solid rgba(232,201,131,.25);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-</style>
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
 </head>
 <body>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
-    </div>
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> <span id="ttl">Attendance report</span></h1><a class="btn btn-sm" id="toqr" href="#"><i class="fa-solid fa-qrcode"></i> QR codes</a></div>
+<div class="wrap">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search name or ID" autocomplete="off">
+    <select id="fcls" style="display:none;"></select>
+    <select id="fsess"><option value="">All sessions</option></select>
+    <select id="fst"><option value="">Any status</option><option>Present</option><option>Late</option><option>Absent</option><option>Missing exit</option></select>
+    <select id="fpc"><option value="">Any attendance %</option><option value="lt75">Below 75%</option><option value="ge75">75% and above</option><option value="eq100">100%</option></select>
+    <div id="xp" style="margin-left:auto;"></div>
   </div>
+
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list" id="tbl"><thead id="th"></thead><tbody id="tb"><tr><td class="empty">Loading…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny noprint" style="margin-top:10px;">Click a row to expand the in/out times for each session. Attendance % counts only sessions marked "counts toward %" that have already started; Present and Late both count as attended.</p>
 </div>
 
-<button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
-
-<div class="body-row">
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div>VRMIC 2026<small>ADMIN CONTROL PANEL</small></div></div>
-  <nav class="sidebar-nav" id="sidebar-nav"></nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="admin-name">—</b><span id="admin-position">—</span></div></div>
-    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div><div class="breadcrumb">ADMIN / ATTENDANCE</div><h1>Attendance Report</h1></div>
-    <a href="attendance-mark.html" class="btn btn-gold"><i class="fa-solid fa-calendar-check"></i> Mark attendance</a>
-  </div>
-
-  <div class="wrap">
-    <div class="stat-strip" id="stat-strip"></div>
-
-    <div class="toolbar">
-      <input type="text" id="search-input" placeholder="Search by name or VRMIC ID...">
-      <select id="filter-type">
-        <option value="">All categories</option>
-        <option value="Oral">Oral</option>
-        <option value="Poster">Poster</option>
-        <option value="Participant">Participant</option>
-      </select>
-      <select id="filter-day">
-        <option value="">Any day present</option>
-        <option value="1">Present Day 1</option>
-        <option value="2">Present Day 2</option>
-        <option value="3">Present Day 3</option>
-        <option value="none">Not marked any day</option>
-      </select>
-      <button class="btn" id="refresh-btn"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
-      <button class="btn" id="export-btn"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
-    </div>
-
-    <div class="table-card">
-      <div class="scroll-x">
-        <table id="report-table" style="display:none;">
-          <thead><tr><th>VRMIC ID</th><th>Name</th><th>Category</th><th>Institution</th><th>Day 1</th><th>Day 2</th><th>Day 3</th></tr></thead>
-          <tbody id="table-body"></tbody>
-        </table>
-      </div>
-      <div class="loading-state" id="loading-state"><div class="spinner-lg"></div>Loading attendance...</div>
-      <div class="empty-state" id="empty-state" style="display:none;"><i class="fa-regular fa-folder-open"></i>No participants match your filters.</div>
-    </div>
-  </div>
-</div>
-</div>
-
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
-const token = localStorage.getItem('vrmic_admin_token');
-if (!token) window.location.href = '../admin-login.html';
-let permissions = {};
-try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
-function can(k, a){ return !!(permissions[k] && permissions[k][a]); }
-function logout(){ localStorage.removeItem('vrmic_admin_token'); localStorage.removeItem('vrmic_admin_name'); localStorage.removeItem('vrmic_admin_position'); localStorage.removeItem('vrmic_admin_permissions'); window.location.href = '../admin-login.html'; }
-document.getElementById('sidebar-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+if (VR.guard() && VR.frameOnly()) (function () {
+const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'studentAttendance' : 'attendance';
+const label = isStudent ? 'Student' : 'Participant';
+$('ttl').textContent = label + ' attendance report';
+document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
+$('toqr').href = 'students-report.html?kind=' + kind;
+if (!VR.can(MOD, 'report')) { VR.denied('You do not have permission to view the attendance report.'); return; }
 
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, token }, payload)) });
-  return res.json();
-}
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+let data = null, view = [], open = new Set();
+const cls = st => 's-' + String(st).replace(/\s.*$/, '');          // "Missing exit" -> s-Missing
+const badge = st => st ? '<span class="badge ' + cls(st) + '">' + esc(st) + '</span>' : '<span class="tiny" style="display:inline;">—</span>';
+const sessList = () => { const f = $('fsess').value; return data.sessions.filter(s => !f || s.id === f); };
 
-const NAV_ITEMS = [
-  { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'home.html', always: true },
-  { section: 'Participants' },
-  { key: 'participants', sub: 'transaction', label: 'Manage Participants', icon: 'fa-user-plus', href: 'participants-manage.html' },
-  { key: 'participants', sub: 'report', label: 'Participant Report', icon: 'fa-table-list', href: 'participants-report.html' },
-  { section: 'Abstract Review' },
-  { key: 'abstract', sub: 'transaction', label: 'Review Abstracts', icon: 'fa-file-circle-check', href: 'abstracts-review.html' },
-  { key: 'abstract', sub: 'report', label: 'Abstract Report', icon: 'fa-table-list', href: 'abstracts-report.html' },
-  { section: 'Slot Allotment' },
-  { key: 'slot', sub: 'transaction', label: 'Allot Slots', icon: 'fa-location-crosshairs', href: 'slots-manage.html' },
-  { key: 'slot', sub: 'report', label: 'Slot Report', icon: 'fa-table-list', href: 'slots-report.html' },
-  { section: 'Attendance' },
-  { key: 'attendance', sub: 'transaction', label: 'Mark Attendance', icon: 'fa-calendar-check', href: 'attendance-mark.html' },
-  { key: 'attendance', sub: 'report', label: 'Attendance Report', icon: 'fa-table-list', href: 'attendance-report.html' },
-  { section: 'Presentation Access' },
-  { key: 'presentationAccess', sub: 'report', label: 'Venue Presentation List', icon: 'fa-display', href: 'presentation-access.html' },
-  { section: 'Certificates' },
-  { key: 'certificates', sub: 'transaction', label: 'Generate Certificate', icon: 'fa-certificate', href: 'certificates-manage.html' },
-  { key: 'certificates', sub: 'report', label: 'Certificate Report', icon: 'fa-table-list', href: 'certificates-report.html' },
-  { section: 'Receipts' },
-  { key: 'receipts', sub: 'transaction', label: 'Fulfill Receipt', icon: 'fa-receipt', href: 'receipts-manage.html' },
-  { key: 'receipts', sub: 'report', label: 'Receipt Report', icon: 'fa-table-list', href: 'receipts-report.html' },
-  { section: 'Feedback' },
-  { key: 'feedback', sub: 'report', label: 'Feedback Report', icon: 'fa-comment-dots', href: 'feedback-report.html' },
-  { section: 'Schedule' },
-  { key: 'schedule', sub: 'transaction', label: 'Edit Schedule', icon: 'fa-calendar-days', href: 'schedule-manage.html' },
-  { key: 'schedule', sub: 'report', label: 'Schedule Report', icon: 'fa-table-list', href: 'schedule-report.html' },
-  { section: 'Announcements' },
-  { key: 'announcements', sub: 'transaction', label: 'Post Announcement', icon: 'fa-bullhorn', href: 'announcements-manage.html' },
-  { key: 'announcements', sub: 'report', label: 'Announcement Report', icon: 'fa-table-list', href: 'announcements-report.html' },
-  { section: 'Mail' },
-  { key: 'mail', sub: 'transaction', label: 'Send Invite', icon: 'fa-paper-plane', href: 'mail-send.html' },
-  { key: 'mail', sub: 'report', label: 'Mail Report', icon: 'fa-table-list', href: 'mail-report.html' },
-  { section: 'Volunteer Management' },
-  { key: 'volunteers', sub: 'transaction', label: 'Assign Volunteers', icon: 'fa-user-group', href: 'volunteers-manage.html' },
-  { key: 'volunteers', sub: 'report', label: 'Volunteer Report', icon: 'fa-table-list', href: 'volunteers-report.html' },
-  { section: 'Settings' },
-  { key: 'settings', sub: 'transaction', label: 'Edit Settings', icon: 'fa-sliders', href: 'settings-manage.html' },
-  { key: 'settings', sub: 'report', label: 'Current Settings', icon: 'fa-table-list', href: 'settings-report.html' },
-  { section: 'Admin Users' },
-  { key: 'adminUsers', sub: 'transaction', label: 'Manage Admin Users', icon: 'fa-user-shield', href: 'admin-users-manage.html' },
-  { key: 'adminUsers', sub: 'report', label: 'Admin User Report', icon: 'fa-table-list', href: 'admin-users-report.html' }
-];
-function renderSidebar(){
-  const nav = document.getElementById('sidebar-nav');
-  let html = '', pendingSection = null;
-  NAV_ITEMS.forEach(item => {
-    if (item.section) { pendingSection = item.section; return; }
-    if (!item.always && !can(item.key, item.sub)) return;
-    if (pendingSection) { html += `<div class="nav-section">${pendingSection}</div>`; pendingSection = null; }
-    const activeClass = item.href === 'attendance-report.html' ? 'active' : '';
-    html += `<a class="nav-link ${activeClass}" href="${item.href}"><i class="fa-solid ${item.icon}"></i> ${item.label}</a>`;
-  });
-  nav.innerHTML = html || `<p style="padding:14px 12px;font-size:12.5px;color:var(--text-3);">No modules assigned yet.</p>`;
-}
-renderSidebar();
-document.getElementById('admin-name').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-document.getElementById('admin-position').textContent = localStorage.getItem('vrmic_admin_position') || '';
-
-if (!can('attendance', 'report')) {
-  document.querySelector('.wrap').innerHTML = `<div style="color:var(--danger);padding:20px;">You do not have permission to view this report. Contact the administrator.</div>`;
-} else {
-
-function typeBadgeClass(t){ return t === 'Oral' ? 'badge-oral' : t === 'Poster' ? 'badge-poster' : ''; }
-function attCell(v){ return String(v).toUpperCase() === 'TRUE' ? '<span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Present</span>' : '<span class="badge badge-neutral">—</span>'; }
-
-let allRows = [];
-
-function applyFilters(){
-  const q = document.getElementById('search-input').value.trim().toLowerCase();
-  const type = document.getElementById('filter-type').value;
-  const day = document.getElementById('filter-day').value;
-  return allRows
-    .filter(r => r.Mode !== 'Online')
-    .filter(r => {
-      if (q && !((r.Name||'').toLowerCase().includes(q) || (r.ID||'').toLowerCase().includes(q))) return false;
-      if (type && r.ParticipantType !== type) return false;
-      if (day === '1' && String(r.Day1Attendance).toUpperCase() !== 'TRUE') return false;
-      if (day === '2' && String(r.Day2Attendance).toUpperCase() !== 'TRUE') return false;
-      if (day === '3' && String(r.Day3Attendance).toUpperCase() !== 'TRUE') return false;
-      if (day === 'none' && (String(r.Day1Attendance).toUpperCase() === 'TRUE' || String(r.Day2Attendance).toUpperCase() === 'TRUE' || String(r.Day3Attendance).toUpperCase() === 'TRUE')) return false;
-      return true;
-    });
-}
-
-function renderTable(){
-  const rows = applyFilters();
-  const table = document.getElementById('report-table');
-  const empty = document.getElementById('empty-state');
-  const d1 = rows.filter(r => String(r.Day1Attendance).toUpperCase()==='TRUE').length;
-  const d2 = rows.filter(r => String(r.Day2Attendance).toUpperCase()==='TRUE').length;
-  const d3 = rows.filter(r => String(r.Day3Attendance).toUpperCase()==='TRUE').length;
-  document.getElementById('stat-strip').innerHTML = `<div class="stat-pill">Showing: <b>${rows.length}</b></div><div class="stat-pill">Day 1 present: <b>${d1}</b></div><div class="stat-pill">Day 2 present: <b>${d2}</b></div><div class="stat-pill">Day 3 present: <b>${d3}</b></div>`;
-  if (!rows.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
-  empty.style.display = 'none'; table.style.display = 'table';
-  document.getElementById('table-body').innerHTML = rows.map(r => `
-    <tr>
-      <td class="id-cell">${escapeHtml(r.ID)}</td>
-      <td class="name-cell">${escapeHtml(r.Name)}</td>
-      <td>${r.ParticipantType ? `<span class="badge ${typeBadgeClass(r.ParticipantType)}">${escapeHtml(r.ParticipantType)}</span>` : '—'}</td>
-      <td>${escapeHtml(r.Institution || '—')}</td>
-      <td>${attCell(r.Day1Attendance)}</td>
-      <td>${attCell(r.Day2Attendance)}</td>
-      <td>${attCell(r.Day3Attendance)}</td>
-    </tr>`).join('');
-}
-
-async function loadData(){
-  document.getElementById('loading-state').style.display = 'block';
-  document.getElementById('report-table').style.display = 'none';
-  document.getElementById('empty-state').style.display = 'none';
-  try {
-    const res = await callApi('adminListParticipants', {});
-    if (!res.ok) {
-      if (/session/i.test(res.error||'')) { logout(); return; }
-      alert(res.error || 'Could not load attendance.');
-      return;
-    }
-    allRows = res.participants;
-    renderTable();
-  } catch (err) {
-    alert('Could not reach the server. Check your connection and try again.');
-  } finally {
-    document.getElementById('loading-state').style.display = 'none';
+async function boot() {
+  const r = await VR.api('adminAttendanceReport', { kind });
+  if (!r.ok) { showErr(r.error || 'Could not load the report.'); $('tb').innerHTML = '<tr><td class="empty">Could not load.</td></tr>'; return; }
+  data = r;
+  $('fsess').innerHTML = '<option value="">All sessions</option>' + r.sessions.map(s => '<option value="' + esc(s.id) + '">' + esc(s.title) + ' — ' + esc(fmtD(s.date)) + '</option>').join('');
+  if (isStudent) {
+    const cl = [...new Set(r.rows.map(x => x.class).filter(Boolean))].sort();
+    $('fcls').innerHTML = '<option value="">All classes</option>' + cl.map(c => '<option>' + esc(c) + '</option>').join(''); $('fcls').style.display = '';
   }
+  render();
 }
 
-['search-input'].forEach(id => document.getElementById(id).addEventListener('input', renderTable));
-['filter-type','filter-day'].forEach(id => document.getElementById(id).addEventListener('change', renderTable));
-document.getElementById('refresh-btn').addEventListener('click', loadData);
-
-document.getElementById('export-btn').addEventListener('click', function(){
-  const rows = applyFilters();
-  const headers = ['VRMIC ID','Name','Category','Institution','Day 1','Day 2','Day 3'];
-  const csvRows = [headers.join(',')];
-  rows.forEach(r => {
-    const line = [
-      r.ID, r.Name, r.ParticipantType, r.Institution,
-      String(r.Day1Attendance).toUpperCase()==='TRUE' ? 'Present' : '',
-      String(r.Day2Attendance).toUpperCase()==='TRUE' ? 'Present' : '',
-      String(r.Day3Attendance).toUpperCase()==='TRUE' ? 'Present' : ''
-    ].map(v => '"' + String(v||'').replace(/"/g,'""') + '"');
-    csvRows.push(line.join(','));
-  });
-  const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'VRMIC2026_Attendance_' + new Date().toISOString().slice(0,10) + '.csv';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-
-loadData();
+function matches(p) {
+  const t = $('q').value.trim().toLowerCase();
+  if (t && String(p.id).toLowerCase().indexOf(t) < 0 && String(p.name).toLowerCase().indexOf(t) < 0) return false;
+  if (isStudent && $('fcls').value && p.class !== $('fcls').value) return false;
+  const st = $('fst').value, ss = sessList();
+  if (st && !ss.some(s => (p.cells[s.id] || {}).status === st)) return false;
+  const pc = $('fpc').value;
+  if (pc === 'lt75' && !(p.percent !== null && p.percent < 75)) return false;
+  if (pc === 'ge75' && !(p.percent !== null && p.percent >= 75)) return false;
+  if (pc === 'eq100' && p.percent !== 100) return false;
+  return true;
 }
+
+function render() {
+  if (!data) return;
+  const ss = sessList();
+  view = data.rows.filter(matches);
+  // header
+  const sub = isStudent ? '<th>Class</th>' : '<th>Institution</th>';
+  $('th').innerHTML = '<tr><th style="width:26px;"></th><th>ID</th><th>Name</th>' + sub + ss.map(s => '<th title="' + esc(s.title) + '">' + esc(s.title) + '<br><span style="text-transform:none;letter-spacing:0;">' + esc(fmtD(s.date)) + '</span></th>').join('') + '<th>Attended</th><th>%</th></tr>';
+  const cols = 6 + ss.length;
+  $('tb').innerHTML = view.length ? view.map(p => {
+    const o = open.has(p.id);
+    let h = '<tr data-id="' + esc(p.id) + '" style="cursor:pointer;"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td><td class="id">' + esc(p.id) + '</td><td class="nm">' + esc(p.name) + '</td><td>' + esc(isStudent ? p.class : p.institution) + '</td>'
+      + ss.map(s => '<td>' + badge((p.cells[s.id] || {}).status) + '</td>').join('')
+      + '<td>' + p.attended + ' / ' + p.total + '</td><td><b>' + (p.percent === null ? '—' : p.percent + '%') + '</b></td></tr>';
+    if (o) h += '<tr><td></td><td colspan="' + (cols - 1) + '" style="background:rgba(232,201,131,.04);"><div style="display:flex;gap:12px;flex-wrap:wrap;">' + ss.map(s => {
+      const c = p.cells[s.id] || {};
+      return '<div class="card" style="padding:10px 14px;min-width:190px;margin:0;"><div style="font-weight:600;color:var(--text-1);">' + esc(s.title) + '</div><div class="tiny" style="display:block;">' + esc(fmtD(s.date)) + '</div>'
+        + '<div style="margin:6px 0;">' + badge(c.status) + '</div><div class="tiny" style="display:block;">In: ' + esc(c.in ? hm12(c.in) : '—') + ' · Out: ' + esc(c.out ? hm12(c.out) : '—') + (c.source ? '<br>Source: ' + esc(c.source) : '') + '</div></div>';
+    }).join('') + '</div></td></tr>';
+    return h;
+  }).join('') : '<tr><td class="empty" colspan="' + cols + '">' + (data.rows.length ? 'No one matches these filters.' : 'No ' + label.toLowerCase() + 's found.') + '</td></tr>';
+  stats(ss); $('info').textContent = 'Showing ' + view.length + ' of ' + data.rows.length + ' · as of ' + fmtD(data.today) + ' (IST)';
+}
+
+function stats(ss) {
+  let pr = 0, la = 0, ab = 0, mi = 0;
+  view.forEach(p => ss.forEach(s => { const st = (p.cells[s.id] || {}).status; if (st === 'Present') pr++; else if (st === 'Late') la++; else if (st === 'Absent') ab++; else if (st === 'Missing exit') mi++; }));
+  const avg = view.filter(p => p.percent !== null);
+  const a = avg.length ? Math.round(avg.reduce((t, p) => t + p.percent, 0) * 10 / avg.length) / 10 : null;
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-users', label + 's', view.length, data.sessions.length + ' session(s)') + c('fa-circle-check', 'Present + Late', pr + la, pr + ' on time · ' + la + ' late')
+    + c('fa-circle-xmark', 'Absent', ab, mi ? mi + ' missing exit' : 'for sessions already started') + c('fa-percent', 'Average attendance', a === null ? '—' : a + '%', 'of the people shown');
+}
+
+['q', 'fcls', 'fsess', 'fst', 'fpc'].forEach(i => $(i).addEventListener(i === 'q' ? 'input' : 'change', render));
+$('tb').onclick = e => { const tr = e.target.closest('tr[data-id]'); if (!tr) return; const id = tr.dataset.id; open.has(id) ? open.delete(id) : open.add(id); render(); };
+
+function exportData() {
+  const ss = sessList();
+  const headers = ['ID', 'Name', isStudent ? 'Class' : 'Institution'].concat(ss.map(s => s.title + ' (' + fmtD(s.date) + ')')).concat(['Attended', 'Total', '%']);
+  const rows = view.map(p => [p.id, p.name, isStudent ? p.class : p.institution].concat(ss.map(s => { const c = p.cells[s.id] || {}; return (c.status || '—') + (c.in ? ' · in ' + hm12(c.in) : '') + (c.out ? ' · out ' + hm12(c.out) : ''); })).concat([p.attended, p.total, p.percent === null ? '' : p.percent]));
+  return { headers, rows };
+}
+VR.exportBar($('xp'), { name: label + '_Attendance_Report', title: label + ' attendance report', imageEl: () => $('tc'), getData: exportData,
+  pdfOpts: { orientation: 'landscape' } });
+
+boot();
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Creation | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-user-graduate" style="color:var(--gold-light);"></i> Student creation</h1><a class="btn btn-sm" href="students-report.html?kind=student"><i class="fa-solid fa-qrcode"></i> Student list &amp; QR codes</a></div>
+<div class="wrap">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+
+  <div class="card">
+    <h3><i class="fa-solid fa-user-plus"></i> Add one student</h3>
+    <div class="grid3">
+      <div><label>Student name *</label><input id="a-name" maxlength="100" autocomplete="off"></div>
+      <div><label>Class *</label><input id="a-class" maxlength="60" placeholder="e.g. II B.Sc Zoology" autocomplete="off"></div>
+      <div><label>Department number *</label><input id="a-dept" maxlength="30" autocomplete="off"><div class="hint">Must be unique.</div></div>
+    </div>
+    <div class="hint" style="margin:12px 0;">The student ID is generated automatically (VRMIC26-S001, S002, …).</div>
+    <button class="btn btn-gold" id="a-save"><i class="fa-solid fa-plus"></i> Create student</button>
+    <div id="a-done" style="margin-top:14px;"></div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fa-solid fa-file-excel"></i> Import from Excel</h3>
+    <p style="font-size:13px;color:var(--text-3);margin-bottom:12px;">The first row must have the headings <b>Name</b>, <b>Class</b> and <b>Department Number</b>. Rows with a repeated department number are rejected and listed below.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="btn btn-sm" id="tpl"><i class="fa-solid fa-download"></i> Download template</button>
+      <input type="file" id="file" accept=".xlsx,.xls,.csv" style="max-width:340px;">
+      <button class="btn btn-gold" id="imp" disabled><i class="fa-solid fa-file-import"></i> Import</button>
+    </div>
+    <div id="prev" style="margin-top:12px;font-size:13px;color:var(--text-2);"></div>
+    <div id="res" style="margin-top:14px;"></div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('students', 'transaction')) { VR.denied('You do not have permission to create students.'); return; }
+const XLSX_URL = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+let parsed = [];
+
+async function create(force) {
+  hideAlerts();
+  const body = { name: $('a-name').value.trim(), class: $('a-class').value.trim(), deptNo: $('a-dept').value.trim(), force: !!force };
+  if (!body.name || !body.class || !body.deptNo) return showErr('Enter the name, class and department number.');
+  const r = await VR.api('adminAddStudent', body);
+  if (r.warning) { if (confirm(r.error)) return create(true); return; }
+  if (!r.ok) return showErr(r.error || 'Could not create the student.');
+  $('a-done').innerHTML = '<div class="alert alert-success show" style="display:block;margin:0;"><i class="fa-solid fa-circle-check"></i> Created <span class="id">' + esc(r.id) + '</span> — ' + esc(body.name) + ' (' + esc(body.class) + ', dept no. ' + esc(body.deptNo) + '). The QR code is in the <a href="students-report.html?kind=student">student list</a>.</div>';
+  ['a-name', 'a-dept'].forEach(i => $(i).value = ''); $('a-name').focus();   // class stays: students are usually added class by class
+}
+$('a-save').onclick = function () { return VR.busy(this, 'Saving…', () => create(false)); };
+['a-name', 'a-class', 'a-dept'].forEach(i => $(i).addEventListener('keydown', e => { if (e.key === 'Enter') $('a-save').click(); }));
+
+$('tpl').onclick = async function () {
+  await VR.load(XLSX_URL);
+  const ws = XLSX.utils.aoa_to_sheet([['Name', 'Class', 'Department Number'], ['Example Student', 'II B.Sc Zoology', '21ZOO001']]);
+  ws['!cols'] = [{ wch: 28 }, { wch: 24 }, { wch: 22 }];
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Students'); XLSX.writeFile(wb, 'VRMIC2026_Student_Import_Template.xlsx');
+};
+
+const norm = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+const pick = (row, names) => { const k = Object.keys(row).find(h => names.indexOf(norm(h)) > -1); return k === undefined ? undefined : String(row[k]).trim(); };
+$('file').onchange = async function () {
+  parsed = []; $('imp').disabled = true; $('res').innerHTML = ''; $('prev').textContent = '';
+  const f = this.files[0]; if (!f) return;
+  try {
+    await VR.load(XLSX_URL);
+    const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' });
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
+    if (!rows.length) return showErr('The file has no data rows.');
+    const first = rows[0];
+    if (pick(first, ['name', 'studentname']) === undefined || pick(first, ['class', 'classname']) === undefined || pick(first, ['departmentnumber', 'departmentno', 'deptno', 'deptnumber', 'deptnum']) === undefined)
+      return showErr('The first row must have the headings: Name, Class, Department Number.');
+    parsed = rows.map((r, i) => ({ rowNo: i + 2, name: pick(r, ['name', 'studentname']), class: pick(r, ['class', 'classname']), deptNo: pick(r, ['departmentnumber', 'departmentno', 'deptno', 'deptnumber', 'deptnum']) }))
+      .filter(r => r.name || r.class || r.deptNo);
+    $('prev').innerHTML = '<b>' + parsed.length + '</b> row(s) found in <i>' + esc(f.name) + '</i>. Click Import to add them.';
+    $('imp').disabled = !parsed.length; hideAlerts();
+  } catch (e) { showErr('Could not read this file. Use an .xlsx, .xls or .csv file.'); }
+};
+$('imp').onclick = function () {
+  return VR.busy(this, 'Importing…', async () => {
+    hideAlerts();
+    const r = await VR.api('adminImportStudents', { rows: parsed });
+    if (!r.ok) return showErr(r.error || 'Import failed.');
+    let h = '<div class="alert alert-success show" style="display:block;"><b>' + r.added + '</b> student(s) added, <b>' + r.rejected.length + '</b> rejected.</div>';
+    if (r.warnings.length) h += '<div class="banner warn"><i class="fa-solid fa-triangle-exclamation"></i><div><b>' + r.warnings.length + ' possible duplicate(s)</b> (same name and class, different department number; added anyway):<br>' + r.warnings.slice(0, 15).map(w => 'Row ' + w.row + ' — ' + esc(w.message)).join('<br>') + (r.warnings.length > 15 ? '<br>…' : '') + '</div></div>';
+    if (r.rejected.length) {
+      h += '<div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Dept no.</th><th>Why rejected</th></tr></thead><tbody>' +
+        r.rejected.map(x => '<tr><td>' + x.row + '</td><td>' + esc(x.name) + '</td><td>' + esc(x.class) + '</td><td>' + esc(x.deptNo) + '</td><td style="color:#e8988c;">' + esc(x.reason) + '</td></tr>').join('') + '</tbody></table></div></div>' +
+        '<p style="margin-top:10px;"><button class="btn btn-sm" id="dlrej"><i class="fa-solid fa-file-csv"></i> Download rejected rows</button></p>';
+    }
+    $('res').innerHTML = h; parsed = []; $('imp').disabled = true; $('file').value = ''; $('prev').textContent = '';
+    const d = $('dlrej'); if (d) d.onclick = () => VR.exportCSV('Rejected_Students', ['Row', 'Name', 'Class', 'Department Number', 'Reason'], r.rejected.map(x => [x.row, x.name, x.class, x.deptNo, x.reason]));
+  });
+};
+})();
+</script>
+</body>
+</html>

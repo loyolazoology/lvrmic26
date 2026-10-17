@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance QR Scan | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.scan-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start;}
+@media(max-width:860px){.scan-grid{grid-template-columns:1fr;}}
+.vid{position:relative;background:#000;border-radius:14px;overflow:hidden;aspect-ratio:4/3;border:1px solid var(--navy-border);}
+.vid video{width:100%;height:100%;object-fit:cover;display:block;}
+.vid .frame{position:absolute;inset:18%;border:3px solid rgba(232,201,131,.85);border-radius:14px;pointer-events:none;box-shadow:0 0 0 999px rgba(0,0,0,.25);}
+.vid .off{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--text-3);font-size:14px;text-align:center;padding:20px;}
+.res{border-radius:14px;padding:22px 18px;text-align:center;border:2px solid var(--navy-border);min-height:170px;display:flex;flex-direction:column;justify-content:center;gap:6px;}
+.res .big{font-size:30px;font-weight:700;line-height:1.15;}
+.res .who{font-size:20px;font-weight:600;}
+.res .sub{font-size:13px;color:var(--text-2);}
+.res.good{background:rgba(79,169,128,.18);border-color:rgba(79,169,128,.7);color:#bff0d6;}
+.res.late{background:rgba(219,164,60,.18);border-color:rgba(219,164,60,.7);color:#f6dca0;}
+.res.bad{background:rgba(216,105,90,.2);border-color:rgba(216,105,90,.75);color:#ffc4bb;}
+.seg{display:flex;gap:0;border:1px solid var(--navy-border);border-radius:10px;overflow:hidden;}
+.seg button{flex:1;padding:12px;background:transparent;border:0;color:var(--text-2);font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;}
+.seg button.on{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;}
+.hist{max-height:260px;overflow-y:auto;font-size:13px;}
+.hist div{padding:7px 4px;border-bottom:1px solid rgba(226,187,120,.08);display:flex;justify-content:space-between;gap:10px;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-qrcode" style="color:var(--gold-light);"></i> <span id="ttl">Attendance entry by scan</span></h1><a class="btn btn-sm" id="tomanual" href="#"><i class="fa-solid fa-keyboard"></i> Manual entry</a></div>
+<div class="wrap">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="banner" id="rule"><i class="fa-solid fa-circle-info"></i><div><b>Scanning works only on the day of the session.</b> A QR code scanned on any other day is rejected by the server.</div></div>
+
+  <div class="card">
+    <div class="grid">
+      <div><label>Session (today) *</label><select id="sess"></select><div class="hint" id="sess-h"></div></div>
+      <div><label>Mark</label><div class="seg" id="seg"><button data-d="in" class="on">ENTRY (IN)</button><button data-d="out" id="b-out">EXIT (OUT)</button></div></div>
+    </div>
+  </div>
+
+  <div class="scan-grid">
+    <div>
+      <div class="vid"><video id="v" playsinline muted></video><div class="frame" id="fr" style="display:none;"></div><div class="off" id="off">Camera is off. Click “Start camera”.</div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+        <button class="btn btn-gold" id="start"><i class="fa-solid fa-video"></i> Start camera</button>
+        <button class="btn" id="stop" disabled><i class="fa-solid fa-video-slash"></i> Stop</button>
+        <button class="btn btn-sm" id="flip" style="display:none;"><i class="fa-solid fa-camera-rotate"></i> Switch camera</button>
+      </div>
+      <div class="hint" style="margin-top:8px;">Hold the QR code inside the gold frame. The result appears on the right and a beep confirms it. The same code is ignored for 60 seconds after a scan.</div>
+    </div>
+    <div>
+      <div class="res" id="res"><div class="big" style="color:var(--text-3);">Ready</div><div class="sub">Waiting for a QR code…</div></div>
+      <div class="card" style="margin-top:14px;padding:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><b>This device: <span id="n">0</span> scanned</b><span id="q-ind"></span></div>
+        <div class="hist" id="hist"><div style="color:var(--text-3);">No scans yet.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'studentAttendance' : 'attendance', label = isStudent ? 'Student' : 'Participant';
+const JSQR = 'https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';
+$('ttl').textContent = label + ' attendance entry by scan'; document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
+$('tomanual').href = 'attendance-entry.html?kind=' + kind;
+if (!VR.can(MOD, 'transaction')) { VR.denied('You do not have permission to mark attendance.'); return; }
+
+const QKEY = 'vrmic_scan_queue_' + kind;
+let ctx = null, dir = 'in', stream = null, raf = 0, facing = 'environment', busy = false, count = 0;
+const recent = {};   // qr -> time of last scan (60 s duplicate window)
+const getQ = () => { try { return JSON.parse(localStorage.getItem(QKEY) || '[]'); } catch (e) { return []; } };
+const setQ = q => { try { localStorage.setItem(QKEY, JSON.stringify(q)); } catch (e) {} drawQ(); };
+const sel = () => ctx && ctx.sessions.find(s => s.id === $('sess').value);
+
+function drawQ() { const n = getQ().length; $('q-ind').innerHTML = n ? '<button class="btn btn-sm" id="sync"><i class="fa-solid fa-rotate"></i> ' + n + ' waiting to sync</button>' : '<span class="tiny" style="display:inline;color:var(--teal-light);">All synced</span>'; const b = $('sync'); if (b) b.onclick = syncQ; }
+
+function beep(ok) {
+  try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination); o.frequency.value = ok ? 880 : 220; g.gain.value = .15; o.start(); o.stop(a.currentTime + (ok ? .12 : .35)); } catch (e) {}
+  try { if (navigator.vibrate) navigator.vibrate(ok ? 60 : [120, 60, 120]); } catch (e) {}
+}
+function show(cls, big, who, sub) { $('res').className = 'res ' + cls; $('res').innerHTML = '<div class="big">' + esc(big) + '</div>' + (who ? '<div class="who">' + esc(who) + '</div>' : '') + (sub ? '<div class="sub">' + esc(sub) + '</div>' : ''); }
+function hist(ok, text) { const h = $('hist'); if (!count) h.innerHTML = ''; count++; $('n').textContent = count; const d = document.createElement('div'); d.innerHTML = '<span>' + esc(text) + '</span><span style="color:' + (ok ? 'var(--teal-light)' : '#e8988c') + ';">' + new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true }) + '</span>'; h.prepend(d); }
+
+async function boot() {
+  const r = await VR.api('adminAttendanceContext', { kind });
+  if (!r.ok) return showErr(r.error || 'Could not load.');
+  ctx = r; ctx.sessions = r.sessions.filter(s => s.date === r.today);   // scanning is only ever for today
+  if (!ctx.sessions.length) { $('sess').innerHTML = '<option value="">No session today</option>'; $('sess-h').textContent = 'No session is scheduled for today (' + fmtD(r.today) + '). Ask the Convener to create one in Configuration.'; $('start').disabled = true; return; }
+  $('sess').innerHTML = ctx.sessions.map(s => '<option value="' + esc(s.id) + '">' + esc(s.title) + ' · entry ' + esc(hm12(s.entry)) + '</option>').join(''); onSession();
+}
+function onSession() { const s = sel(); if (!s) return; const hasOut = !!(s.exitRequired || s.exit); $('b-out').style.display = hasOut ? '' : 'none'; if (!hasOut) setDir('in'); $('sess-h').textContent = 'On time until ' + (s.onTime ? hm12(s.onTime) : '—') + ' · entry closes ' + (s.lateUntil ? hm12(s.lateUntil) : '—'); }
+$('sess').onchange = onSession;
+function setDir(d) { dir = d; document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.d === d)); }
+$('seg').onclick = e => { const b = e.target.closest('button'); if (b) setDir(b.dataset.d); };
+
+/* ---- camera ---- */
+async function start() {
+  hideAlerts();
+  try {
+    await VR.load(JSQR);
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing, width: { ideal: 1280 } }, audio: false });
+    const v = $('v'); v.srcObject = stream; await v.play();
+    $('off').style.display = 'none'; $('fr').style.display = ''; $('start').disabled = true; $('stop').disabled = false;
+    navigator.mediaDevices.enumerateDevices().then(d => { if (d.filter(x => x.kind === 'videoinput').length > 1) $('flip').style.display = ''; });
+    loop();
+  } catch (e) { showErr('Could not open the camera. Allow camera access for this site in the browser, or use Manual entry.'); }
+}
+function stop() { cancelAnimationFrame(raf); if (stream) stream.getTracks().forEach(t => t.stop()); stream = null; $('v').srcObject = null; $('off').style.display = ''; $('fr').style.display = 'none'; $('start').disabled = false; $('stop').disabled = true; }
+$('start').onclick = start; $('stop').onclick = stop; $('flip').onclick = () => { facing = facing === 'environment' ? 'user' : 'environment'; stop(); start(); };
+window.addEventListener('pagehide', stop);
+
+const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+function loop() {
+  const v = $('v');
+  if (v.readyState === v.HAVE_ENOUGH_DATA && !busy) {
+    const w = v.videoWidth, h = v.videoHeight, sc = Math.min(1, 640 / w); cv.width = Math.round(w * sc); cv.height = Math.round(h * sc);
+    cx.drawImage(v, 0, 0, cv.width, cv.height);
+    const c = window.jsQR && jsQR(cx.getImageData(0, 0, cv.width, cv.height).data, cv.width, cv.height, { inversionAttempts: 'dontInvert' });
+    if (c && c.data) handle(c.data.trim());
+  }
+  raf = requestAnimationFrame(loop);
+}
+
+async function handle(qr) {
+  const now = Date.now(); if (recent[qr] && now - recent[qr] < 60000) return;   // same code within 60 s: ignore
+  const s = sel(); if (!s) return;
+  recent[qr] = now; busy = true;
+  const item = { qr, sessionId: s.id, direction: dir, scannedAt: new Date().toISOString() };
+  try { await send(item, true); } finally { setTimeout(() => { busy = false; }, 700); }
+}
+async function send(item, live) {
+  let r;
+  try { r = await VR.api('adminRecordAttendance', { kind, sessionId: item.sessionId, direction: item.direction, source: 'scan', qr: item.qr, scannedAt: item.scannedAt }); }
+  catch (e) {   // no network: keep the scan and send it later
+    if (live) { const q = getQ(); q.push(item); setQ(q); beep(true); show('late', 'Saved offline', '', 'It will be sent when the connection returns.'); hist(true, 'Saved offline'); }
+    return 'offline';
+  }
+  if (r && r.sessionExpired) return 'offline';
+  if (live) {
+    if (r.ok) { beep(true); show(r.late ? 'late' : 'good', (r.direction === 'out' ? 'EXIT ' : '') + (r.late ? 'LATE' : (r.direction === 'out' ? 'RECORDED' : 'PRESENT')), r.name, r.id + (r.sub ? ' · ' + r.sub : '') + ' · ' + r.time); hist(true, r.name + ' — ' + r.status); }
+    else { beep(false); show(r.duplicate ? 'late' : 'bad', r.duplicate ? 'ALREADY MARKED' : 'REJECTED', r.name || '', r.error || 'Could not mark.'); hist(false, (r.name || 'Unknown') + ' — ' + (r.error || 'rejected')); }
+  }
+  return r;
+}
+let syncing = false;
+async function syncQ() {
+  if (syncing) return; syncing = true; const q = getQ(), keep = []; let ok = 0, bad = 0;
+  for (const it of q) { const r = await send(it, false); if (r === 'offline') keep.push(it); else if (r && (r.ok || r.duplicate)) ok++; else bad++; }
+  setQ(keep); syncing = false;
+  if (ok || bad) showOk(ok + ' saved scan(s) synced' + (bad ? ', ' + bad + ' rejected by the server (outside the allowed day, forged code, or already marked).' : '.'));
+}
+window.addEventListener('online', syncQ);
+drawQ(); boot().then(() => { if (getQ().length) syncQ(); });
+})();
+</script>
+</body>
+</html>
