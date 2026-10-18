@@ -8,7 +8,7 @@
   const VR = (window.VR = {});
   VR.URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
   // ---- where things live (change here ONLY if the site folders move) ----
-  VR.LOGIN_URL = '/vrmic26/admin-login.html';   // https://vrmic26.vercel.app/vrmic26/admin-login.html
+  VR.LOGIN_URL = '/admin-login.html';   // https://vrmic26.vercel.app/vrmic26/admin-login.html
   VR.HOME_URL  = '/admin/home.html';            // https://vrmic26.vercel.app/admin/home.html
   VR.token = () => localStorage.getItem('vrmic_admin_token') || '';
   VR.esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
