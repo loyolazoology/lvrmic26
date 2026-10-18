@@ -138,6 +138,9 @@ const MENU = [
  { id:'participants', label:'Participants', icon:'fa-users', mod:'participants',
    tx:[['Participant creation','participants-manage.html','fa-user-plus'],['Participant edit','participants-details.html','fa-user-pen'],['Bulk import and merge','participants-import.html','fa-file-import']],
    rp:[['List view','participants-report.html','fa-table-list'],['Individual view','participants-individual.html','fa-id-card'],['QR codes','students-report.html?kind=participant','fa-qrcode']] },
+ { id:'spot', label:'Spot Registration', icon:'fa-bolt', mod:'spotRegistration',
+   tx:[['New spot registration','spot-registration.html','fa-bolt'],['Payment and badge desk','spot-desk.html','fa-cash-register']],
+   rp:[['Spot registration report','spot-report.html','fa-table-list']] },
  { id:'abstract', label:'Abstracts', icon:'fa-file-lines', mod:'abstract',
    tx:[['Abstract review','abstracts-review.html','fa-file-circle-check'],['Revision requests','abstracts-revision.html','fa-rotate-left'],['Upload on behalf of participant','abstracts-upload.html','fa-file-arrow-up']],
    rp:[['Abstract status report','abstracts-report.html','fa-table-list'],['Review history','abstracts-history.html','fa-clock-rotate-left']] },
@@ -192,7 +195,8 @@ const MENU = [
    rp:[['Admin user report','admin-users-report.html','fa-table-list'],['Audit log','audit-log.html','fa-shield-halved','auditLog']] },
  { id:'trash', label:'Trash and Backups', icon:'fa-trash-can-arrow-up', mod:'trash',
    tx:[['Restore deleted records','trash-manage.html','fa-trash-can-arrow-up']],
-   rp:[['Backup list','backups-report.html','fa-database']] }
+   rp:[['Backup list','backups-report.html','fa-database']] },
+ { id:'help', label:'Help and Guide', icon:'fa-circle-question', href:'help.html', always:true, pinned:true }
 ];
 
 /* ============ helpers ============ */
@@ -200,7 +204,8 @@ const KINDS = { cf:'Configuration', tx:'Transaction', rp:'Report' };
 const perms = () => { try { return JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch (e) { return {}; } };
 const FIELD = ['presentationAccess','attendance','studentAttendance','scoring','liveBoard'];   /* field-team access: no dashboard by default */
 const fieldOnly = () => { const p = perms(), k = Object.keys(p).filter(x => p[x] && (p[x].report || p[x].transaction)); return k.length > 0 && k.every(x => FIELD.indexOf(x) > -1); };
-const itemOk = (g, k, i) => { const m = i[3] || g.mod; return k === 'tx' ? VR.can(m,'transaction') : k === 'rp' ? VR.can(m,'report') : (VR.can(m,'transaction') || VR.can(m,'report')); };
+const isSuper = () => String(localStorage.getItem('vrmic_admin_id') || '') === '1001';   /* Administrator: full access, display only; the server decides for real */
+const itemOk = (g, k, i) => { if (isSuper()) return true; const m = i[3] || g.mod; return k === 'tx' ? VR.can(m,'transaction') : k === 'rp' ? VR.can(m,'report') : (VR.can(m,'transaction') || VR.can(m,'report')); };
 const firstAllowed = () => { for (const g of MENU) for (const k of ['tx','rp']) for (const i of (g[k]||[])) if (itemOk(g,k,i)) return i[1]; return 'dashboard.html'; };
 const DEFAULT_PAGE = () => fieldOnly() ? firstAllowed() : 'dashboard.html';
 const SAFE_PAGE = /^[a-z0-9][a-z0-9_-]*\.html(\?[A-Za-z0-9_=&%.\-]*)?$/i;
@@ -213,7 +218,7 @@ function renderMenu() {
   const q = query.trim().toLowerCase();
   let html = '';
   MENU.forEach(g => {
-    if (g.always) { if (!fieldOnly() && (!q || g.label.toLowerCase().includes(q))) html += `<a class="nl" href="#${g.href}" data-page="${g.href}"><i class="fa-solid ${g.icon} ic"></i>${g.label}</a>`; return; }
+    if (g.always) { if ((g.pinned || !fieldOnly()) && (!q || g.label.toLowerCase().includes(q))) html += `<a class="nl" href="#${g.href}" data-page="${g.href}"><i class="fa-solid ${g.icon} ic"></i>${g.label}</a>`; return; }
     const parts = ['cf','tx','rp'].map(k => [k, (g[k]||[]).filter(i => itemOk(g,k,i) && (!q || (i[0]+' '+g.label).toLowerCase().includes(q)))]).filter(x => x[1].length);
     if (!parts.length) return;
     const open = q ? true : openId === g.id;
@@ -286,7 +291,7 @@ function setAvatar() {
 }
 function showUser() {
   $('uName').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-  $('uPos').textContent = localStorage.getItem('vrmic_admin_position') || localStorage.getItem('vrmic_admin_category') || '';
+  $('uPos').textContent = isSuper() ? 'Administrator (full access)' : (localStorage.getItem('vrmic_admin_position') || localStorage.getItem('vrmic_admin_category') || '');
   setAvatar();
 }
 async function syncSelf() {   /* permissions re-read from the server, so changes apply without a new login */
