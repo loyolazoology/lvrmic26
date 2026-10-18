@@ -4,118 +4,117 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Portal | VRMIC 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
 <style>
-:root{
-  --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
-  --navy-border:rgba(226,187,120,.24);
-  --gold:#c9974f; --gold-light:#e8c983;
-  --teal-light:#6fc9b6;
-  --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
-  --danger:#d8695a;
-  --sidebar-w:272px; --top-h:60px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.5;background:var(--navy-950);display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;}
-button{font-family:inherit;}
-.mono{font-family:'IBM Plex Mono',monospace;}
+:root{--n950:#0a1230;--n900:#0e1938;--n850:#122043;--n800:#152750;--bd:rgba(226,187,120,.24);--gold:#c9974f;--gl:#e8c983;--t1:#f3f5fb;--t2:#b3bcd6;--t3:#8390b3;--sw:280px;--th:60px;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Inter',sans-serif;color:var(--t1);line-height:1.5;background:var(--n950);display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--gl);outline-offset:2px}
+.top{height:var(--th);flex-shrink:0;background:var(--n900);border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:14px;padding:0 16px;z-index:50}
+.ib{width:38px;height:38px;border-radius:9px;border:1px solid var(--bd);background:var(--n850);color:var(--t2);cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s}
+.ib:hover{border-color:var(--gold);color:var(--gl)}
+.ib.spin i{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{height:34px;width:auto}
+.brand b{font-family:'Fraunces',serif;font-weight:500;font-size:15px;white-space:nowrap}
+.brand small{display:block;font-size:10.5px;letter-spacing:.4px;color:var(--t3)}
+.sp1{flex:1}
+.clock{text-align:right;line-height:1.25;white-space:nowrap}
+.clock .t{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:var(--gl)}
+.clock .d{font-size:11px;color:var(--t3)}
+.last{font-size:11.5px;color:var(--t3);line-height:1.3;text-align:right;max-width:270px}
+.last b{color:var(--t2);display:block;font-size:11px;font-weight:600}
+.user{display:flex;align-items:center;gap:9px;min-width:0;padding-left:12px;border-left:1px solid var(--bd)}
+.av{width:38px;height:38px;border-radius:50%;background:var(--n800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gl);font-size:14px;flex-shrink:0;position:relative;overflow:hidden}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s}
+.av img.ok{opacity:1}
+.av .ld{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:var(--n800)}
+.av.wait .ld{display:flex}
+.av .ld::after{content:"";width:16px;height:16px;border:2px solid rgba(232,201,131,.25);border-top-color:var(--gl);border-radius:50%;animation:spin .8s linear infinite}
+.user b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+.user span{display:block;font-size:11px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+.logout{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:9px;border:1px solid rgba(216,105,90,.4);background:rgba(216,105,90,.1);color:#e8988c;font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0}
+.logout:hover{background:rgba(216,105,90,.2)}
+@media(max-width:1180px){.last{display:none}}
+@media(max-width:820px){.user div,.clock .d,.brand small,.logout span{display:none}.user{padding-left:0;border:none}.top{gap:8px;padding:0 10px}}
+@media(max-width:520px){.brand b{display:none}}
 
-/* ---------- top bar ---------- */
-.top{height:var(--top-h);flex-shrink:0;background:var(--navy-900);border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:14px;padding:0 16px;z-index:50;}
-.icon-btn{width:38px;height:38px;border-radius:9px;border:1px solid var(--navy-border);background:var(--navy-850);color:var(--text-2);cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
-.icon-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-.icon-btn.spin i{animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.brand{display:flex;align-items:center;gap:10px;min-width:0;}
-.brand img{height:34px;width:auto;object-fit:contain;}
-.brand b{font-family:'Fraunces',serif;font-weight:500;font-size:15px;white-space:nowrap;}
-.brand small{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.6px;color:var(--text-3);}
-.spacer{flex:1;}
-.clock{text-align:right;line-height:1.25;white-space:nowrap;}
-.clock .t{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:var(--gold-light);}
-.clock .d{font-size:11px;color:var(--text-3);}
-.last{font-size:11.5px;color:var(--text-3);line-height:1.3;text-align:right;max-width:260px;}
-.last b{color:var(--text-2);font-weight:600;display:block;font-size:10px;letter-spacing:.5px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;}
-.user{display:flex;align-items:center;gap:9px;min-width:0;padding-left:12px;border-left:1px solid var(--navy-border);}
-.avatar{width:34px;height:34px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:13px;flex-shrink:0;}
-.user b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;}
-.user span{display:block;font-size:10.5px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;}
-.logout{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:9px;border:1px solid rgba(216,105,90,.4);background:rgba(216,105,90,.1);color:#e8988c;font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0;}
-.logout:hover{background:rgba(216,105,90,.2);}
-@media(max-width:1180px){.last{display:none;}}
-@media(max-width:820px){.user div,.clock .d,.brand small,.logout span{display:none;}.user{padding-left:0;border:none;}.top{gap:8px;padding:0 10px;}}
-@media(max-width:520px){.brand b{display:none;}}
-
-/* ---------- body ---------- */
-.row{flex:1;display:flex;min-height:0;position:relative;}
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);overflow-y:auto;padding:12px 10px 24px;transition:margin .25s ease;}
-body.collapsed .sidebar{margin-left:calc(-1 * var(--sidebar-w));}
-.scrim{display:none;}
+.row{flex:1;display:flex;min-height:0;position:relative}
+.sidebar{width:var(--sw);flex-shrink:0;background:var(--n900);border-right:1px solid var(--bd);overflow-y:auto;padding:12px 10px 24px;transition:margin .25s ease}
+body.collapsed .sidebar{margin-left:calc(-1*var(--sw))}
+.scrim{display:none}
 @media(max-width:960px){
-  .sidebar{position:absolute;top:0;bottom:0;left:0;z-index:40;margin-left:calc(-1 * var(--sidebar-w));box-shadow:0 0 40px rgba(0,0,0,.5);}
-  body.collapsed .sidebar{margin-left:calc(-1 * var(--sidebar-w));}
-  body.navopen .sidebar{margin-left:0;}
-  body.navopen .scrim{display:block;position:absolute;inset:0;background:rgba(6,10,26,.55);z-index:35;}
-}
-.nav-link,.grp-h,.sub-h{display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;background:none;border:none;cursor:pointer;text-align:left;text-decoration:none;transition:.15s;}
-.nav-link i.ic,.grp-h i.ic,.sub-h i.ic{width:16px;text-align:center;color:var(--text-3);font-size:13px;flex-shrink:0;}
-.nav-link:hover,.grp-h:hover,.sub-h:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
-.nav-link.active{background:rgba(232,201,131,.12);color:var(--gold-light);}
-.nav-link.active i.ic{color:var(--gold-light);}
-.chev{margin-left:auto;font-size:10px;color:var(--text-3);transition:transform .2s;}
-.open > .grp-h .chev,.open > .sub-h .chev{transform:rotate(180deg);}
-.grp{margin:2px 0;}
-.grp-h{font-weight:600;color:var(--text-1);}
-.grp.has-active > .grp-h{color:var(--gold-light);}
-.grp.has-active > .grp-h i.ic{color:var(--gold-light);}
-.grp-b,.sub-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease;}
-.open > .grp-b,.open > .sub-b{grid-template-rows:1fr;}
-.grp-b > div,.sub-b > div{overflow:hidden;min-height:0;}
-.grp-b > div{margin-left:18px;border-left:1px solid var(--navy-border);padding-left:6px;}
-.sub-h{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--text-3);padding:8px 10px;}
-.sub-b > div{padding-left:6px;}
-.sub-b .nav-link{font-size:13px;padding:8px 10px;}
-.empty-nav{padding:14px 12px;font-size:12.5px;color:var(--text-3);}
+.sidebar{position:absolute;top:0;bottom:0;left:0;z-index:40;margin-left:calc(-1*var(--sw));box-shadow:0 0 40px rgba(0,0,0,.5)}
+body.collapsed .sidebar{margin-left:calc(-1*var(--sw))}
+body.navopen .sidebar{margin-left:0}
+body.navopen .scrim{display:block;position:absolute;inset:0;background:rgba(6,10,26,.55);z-index:35}}
+.find{position:relative;margin:0 2px 10px}
+.find i{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--t3)}
+.find input{width:100%;height:36px;border-radius:8px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);padding:0 10px 0 32px;font-size:13px;font-family:inherit}
+.find input::placeholder{color:var(--t3)}
+.nl,.gh{display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;border-radius:8px;color:var(--t2);font-size:13.5px;font-weight:500;background:none;border:none;cursor:pointer;text-align:left;text-decoration:none;transition:.15s}
+.nl i.ic,.gh i.ic{width:16px;text-align:center;color:var(--t3);font-size:13px;flex-shrink:0}
+.nl:hover,.gh:hover{background:rgba(232,201,131,.07);color:var(--t1)}
+.nl.active{background:rgba(232,201,131,.13);color:var(--gl)}
+.nl.active i.ic{color:var(--gl)}
+.chev{margin-left:auto;font-size:10px;color:var(--t3);transition:transform .2s}
+.grp{margin:2px 0}
+.grp.open>.gh .chev{transform:rotate(180deg)}
+.gh{font-weight:600;color:var(--t1)}
+.grp.has>.gh,.grp.has>.gh i.ic{color:var(--gl)}
+.gb{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease}
+.grp.open>.gb{grid-template-rows:1fr}
+.gb>div{overflow:hidden;min-height:0}
+.gi{margin:2px 0 6px 18px;border-left:1px solid var(--bd);padding:2px 0 2px 6px}
+.sec{font-size:11.5px;font-weight:600;color:var(--t3);padding:9px 10px 4px;letter-spacing:.3px}
+.gi .nl{font-size:13px;padding:8px 10px}
+.none{padding:14px 12px;font-size:12.5px;color:var(--t3)}
+.skel{height:38px;margin:6px 2px;border-radius:8px;background:linear-gradient(90deg,var(--n850),var(--n800),var(--n850));background-size:200% 100%;animation:sh 1.2s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.skel,.sp i,.ib.spin i{animation:none}}
 
-/* ---------- content ---------- */
-.main{flex:1;min-width:0;display:flex;flex-direction:column;}
-.crumb{flex-shrink:0;padding:7px 18px;border-bottom:1px solid var(--navy-border);background:rgba(6,11,28,.6);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.4px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.crumb b{color:var(--gold-light);font-weight:500;}
-.frame-wrap{flex:1;position:relative;min-height:0;}
-iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--navy-950);}
-.loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--navy-950);color:var(--text-3);font-size:13px;gap:10px;z-index:5;transition:opacity .2s;}
-.loading.hide{opacity:0;pointer-events:none;}
-.sp{width:18px;height:18px;border:2px solid rgba(232,201,131,.2);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.crumb{flex-shrink:0;padding:8px 18px;border-bottom:1px solid var(--bd);background:rgba(6,11,28,.6);font-size:12px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb b{color:var(--gl);font-weight:500}
+.fw{flex:1;position:relative;min-height:0}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--n950)}
+.loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--n950);color:var(--t3);font-size:13px;z-index:5;transition:opacity .2s}
+.loading.hide{opacity:0;pointer-events:none}
+.ring{width:34px;height:34px;border:3px solid rgba(232,201,131,.2);border-top-color:var(--gl);border-radius:50%;animation:spin .8s linear infinite}
 </style>
 </head>
 <body>
 
 <header class="top">
-  <button class="icon-btn" id="navBtn" title="Show or hide menu" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
-  <div class="brand">
-    <img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'">
-    <div><b id="shortName">VRMIC 2026</b><small>ADMIN PORTAL</small></div>
-  </div>
-  <div class="spacer"></div>
-  <div class="last" id="lastLogin"><b>Last login</b><span>—</span></div>
+  <button class="ib" id="navBtn" title="Show or hide menu" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+  <div class="brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div><b id="shortName">VRMIC 2026</b><small>Admin portal</small></div></div>
+  <div class="sp1"></div>
+  <div class="last" id="lastLogin"><b>Last login</b><span>-</span></div>
   <div class="clock" title="Indian Standard Time"><div class="t" id="clockT">--:--:--</div><div class="d" id="clockD">&nbsp;</div></div>
-  <button class="icon-btn" id="refreshBtn" title="Refresh this page and your permissions" aria-label="Refresh"><i class="fa-solid fa-rotate"></i></button>
-  <button class="icon-btn" id="fsBtn" title="Full screen" aria-label="Full screen"><i class="fa-solid fa-expand"></i></button>
-  <div class="user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="uName">Admin</b><span id="uPos"></span></div></div>
+  <button class="ib" id="refreshBtn" title="Refresh this page and your access" aria-label="Refresh"><i class="fa-solid fa-rotate"></i></button>
+  <button class="ib" id="fsBtn" title="Full screen" aria-label="Full screen"><i class="fa-solid fa-expand"></i></button>
+  <div class="user">
+    <div class="av wait" id="av"><i class="fa-solid fa-user-shield"></i><img id="avImg" alt=""><span class="ld"></span></div>
+    <div><b id="uName">Admin</b><span id="uPos"></span></div>
+  </div>
   <button class="logout" id="logoutBtn" title="Log out"><i class="fa-solid fa-right-from-bracket"></i><span>Log out</span></button>
 </header>
 
 <div class="row">
-  <aside class="sidebar" id="sidebar"><nav id="nav"></nav></aside>
+  <aside class="sidebar" id="sidebar">
+    <div class="find"><i class="fa-solid fa-magnifying-glass"></i><input id="find" type="search" placeholder="Search menu" aria-label="Search menu" autocomplete="off"></div>
+    <nav id="nav"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></nav>
+  </aside>
   <div class="scrim" id="scrim"></div>
   <div class="main">
     <div class="crumb" id="crumb">Dashboard</div>
-    <div class="frame-wrap">
-      <div class="loading" id="loading"><div class="sp"></div> Loading…</div>
+    <div class="fw">
+      <div class="loading" id="loading"><div class="ring"></div><span id="loadTxt">Loading page</span></div>
       <iframe id="frame" title="Admin page" allow="camera; fullscreen; clipboard-write" referrerpolicy="same-origin"></iframe>
     </div>
   </div>
@@ -126,169 +125,183 @@ iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(
 const $ = id => document.getElementById(id), esc = VR.esc;
 if (!VR.token()) location.replace(VR.LOGIN_URL);
 
-/* ================= MENU: defined once. To add a page, add one line here. =================
-   cf = Configuration (needs transaction or report), tx = Transaction (needs transaction), rp = Report (needs report).
-   An item may carry a 4th value: the permission module to check instead of the group's own. */
+/* Photo shown only for the Convener account (ID 1001). */
+const PHOTO_1001 = 'https://lh3.googleusercontent.com/d/1n43Ne3m3JGDymDtjAr8UYSlCNvANstTv=w600?authuser=0';
+
+/* ============ MENU: one place to edit. Item = [label, page, icon, moduleOverride?] ============
+   cf = Configuration, tx = Transaction, rp = Report (shown as small headings inside one dropdown).
+   Visibility: cf needs transaction or report; tx needs transaction; rp needs report. */
 const MENU = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'dashboard.html', always: true },
-  { id: 'participants', label: 'Participants', icon: 'fa-users', mod: 'participants',
-    cf: [['Attendance sessions', 'sessions-config.html?kind=participant', 'fa-clock', 'attendanceConfig']],
-    tx: [['Participant master', 'participants-manage.html', 'fa-user-plus'], ['Participant details', 'participants-details.html', 'fa-user-pen'],
-         ['Attendance entry', 'attendance-entry.html?kind=participant', 'fa-calendar-check', 'attendance'], ['Attendance entry by scan', 'attendance-scan.html?kind=participant', 'fa-qrcode', 'attendance']],
-    rp: [['List view', 'participants-report.html', 'fa-table-list'], ['Individual view', 'participants-individual.html', 'fa-id-card'],
-         ['QR codes', 'students-report.html?kind=participant', 'fa-qrcode'], ['Attendance report', 'attendance-report.html?kind=participant', 'fa-clipboard-list', 'attendance']] },
-  { id: 'students', label: 'Students', icon: 'fa-user-graduate', mod: 'studentAttendance',
-    cf: [['Attendance sessions', 'sessions-config.html?kind=student', 'fa-clock', 'studentConfig']],
-    tx: [['Student creation', 'students-manage.html', 'fa-user-plus', 'students'], ['Attendance entry', 'attendance-entry.html?kind=student', 'fa-calendar-check'], ['Attendance entry by scan', 'attendance-scan.html?kind=student', 'fa-qrcode']],
-    rp: [['Student list & QR codes', 'students-report.html?kind=student', 'fa-address-card', 'students'], ['Attendance report', 'attendance-report.html?kind=student', 'fa-clipboard-list']] },
-  { id: 'abstract', label: 'Abstract', icon: 'fa-file-lines', mod: 'abstract',
-    tx: [['Review', 'abstracts-review.html', 'fa-file-circle-check']],
-    rp: [['Abstract status', 'abstracts-report.html', 'fa-table-list']] },
-  { id: 'slot', label: 'Slot allotment', icon: 'fa-location-crosshairs', mod: 'slot',
-    tx: [['Allot slots', 'slots-manage.html', 'fa-location-crosshairs']],
-    rp: [['Slot report', 'slots-report.html', 'fa-table-list']] },
-  { id: 'presentationAccess', label: 'Presentation access', icon: 'fa-display', mod: 'presentationAccess',
-    rp: [['Venue presentation list', 'presentation-access.html', 'fa-display']] },
-  { id: 'certificates', label: 'Certificates', icon: 'fa-certificate', mod: 'certificates',
-    tx: [['Generate certificate', 'certificates-manage.html', 'fa-certificate']],
-    rp: [['Certificate report', 'certificates-report.html', 'fa-table-list']] },
-  { id: 'receipts', label: 'Receipts', icon: 'fa-receipt', mod: 'receipts',
-    tx: [['Fulfil receipt', 'receipts-manage.html', 'fa-receipt']],
-    rp: [['Receipt report', 'receipts-report.html', 'fa-table-list']] },
-  { id: 'feedback', label: 'Feedback', icon: 'fa-comment-dots', mod: 'feedback',
-    rp: [['Feedback report', 'feedback-report.html', 'fa-comment-dots']] },
-  { id: 'schedule', label: 'Schedule', icon: 'fa-calendar-days', mod: 'schedule',
-    tx: [['Edit schedule', 'schedule-manage.html', 'fa-calendar-days']],
-    rp: [['Schedule report', 'schedule-report.html', 'fa-table-list']] },
-  { id: 'announcements', label: 'Announcements', icon: 'fa-bullhorn', mod: 'announcements',
-    tx: [['Post announcement', 'announcements-manage.html', 'fa-bullhorn']],
-    rp: [['Announcement report', 'announcements-report.html', 'fa-table-list']] },
-  { id: 'mail', label: 'Mail', icon: 'fa-paper-plane', mod: 'mail',
-    tx: [['Send invite', 'mail-send.html', 'fa-paper-plane']],
-    rp: [['Mail log', 'mail-report.html', 'fa-table-list']] },
-  { id: 'volunteers', label: 'Volunteers', icon: 'fa-user-group', mod: 'volunteers',
-    tx: [['Assign volunteers', 'volunteers-manage.html', 'fa-user-group']],
-    rp: [['Volunteer report', 'volunteers-report.html', 'fa-table-list']] },
-  { id: 'settings', label: 'Settings', icon: 'fa-sliders', mod: 'settings',
-    tx: [['Edit settings', 'settings-manage.html', 'fa-sliders']],
-    rp: [['Current settings', 'settings-report.html', 'fa-table-list']] },
-  { id: 'adminUsers', label: 'Admin users', icon: 'fa-user-shield', mod: 'adminUsers',
-    tx: [['Manage admin users', 'admin-users-manage.html', 'fa-user-shield']],
-    rp: [['Admin user report', 'admin-users-report.html', 'fa-table-list']] }
+ { id:'dashboard', label:'Dashboard', icon:'fa-gauge-high', href:'dashboard.html', always:true },
+ { id:'live', label:'Live Event Board', icon:'fa-tower-broadcast', mod:'liveBoard',
+   rp:[['Venue and room status','live-board.html','fa-tower-broadcast']] },
+ { id:'participants', label:'Participants', icon:'fa-users', mod:'participants',
+   tx:[['Participant creation','participants-manage.html','fa-user-plus'],['Participant edit','participants-details.html','fa-user-pen'],['Bulk import and merge','participants-import.html','fa-file-import']],
+   rp:[['List view','participants-report.html','fa-table-list'],['Individual view','participants-individual.html','fa-id-card'],['QR codes','students-report.html?kind=participant','fa-qrcode']] },
+ { id:'abstract', label:'Abstracts', icon:'fa-file-lines', mod:'abstract',
+   tx:[['Abstract review','abstracts-review.html','fa-file-circle-check'],['Revision requests','abstracts-revision.html','fa-rotate-left'],['Upload on behalf of participant','abstracts-upload.html','fa-file-arrow-up']],
+   rp:[['Abstract status report','abstracts-report.html','fa-table-list'],['Review history','abstracts-history.html','fa-clock-rotate-left']] },
+ { id:'slot', label:'Slots and Posters', icon:'fa-location-crosshairs', mod:'slot',
+   tx:[['Slot allotment','slots-manage.html','fa-location-crosshairs'],['No-show and reallocation','slots-noshow.html','fa-user-slash'],['Poster board allotment','posters-manage.html','fa-chalkboard']],
+   rp:[['Slot report','slots-report.html','fa-table-list'],['Free slots','slots-free.html','fa-calendar-plus'],['Poster board map','posters-map.html','fa-map']] },
+ { id:'schedule', label:'Programme and Schedule', icon:'fa-calendar-days', mod:'schedule',
+   tx:[['Schedule editor','schedule-manage.html','fa-calendar-days'],['Chair and judge assignment','chairs-manage.html','fa-gavel']],
+   rp:[['Schedule report','schedule-report.html','fa-table-list'],['Printable programme','programme-print.html','fa-print']] },
+ { id:'scoring', label:'Scoring and Evaluation', icon:'fa-star-half-stroke', mod:'scoring',
+   cf:[['Scoring criteria','scoring-config.html','fa-list-check']],
+   tx:[['Score entry','scoring-entry.html','fa-pen-ruler']],
+   rp:[['Score sheet','scoring-report.html','fa-table-list'],['Rankings and winners','scoring-rank.html','fa-trophy']] },
+ { id:'attendance', label:'Participant Attendance', icon:'fa-calendar-check', mod:'attendance',
+   cf:[['Attendance sessions','sessions-config.html?kind=participant','fa-clock','attendanceConfig']],
+   tx:[['Manual attendance entry','attendance-entry.html?kind=participant','fa-keyboard'],['QR scan attendance','attendance-scan.html?kind=participant','fa-qrcode']],
+   rp:[['Attendance report','attendance-report.html?kind=participant','fa-clipboard-list']] },
+ { id:'students', label:'Student Attendance', icon:'fa-user-graduate', mod:'studentAttendance',
+   cf:[['Attendance sessions','sessions-config.html?kind=student','fa-clock','studentConfig']],
+   tx:[['Student creation','students-manage.html','fa-user-plus','students'],['Manual attendance entry','attendance-entry.html?kind=student','fa-keyboard'],['QR scan attendance','attendance-scan.html?kind=student','fa-qrcode']],
+   rp:[['Student list and QR codes','students-report.html?kind=student','fa-address-card','students'],['Attendance report','attendance-report.html?kind=student','fa-clipboard-list']] },
+ { id:'presentation', label:'Presentations', icon:'fa-display', mod:'presentationAccess',
+   tx:[['Manual PPT upload','ppt-upload.html','fa-file-arrow-up']],
+   rp:[['Venue presentation list','presentation-access.html','fa-display']] },
+ { id:'badges', label:'Badges and ID Cards', icon:'fa-id-badge', mod:'badges',
+   tx:[['Print all or by category','badges-print.html','fa-print']],
+   rp:[['Badge register','badges-report.html','fa-table-list']] },
+ { id:'certificates', label:'Certificates', icon:'fa-certificate', mod:'certificates',
+   cf:[['Certificate template and signature','certificates-template.html','fa-signature']],
+   tx:[['Certificate generation','certificates-manage.html','fa-certificate']],
+   rp:[['Certificate report','certificates-report.html','fa-table-list']] },
+ { id:'receipts', label:'Receipts', icon:'fa-receipt', mod:'receipts',
+   tx:[['Receipt generation','receipts-manage.html','fa-receipt']],
+   rp:[['Receipt report','receipts-report.html','fa-table-list']] },
+ { id:'feedback', label:'Feedback', icon:'fa-comment-dots', mod:'feedback',
+   tx:[['Question builder','feedback-manage.html','fa-pen-to-square']],
+   rp:[['Feedback report','feedback-report.html','fa-comment-dots']] },
+ { id:'mail', label:'Mail', icon:'fa-paper-plane', mod:'mail',
+   tx:[['Send invitation','mail-send.html','fa-paper-plane']],
+   rp:[['Mail log','mail-report.html','fa-table-list']] },
+ { id:'announcements', label:'Announcements', icon:'fa-bullhorn', mod:'announcements',
+   tx:[['Post announcement','announcements-manage.html','fa-bullhorn']],
+   rp:[['Announcement report','announcements-report.html','fa-table-list']] },
+ { id:'volunteers', label:'Volunteers', icon:'fa-user-group', mod:'volunteers',
+   tx:[['Volunteer assignment','volunteers-manage.html','fa-user-group']],
+   rp:[['Volunteer report','volunteers-report.html','fa-table-list']] },
+ { id:'settings', label:'Settings', icon:'fa-sliders', mod:'settings',
+   tx:[['Conference settings','settings-manage.html','fa-sliders']],
+   rp:[['Current settings','settings-report.html','fa-table-list']] },
+ { id:'adminUsers', label:'Users and Audit', icon:'fa-user-shield', mod:'adminUsers',
+   tx:[['Admin user management','admin-users-manage.html','fa-user-shield']],
+   rp:[['Admin user report','admin-users-report.html','fa-table-list'],['Audit log','audit-log.html','fa-shield-halved','auditLog']] },
+ { id:'trash', label:'Trash and Backups', icon:'fa-trash-can-arrow-up', mod:'trash',
+   tx:[['Restore deleted records','trash-manage.html','fa-trash-can-arrow-up']],
+   rp:[['Backup list','backups-report.html','fa-database']] }
 ];
 
-/* ================= helpers ================= */
+/* ============ helpers ============ */
+const KINDS = { cf:'Configuration', tx:'Transaction', rp:'Report' };
 const perms = () => { try { return JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch (e) { return {}; } };
-const FIELD_KEYS = ['presentationAccess', 'attendance', 'studentAttendance'];   // volunteer-type access: no dashboard
-const onlyPresentation = () => { const p = perms(), ks = Object.keys(p).filter(k => p[k] && (p[k].report || p[k].transaction)); return ks.length > 0 && ks.every(k => FIELD_KEYS.indexOf(k) > -1); };
-const DEFAULT_PAGE = () => {
-  if (!onlyPresentation()) return 'dashboard.html';
-  if (VR.can('presentationAccess', 'report')) return 'presentation-access.html';
-  return VR.can('attendance', 'transaction') ? 'attendance-entry.html?kind=participant' : 'attendance-entry.html?kind=student';
-};
-const SAFE_PAGE = /^[a-z0-9][a-z0-9_-]*\.html(\?[A-Za-z0-9_=&%.\-]*)?$/i;   // only our own pages can be framed
+const FIELD = ['presentationAccess','attendance','studentAttendance','scoring','liveBoard'];   /* field-team access: no dashboard by default */
+const fieldOnly = () => { const p = perms(), k = Object.keys(p).filter(x => p[x] && (p[x].report || p[x].transaction)); return k.length > 0 && k.every(x => FIELD.indexOf(x) > -1); };
+const itemOk = (g, k, i) => { const m = i[3] || g.mod; return k === 'tx' ? VR.can(m,'transaction') : k === 'rp' ? VR.can(m,'report') : (VR.can(m,'transaction') || VR.can(m,'report')); };
+const firstAllowed = () => { for (const g of MENU) for (const k of ['tx','rp']) for (const i of (g[k]||[])) if (itemOk(g,k,i)) return i[1]; return 'dashboard.html'; };
+const DEFAULT_PAGE = () => fieldOnly() ? firstAllowed() : 'dashboard.html';
+const SAFE_PAGE = /^[a-z0-9][a-z0-9_-]*\.html(\?[A-Za-z0-9_=&%.\-]*)?$/i;
 const OPEN_KEY = 'vrmic_admin_menu_open';
-const openSet = () => { try { return new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || '[]')); } catch (e) { return new Set(); } };
-const saveOpen = () => { try { localStorage.setItem(OPEN_KEY, JSON.stringify([...openState])); } catch (e) {} };
-let openState = openSet();
+let openId = localStorage.getItem(OPEN_KEY) || '';
+let query = '';
 
-/* ================= menu ================= */
-const KINDS = { cf: ['Configuration', 'fa-gear'], tx: ['Transaction', 'fa-pen-to-square'], rp: ['Report', 'fa-chart-column'] };
-const itemOk = (g, kind, i) => { const m = i[3] || g.mod; return kind === 'tx' ? VR.can(m, 'transaction') : kind === 'rp' ? VR.can(m, 'report') : (VR.can(m, 'transaction') || VR.can(m, 'report')); };
-function section(g, kind, items) {
-  const key = g.id + ':' + kind, label = KINDS[kind][0], icon = KINDS[kind][1];
-  return `<div class="sub ${openState.has(key) ? 'open' : ''}" data-key="${key}">
-    <button class="sub-h" aria-expanded="${openState.has(key)}"><i class="fa-solid ${icon} ic"></i>${label}<i class="fa-solid fa-chevron-down chev"></i></button>
-    <div class="sub-b"><div>${items.map(i => `<a class="nav-link" href="#${i[1]}" data-page="${i[1]}"><i class="fa-solid ${i[2]} ic"></i>${esc(i[0])}</a>`).join('')}</div></div></div>`;
-}
+/* ============ menu ============ */
 function renderMenu() {
-  const can = VR.can;
+  const q = query.trim().toLowerCase();
   let html = '';
   MENU.forEach(g => {
-    if (g.always) { if (!onlyPresentation()) html += `<a class="nav-link" href="#${g.href}" data-page="${g.href}"><i class="fa-solid ${g.icon} ic"></i>${g.label}</a>`; return; }
-    const parts = ['cf', 'tx', 'rp'].map(k => [k, (g[k] || []).filter(i => itemOk(g, k, i))]).filter(x => x[1].length);
+    if (g.always) { if (!fieldOnly() && (!q || g.label.toLowerCase().includes(q))) html += `<a class="nl" href="#${g.href}" data-page="${g.href}"><i class="fa-solid ${g.icon} ic"></i>${g.label}</a>`; return; }
+    const parts = ['cf','tx','rp'].map(k => [k, (g[k]||[]).filter(i => itemOk(g,k,i) && (!q || (i[0]+' '+g.label).toLowerCase().includes(q)))]).filter(x => x[1].length);
     if (!parts.length) return;
-    html += `<div class="grp ${openState.has(g.id) ? 'open' : ''}" data-key="${g.id}">
-      <button class="grp-h" aria-expanded="${openState.has(g.id)}"><i class="fa-solid ${g.icon} ic"></i>${g.label}<i class="fa-solid fa-chevron-down chev"></i></button>
-      <div class="grp-b"><div>${parts.map(x => section(g, x[0], x[1])).join('')}</div></div></div>`;
+    const open = q ? true : openId === g.id;
+    html += `<div class="grp ${open ? 'open' : ''}" data-id="${g.id}"><button class="gh" aria-expanded="${open}"><i class="fa-solid ${g.icon} ic"></i>${esc(g.label)}<i class="fa-solid fa-chevron-down chev"></i></button>
+      <div class="gb"><div class="gi">${parts.map(x => `<div class="sec">${KINDS[x[0]]}</div>` + x[1].map(i => `<a class="nl" href="#${i[1]}" data-page="${i[1]}"><i class="fa-solid ${i[2]} ic"></i>${esc(i[0])}</a>`).join('')).join('')}</div></div></div>`;
   });
-  $('nav').innerHTML = html || '<div class="empty-nav">No modules assigned yet. Contact the administrator.</div>';
+  $('nav').innerHTML = html || `<div class="none">${q ? 'No menu item matches your search.' : 'No modules assigned yet. Please contact the administrator.'}</div>`;
   mark(currentPage());
 }
 $('nav').addEventListener('click', e => {
-  const h = e.target.closest('.grp-h, .sub-h');
-  if (h) {
-    const box = h.parentElement, k = box.dataset.key, on = !box.classList.contains('open');
-    box.classList.toggle('open', on); h.setAttribute('aria-expanded', on); on ? openState.add(k) : openState.delete(k); saveOpen(); return;
-  }
-  if (e.target.closest('.nav-link') && innerWidth <= 960) document.body.classList.remove('navopen');   // close the drawer on phones
+  const h = e.target.closest('.gh');
+  if (h) { const id = h.parentElement.dataset.id, on = !h.parentElement.classList.contains('open');
+    document.querySelectorAll('.grp.open').forEach(x => { x.classList.remove('open'); x.firstElementChild.setAttribute('aria-expanded', false); });
+    if (on) { h.parentElement.classList.add('open'); h.setAttribute('aria-expanded', true); }
+    openId = on ? id : ''; try { localStorage.setItem(OPEN_KEY, openId); } catch (x) {} return; }
+  if (e.target.closest('.nl') && innerWidth <= 960) document.body.classList.remove('navopen');
 });
-function findItem(page) {   // exact match (page + ?query) first, so ?kind=student and ?kind=participant stay distinct
+$('find').addEventListener('input', e => { query = e.target.value; renderMenu(); });
+
+function findItem(page) {
   const base = page.split('?')[0];
-  for (const pass of [0, 1]) for (const g of MENU) {
-    if (g.href && (pass ? g.href === base : g.href === page)) return { g, kind: '', label: g.label, page: g.href };
-    for (const kind of ['cf', 'tx', 'rp']) for (const i of (g[kind] || [])) if (pass ? i[1].split('?')[0] === base : i[1] === page) return { g, kind, label: i[0], page: i[1] };
+  for (const pass of [0,1]) for (const g of MENU) {
+    if (g.href && (pass ? g.href === base : g.href === page)) return { g, kind:'', label:g.label, page:g.href };
+    for (const k of ['cf','tx','rp']) for (const i of (g[k]||[])) if (pass ? i[1].split('?')[0] === base : i[1] === page) return { g, kind:k, label:i[0], page:i[1] };
   }
   return null;
 }
 function mark(page) {
   page = String(page || ''); const base = page.split('?')[0], hit = findItem(page), key = hit ? hit.page : base;
-  document.querySelectorAll('.nav-link.active').forEach(a => a.classList.remove('active'));
-  document.querySelectorAll('.grp.has-active').forEach(a => a.classList.remove('has-active'));
-  const a = document.querySelector(`.nav-link[data-page="${CSS.escape(key)}"]`);
-  if (a) { a.classList.add('active'); const sub = a.closest('.sub'), grp = a.closest('.grp');
-    [sub, grp].forEach(x => { if (x) { x.classList.add('open'); openState.add(x.dataset.key); } }); if (grp) grp.classList.add('has-active'); }
-  $('crumb').innerHTML = hit ? (hit.kind ? `${esc(hit.g.label)} › ${KINDS[hit.kind][0]} › <b>${esc(hit.label)}</b>` : `<b>${esc(hit.label)}</b>`) : esc(base);
+  document.querySelectorAll('.nl.active').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.grp.has').forEach(a => a.classList.remove('has'));
+  const a = document.querySelector(`.nl[data-page="${CSS.escape(key)}"]`);
+  if (a) { a.classList.add('active'); const grp = a.closest('.grp'); if (grp) { grp.classList.add('has'); if (!query) { document.querySelectorAll('.grp.open').forEach(x => x.classList.remove('open')); grp.classList.add('open'); openId = grp.dataset.id; } } }
+  $('crumb').innerHTML = hit ? (hit.kind ? `${esc(hit.g.label)} &rsaquo; ${KINDS[hit.kind]} &rsaquo; <b>${esc(hit.label)}</b>` : `<b>${esc(hit.label)}</b>`) : esc(base);
   document.title = (hit ? hit.label + ' | ' : '') + 'VRMIC 2026 Admin';
 }
 
-/* ================= frame / routing ================= */
+/* ============ frame and routing ============ */
 const frame = $('frame');
 const currentPage = () => { const h = decodeURIComponent(location.hash.slice(1)); return SAFE_PAGE.test(h) ? h : DEFAULT_PAGE(); };
-function load(page) { $('loading').classList.remove('hide'); frame.src = page; }
+function load(page, txt) { $('loadTxt').textContent = txt || 'Loading page'; $('loading').classList.remove('hide'); frame.src = page; }
 frame.addEventListener('load', () => {
   $('loading').classList.add('hide');
-  try {   // keep the address bar, menu highlight and breadcrumb in step with links clicked inside the page
-    const l = frame.contentWindow.location, rel = l.pathname.split('/').pop() + l.search;
-    if (SAFE_PAGE.test(rel)) { history.replaceState(null, '', '#' + rel); mark(rel); }
-  } catch (e) {}
+  try { const l = frame.contentWindow.location, rel = l.pathname.split('/').pop() + l.search; if (SAFE_PAGE.test(rel)) { history.replaceState(null, '', '#' + rel); mark(rel); } } catch (e) {}
 });
 window.addEventListener('hashchange', () => { const p = currentPage(); let cur = ''; try { cur = frame.contentWindow.location.pathname.split('/').pop() + frame.contentWindow.location.search; } catch (e) {} if (p !== cur) load(p); mark(p); });
 
-/* ================= top bar ================= */
-const IST = { timeZone: 'Asia/Kolkata' };
+/* ============ top bar ============ */
+const IST = { timeZone:'Asia/Kolkata' };
 function tick() {
   const n = new Date();
-  $('clockT').textContent = n.toLocaleTimeString('en-GB', Object.assign({ hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }, IST));
-  $('clockD').textContent = n.toLocaleDateString('en-GB', Object.assign({ weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }, IST)) + ' · IST';
+  $('clockT').textContent = n.toLocaleTimeString('en-GB', Object.assign({ hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true }, IST));
+  $('clockD').textContent = n.toLocaleDateString('en-GB', Object.assign({ weekday:'short', day:'2-digit', month:'short', year:'numeric' }, IST)) + ' IST';
 }
 tick(); setInterval(tick, 1000);
 
 function showLastLogin() {
   let l = {}; try { l = JSON.parse(localStorage.getItem('vrmic_admin_last_login') || '{}') || {}; } catch (e) {}
   const d = l.at ? new Date(l.at) : null;
-  $('lastLogin').innerHTML = '<b>Last login</b>' + (d && !isNaN(d)
-    ? esc(d.toLocaleString('en-GB', Object.assign({ day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }, IST))) + (l.ip ? ' · IP ' + esc(l.ip) : '')
-    : 'First login on this account');
+  $('lastLogin').innerHTML = '<b>Last login</b>' + (d && !isNaN(d) ? esc(d.toLocaleString('en-GB', Object.assign({ day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:true }, IST))) + (l.ip ? ' | IP ' + esc(l.ip) : '') : 'First login on this account');
+}
+function setAvatar() {
+  const id = String(localStorage.getItem('vrmic_admin_id') || ''), av = $('av'), img = $('avImg');
+  if (id !== '1001') { av.classList.remove('wait'); img.classList.remove('ok'); return; }
+  if (img.dataset.done) { av.classList.remove('wait'); return; }
+  av.classList.add('wait');
+  img.onload = () => { img.classList.add('ok'); img.dataset.done = 1; av.classList.remove('wait'); };
+  img.onerror = () => av.classList.remove('wait');
+  img.src = PHOTO_1001;
 }
 function showUser() {
   $('uName').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
   $('uPos').textContent = localStorage.getItem('vrmic_admin_position') || localStorage.getItem('vrmic_admin_category') || '';
+  setAvatar();
 }
-async function syncSelf() {   // permissions are re-read from the server so changes by the Convener apply without a new login
+async function syncSelf() {   /* permissions re-read from the server, so changes apply without a new login */
   const r = await VR.api('adminGetSelf', {});
   if (!r.ok) return false;
   const a = r.admin;
-  localStorage.setItem('vrmic_admin_name', a.name || ''); localStorage.setItem('vrmic_admin_position', a.position || '');
-  localStorage.setItem('vrmic_admin_category', a.category || ''); localStorage.setItem('vrmic_admin_permissions', JSON.stringify(a.permissions || {}));
+  [['name',a.name],['position',a.position],['category',a.category],['id',a.id || a.adminId]].forEach(x => localStorage.setItem('vrmic_admin_' + x[0], x[1] == null ? '' : x[1]));
+  localStorage.setItem('vrmic_admin_permissions', JSON.stringify(a.permissions || {}));
   showUser(); renderMenu(); return true;
 }
 
 $('refreshBtn').onclick = async function () {
   const b = this; b.classList.add('spin'); sessionStorage.removeItem('vrmic_pub');
   try { await syncSelf(); } catch (e) {}
-  try { frame.contentWindow.location.reload(); } catch (e) { load(currentPage()); }
-  $('loading').classList.remove('hide');
+  try { frame.contentWindow.location.reload(); $('loadTxt').textContent = 'Refreshing'; $('loading').classList.remove('hide'); } catch (e) { load(currentPage(), 'Refreshing'); }
   setTimeout(() => b.classList.remove('spin'), 700);
   b.title = 'Refreshed at ' + VR.now();
 };
@@ -300,11 +313,11 @@ $('logoutBtn').onclick = () => { if (confirm('Log out of the admin portal?')) VR
 $('navBtn').onclick = () => { if (innerWidth <= 960) document.body.classList.toggle('navopen'); else document.body.classList.toggle('collapsed'); };
 $('scrim').onclick = () => document.body.classList.remove('navopen');
 
-/* ================= start ================= */
+/* ============ start ============ */
 VR.settings().then(s => { if (s['conf.shortName']) $('shortName').textContent = s['conf.shortName']; });
-showUser(); showLastLogin(); renderMenu();
-load(currentPage());
-syncSelf();
+showUser(); showLastLogin();
+if (Object.keys(perms()).length) renderMenu();           /* instant menu from last known access */
+syncSelf().then(ok => { if (!ok && !Object.keys(perms()).length) renderMenu(); load(currentPage()); });
 </script>
 </body>
 </html>
