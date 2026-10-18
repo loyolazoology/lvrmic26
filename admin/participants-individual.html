@@ -3,156 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student List &amp; QR Codes | VRMIC 2026 Admin</title>
+<title>Participant Individual View | VRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="admin-base.css">
+<style>
+:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--danger:#d8695a;--warn:#dba43c;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.55;background:var(--navy-950);min-height:100vh;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;}
+a{color:var(--gold-light);text-decoration:none;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.topbar{padding:14px 24px;border-bottom:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:rgba(6,11,28,.85);position:sticky;top:0;z-index:30;}
+.topbar h1{font-size:1.25rem;}
+.wrap{padding:22px 24px;max-width:1300px;}
+.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:22px;margin-bottom:18px;}
+.card h3{font-size:1rem;margin-bottom:14px;display:flex;gap:9px;align-items:center;}
+.card h3 i{color:var(--gold-light);}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:8px;border:1px solid var(--navy-border);background:var(--navy-850);color:var(--text-1);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;}
+.btn:hover{border-color:var(--gold);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
+.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
+.btn-sm{padding:7px 11px;font-size:12px;}
+input,select,textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:14px;}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
+input:disabled{opacity:.6;cursor:wait;}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 5px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid .full{grid-column:1/-1;}
+@media(max-width:700px){.grid{grid-template-columns:1fr;}}
+.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;border:1px solid transparent;display:none;}
+.alert.show{display:block;}
+.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
+.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+.btn-gold .spinner{border-color:rgba(36,26,6,.3);border-top-color:#241a06;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{padding:40px 18px;text-align:center;color:var(--text-3);}
+.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
+.scroll-x{overflow-x:auto;}
+table.list{width:100%;border-collapse:collapse;font-size:13px;}
+table.list th{text-align:left;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;position:sticky;top:0;background:var(--navy-900);}
+table.list td{padding:10px 13px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;}
+table.list tr:hover td{background:rgba(232,201,131,.03);}
+.id{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;}
+.nm{color:var(--text-1);font-weight:600;}
+.badge{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-ok{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.b-warn{background:rgba(219,164,60,.14);color:var(--warn);}
+.b-bad{background:rgba(216,105,90,.14);color:#e8988c;}
+.b-neu{background:rgba(179,188,214,.1);color:var(--text-2);}
+.b-oral{background:rgba(232,201,131,.14);color:var(--gold-light);}
+.b-poster{background:rgba(120,160,230,.14);color:#9db8ee;}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.toolbar input{flex:1;min-width:200px;}
+.toolbar select{width:auto;min-width:150px;}
+.modal{position:fixed;inset:0;background:rgba(6,10,26,.72);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 18px;overflow-y:auto;}
+.modal.show{display:flex;}
+.modal .box{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:24px;max-width:480px;width:100%;}
+@media print{body{background:#fff;color:#000}.topbar,.toolbar,.noprint{display:none !important}}
+</style>
 <link rel="stylesheet" href="admin-common.css">
+<style>
+/* photo + QR side by side (loaded after admin-common.css so it wins) */
+.head{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;}
+.head .ph{flex:0 0 auto;display:flex;align-items:center;justify-content:center;}
+.head .ph img{width:100%;height:100%;object-fit:cover;display:block;}
+.qrbox{flex:0 0 auto;width:126px;text-align:center;}
+.qrbox .qrimg{width:126px;height:126px;background:#fff;border-radius:10px;padding:7px;display:flex;align-items:center;justify-content:center;}
+.qrbox .qrimg img{width:100%;height:100%;display:block;}
+.qrbox .qrimg .spinner{border-color:rgba(10,18,48,.2);border-top-color:#0a1230;width:22px;height:22px;}
+.qrbox .qrcap{margin-top:5px;font-size:10.5px;color:var(--text-3);line-height:1.3;}
+.head .info{flex:1 1 260px;min-width:0;}
+.srch-state{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12.5px;color:var(--text-3);}
+.sheet-load{display:flex;align-items:center;justify-content:center;gap:10px;padding:46px 18px;color:var(--text-3);}
+</style>
 </head>
 <body>
 
-<div class="topbar"><h1><i class="fa-solid fa-qrcode" style="color:var(--gold-light);"></i> <span id="ttl">Student list &amp; QR codes</span></h1><div id="xp"></div></div>
+<div class="topbar"><h1><i class="fa-solid fa-id-card" style="color:var(--gold-light);"></i> Participants — Individual View</h1><div id="xp"></div></div>
 <div class="wrap">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
-  <div class="banner noprint"><i class="fa-solid fa-circle-info"></i><div>Each QR code holds a <b>signed</b> ID (for example <span class="mono">VRMIC26-S001</span>), so a code that was not generated here is rejected by the scanner. Tick people to print only them; with nothing ticked, everyone in the current filter is printed.</div></div>
-  <div class="toolbar noprint">
-    <input id="q" placeholder="Search name, ID, class or department number…" autocomplete="off">
-    <select id="fc" style="display:none;"><option value="">All classes</option></select>
-    <select id="fs"><option value="">Active &amp; inactive</option><option value="1">Active only</option><option value="0">Inactive only</option></select>
-    <select id="lay" title="QR tiles per A4 page"><option value="24">24 per page (3 × 8)</option><option value="12">12 per page (3 × 4)</option><option value="8">8 per page, large (2 × 4)</option></select>
-    <button class="btn btn-gold" id="pdf"><i class="fa-solid fa-file-pdf"></i> QR sheet PDF</button>
-    <button class="btn" id="prt"><i class="fa-solid fa-print"></i> Print QR sheet</button>
+  <div class="card noprint">
+    <label for="q">Search by name or VRMIC ID</label>
+    <input id="q" placeholder="Loading participants…" autocomplete="off" disabled>
+    <div class="srch-state" id="state"><span class="spinner"></span> Loading participants…</div>
+    <div id="results" style="margin-top:8px;"></div>
   </div>
-  <div style="font-size:12.5px;color:var(--text-3);margin-bottom:8px;" id="count"></div>
-  <div class="table-card" id="tc"><div class="scroll-x"><table class="list"><thead id="th"></thead><tbody id="tb"><tr><td class="empty" colspan="8"><span class="spinner"></span> Loading…</td></tr></tbody></table></div></div>
+  <div id="sheet"><div class="sheet-load"><span class="spinner" style="width:20px;height:20px;"></span> Loading participants…</div></div>
 </div>
 
-<div class="modal" id="qm"><div class="box" style="text-align:center;">
-  <div id="q-img" style="display:inline-block;background:#fff;padding:12px;border-radius:10px;"></div>
-  <h3 id="q-id" class="id" style="margin-top:14px;font-size:1.15rem;"></h3>
-  <div id="q-name" class="nm"></div><div id="q-sub" style="font-size:12.5px;color:var(--text-3);"></div>
-  <div style="display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;"><button class="btn btn-sm" id="q-dl"><i class="fa-solid fa-download"></i> Download PNG</button><button class="btn btn-sm" id="q-close">Close</button></div>
-</div></div>
-
-<div class="modal" id="em"><div class="box">
-  <h3 style="margin-bottom:12px;"><i class="fa-solid fa-pen" style="color:var(--gold-light);"></i> Edit <span class="id" id="e-id"></span></h3>
-  <div class="alert alert-error" id="e-err"></div>
-  <label>Name</label><input id="e-name" maxlength="100"><div style="height:10px"></div>
-  <label>Class</label><input id="e-class" maxlength="60"><div style="height:10px"></div>
-  <label>Department number</label><input id="e-dept" maxlength="30"><div style="height:12px"></div>
-  <label class="chk"><input type="checkbox" id="e-active"> Active (inactive students cannot be marked)</label>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;"><button class="btn" id="e-cancel">Cancel</button><button class="btn btn-gold" id="e-save">Save</button></div>
-</div></div>
-
 <script src="admin-common.js"></script>
-<script src="admin-page.js"></script>
 <script>
-if (VR.guard() && VR.frameOnly()) (function () {
-const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'students' : 'attendance';
-if (!VR.can(MOD, 'report') && !VR.can(MOD, 'transaction')) { VR.denied('You do not have permission to view this page.'); return; }
-$('ttl').textContent = isStudent ? 'Student list & QR codes' : 'Participant QR codes';
-document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
-const canEdit = isStudent && VR.can('students', 'transaction');
-const QR_URL = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js', PDF_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-const LAYOUTS = { 24: { cols: 3, rows: 8 }, 12: { cols: 3, rows: 4 }, 8: { cols: 2, rows: 4 } };
-let all = [], shown = [], picked = new Set(), cur = null;
-const cache = {};
 
-const H = isStudent ? ['VRMIC ID', 'Name', 'Class', 'Department No.', 'Status'] : ['VRMIC ID', 'Name', 'Institution', 'Category', 'Mode', 'Status'];
-const rowOf = p => isStudent ? [p.id, p.name, p.class, p.deptNo, p.active ? 'Active' : 'Inactive'] : [p.id, p.name, p.institution, p.type, p.mode, p.active ? 'Active' : 'Cancelled'];
-const hay = p => [p.id, p.name, p.class, p.deptNo, p.institution].join(' ').toLowerCase();
+const $ = id => document.getElementById(id), esc = VR.esc;
+if (!VR.token()) (window.top || window).location.replace(VR.LOGIN_URL);
+function showErr(m){ const e = $('err'); e.textContent = m; e.className = 'alert alert-error show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function showOk(m){ const e = $('ok'); e.textContent = m; e.className = 'alert alert-success show'; window.scrollTo({top:0,behavior:'smooth'}); }
+function hideAlerts(){ $('err').classList.remove('show'); $('ok').classList.remove('show'); }
+const fmtD = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }); };
+const fmtDT = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const yes = v => String(v).toUpperCase() === 'TRUE';
+const typeBadge = t => t === 'Oral' ? 'b-oral' : t === 'Poster' ? 'b-poster' : 'b-neu';
 
+if (!VR.can('participants', 'report')) document.querySelector('.wrap').innerHTML = '<div class="alert alert-error show">You do not have permission to view participant details.</div>';
+else {
+const QR_URL = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+let all = [], cur = null, ready = false;
+const qrText = {};          // VRMIC ID -> signed QR text (from the server)
+let qrError = '';           // reason the QR list could not be loaded, if any
+const qrCache = {};
+
+const hay = p => [p.ID, p.Name, p.Email, p.Phone].join(' ').toLowerCase();
+
+/* ---- QR image (same generator as the QR codes page) ---- */
 async function qrImg(text, px) {
-  const key = text + '|' + px; if (cache[key]) return cache[key];
+  const key = text + '|' + px; if (qrCache[key]) return qrCache[key];
   await VR.load(QR_URL);
-  const d = document.createElement('div'); new QRCode(d, { text: text, width: px, height: px, correctLevel: QRCode.CorrectLevel.M });
-  return (cache[key] = d.querySelector('canvas').toDataURL('image/png'));
+  const d = document.createElement('div');
+  new QRCode(d, { text: text, width: px, height: px, correctLevel: QRCode.CorrectLevel.M });
+  const c = d.querySelector('canvas');
+  return (qrCache[key] = c ? c.toDataURL('image/png') : '');
 }
 
-function filter() {
-  const q = $('q').value.trim().toLowerCase(), c = $('fc').value, s = $('fs').value;
-  shown = all.filter(p => (!q || hay(p).includes(q)) && (!c || p.class === c) && (!s || (s === '1') === p.active));
-  $('count').textContent = shown.length + ' of ' + all.length + ' shown' + (picked.size ? ' · ' + picked.size + ' ticked' : '');
-  $('th').innerHTML = '<tr><th class="noprint"><input type="checkbox" id="all" style="width:auto;" title="Tick everyone shown"></th>' + H.map(h => '<th>' + h + '</th>').join('') + '<th class="noprint">QR</th>' + (canEdit ? '<th class="noprint"></th>' : '') + '</tr>';
-  $('all').checked = shown.length > 0 && shown.every(p => picked.has(p.id));
-  $('tb').innerHTML = shown.length ? shown.map(p => {
-    const r = rowOf(p);
-    return '<tr><td class="noprint"><input type="checkbox" data-pick="' + esc(p.id) + '" style="width:auto;"' + (picked.has(p.id) ? ' checked' : '') + '></td><td class="id">' + esc(r[0]) + '</td><td class="nm">' + esc(r[1]) + '</td>' +
-      r.slice(2, -1).map(x => '<td>' + esc(x) + '</td>').join('') + '<td><span class="badge ' + (p.active ? 'b-ok' : 'b-neu') + '">' + esc(r[r.length - 1]) + '</span></td>' +
-      '<td class="noprint"><button class="btn btn-sm" data-qr="' + esc(p.id) + '"><i class="fa-solid fa-qrcode"></i> Show</button></td>' +
-      (canEdit ? '<td class="noprint"><button class="btn btn-sm" data-edit="' + esc(p.id) + '"><i class="fa-solid fa-pen"></i></button></td>' : '') + '</tr>';
-  }).join('') : '<tr><td class="empty" colspan="9">' + (all.length ? 'No match.' : (isStudent ? 'No students yet. Add them under Students → Transaction → Student creation.' : 'No participants yet.')) + '</td></tr>';
-  $('all').onchange = function () { shown.forEach(p => this.checked ? picked.add(p.id) : picked.delete(p.id)); filter(); };
+/* ---- search ---- */
+function results(){
+  const q = $('q').value.trim().toLowerCase();
+  if (!q) { $('results').innerHTML = ''; return; }
+  if (!ready) { $('results').innerHTML = '<div class="srch-state"><span class="spinner"></span> Still loading participants…</div>'; return; }
+  const l = all.filter(p => hay(p).includes(q)).slice(0, 8);
+  $('results').innerHTML = l.length ? l.map(p => `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(226,187,120,.08);cursor:pointer;" data-pick="${esc(p.ID)}"><span><span class="id">${esc(p.ID)}</span> &nbsp;<b class="nm">${esc(p.Name)}</b> <span style="font-size:12px;color:var(--text-3);">· ${esc(p.Institution || '')}</span></span><span class="badge ${typeBadge(p.ParticipantType)}">${esc(p.ParticipantType)}</span></div>`).join('') : '<div class="empty" style="padding:12px;">No match.</div>';
 }
-async function load() {
-  const r = await VR.api('adminQrList', { kind }); if (!r.ok) { showErr(r.error || 'Could not load the list.'); $('tb').innerHTML = ''; return; }
-  all = r.people;
-  if (isStudent) { const cl = [...new Set(all.map(p => p.class).filter(Boolean))].sort(); $('fc').style.display = ''; $('fc').innerHTML = '<option value="">All classes</option>' + cl.map(c => '<option>' + esc(c) + '</option>').join(''); }
-  filter();
+const kv = (l, v, link) => `<div><span>${l}</span><b>${v ? (link ? `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a>` : esc(v)) : '—'}</b></div>`;
+
+/* ---- QR box ---- */
+function qrBoxHtml(){ return `<div class="qrbox"><div class="qrimg" id="qrb"><span class="spinner"></span></div><div class="qrcap" id="qrcap">Attendance QR</div></div>`; }
+async function fillQr(p){
+  const box = $('qrb'), cap = $('qrcap'); if (!box) return;
+  const txt = qrText[p.ID];
+  if (!txt) {
+    if (cur && cur.ID === p.ID) { box.innerHTML = '<i class="fa-solid fa-qrcode" style="font-size:34px;color:#9aa3bd;"></i>'; cap.textContent = qrError ? 'QR not available: ' + qrError : 'No QR for this participant'; }
+    return;
+  }
+  try {
+    const src = await qrImg(txt, 360);
+    if (cur && cur.ID === p.ID && $('qrb')) { $('qrb').innerHTML = `<img alt="Attendance QR code of ${esc(p.ID)}" src="${src}">`; $('qrcap').textContent = 'Attendance QR · ' + p.ID; }
+  } catch (e) { if (cur && cur.ID === p.ID && $('qrb')) { $('qrb').innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="font-size:30px;color:#c9974f;"></i>'; $('qrcap').textContent = 'Could not draw the QR code'; } }
 }
-$('q').oninput = filter; $('fc').onchange = filter; $('fs').onchange = filter;
-$('tb').onclick = async e => {
-  const pk = e.target.closest('[data-pick]'), qr = e.target.closest('[data-qr]'), ed = e.target.closest('[data-edit]');
-  if (pk) { pk.checked ? picked.add(pk.dataset.pick) : picked.delete(pk.dataset.pick); $('count').textContent = shown.length + ' of ' + all.length + ' shown' + (picked.size ? ' · ' + picked.size + ' ticked' : ''); }
-  if (qr) { cur = all.find(p => p.id === qr.dataset.qr); $('q-img').innerHTML = '<img alt="QR code" width="240" height="240" src="' + await qrImg(cur.qr, 480) + '">';
-    $('q-id').textContent = cur.id; $('q-name').textContent = cur.name; $('q-sub').textContent = isStudent ? cur.class + ' · Dept ' + cur.deptNo : (cur.institution || ''); $('qm').classList.add('show'); }
-  if (ed) { cur = all.find(p => p.id === ed.dataset.edit); $('e-id').textContent = cur.id; $('e-name').value = cur.name; $('e-class').value = cur.class; $('e-dept').value = cur.deptNo; $('e-active').checked = cur.active; $('e-err').classList.remove('show'); $('em').classList.add('show'); }
-};
-$('q-close').onclick = () => $('qm').classList.remove('show');
-$('q-dl').onclick = async () => { const a = document.createElement('a'); a.href = await qrImg(cur.qr, 600); a.download = 'QR_' + cur.id + '.png'; document.body.appendChild(a); a.click(); a.remove(); };
-$('e-cancel').onclick = () => $('em').classList.remove('show');
-$('e-save').onclick = function () {
-  return VR.busy(this, 'Saving…', async () => {
-    const r = await VR.api('adminUpdateStudent', { id: cur.id, name: $('e-name').value, class: $('e-class').value, deptNo: $('e-dept').value, active: $('e-active').checked });
-    if (!r.ok) { $('e-err').textContent = r.error || 'Could not save.'; $('e-err').classList.add('show'); return; }
-    $('em').classList.remove('show'); showOk('Saved.'); load();
-  });
-};
 
-// ---------- QR sheet (A4) ----------
-const chosen = () => { const l = picked.size ? all.filter(p => picked.has(p.id)) : shown; return l.filter(p => p.active); };
-const lines = p => isStudent ? { a: p.id, b: p.name, c: p.class + ' · Dept ' + p.deptNo } : { a: p.id, b: p.name, c: p.institution || '' };
-function needList() { const l = chosen(); if (!l.length) { showErr('There is nobody to print (inactive people are skipped).'); return null; } if (!picked.size && l.length > 60 && !confirm('Print QR codes for all ' + l.length + ' people shown?')) return null; hideAlerts(); return l; }
+function show(p, photo){
+  cur = p; history.replaceState(null, '', '?id=' + encodeURIComponent(p.ID));
+  const initials = String(p.Name || '?').replace(/^(Dr|Mr|Ms|Mrs|Prof)\.?\s*/i, '').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  $('sheet').innerHTML = `<div class="card" id="card">
+    <div class="head"><div class="ph" id="ph">${photo ? `<img src="${photo}" alt="Photo of ${esc(p.Name)}">` : (p.PhotoURL ? '<span class="spinner" style="width:22px;height:22px;"></span>' : esc(initials))}</div>
+      ${qrBoxHtml()}
+      <div class="info"><h2>${esc(p.Name)}</h2><div class="id" style="font-size:15px;margin-bottom:8px;">${esc(p.ID)}</div>
+        <span class="badge ${typeBadge(p.ParticipantType)}">${esc(p.ParticipantType || 'Participant')}</span> <span class="badge ${p.RegistrationStatus === 'Cancelled' ? 'b-bad' : 'b-ok'}">${esc(p.RegistrationStatus || 'Registered')}</span> <span class="badge ${yes(p.ProfileCompleted) ? 'b-ok' : 'b-warn'}">Profile ${yes(p.ProfileCompleted) ? 'completed' : 'pending'}</span>
+        <div style="margin-top:10px;font-size:13px;color:var(--text-2);">${esc(p.Designation === 'Other' ? (p.DesignationOther || 'Other') : (p.Designation || ''))}${p.Department ? ' · ' + esc(p.Department) : ''}<br>${esc(p.Institution || '')}</div></div></div>
+    <div class="sec"><h4>Contact</h4><div class="kv">${kv('Email', p.Email)}${kv('Phone', p.Phone)}${kv('City', p.City)}${kv('State', p.State)}${kv('Country', p.Country)}</div></div>
+    <div class="sec"><h4>Personal &amp; profile</h4><div class="kv">${kv('Gender', p.Gender)}${kv('Date of birth', p.DOB ? fmtD(p.DOB) : '')}${kv('Category', p.Category)}${kv('Food preference', p.FoodPreference)}${kv('ORCID', p.OrcidId)}${kv('Google Scholar', p.GoogleScholar, 1)}${kv('LinkedIn', p.LinkedIn, 1)}</div></div>
+    <div class="sec"><h4>Registration &amp; payment</h4><div class="kv">${kv('Registration type', p.Role)}${kv('Registered on', fmtDT(p.RegistrationDate || p.CreatedAt))}${kv('Amount paid', p.AmountPaid ? '₹' + p.AmountPaid : '')}${kv('Fee paid', yes(p.FeePaid) ? 'Yes' : 'No')}${kv('Mode', p.Mode)}${kv(p.Mode === 'Online' ? 'Meeting link' : 'Venue', p.Mode === 'Online' ? p.MeetingLink : p.Location, p.Mode === 'Online')}</div></div>
+    <div class="sec"><h4>Abstract &amp; presentation</h4><div class="kv">${kv('Abstract status', p.AbstractStatus || 'Not Submitted')}${kv('Title', p.AbstractTitle)}${kv('Theme', p.AbstractTheme)}${kv('Document ID', p.AbstractDocId)}${kv('Version', p.AbstractRevision)}${kv('Reviewer remarks', p.AbstractRemarks)}${kv('Reviewed on', p.AbstractReviewedAt ? fmtDT(p.AbstractReviewedAt) : '')}${kv('PPT', p.PPTLink ? (p.PPTFileName || 'Uploaded') : '')}${kv('PPT uploaded', p.PPTUploadedAt ? fmtDT(p.PPTUploadedAt) : '')}</div></div>
+    <div class="sec"><h4>Slot &amp; attendance</h4><div class="kv">${kv('Venue', p.SlotVenue)}${kv('Room', p.SlotRoom)}${kv('Date', p.SlotDate ? fmtD(p.SlotDate) : '')}${kv('Time', p.SlotTime)}${kv('Token', p.SlotToken)}${kv('Day 1', yes(p.Day1Attendance) ? 'Present' : 'Absent')}${kv('Day 2', yes(p.Day2Attendance) ? 'Present' : 'Absent')}${kv('Day 3', yes(p.Day3Attendance) ? 'Present' : 'Absent')}</div></div>
+    <div class="sec"><h4>Feedback &amp; certificate</h4><div class="kv">${kv('Feedback submitted', yes(p.FeedbackSubmitted) ? 'Yes' : 'No')}${kv('Certificate requested', yes(p.CertificateRequested) ? 'Yes (' + fmtD(p.CertificateRequestedAt) + ')' : 'No')}${kv('Certificate', p.CertificateLink ? 'Issued' : '')}${kv('WhatsApp group joined', yes(p.WhatsappJoined) ? 'Yes' : 'No')}</div></div>
+  </div>
+  ${VR.can('participants', 'transaction') ? `<p class="noprint" style="margin-top:-4px;"><a class="btn btn-sm" href="participants-details.html?id=${encodeURIComponent(p.ID)}"><i class="fa-solid fa-user-pen"></i> Edit this participant</a></p>` : ''}`;
+  fillQr(p);
+  if (!photo && p.PhotoURL) VR.api('adminGetParticipantPhoto', { id: p.ID }).then(r => { if (cur && cur.ID === p.ID && r.ok && r.photo) $('ph').innerHTML = `<img src="${r.photo}" alt="Photo of ${esc(p.Name)}">`; else if (cur && cur.ID === p.ID) $('ph').textContent = initials; }).catch(() => { if (cur && cur.ID === p.ID) $('ph').textContent = initials; });
+}
+function pick(id){ const p = all.find(x => x.ID === id); if (p) { $('results').innerHTML = ''; $('q').value = ''; show(p); } }
+$('results').onclick = e => { const r = e.target.closest('[data-pick]'); if (r) pick(r.dataset.pick); };
+$('q').oninput = results;
+$('q').onkeydown = e => { if (e.key === 'Enter' && ready) { const l = all.filter(p => hay(p).includes($('q').value.trim().toLowerCase())); if (l.length) pick(l[0].ID); } };
 
-$('pdf').onclick = function () {
-  const l = needList(); if (!l) return;
-  const L = LAYOUTS[$('lay').value];
-  return VR.busy(this, 'Building PDF…', async () => {
-    await VR.load(PDF_URL);
-    const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' }), M = 10, tw = (210 - 2 * M) / L.cols, th = (297 - 2 * M) / L.rows, per = L.cols * L.rows;
-    const side = Math.min(tw - 12, th - 24), fs = th > 55 ? 12 : 9.5;
-    for (let i = 0; i < l.length; i++) {
-      if (i && i % per === 0) doc.addPage();
-      const k = i % per, x = M + (k % L.cols) * tw, y = M + Math.floor(k / L.cols) * th, t = lines(l[i]);
-      doc.setLineDashPattern([1.2, 1.2], 0); doc.setDrawColor(150); doc.setLineWidth(0.15); doc.rect(x, y, tw, th);   // cut guide
-      doc.addImage(await qrImg(l[i].qr, 360), 'PNG', x + (tw - side) / 2, y + 3.5, side, side);
-      let ty = y + 3.5 + side + 4.5;
-      doc.setTextColor(0); doc.setFont('helvetica', 'bold'); doc.setFontSize(fs); doc.text(t.a, x + tw / 2, ty, { align: 'center' });
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(fs - 2.5);
-      doc.splitTextToSize(t.b, tw - 6).slice(0, 2).forEach(s => { ty += (fs - 2.5) * 0.42; doc.text(s, x + tw / 2, ty, { align: 'center' }); });
-      doc.setTextColor(90); ty += (fs - 2.5) * 0.42; doc.splitTextToSize(t.c, tw - 6).slice(0, 1).forEach(s => doc.text(s, x + tw / 2, ty, { align: 'center' }));
-    }
-    doc.save(VR.fileName((isStudent ? 'Student' : 'Participant') + '_QR_Sheet', 'pdf'));
-  });
-};
-$('prt').onclick = function () {
-  const l = needList(); if (!l) return;
-  const L = LAYOUTS[$('lay').value], per = L.cols * L.rows, w = window.open('', '_blank'); if (!w) return showErr('Allow pop-ups to print.');
-  return VR.busy(this, 'Preparing…', async () => {
-    let pages = '';
-    for (let i = 0; i < l.length; i += per) {
-      let tiles = '';
-      for (const p of l.slice(i, i + per)) { const t = lines(p); tiles += '<div class="t"><img src="' + await qrImg(p.qr, 360) + '"><b>' + esc(t.a) + '</b><span>' + esc(t.b) + '</span><i>' + esc(t.c) + '</i></div>'; }
-      pages += '<div class="pg">' + tiles + '</div>';
-    }
-    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>QR sheet</title><style>@page{size:A4;margin:10mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#000}.pg{display:grid;grid-template-columns:repeat(' + L.cols + ',1fr);grid-template-rows:repeat(' + L.rows + ',1fr);height:277mm;page-break-after:always}.pg:last-child{page-break-after:auto}.t{border:1px dashed #888;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2mm;overflow:hidden}.t img{width:' + (L.cols === 2 ? '48mm' : '30mm') + ';height:auto;max-height:70%}.t b{font-size:' + (L.rows === 4 ? '11pt' : '9.5pt') + ';margin-top:1.5mm;font-family:monospace}.t span{font-size:8.5pt;margin-top:.6mm;line-height:1.15}.t i{font-size:7.5pt;color:#555;font-style:normal;margin-top:.4mm}</style></head><body>' + pages + '</body></html>');
-    w.document.close(); w.focus(); setTimeout(() => w.print(), 500);
-  });
-};
+/* ---- export helpers ---- */
+function flat(p){ return [['VRMIC ID', p.ID], ['Name', p.Name], ['Category', p.ParticipantType], ['Registration status', p.RegistrationStatus], ['Email', p.Email], ['Phone', p.Phone], ['Institution', p.Institution], ['Designation', p.Designation === 'Other' ? p.DesignationOther : p.Designation], ['Department', p.Department], ['City / State / Country', [p.City, p.State, p.Country].filter(Boolean).join(', ')], ['Gender', p.Gender], ['Date of birth', p.DOB ? fmtD(p.DOB) : ''], ['Registration type', p.Role], ['Food preference', p.FoodPreference], ['Amount paid', p.AmountPaid], ['Mode', p.Mode], ['Abstract status', p.AbstractStatus], ['Abstract title', p.AbstractTitle], ['Theme', p.AbstractTheme], ['Reviewer remarks', p.AbstractRemarks], ['Slot', [p.SlotVenue, p.SlotRoom, p.SlotDate ? fmtD(p.SlotDate) : '', p.SlotTime].filter(Boolean).join(' · ')], ['Token', p.SlotToken], ['Attendance', ['Day 1: ' + (yes(p.Day1Attendance) ? 'Present' : 'Absent'), 'Day 2: ' + (yes(p.Day2Attendance) ? 'Present' : 'Absent'), 'Day 3: ' + (yes(p.Day3Attendance) ? 'Present' : 'Absent')].join(', ')]].map(r => [r[0], r[1] == null ? '' : String(r[1])]); }
 
-VR.exportBar($('xp'), { name: isStudent ? 'Students' : 'Participant_QR_List', title: $('ttl').textContent, imageEl: () => $('tc'), getData: () => ({ headers: H, rows: shown.map(rowOf) }) });
-load();
+const photoEl = () => $('ph') && $('ph').querySelector('img');
+const qrEl = () => $('qrb') && $('qrb').querySelector('img');
+
+VR.exportBar($('xp'), { name: 'Participant', title: 'Participant Details', imageEl: () => $('card'),   // the image export captures the whole card, photo and QR included
+  getData: () => cur ? { headers: ['Field', 'Value'], rows: flat(cur) } : (alert('Select a participant first.'), { headers: [], rows: [] }),
+  pdf: async () => { if (!cur) return alert('Select a participant first.');   // PDF with photo and QR embedded
+    await VR.load('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); await VR.load('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
+    const s = await VR.settings(), doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' }), W = doc.internal.pageSize.getWidth();
+    const put = (img, x, y, w, h) => { try { let t = 'JPEG'; try { t = doc.getImageProperties(img.src).fileType || 'JPEG'; } catch (e) {} doc.addImage(img.src, t, x, y, w, h); } catch (e) {} };
+    doc.setFontSize(12); doc.text(s['conf.name'] || 'VRMIC 2026', 36, 34, { maxWidth: W - 72 }); doc.setFontSize(10); doc.setTextColor(110); doc.text('Participant details · generated ' + VR.now(), 36, 62);
+    const px = W - 36 - 100, qx = px - 12 - 100;                    // photo on the far right, QR to its left
+    const pimg = photoEl(); if (pimg) put(pimg, px, 74, 100, 126);
+    const qimg = qrEl();
+    if (qimg) { doc.setDrawColor(200); doc.rect(qx, 74, 100, 100); put(qimg, qx + 4, 78, 92, 92); doc.setFontSize(7.5); doc.setTextColor(110); doc.text('Attendance QR', qx + 50, 184, { align: 'center' }); }
+    doc.setTextColor(0); doc.setFontSize(16); doc.text(cur.Name || '', 36, 92, { maxWidth: qx - 36 - 14 }); doc.setFontSize(11); doc.text(cur.ID, 36, 126);
+    doc.autoTable({ body: flat(cur).slice(2), startY: 214, theme: 'grid', styles: { fontSize: 9, cellPadding: 4 }, columnStyles: { 0: { cellWidth: 130, fontStyle: 'bold', fillColor: [240, 242, 248] } }, margin: { left: 36, right: 36 } });
+    doc.save(VR.fileName('Participant_' + cur.ID, 'pdf')); },
+  print: async () => { if (!cur) return alert('Select a participant first.'); const img = photoEl(), qr = qrEl();
+    const pics = '<div style="float:right;display:flex;gap:12px;margin-left:14px;align-items:flex-start;">'
+      + (qr ? '<div style="text-align:center;font:9px Arial,sans-serif;color:#444;"><img src="' + qr.src + '" style="width:112px;height:112px;border:1px solid #bbb;padding:3px;background:#fff;display:block;"><div style="margin-top:3px;">Attendance QR</div></div>' : '')
+      + (img ? '<img src="' + img.src + '" style="width:110px;height:140px;object-fit:cover;border:1px solid #888;">' : '') + '</div>';
+    await VR.printHtml('Participant — ' + cur.Name + ' (' + cur.ID + ')', pics + VR.tableHtml(['Field', 'Value'], flat(cur))); } });
+
+/* ---- load participants and the QR list together ---- */
+(async function(){
+  const qrReq = VR.api('adminQrList', { kind: 'participant' }).then(r => {
+    if (r && r.ok) (r.people || []).forEach(x => { if (x.id && x.qr) qrText[x.id] = x.qr; });
+    else qrError = (r && r.error) || 'could not be loaded';
+  }).catch(() => { qrError = 'could not reach the server'; });
+  try {
+    const r = await VR.api('adminListParticipants', {});
+    if (!r.ok) { showErr(r.error || 'Could not load participants.'); $('state').innerHTML = 'Could not load participants.'; $('sheet').innerHTML = '<div class="empty">Could not load participants. Refresh the page to try again.</div>'; return; }
+    all = r.participants || [];
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); $('state').innerHTML = 'Could not load participants.'; $('sheet').innerHTML = '<div class="empty">Could not load participants.</div>'; return; }
+  ready = true; $('q').disabled = false; $('q').placeholder = 'e.g. Riya or VRMIC26-0001';
+  $('state').innerHTML = '<i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> ' + all.length + ' participants ready';
+  $('sheet').innerHTML = '<div class="empty">Search for a participant above to see their full details.</div>';
+  const id = new URLSearchParams(location.search).get('id');
+  if (id) { $('sheet').innerHTML = '<div class="sheet-load"><span class="spinner" style="width:20px;height:20px;"></span> Opening participant…</div>'; await qrReq; pick(id); }
+  else $('q').focus();
 })();
+}
+
 </script>
 </body>
 </html>
