@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="admin-base.css">
 <link rel="stylesheet" href="admin-common.css">
 <style>
+/* badges */
 .t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
 .t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
 .t-Participant{background:rgba(179,188,214,.1);color:var(--text-2);}
@@ -16,10 +17,21 @@
 .a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
 .a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
 .a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
-.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px 22px;padding:6px 4px;}
-.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
-.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;}
-table.list td{white-space:nowrap;}
+
+/* main table: one line per cell, except long text columns which wrap */
+table.list td{white-space:nowrap;vertical-align:middle;}
+table.list td.wrapc{white-space:normal;min-width:170px;max-width:260px;overflow-wrap:anywhere;line-height:1.4;}
+table.list tr.main{cursor:pointer;}
+table.list tr.detail td{white-space:normal;background:rgba(232,201,131,.04);padding:0;}
+
+/* expanded record: stays inside the visible width, wraps long values */
+.x-wrap{position:sticky;left:0;width:min(1100px,calc(100vw - 70px));padding:14px 16px 16px;white-space:normal;}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px 26px;}
+.x-body > div{min-width:0;}
+.x-body > div > span{display:block;margin-bottom:3px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body > div > b{display:block;font-weight:500;color:var(--text-1);white-space:normal;overflow-wrap:anywhere;line-height:1.4;}
+.x-body > div.span2{grid-column:span 2;}
+@media(max-width:600px){.x-body > div.span2{grid-column:auto;}}
 </style>
 </head>
 <body>
@@ -54,9 +66,11 @@ table.list td{white-space:nowrap;}
 if (VR.guard() && VR.frameOnly()) (function () {
 if (!VR.can('participants', 'report')) { VR.denied('You do not have permission to view the participant list.'); return; }
 const canEdit = VR.can('participants', 'transaction');
-if (!VR.can('participants', 'transaction')) $('add').style.display = 'none';
+if (!canEdit) $('add').style.display = 'none';
 
 let all = [], view = [], open = new Set();
+
+const key = r => String(r.ID || r._row || r.row || '');
 const abs = r => r.AbstractStatus || 'Not Submitted';
 const aCls = s => 'a-' + String(s).split(' ')[0];
 const created = r => r.CreatedAt ? fmtD(String(r.CreatedAt).slice(0, 10)) : '—';
@@ -76,26 +90,47 @@ function filtered() {
     return true;
   });
 }
-const row = (k, v) => '<div><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
+
+const cell = (k, v, wide) => '<div' + (wide ? ' class="span2"' : '') + '><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
+
+function detail(r) {
+  const online = r.Mode === 'Online';
+  return '<tr class="detail"><td colspan="13"><div class="x-wrap"><div class="x-body">'
+    + cell('Registration category', r.Role)
+    + cell('Food preference', r.FoodPreference)
+    + cell('Amount paid', paid(r))
+    + cell('Fee paid', String(r.FeePaid).toUpperCase() === 'TRUE' ? 'Yes' : 'No')
+    + cell('Registration date', r.RegistrationDate ? fmtD(String(r.RegistrationDate).slice(0, 10)) : '')
+    + cell('Gender', r.Gender)
+    + cell('City / State / Country', [r.City, r.State, r.Country].filter(Boolean).join(', '))
+    + cell('Designation', r.Designation)
+    + cell('Department', r.Department)
+    + cell(online ? 'Meeting link' : 'Venue', online ? r.MeetingLink : r.Location, true)
+    + cell('Abstract title', r.AbstractTitle, true)
+    + cell('Abstract theme', r.AbstractTheme)
+    + cell('Slot venue', r.SlotVenue)
+    + '</div></div></td></tr>';
+}
 
 function render() {
   view = filtered();
   $('tb').innerHTML = view.length ? view.map(r => {
-    const o = open.has(String(r.row));
-    let h = '<tr data-row="' + esc(r.row) + '" style="cursor:pointer;"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td>'
-      + '<td class="id">' + esc(r.ID) + '</td><td class="nm">' + esc(r.Name) + '</td><td>' + esc(r.Email) + '</td><td>' + esc(r.Phone) + '</td><td>' + esc(r.Institution) + '</td>'
-      + '<td><span class="badge t-' + esc(r.ParticipantType || 'Participant') + '">' + esc(r.ParticipantType || '—') + '</span></td><td>' + esc(r.Mode || '—') + '</td><td>' + esc(reg(r)) + '</td>'
+    const k = key(r), o = open.has(k);
+    let h = '<tr class="main" data-row="' + esc(k) + '"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td>'
+      + '<td class="id">' + esc(r.ID) + '</td>'
+      + '<td class="nm wrapc">' + esc(r.Name) + '</td>'
+      + '<td>' + esc(r.Email) + '</td>'
+      + '<td>' + esc(r.Phone) + '</td>'
+      + '<td class="wrapc">' + esc(r.Institution) + '</td>'
+      + '<td><span class="badge t-' + esc(r.ParticipantType || 'Participant') + '">' + esc(r.ParticipantType || '—') + '</span></td>'
+      + '<td>' + esc(r.Mode || '—') + '</td>'
+      + '<td>' + esc(reg(r)) + '</td>'
       + '<td>' + (profile(r) ? '<span class="badge s-Present">Complete</span>' : '<span class="badge s-Late">Incomplete</span>') + '</td>'
-      + '<td><span class="badge ' + aCls(abs(r)) + '">' + esc(abs(r)) + '</span></td><td>' + esc(created(r)) + '</td>'
+      + '<td><span class="badge ' + aCls(abs(r)) + '">' + esc(abs(r)) + '</span></td>'
+      + '<td>' + esc(created(r)) + '</td>'
       + '<td class="noprint">' + (canEdit ? '<a class="btn btn-sm" title="Edit in Participant details" href="participants-details.html?id=' + encodeURIComponent(r.ID) + '"><i class="fa-solid fa-pen"></i></a> ' : '')
       + '<a class="btn btn-sm" title="Individual view" href="participants-individual.html?id=' + encodeURIComponent(r.ID) + '"><i class="fa-solid fa-id-card"></i></a></td></tr>';
-    if (o) h += '<tr><td></td><td colspan="12" style="background:rgba(232,201,131,.04);"><div class="x-body">'
-      + row('Registration category', r.Role) + row('Food preference', r.FoodPreference) + row('Amount paid', paid(r)) + row('Fee paid', String(r.FeePaid).toUpperCase() === 'TRUE' ? 'Yes' : 'No')
-      + row('Registration date', r.RegistrationDate ? fmtD(String(r.RegistrationDate).slice(0, 10)) : '') + row('Gender', r.Gender) + row('City / State / Country', [r.City, r.State, r.Country].filter(Boolean).join(', '))
-      + row('Designation', r.Designation) + row('Department', r.Department)
-      + row(r.Mode === 'Online' ? 'Meeting link' : 'Venue', r.Mode === 'Online' ? r.MeetingLink : r.Location)
-      + row('Abstract title', r.AbstractTitle) + row('Abstract theme', r.AbstractTheme) + row('Slot venue', r.SlotVenue)
-      + '</div></td></tr>';
+    if (o) h += detail(r);
     return h;
   }).join('') : '<tr><td class="empty" colspan="13">' + (all.length ? 'No participants match these filters.' : 'No participants yet.') + '</td></tr>';
   $('info').textContent = 'Showing ' + view.length + ' of ' + all.length;
@@ -112,20 +147,24 @@ function stats() {
 }
 
 async function load() {
+  hideAlerts();
   $('tb').innerHTML = '<tr><td class="empty" colspan="13">Loading participants…</td></tr>';
   try {
     const r = await VR.api('adminListParticipants', {});
     if (!r.ok) { showErr(r.error || 'Could not load participants.'); $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; return; }
     all = r.participants || []; render();
-  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+  } catch (e) {
+    showErr('Could not reach the server. Check your connection and try again.');
+    $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>';
+  }
 }
 
-['q'].forEach(i => $(i).addEventListener('input', render));
+$('q').addEventListener('input', render);
 ['ft', 'fm', 'fa', 'fr', 'fp'].forEach(i => $(i).addEventListener('change', render));
 $('refresh').onclick = load;
 $('tb').onclick = e => {
   if (e.target.closest('a,button')) return;
-  const tr = e.target.closest('tr[data-row]'); if (!tr) return;
+  const tr = e.target.closest('tr.main'); if (!tr) return;
   const k = tr.dataset.row; open.has(k) ? open.delete(k) : open.add(k); render();
 };
 
