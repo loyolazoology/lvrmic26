@@ -27,6 +27,8 @@
 .modal .box.xl{max-width:780px;}
 .sub-title{font-family:'Fraunces',serif;font-size:1rem;margin:20px 0 10px;color:var(--text-1);}
 .lock-note{margin:0 0 10px;}
+.rm-row{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--text-2);margin-top:8px;font-weight:400;}
+.rm-row input{width:16px;height:16px;accent-color:#c9974f;}
 </style>
 </head>
 <body>
@@ -41,9 +43,11 @@
       <div><label>Admin ID *</label><input id="n-id" placeholder="e.g. 1002 or vol-gate1" autocomplete="off"><div class="hint">Used to log in. 3–30 characters; letters, numbers, . _ -</div></div>
       <div><label>Full name *</label><input id="n-name" autocomplete="off"></div>
       <div><label>Email <span class="hint" style="display:inline;">(optional)</span></label><input id="n-email" type="email" autocomplete="off"><div class="hint">If filled, every login sends a 6-digit OTP to this address. Leave blank for no OTP step.</div></div>
-      <div><label>Position / role title</label><input id="n-position" placeholder="e.g. Volunteer, Abstract Reviewer"></div>
-      <div><label>Category</label><select id="n-category"><option>Admin</option><option>Staff</option><option>Reviewer</option><option>Volunteer</option></select></div>
-      <div><label>Assigned venue <span class="hint" style="display:inline;">(volunteers)</span></label><input id="n-venue" placeholder="Must match the Slot venue exactly"><div class="hint">Legacy field. Use Volunteers &gt; Assign for venues, slots and individual participants.</div></div>
+      <div><label>Contact number <span class="hint" style="display:inline;">(optional)</span></label><input id="n-contact" type="tel" inputmode="tel" maxlength="18" placeholder="+91 9XXXXXXXXX" autocomplete="off"><div class="hint">Printed on the team ID card.</div></div>
+      <div><label>Position / role title</label><input id="n-position" placeholder="e.g. Volunteer, Abstract Reviewer"><div class="hint">Printed as the designation on the ID card. Type "Convener" for the Convener card.</div></div>
+      <div><label>Category</label><select id="n-category"><option>Admin</option><option>Staff</option><option>Volunteer</option><option>Official</option></select></div>
+      <div><label>Assigned venue <span class="hint" style="display:inline;">(non-volunteers)</span></label><input id="n-venue" placeholder="Must match the Slot venue exactly"><div class="hint">Printed as "Venue" on the ID card. For volunteers use Volunteers &gt; Assign (venues come from there).</div></div>
+      <div><label>Photo <span class="hint" style="display:inline;">(optional, JPG or PNG)</span></label><input id="n-photo" type="file" accept="image/jpeg,image/png"><div class="hint">Front-facing, plain background. Resized automatically.</div></div>
       <div class="full"><label>Initial password *</label><div class="inline"><input id="n-pass" autocomplete="off"><button type="button" class="btn" id="n-gen"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button></div><div class="hint">The admin must change it at first login. Share it securely.</div></div>
     </div>
     <div class="sub-title">Access permissions</div>
@@ -52,9 +56,9 @@
   </div>
 
   <div class="sub-title" style="font-size:1.15rem;margin-top:6px;">Existing admin accounts</div>
-  <div class="toolbar noprint"><input id="q" placeholder="Search by ID, name or position" autocomplete="off"><select id="fc"><option value="">All categories</option><option>Admin</option><option>Staff</option><option>Reviewer</option><option>Volunteer</option></select><select id="fs"><option value="">Any status</option><option value="1">Active</option><option value="0">Disabled</option></select></div>
+  <div class="toolbar noprint"><input id="q" placeholder="Search by ID, name, position or phone" autocomplete="off"><select id="fc"><option value="">All categories</option><option>Admin</option><option>Staff</option><option>Volunteer</option><option>Official</option></select><select id="fs"><option value="">Any status</option><option value="1">Active</option><option value="0">Disabled</option></select><select id="fp"><option value="">Any photo status</option><option value="0">Photo missing</option><option value="1">Has photo</option></select></div>
   <div class="table-card"><div class="scroll-x" id="tc">
-    <table class="list"><thead><tr><th>ID</th><th>Name</th><th>Position</th><th>Venue</th><th>Status</th><th>Access</th><th class="noprint">Actions</th></tr></thead><tbody id="ab"><tr><td class="empty" colspan="7">Loading admins…</td></tr></tbody></table>
+    <table class="list"><thead><tr><th>ID</th><th>Name</th><th>Position</th><th>Venue</th><th>Photo</th><th>Status</th><th>Access</th><th class="noprint">Actions</th></tr></thead><tbody id="ab"><tr><td class="empty" colspan="8">Loading admins…</td></tr></tbody></table>
   </div></div>
 </div>
 
@@ -65,9 +69,12 @@
   <div class="grid">
     <div><label>Full name</label><input id="ed-name"></div>
     <div><label>Email</label><input id="ed-email" type="email"></div>
+    <div><label>Contact number</label><input id="ed-contact" type="tel" inputmode="tel" maxlength="18" placeholder="+91 9XXXXXXXXX"></div>
     <div><label>Position</label><input id="ed-position"></div>
-    <div><label>Category</label><select id="ed-category"><option>Admin</option><option>Staff</option><option>Reviewer</option><option>Volunteer</option></select></div>
-    <div class="full"><label>Assigned venue</label><input id="ed-venue"></div>
+    <div><label>Category</label><select id="ed-category"><option>Admin</option><option>Staff</option><option>Volunteer</option><option>Official</option></select></div>
+    <div><label>Assigned venue</label><input id="ed-venue"></div>
+    <div class="full"><label>Photo <span class="hint" style="display:inline;">(choose a file to replace it)</span></label><input id="ed-photo" type="file" accept="image/jpeg,image/png"><div class="hint" id="ed-photo-note"></div>
+      <label class="rm-row" id="ed-photo-rm-row"><input type="checkbox" id="ed-photo-rm"> Remove the current photo</label></div>
   </div>
   <div class="sub-title">Access permissions</div>
   <div id="ed-matrix"></div>
@@ -90,8 +97,8 @@
   <h3 style="margin-bottom:10px;"><i class="fa-solid fa-trash" style="color:var(--danger);"></i> Delete admin</h3>
   <p class="hint" id="dl-who" style="margin-bottom:12px;"></p>
   <div class="alert alert-error" id="dl-err"></div>
-  <p class="hint">To remove access without losing the record, use <b>Disable</b> instead. Deleting is permanent.</p>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="dl-cancel">Cancel</button><button class="btn btn-danger" id="dl-go"><i class="fa-solid fa-trash"></i> Delete permanently</button></div>
+  <p class="hint">To remove access without losing the record, use <b>Disable</b> instead. The server disables the account and keeps its history.</p>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="dl-cancel">Cancel</button><button class="btn btn-danger" id="dl-go"><i class="fa-solid fa-trash"></i> Delete</button></div>
 </div></div>
 
 <script src="admin-common.js"></script>
@@ -100,10 +107,12 @@
 if (VR.guard() && VR.frameOnly()) (function () {
 if (!VR.can('adminUsers', 'transaction')) { VR.denied('You do not have permission to manage admin users.'); return; }
 
-/* [key, label, description] — a null row is a group heading */
+/* [key, label, description] — a null row is a group heading.
+   Every module the server knows is listed here, so saving never silently removes access that is not shown. */
 const MODULES = [
   null, 'Participants',
   ['participants', 'Participants', 'Create / edit / delete accounts; participant list and details'],
+  ['spotRegistration', 'Spot registration', 'Register walk-ins, payment desk, spot report'],
   ['abstract', 'Abstracts', 'Review, remarks, revision requests, manual upload'],
   ['slot', 'Slots', 'Allot venue / room / time / token'],
   ['presentationAccess', 'Presentation access', 'Venue-wise PPT list (uses assignments)'],
@@ -114,6 +123,10 @@ const MODULES = [
   ['students', 'Student master', 'Create / import students; student list and QR codes'],
   ['studentConfig', 'Student attendance sessions', 'Create sessions: date, entry / exit times'],
   ['studentAttendance', 'Student attendance', 'Mark entry, scan QR, attendance report (volunteers: today only)'],
+  null, 'Event day',
+  ['liveBoard', 'Live event board', 'Venue and room status'],
+  ['scoring', 'Scoring and evaluation', 'Criteria, score entry, rankings'],
+  ['badges', 'Badges and ID cards', 'Participant badges, student hand tags, team ID cards (Edit = can print)'],
   null, 'Desk and communication',
   ['certificates', 'Certificates', 'Generate and attach certificates'],
   ['receipts', 'Receipts', 'Payment receipt requests'],
@@ -124,19 +137,22 @@ const MODULES = [
   ['volunteers', 'Volunteers', 'Assign venues to volunteers'],
   null, 'System',
   ['settings', 'Settings', 'Deadlines, fees, files and feedback window'],
-  ['adminUsers', 'Admin users', 'Create admins and grant access (high privilege)']
+  ['adminUsers', 'Admin users', 'Create admins and grant access (high privilege)'],
+  ['auditLog', 'Audit log', 'View who changed what (high privilege)'],
+  ['trash', 'Trash and backups', 'Restore deleted records, backup list']
 ];
 const MODS = []; for (let i = 0; i < MODULES.length; i++) { if (MODULES[i] === null) i++; else MODS.push(MODULES[i]); }
+const NOT_READONLY = ['adminUsers', 'auditLog', 'trash'];
 const PRESETS = {
   full: { label: 'Full access', all: true },
-  registration: { label: 'Registration desk', perms: { participants: [1, 1], receipts: [1, 1], certificates: [1, 1], attendance: [1, 1], students: [1, 1], studentAttendance: [1, 1] } },
+  registration: { label: 'Registration desk', perms: { participants: [1, 1], spotRegistration: [1, 1], badges: [1, 0], receipts: [1, 1], certificates: [1, 1], attendance: [1, 1], students: [1, 1], studentAttendance: [1, 1] } },
   reviewer: { label: 'Abstract reviewer', perms: { abstract: [1, 1], participants: [0, 1] } },
   venue: { label: 'Venue staff', perms: { presentationAccess: [0, 1], attendance: [1, 1], studentAttendance: [1, 1], slot: [0, 1] } },
   attendance: { label: 'Attendance only', perms: { attendance: [1, 0], studentAttendance: [1, 0] } },
   readonly: { label: 'Read-only (all reports)', perms: 'report' },
   none: { label: 'Clear all', perms: {} }
 };
-// What the server enforces for the Volunteer category (see volunteerPerms_ in Code.gs).
+// What the server enforces for the Volunteer category.
 const VOLUNTEER = { presentationAccess: { report: true, transaction: false }, attendance: { transaction: true, report: false }, studentAttendance: { transaction: true, report: false } };
 
 function buildMatrix(id) {
@@ -162,7 +178,7 @@ function getPerms(id) { const out = {}; MODS.forEach(m => out[m[0]] = { transact
 function applyPreset(id, key) {
   const pr = PRESETS[key], perms = {};
   MODS.forEach(m => { let t = 0, r = 0;
-    if (pr.all) { t = 1; r = 1; } else if (pr.perms === 'report') { r = m[0] === 'adminUsers' ? 0 : 1; } else if (pr.perms[m[0]]) { t = pr.perms[m[0]][0]; r = pr.perms[m[0]][1]; }
+    if (pr.all) { t = 1; r = 1; } else if (pr.perms === 'report') { r = NOT_READONLY.indexOf(m[0]) > -1 ? 0 : 1; } else if (pr.perms[m[0]]) { t = pr.perms[m[0]][0]; r = pr.perms[m[0]][1]; }
     perms[m[0]] = { transaction: !!t, report: !!r }; });
   setPerms(id, perms);
 }
@@ -173,6 +189,25 @@ function permSummary(perms) {
   return chips || '<span style="color:var(--text-3);">No access</span>';
 }
 const permText = perms => MODS.map(m => { const p = (perms || {})[m[0]] || {}; return (p.transaction || p.report) ? m[1] + ': ' + (p.transaction && p.report ? 'Edit' : p.transaction ? 'Mark' : 'View') : ''; }).filter(Boolean).join('; ') || 'No access';
+
+/* ---------- photo: resized in the browser (max 700 px, JPEG) so the upload stays small ---------- */
+function photoToPayload(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) return resolve(null);
+    if (!/^image\/(jpeg|png)$/.test(file.type)) return reject(new Error('Photo must be a JPG or PNG file.'));
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const k = Math.min(1, 700 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      resolve({ photoData: c.toDataURL('image/jpeg', 0.85).split(',')[1], photoFileName: 'photo.jpg' });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('That picture could not be read.')); };
+    img.src = url;
+  });
+}
+const contactOk = s => !s || /^\+?[\d\s-]{7,18}$/.test(s);
 
 buildMatrix('n-matrix'); buildMatrix('ed-matrix');
 
@@ -197,34 +232,41 @@ $('n-create').onclick = async function () {
   if (!v('n-id') || !v('n-name') || !$('n-pass').value) return showErr('Admin ID, name and initial password are required.');
   if (!/^[A-Za-z0-9._-]{3,30}$/.test(v('n-id'))) return showErr('Admin ID must be 3–30 characters (letters, numbers, . _ -).');
   if ($('n-pass').value.length < 6) return showErr('Initial password must be at least 6 characters.');
+  if (!contactOk(v('n-contact'))) return showErr('Enter a valid contact number (7–15 digits) or leave it blank.');
   const perms = getPerms('n-matrix');
   if ($('n-category').value !== 'Volunteer' && !Object.values(perms).some(p => p.report || p.transaction) && !confirm('No permissions are ticked — this admin will see nothing. Create anyway?')) return;
+  let pic = null;
+  try { pic = await photoToPayload($('n-photo').files[0]); } catch (e) { return showErr(e.message || 'That picture could not be read.'); }
   await VR.busy(this, 'Creating…', async () => {
     try {
       const pw = $('n-pass').value;
-      const r = await VR.api('adminAddAdminUser', { id: v('n-id'), name: v('n-name'), email: v('n-email'), position: v('n-position'), category: $('n-category').value, assignedVenue: v('n-venue'), password: pw, permissions: perms });
+      const body = { id: v('n-id'), name: v('n-name'), email: v('n-email'), contactNo: v('n-contact'), position: v('n-position'), category: $('n-category').value, assignedVenue: v('n-venue'), password: pw, permissions: perms };
+      if (pic) Object.assign(body, pic);
+      const r = await VR.api('adminAddAdminUser', body);
       if (!r.ok) return showErr(r.error || 'Could not create the admin.');
       showOk('Admin "' + r.id + '" created. Initial password: ' + pw + (v('n-email') ? (r.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.') : ' — share it securely.'));
-      ['n-id', 'n-name', 'n-email', 'n-position', 'n-venue'].forEach(i => $(i).value = '');
+      if (r.photoError) showErr('The account was created, but the photo was not saved: ' + r.photoError + ' Open Edit on this admin and upload it again.');
+      ['n-id', 'n-name', 'n-email', 'n-contact', 'n-position', 'n-venue', 'n-photo'].forEach(i => $(i).value = '');
       $('n-pass').value = genPassword(); setPerms('n-matrix', {}); applyVolLock('n'); load();
     } catch (e) { showErr('Could not reach the server.'); }
   });
 };
 
-const view = () => { const q = v('q').toLowerCase(), c = $('fc').value, s = $('fs').value;
-  return admins.filter(a => (!q || [a.id, a.name, a.position, a.email].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) && (!c || a.category === c) && (!s || (s === '1') === a.active)); };
+const view = () => { const q = v('q').toLowerCase(), c = $('fc').value, s = $('fs').value, p = $('fp').value;
+  return admins.filter(a => (!q || [a.id, a.name, a.position, a.email, a.contactNo].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) && (!c || a.category === c) && (!s || (s === '1') === a.active) && (!p || (p === '1') === !!a.hasPhoto)); };
 
 function render() {
   const list = view();
   $('ab').innerHTML = list.length ? list.map(a => {
     const main = String(a.id) === '1001';
-    return '<tr><td class="id">' + esc(a.id) + '</td><td><span class="nm">' + esc(a.name) + '</span><span class="tiny">' + esc(a.email || 'no email (no OTP)') + '</span></td>'
+    return '<tr><td class="id">' + esc(a.id) + '</td><td><span class="nm">' + esc(a.name) + '</span><span class="tiny">' + esc(a.email || 'no email (no OTP)') + '</span>' + (a.contactNo ? '<span class="tiny">' + esc(a.contactNo) + '</span>' : '') + '</td>'
       + '<td>' + esc(a.position || '—') + '<span class="tiny">' + esc(a.category || '') + '</span></td><td>' + esc(a.assignedVenue || '—') + '</td>'
+      + '<td>' + (a.hasPhoto ? '<span class="badge s-Present">Yes</span>' : '<span class="badge s-Absent">Missing</span>') + '</td>'
       + '<td>' + (a.active ? '<span class="badge s-Present">Active</span>' : '<span class="badge s-Absent">Disabled</span>') + '</td>'
       + '<td style="max-width:380px;">' + permSummary(a.permissions) + '</td>'
       + '<td class="noprint"><div class="row-actions"><button class="btn btn-sm" data-act="edit" data-id="' + esc(a.id) + '"><i class="fa-solid fa-pen"></i> Edit</button> <button class="btn btn-sm" data-act="reset" data-id="' + esc(a.id) + '" title="Reset password"><i class="fa-solid fa-key"></i></button>'
       + (main ? '' : ' <button class="btn btn-sm btn-warn" data-act="toggle" data-id="' + esc(a.id) + '">' + (a.active ? 'Disable' : 'Enable') + '</button> <button class="btn btn-sm btn-danger" data-act="delete" data-id="' + esc(a.id) + '" title="Delete"><i class="fa-solid fa-trash"></i></button>') + '</div></td></tr>';
-  }).join('') : '<tr><td class="empty" colspan="7">' + (admins.length ? 'No admins match.' : 'No admin accounts yet.') + '</td></tr>';
+  }).join('') : '<tr><td class="empty" colspan="8">' + (admins.length ? 'No admins match.' : 'No admin accounts yet.') + '</td></tr>';
 }
 async function load() {
   try {
@@ -233,7 +275,7 @@ async function load() {
     admins = r.admins || []; render();
   } catch (e) { showErr('Could not reach the server.'); }
 }
-['q'].forEach(i => $(i).addEventListener('input', render)); ['fc', 'fs'].forEach(i => $(i).addEventListener('change', render));
+['q'].forEach(i => $(i).addEventListener('input', render)); ['fc', 'fs', 'fp'].forEach(i => $(i).addEventListener('change', render));
 const byId = id => admins.find(a => String(a.id) === String(id));
 
 $('ab').onclick = async e => {
@@ -241,13 +283,16 @@ $('ab').onclick = async e => {
   const a = byId(b.dataset.id); if (!a) return; target = a; hideAlerts();
   if (b.dataset.act === 'edit') {
     editing = a; $('ed-err').classList.remove('show'); $('ed-id').textContent = a.id;
-    $('ed-name').value = a.name || ''; $('ed-email').value = a.email || ''; $('ed-position').value = a.position || ''; $('ed-venue').value = a.assignedVenue || '';
+    $('ed-name').value = a.name || ''; $('ed-email').value = a.email || ''; $('ed-contact').value = a.contactNo || ''; $('ed-position').value = a.position || ''; $('ed-venue').value = a.assignedVenue || '';
+    $('ed-photo').value = ''; $('ed-photo-rm').checked = false;
+    $('ed-photo-note').textContent = a.hasPhoto ? 'A photo is on file. Choose a new file to replace it.' : 'No photo on file yet.';
+    $('ed-photo-rm-row').style.display = a.hasPhoto ? 'flex' : 'none';
     const cat = $('ed-category'); if (a.category && ![...cat.options].some(o => o.value === a.category)) cat.add(new Option(a.category));
     cat.value = a.category || 'Admin'; setPerms('ed-matrix', a.permissions); applyVolLock('ed'); $('ed').classList.add('show');
   } else if (b.dataset.act === 'reset') {
     $('rp-who').textContent = a.name + ' (' + a.id + ')'; $('rp-pass').value = genPassword(); $('rp-err').classList.remove('show'); $('rp').classList.add('show');
   } else if (b.dataset.act === 'delete') {
-    $('dl-who').textContent = 'Delete ' + a.name + ' (' + a.id + ') permanently?'; $('dl-err').classList.remove('show'); $('dl').classList.add('show');
+    $('dl-who').textContent = 'Delete ' + a.name + ' (' + a.id + ')? The account is switched off and its history is kept.'; $('dl-err').classList.remove('show'); $('dl').classList.add('show');
   } else if (b.dataset.act === 'toggle') {
     if (!confirm((a.active ? 'Disable ' : 'Enable ') + a.name + '?')) return;
     const r = await VR.api('adminUpdateAdminUser', { row: a.row, active: !a.active });
@@ -258,11 +303,16 @@ $('ed-cancel').onclick = () => $('ed').classList.remove('show'); $('rp-cancel').
 
 $('ed-save').onclick = async function () {
   $('ed-err').classList.remove('show');
+  if (!contactOk(v('ed-contact'))) return inModal('ed-err', 'Enter a valid contact number (7–15 digits) or leave it blank.');
+  let pic = null;
+  try { pic = await photoToPayload($('ed-photo').files[0]); } catch (e) { return inModal('ed-err', e.message || 'That picture could not be read.'); }
   await VR.busy(this, 'Saving…', async () => {
     try {
-      const r = await VR.api('adminUpdateAdminUser', { row: editing.row, name: v('ed-name'), email: v('ed-email'), position: v('ed-position'), category: $('ed-category').value, assignedVenue: v('ed-venue'), permissions: getPerms('ed-matrix') });
+      const body = { row: editing.row, name: v('ed-name'), email: v('ed-email'), contactNo: v('ed-contact'), position: v('ed-position'), category: $('ed-category').value, assignedVenue: v('ed-venue'), permissions: getPerms('ed-matrix') };
+      if (pic) Object.assign(body, pic); else if ($('ed-photo-rm').checked) body.removePhoto = true;
+      const r = await VR.api('adminUpdateAdminUser', body);
       if (!r.ok) return inModal('ed-err', r.error || 'Could not save.');
-      $('ed').classList.remove('show'); showOk('Admin updated. Changes apply at their next login.'); load();
+      $('ed').classList.remove('show'); showOk('Admin updated. Permission changes apply at their next login.'); load();
     } catch (e) { inModal('ed-err', 'Could not reach the server.'); }
   });
 };
@@ -283,14 +333,14 @@ $('dl-go').onclick = async function () {
     try {
       const r = await VR.api('adminDeleteAdminUser', { row: target.row, id: target.id });
       if (!r.ok) return inModal('dl-err', r.error || 'Could not delete.');
-      $('dl').classList.remove('show'); showOk('Admin ' + target.id + ' deleted.'); load();
+      $('dl').classList.remove('show'); showOk('Admin ' + target.id + ' disabled.'); load();
     } catch (e) { inModal('dl-err', 'Could not reach the server.'); }
   });
 };
 
 // Export (passwords and hashes are never part of the list)
 VR.exportBar($('xp'), { name: 'VRMIC2026_Admin_Users', title: 'VRMIC 2026 — Admin users', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
-  getData: () => ({ headers: ['ID', 'Name', 'Email', 'Position', 'Category', 'Venue', 'Status', 'Access'], rows: view().map(a => [a.id, a.name, a.email || '', a.position || '', a.category || '', a.assignedVenue || '', a.active ? 'Active' : 'Disabled', permText(a.permissions)]) }) });
+  getData: () => ({ headers: ['ID', 'Name', 'Email', 'Contact no.', 'Position', 'Category', 'Venue', 'Photo', 'Status', 'Access'], rows: view().map(a => [a.id, a.name, a.email || '', a.contactNo || '', a.position || '', a.category || '', a.assignedVenue || '', a.hasPhoto ? 'Yes' : 'Missing', a.active ? 'Active' : 'Disabled', permText(a.permissions)]) }) });
 
 load();
 })();
