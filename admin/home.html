@@ -166,7 +166,15 @@ const MENU = [
    tx:[['Manual PPT upload','ppt-upload.html','fa-file-arrow-up']],
    rp:[['Venue presentation list','presentation-access.html','fa-display']] },
  { id:'badges', label:'Badges and ID Cards', icon:'fa-id-badge', mod:'badges',
-   tx:[['Print all or by category','badges-print.html','fa-print']],
+   tx:[
+     ['Print all or by category','badges-print.html','fa-print'],
+     ['Student hand tag','students-tag.html','fa-tag'],
+     ['Participant ID card','participants-idcard.html','fa-id-card-clip'],
+     ['Team ID: all','team-id.html?role=all','fa-people-group'],
+     ['Team ID: volunteers','team-id.html?role=volunteer','fa-user-group'],
+     ['Team ID: admins','team-id.html?role=admin','fa-user-shield'],
+     ['Team ID: convener','team-id.html?role=convener','fa-crown']
+   ],
    rp:[['Badge register','badges-report.html','fa-table-list']] },
  { id:'certificates', label:'Certificates', icon:'fa-certificate', mod:'certificates',
    cf:[['Certificate template and signature','certificates-template.html','fa-signature']],
