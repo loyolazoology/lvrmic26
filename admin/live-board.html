@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Event Board | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--n950:#0a1230;--n900:#0e1938;--n850:#122043;--n800:#152750;--bd:rgba(226,187,120,.24);--gold:#c9974f;--gl:#e8c983;--t1:#f3f5fb;--t2:#b3bcd6;--t3:#8390b3;--ok:#6fc9b6;--warn:#dba43c;--bad:#e8988c;--blue:#9db8ee;--z:1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--n950);color:var(--t1);line-height:1.45;font-size:calc(14px*var(--z))}
+body.tv{--z:1.35}
+.mono{font-family:'IBM Plex Mono',monospace}
+button,select{font-family:inherit}
+:focus-visible{outline:2px solid var(--gl);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px 18px;background:rgba(6,11,28,.94);border-bottom:1px solid var(--bd)}
+.bar h1{font-family:'Fraunces',serif;font-weight:500;font-size:1.2em;margin-right:auto;display:flex;gap:9px;align-items:center}
+.bar h1 i{color:var(--gl)}
+.bar select,.btn{height:36px;border-radius:8px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);padding:0 12px;font-size:.9em;font-weight:600;cursor:pointer}
+.btn:hover,.bar select:hover{border-color:var(--gold)}
+.btn.on{background:rgba(219,164,60,.18);border-color:var(--warn);color:var(--warn)}
+.clock{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.15em;color:var(--gl)}
+.last{font-size:.8em;color:var(--t3);text-align:right;line-height:1.25}
+.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px}
+.live.p{background:var(--warn)}.live.x{background:var(--bad)}
+.wrap{padding:16px 18px 30px}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--n850);border:1px solid var(--bd);border-radius:10px;padding:10px 14px}
+.kpi b{display:block;font-size:1.9em;font-family:'IBM Plex Mono',monospace;color:var(--gl);line-height:1.1}
+.kpi span{font-size:.8em;color:var(--t2)}
+.alerts{margin-bottom:14px;border-radius:10px;border:1px solid rgba(216,105,90,.5);background:rgba(216,105,90,.12);padding:8px 14px}
+.alerts div{padding:3px 0;font-size:.92em;color:#f3b8ae;display:flex;gap:9px;align-items:baseline}
+.alerts .w{color:var(--warn)}
+.notice{margin-bottom:14px;padding:10px 14px;border-radius:10px;background:rgba(219,164,60,.1);border:1px solid rgba(219,164,60,.4);color:var(--warn);font-size:.9em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,430px),1fr));gap:14px}
+.card{background:linear-gradient(180deg,var(--n850),var(--n900));border:1px solid var(--bd);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.card.hot{border-color:rgba(216,105,90,.6)}
+.ch{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.ch h2{font-family:'Fraunces',serif;font-weight:500;font-size:1.25em}
+.ch small{color:var(--t3);font-size:.8em}
+.cnt{display:flex;gap:12px;font-size:.82em;color:var(--t2);white-space:nowrap}
+.cnt b{color:var(--t1)}
+.now{border-radius:10px;border:1px solid var(--gold);background:rgba(232,201,131,.07);padding:12px 14px}
+.now.idle{border-style:dashed;border-color:var(--bd);background:none;color:var(--t3);text-align:center}
+.lbl{font-size:.78em;color:var(--gl);font-weight:600;margin-bottom:4px}
+.nm{font-size:1.2em;font-weight:700}
+.sub{font-size:.85em;color:var(--t2)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0;font-size:.82em;color:var(--t2)}
+.tm{font-family:'IBM Plex Mono',monospace;font-size:1.05em;font-weight:700;color:var(--gl);margin-top:6px}
+.pg{height:6px;border-radius:3px;background:rgba(255,255,255,.1);margin-top:6px;overflow:hidden}
+.pg i{display:block;height:100%;background:var(--gold);width:0}
+.nx{display:flex;flex-direction:column;gap:5px}
+.nx .r{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.03);font-size:.9em}
+.nx .r span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;font-size:.78em;font-weight:600;white-space:nowrap}
+.c-Present{background:rgba(79,169,128,.18);color:var(--ok)}
+.c-Presented{background:rgba(111,201,182,.1);color:#8fb9ae}
+.c-Late{background:rgba(219,164,60,.18);color:var(--warn)}
+.c-Absent,.c-No-show{background:rgba(216,105,90,.2);color:var(--bad)}
+.c-Likely{background:rgba(216,105,90,.12);color:var(--bad);border:1px dashed rgba(216,105,90,.6)}
+.c-Online{background:rgba(120,160,230,.16);color:var(--blue)}
+.c-Expected{background:rgba(179,188,214,.1);color:var(--t2)}
+.ros{display:flex;flex-wrap:wrap;gap:5px}
+.ros .chip{font-family:'IBM Plex Mono',monospace;font-size:.72em;padding:2px 7px}
+.sec{font-family:'Fraunces',serif;font-size:1.1em;margin:20px 0 10px;display:flex;gap:9px;align-items:center}
+.sec i{color:var(--gl)}
+.empty{padding:50px 18px;text-align:center;color:var(--t3);border:1px dashed var(--bd);border-radius:14px}
+.foot{margin-top:18px;font-size:.8em;color:var(--t3)}
+.foot a{color:var(--gl)}
+.err{margin-bottom:12px;padding:10px 14px;border-radius:10px;background:rgba(216,105,90,.12);border:1px solid rgba(216,105,90,.4);color:var(--bad);font-size:.9em;display:none}
+.err.show{display:block}
+body.fs .bar h1 span,body.fs .foot{display:none}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <h1><i class="fa-solid fa-tower-broadcast"></i><span>Live Event Board</span></h1>
+  <select id="day" aria-label="Day"></select>
+  <select id="ven" aria-label="Venue"><option value="">All venues</option></select>
+  <button class="btn" id="pause" title="Pause automatic refresh"><i class="fa-solid fa-pause"></i> Pause</button>
+  <button class="btn" id="screen" title="Fill the screen with the board"><i class="fa-solid fa-expand"></i> Screen mode</button>
+  <div class="last"><span class="live" id="dot"></span><span id="upd">Loading…</span><br><span id="refIn"></span></div>
+  <div class="clock" id="clk" title="Indian Standard Time">--:--:--</div>
+</div>
+<div class="wrap">
+  <div class="err" id="err"></div>
+  <div class="strip" id="strip"></div>
+  <div id="notice"></div>
+  <div id="alerts"></div>
+  <div class="grid" id="cards"><div class="empty">Loading the board…</div></div>
+  <div id="posters"></div>
+  <div class="foot">Read-only board. To mark a presenter as presented or no-show, open <a href="slots-noshow.html">No-show and reallocation</a>.</div>
+</div>
+
+<script src="admin-common.js"></script>
+<script>
+const $ = id => document.getElementById(id), esc = VR.esc, EVERY = 30;
+if (!VR.token()) (window.top || window).location.replace(VR.LOGIN_URL);
+const DEMO = new URLSearchParams(location.search).get('demo') === '1';
+if (!DEMO && window.self === window.top) location.replace(VR.HOME_URL + '#live-board.html');
+
+let data = null, recvAt = 0, paused = false, busy = false, nextAt = Date.now() + EVERY * 1000, day = '', ven = '';
+
+/* ---------- time: always the server's IST clock, never the device clock ---------- */
+const nowSec = () => data ? data.istSec + (Date.now() - recvAt) / 1000 : 0;
+const hms = s => { s = Math.max(0, Math.floor(s)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+const clockText = s => { s = Math.floor(s) % 86400; let h = Math.floor(s / 3600); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + String(Math.floor(s % 3600 / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0') + ' ' + ap; };
+
+/* ---------- demo data (open this page with ?demo=1) ---------- */
+function demoData() {
+  const d = new Date(), key = d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }), p = d.toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour12: false }).split(':').map(Number);
+  const sec = p[0] * 3600 + p[1] * 60 + p[2], nowM = sec / 60, names = ['Dr. A. Meena', 'S. Karthik', 'Dr. P. Ravi', 'N. Fathima', 'Dr. J. Selvam', 'R. Divya', 'Dr. K. Anand', 'M. Priya', 'Dr. S. Iqbal', 'T. Harini'];
+  const t12 = m => { let h = Math.floor(m / 60) % 24; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + String(m % 60).padStart(2, '0') + ' ' + ap; };
+  const cards = [['Bertram Hall', ''], ['Zoology Smart Room', 'JF-02']].map((v, vi) => {
+    const first = Math.floor(nowM / 10) * 10 - 30 + vi * 10, roster = names.map((n, i) => {
+      const start = first + i * 10, end = start + 10, past = end <= nowM;
+      const status = past ? (i % 5 === 1 ? 'No-show' : 'Presented') : 'Scheduled';
+      const chip = status !== 'Scheduled' ? status : (i % 4 === 3 ? 'Expected' : (start - nowM < 10 && i % 4 === 2 ? 'Late' : 'Present'));
+      return { id: 'VRMIC26-' + (vi * 20 + i + 1), name: n, title: 'Vector-borne disease surveillance in coastal Tamil Nadu', inst: 'Loyola College, Chennai', token: 'OR-' + String(i + 1).padStart(3, '0'), time: t12(start), endTime: t12(end), start: start, end: end, mode: i === 6 ? 'Online' : 'Offline', status: status, hasPPT: i !== 4, chip: i === 6 && status === 'Scheduled' ? 'Online' : chip };
+    });
+    const now = roster.find(r => r.start <= nowM && nowM < r.end && r.status !== 'No-show') || null;
+    return { venue: v[0], room: v[1], now: now, next: roster.filter(r => r !== now && r.status === 'Scheduled' && r.start > nowM).slice(0, 3), roster: roster,
+      counts: { presented: roster.filter(r => r.status === 'Presented').length, remaining: roster.filter(r => r.status === 'Scheduled').length, noShow: roster.filter(r => r.status === 'No-show').length, total: roster.length } };
+  });
+  const alerts = [{ venue: 'Bertram Hall', room: '', level: 'bad', text: 'Not checked in: ' + names[3] + ' (OR-004) - Bertram Hall' }, { venue: 'Zoology Smart Room', room: 'JF-02', level: 'warn', text: 'Slot freed by no-show: ' + names[1] + ' (OR-002) - Zoology Smart Room JF-02' }];
+  return { ok: true, istSec: sec, date: key, dateText: 'Demo day', today: key, days: [{ key: key, text: 'Demo day' }], isToday: true, hasSession: true, venues: ['Bertram Hall', 'Zoology Smart Room'], cards: cards, alerts: alerts,
+    posters: [{ venue: 'Poster Hall', total: 24, arrived: 17, boards: 24, ids: [] }], overall: { presenters: 44, presented: cards.reduce((n, c) => n + c.counts.presented, 0), noShow: 2, checkedIn: 31, inside: null } };
+}
+
+/* ---------- load ---------- */
+async function load(manual) {
+  if (busy) return; busy = true; $('dot').className = 'live p';
+  try {
+    const r = DEMO ? demoData() : await VR.api('getLiveBoard', { date: day });
+    if (!r.ok) { fail(r.error || 'Could not load the board.', /permission/i.test(r.error || '')); return; }
+    if (r.newToken) localStorage.setItem('vrmic_admin_token', r.newToken);
+    data = r; recvAt = Date.now(); day = r.date; $('err').classList.remove('show'); $('dot').className = 'live';
+    $('upd').textContent = 'Refreshed ' + clockText(r.istSec);
+    render();
+  } catch (e) { fail('Connection problem. Showing the last data; retrying.'); } finally { busy = false; nextAt = Date.now() + EVERY * 1000; }
+}
+function fail(m, fatal) { $('dot').className = 'live x'; const e = $('err'); e.textContent = m; e.classList.add('show'); if (fatal) { $('cards').innerHTML = ''; paused = true; } }
+
+/* ---------- render ---------- */
+const chipCls = c => 'c-' + String(c).split(' ')[0];
+const chip = c => `<span class="chip ${chipCls(c)}">${esc(c)}</span>`;
+function render() {
+  const r = data, v = ven;
+  $('day').innerHTML = r.days.length ? r.days.map(d => `<option value="${d.key}" ${d.key === r.date ? 'selected' : ''}>${esc(d.text)}${d.key === r.today ? ' (today)' : ''}</option>`).join('') : `<option>${esc(r.dateText)}</option>`;
+  $('ven').innerHTML = '<option value="">All venues</option>' + r.venues.map(x => `<option ${x === v ? 'selected' : ''}>${esc(x)}</option>`).join('');
+  const o = r.overall, K = (n, l) => `<div class="kpi"><b>${n == null ? '—' : n}</b><span>${l}</span></div>`;
+  $('strip').innerHTML = K(o.presenters, 'Presenters on this day') + K(o.presented, 'Presented') + K(o.noShow, 'No-shows') + (o.inside != null ? K(o.inside, 'People inside now') : K(o.checkedIn, 'Checked in at the gate'));
+  $('notice').innerHTML = (!r.hasSession ? '<div class="notice"><i class="fa-solid fa-circle-info"></i> No attendance session is set for this day, so gate arrivals cannot be shown. Add one under Participant Attendance › Attendance sessions.</div>' : '') +
+    (!r.isToday ? `<div class="notice"><i class="fa-solid fa-calendar"></i> Showing ${esc(r.dateText)}, not today. Timers and alerts apply only to today.</div>` : '');
+  const al = r.alerts.filter(a => !v || a.venue === v);
+  $('alerts').innerHTML = al.length ? `<div class="alerts">${al.map(a => `<div><i class="fa-solid fa-triangle-exclamation ${a.level === 'warn' ? 'w' : ''}"></i><span>${esc(a.text)}</span></div>`).join('')}</div>` : '';
+  const cards = r.cards.filter(c => !v || c.venue === v), hot = {}; al.forEach(a => { if (a.level === 'bad') hot[a.venue + '|' + a.room] = 1; });
+  $('cards').innerHTML = cards.length ? cards.map(c => {
+    const n = c.now, k = c.counts;
+    const nowHtml = n ? `<div class="now"><div class="lbl">Now presenting</div><div class="nm">${esc(n.name)} ${chip(n.chip)}</div><div class="sub">${esc(n.title)}</div>
+      <div class="meta"><span>${esc(n.inst)}</span><span class="mono">${esc(n.token)}</span><span>${esc(n.time)} – ${esc(n.endTime)}</span><span>${esc(n.mode)}</span>${n.hasPPT ? '' : '<span style="color:var(--bad)">No PPT</span>'}</div>
+      <div class="tm" data-s="${n.start}" data-e="${n.end}">--:--</div><div class="pg"><i></i></div></div>` : '<div class="now idle">Nobody presenting right now</div>';
+    const nx = c.next.length ? `<div><div class="lbl">Next up</div><div class="nx">${c.next.map(x => `<div class="r"><span><b>${esc(x.time)}</b> &nbsp;${esc(x.name)} <span class="sub mono">${esc(x.token)}</span></span>${chip(x.chip)}</div>`).join('')}</div></div>` : '';
+    const ros = `<div class="ros">${c.roster.map(x => `<span class="chip ${chipCls(x.chip)}" title="${esc(x.name)} · ${esc(x.time)} · ${esc(x.chip)}">${esc(x.token || x.id.slice(-4))}</span>`).join('')}</div>`;
+    return `<div class="card ${hot[c.venue + '|' + c.room] ? 'hot' : ''}"><div class="ch"><h2>${esc(c.venue)}${c.room ? ' <small>Room ' + esc(c.room) + '</small>' : ''}</h2>
+      <div class="cnt"><span><b>${k.presented}</b> presented</span><span><b>${k.remaining}</b> left</span><span><b>${k.noShow}</b> no-show</span></div></div>${nowHtml}${nx}${ros}</div>`;
+  }).join('') : `<div class="empty" style="grid-column:1/-1">${r.venues.length || r.posters.length ? 'No oral sessions for this selection.' : 'No slots are scheduled for this day yet.'}</div>`;
+  const po = r.posters.filter(x => !v || x.venue === v);
+  $('posters').innerHTML = po.length ? `<div class="sec"><i class="fa-solid fa-chalkboard"></i> Poster venues</div><div class="strip">${po.map(x => `<div class="kpi"><b>${x.arrived}<small style="font-size:.5em;color:var(--t3)"> / ${x.total}</small></b><span>${esc(x.venue)}: presenters arrived · ${x.boards} boards in use</span></div>`).join('')}</div>` : '';
+  tick();
+}
+
+/* ---------- one-second tick: clock, timers, refresh countdown ---------- */
+function tick() {
+  if (!data) return; const s = nowSec(); $('clk').textContent = clockText(s);
+  document.querySelectorAll('.tm').forEach(el => {
+    if (!data.isToday) { el.textContent = ''; return; }
+    const st = +el.dataset.s * 60, en = +el.dataset.e * 60, el_ = s - st, left = en - s;
+    el.textContent = 'Elapsed ' + hms(el_) + '  ·  ' + (left >= 0 ? hms(left) + ' left' : 'over by ' + hms(-left));
+    el.style.color = left < 0 ? 'var(--bad)' : '';
+    el.nextElementSibling.firstElementChild.style.width = Math.max(0, Math.min(100, el_ / (en - st) * 100)) + '%';
+  });
+  const left = Math.max(0, Math.round((nextAt - Date.now()) / 1000));
+  $('refIn').textContent = paused ? 'Auto-refresh paused' : 'Next refresh in ' + left + 's';
+  if (!paused && Date.now() >= nextAt) load();
+}
+setInterval(tick, 1000);
+
+/* ---------- controls ---------- */
+$('day').onchange = e => { day = e.target.value; load(true); };
+$('ven').onchange = e => { ven = e.target.value; if (data) render(); };
+$('pause').onclick = function () { paused = !paused; this.classList.toggle('on', paused); this.innerHTML = paused ? '<i class="fa-solid fa-play"></i> Resume' : '<i class="fa-solid fa-pause"></i> Pause'; if (!paused) load(); tick(); };
+$('screen').onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); };
+document.addEventListener('fullscreenchange', () => { const on = !!document.fullscreenElement; document.body.classList.toggle('tv', on); document.body.classList.toggle('fs', on); $('screen').innerHTML = on ? '<i class="fa-solid fa-compress"></i> Exit screen mode' : '<i class="fa-solid fa-expand"></i> Screen mode'; });
+if (!document.documentElement.requestFullscreen) $('screen').style.display = 'none';
+if (DEMO) $('upd').textContent = 'Demo data';
+load();
+</script>
+</body>
+</html>
