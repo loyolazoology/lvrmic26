@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Badge Register | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.btn-success{background:rgba(79,169,128,.14);border-color:rgba(79,169,128,.4);color:var(--teal-light);}
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
+.sec{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+.sec i{color:var(--gold-light);} .sec h2{font-size:1.05rem;margin:0;}
+.sec .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.a-Info{background:rgba(120,160,230,.14);color:#a9c3f0;}
+.note{text-align:center;padding:38px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
+.note i{font-size:24px;color:var(--gold-light);display:block;margin-bottom:8px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px;}
+.tab{background:var(--navy-900);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab b{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-left:6px;color:var(--text-3);}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);} .tab.on b{color:var(--gold-light);}
+.qi{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;cursor:pointer;}
+.qi-name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--text-1);}
+.qi-meta{font-size:12.5px;color:var(--text-3);}
+.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
+.qi-theme{font-size:12.5px;color:var(--teal-light);}
+.qi-body{display:none;margin-top:10px;} .qi.open .qi-body{display:block;}
+.rv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:10px 0;white-space:pre-wrap;}
+.remark b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px;margin:8px 0;}
+.facts div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.facts div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;} .chk input{width:auto;}
+textarea{width:100%;min-height:96px;resize:vertical;}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;white-space:pre-wrap;}
+.x-body .wide{grid-column:1/-1;}
+table.list td.ti{white-space:normal;min-width:220px;max-width:380px;}
+table.list td.rm{white-space:normal;min-width:200px;max-width:340px;font-size:12.5px;color:var(--text-2);}
+.over{color:#e8988c;font-weight:600;} .ok{}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+.bars div{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px;color:var(--text-2);}
+.bars .l{flex:0 0 46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .bars .b{flex:1;height:8px;background:var(--navy-950);border-radius:6px;overflow:hidden;} .bars .b i{display:block;height:100%;background:var(--gold);} .bars .c{flex:0 0 32px;text-align:right;font-family:'IBM Plex Mono',monospace;}
+
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-id-badge" style="color:var(--gold-light);"></i> Badge register</h1><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><span id="xp"></span></div></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by name, ID or organisation" autocomplete="off">
+    <select id="fg"><option value="">All groups</option><option value="participant">Participants</option><option value="student">Students</option><option value="team">Volunteers / staff</option></select>
+    <select id="fc"><option value="">All categories</option></select>
+    <select id="fs"><option value="">All statuses</option><option>Not printed</option><option>Printed</option><option>Reprinted</option></select>
+    <select id="fk"><option value="">Collected: any</option><option value="y">Collected</option><option value="n">Printed, not collected</option></select>
+    <label class="tiny" style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="fp" style="width:auto;"> Missing photo only</label>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+  </div>
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list"><thead><tr><th style="width:26px;"></th><th>ID</th><th>Name</th><th>Group</th><th>Category</th><th>Status</th><th>Prints</th><th>First printed</th><th>Last printed</th><th>Printed by</th><th>Photo</th><th class="noprint">Collected</th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="12">Loading badge register…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny noprint" style="margin-top:10px;">Click a row to see every print and each reprint reason. A badge counts as "Reprinted" from its second print. Prints are recorded when the badge PDF is created. Students have no photo on file, so they never appear in "Missing photo".</p>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('badges', 'report') && !VR.can('badges', 'transaction')) { VR.denied('You do not have permission to view the badge register.'); return; }
+
+const url = u => /^https?:\/\//i.test(String(u || '')) ? String(u) : '';
+const ver = p => Number(p.AbstractRevision) || (p.AbstractDocId ? 1 : 0);
+const isAbs = p => p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster';
+const st = p => p.AbstractStatus || 'Not Submitted';
+const aCls = s => 'a-' + String(s).split(' ')[0];
+const dtm = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const dts = v => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); };
+const fact = (k, v) => '<div><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
+const byLine = p => p.AbstractReviewedByName ? p.AbstractReviewedByName + (p.AbstractReviewedBy ? ' (' + p.AbstractReviewedBy + ')' : '') : '';
+
+const canTick = VR.can('badges', 'transaction') || VR.can('spotRegistration', 'transaction');
+let all = [], view = [], open = new Set();
+const GN = { participant: 'Participant', student: 'Student', team: 'Volunteer / staff' };
+const status = p => p.printCount === 0 ? 'Not printed' : p.printCount === 1 ? 'Printed' : 'Reprinted';
+const sCls = s => s === 'Not printed' ? 'a-Not' : s === 'Printed' ? 'a-Accepted' : 'a-Revision';
+const key = p => p.group + ':' + p.id;
+const reasons = p => p.prints.filter(x => x.kind === 'Reprint').map(x => dtm(x.time) + ': ' + x.reason).join(' | ');
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), g = $('fg').value, c = $('fc').value, s = $('fs').value, k = $('fk').value, mp = $('fp').checked;
+  return all.filter(p => (!q || [p.name, p.id, p.org].some(v => String(v || '').toLowerCase().indexOf(q) > -1)) && (!g || p.group === g) && (!c || p.category === c) && (!s || status(p) === s)
+    && (!k || (k === 'y' ? p.collected : (p.printCount > 0 && !p.collected))) && (!mp || p.hasPhoto === false));
+}
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map(p => {
+    const o = open.has(key(p)), s = status(p);
+    let h = '<tr data-k="' + esc(key(p)) + '" style="cursor:pointer;"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td>'
+      + '<td class="id">' + esc(p.id) + '</td><td class="nm">' + esc(p.name) + '<div class="tiny">' + esc(p.org) + '</div></td><td>' + esc(GN[p.group]) + '</td><td>' + esc(p.category) + '</td>'
+      + '<td><span class="badge ' + sCls(s) + '">' + s + '</span></td><td>' + p.printCount + '</td><td>' + (p.firstPrint ? dtm(p.firstPrint) : '—') + '</td><td>' + (p.lastPrint ? dtm(p.lastPrint) : '—') + '</td><td>' + esc(p.lastBy || '—') + '</td>'
+      + '<td>' + (p.hasPhoto === null ? '<span class="hint">n/a</span>' : p.hasPhoto ? 'OK' : '<span class="over">Missing</span>') + '</td>'
+      + '<td class="noprint">' + (p.printCount ? (canTick ? '<input type="checkbox" class="ck" style="width:auto;"' + (p.collected ? ' checked' : '') + '>' : (p.collected ? 'Yes' : '—')) : '<span class="hint">—</span>') + '</td></tr>';
+    if (o) h += '<tr><td></td><td colspan="11" style="background:rgba(232,201,131,.04);"><div class="x-body">'
+      + fact('Organisation', p.org) + fact('Collected', p.collected ? dtm(p.collectedAt) + ' · ' + p.collectedBy : 'No')
+      + '<div class="wide"><span>Print history</span><b style="white-space:normal;">' + (p.prints.length ? p.prints.map(x => esc(dtm(x.time)) + ' · ' + esc(x.by || '') + ' · <i>' + esc(x.kind) + '</i>' + (x.reason ? ' — ' + esc(x.reason) : '') + (x.source ? ' <span class="tiny" style="display:inline;">(' + esc(x.source) + ')</span>' : '')).join('<br>') : 'Never printed') + '</b></div></div></td></tr>';
+    return h;
+  }).join('') : '<tr><td class="empty" colspan="12">' + (all.length ? 'Nobody matches these filters.' : 'No people found.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length + ' people';
+  const n = f => view.filter(f).length, c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  const printed = n(p => p.printCount > 0);
+  $('stats').innerHTML = c('fa-users', 'People', view.length, 'in this selection') + c('fa-print', 'Not printed', n(p => p.printCount === 0), 'still to print')
+    + c('fa-circle-check', 'Printed', printed, view.length ? Math.round(printed * 100 / view.length) + '% done' : '—') + c('fa-rotate', 'Reprinted', n(p => p.printCount > 1), 'two or more prints')
+    + c('fa-hand-holding', 'Collected', n(p => p.collected), printed - n(p => p.collected) + ' printed, not collected') + c('fa-camera', 'Missing photo', n(p => p.hasPhoto === false), 'participants and team');
+}
+function cats() {
+  const g = $('fg').value, cur = $('fc').value;
+  $('fc').innerHTML = '<option value="">All categories</option>' + [...new Set(all.filter(p => !g || p.group === g).map(p => p.category))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+  $('fc').value = [...$('fc').options].some(o => o.value === cur) ? cur : '';
+}
+async function load() {
+  $('tb').innerHTML = '<tr><td class="empty" colspan="12">Loading badge register…</td></tr>';
+  try {
+    const r = await VR.api('adminBadgeRegister', {});
+    if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="12">Could not load.</td></tr>'; return showErr(r.error || 'Could not load the badge register.'); }
+    all = r.people || []; cats(); render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('fg').addEventListener('change', () => { cats(); render(); });
+['fc', 'fs', 'fk', 'fp'].forEach(i => $(i).addEventListener('change', render)); $('q').addEventListener('input', render); $('refresh').onclick = load;
+$('tb').onclick = async e => {
+  const tr = e.target.closest('tr[data-k]'); if (!tr) return; const k = tr.dataset.k, p = all.find(x => key(x) === k);
+  if (e.target.classList.contains('ck')) {
+    hideAlerts(); const want = e.target.checked;
+    try {
+      const r = await VR.api('adminMarkBadgeCollected', { group: p.group, id: p.id, collected: want });
+      if (!r.ok) { showErr(r.error || 'Could not save.'); e.target.checked = !want; return; }
+      load();
+    } catch (er) { showErr('Could not reach the server.'); e.target.checked = !want; }
+    return;
+  }
+  if (e.target.closest('a,button,input')) return;
+  open.has(k) ? open.delete(k) : open.add(k); render();
+};
+VR.exportBar($('xp'), { name: 'VRMIC2026_Badge_Register', title: 'VRMIC 2026 — Badge register', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['ID', 'Name', 'Group', 'Category', 'Organisation', 'Status', 'Prints', 'First printed', 'Last printed', 'Last printed by', 'Reprint reasons', 'Collected', 'Photo'],
+    rows: view.map(p => [p.id, p.name, GN[p.group], p.category, p.org, status(p), p.printCount, p.firstPrint ? dtm(p.firstPrint) : '', p.lastPrint ? dtm(p.lastPrint) : '', p.lastBy || '', reasons(p), p.collected ? 'Yes' : 'No', p.hasPhoto === null ? 'n/a' : p.hasPhoto ? 'OK' : 'Missing']) }) });
+load();
+})();
+</script>
+</body>
+</html>
