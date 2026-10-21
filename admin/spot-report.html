@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spot Registration Report | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+table.list tr.main{cursor:pointer;} table.list tr.chg td{background:rgba(219,164,60,.07);} table.list tr.void td{opacity:.5;text-decoration:line-through;}
+table.list tr.detail td{white-space:normal;background:rgba(232,201,131,.04);}
+.toolbar label{margin:0;font-size:12px;} .toolbar .f{display:flex;flex-direction:column;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Spot registration report</h1>
+  <div style="display:flex;gap:8px;"><a class="btn btn-sm" href="spot-registration.html"><i class="fa-solid fa-user-plus"></i> New</a><a class="btn btn-sm" href="spot-desk.html"><i class="fa-solid fa-cash-register"></i> Payment desk</a></div></div>
+<div class="wrap" style="max-width:1400px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="toolbar noprint">
+    <div class="f"><label>From</label><input type="date" id="ffrom" style="width:auto;"></div>
+    <div class="f"><label>To</label><input type="date" id="fto" style="width:auto;"></div>
+    <div class="f"><label>Desk user</label><select id="fdesk"><option value="">All</option></select></div>
+    <div class="f"><label>Mode</label><select id="fmode"><option value="">All</option></select></div>
+    <div class="f"><label>Type</label><select id="fsrc"><option value="">All</option><option value="Spot">On-spot registration</option><option value="Desk">Desk payment</option></select></div>
+    <div class="f"><label>Status</label><select id="fst"><option value="Active">Active</option><option value="Void">Void</option><option value="">All</option></select></div>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <button class="btn btn-sm btn-gold" id="recon"><i class="fa-solid fa-print"></i> Cash reconciliation</button>
+    <div id="xp" style="margin-left:auto;"></div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="two" style="margin-bottom:18px;"><div class="card"><h3>By payment mode</h3><div id="bm"></div></div><div class="card"><h3>By desk user</h3><div id="bu"></div></div></div>
+  <div class="card"><h3>By day</h3><div id="bd"></div></div>
+  <div class="card" id="chgCard" style="display:none;"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--warn);"></i> Changed or waived fees</h3><div class="scroll-x"><table class="list"><thead><tr><th>Bill</th><th>ID</th><th>Name</th><th>Standard</th><th>Collected</th><th>Mode</th><th>Desk user</th><th>Reason</th></tr></thead><tbody id="chg"></tbody></table></div></div>
+  <div class="table-card" id="tc"><div class="tiny" id="info" style="padding:12px 16px 0;"></div><div class="scroll-x"><table class="list"><thead><tr><th></th><th>Bill</th><th>Date</th><th>Time</th><th>VRMIC ID</th><th>Name</th><th>Category</th><th>Amount</th><th>Mode</th><th>Desk user</th><th>Type</th><th class="noprint"></th></tr></thead><tbody id="tb"><tr><td class="empty" colspan="12"><span class="spinner"></span> Loading…</td></tr></tbody></table></div></div>
+  <p class="tiny noprint" style="margin-top:10px;">Click a row for the reference number, reason and receipt status. Amounts are in rupees; foreign delegates are converted at the rate in Settings.</p>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="spot-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('spotRegistration', 'report')) { VR.denied('You do not have permission to view the spot registration report.'); return; }
+let all = [], view = [], canVoid = false, open = new Set();
+const I = SPOT.inr, sum = a => a.reduce((t, r) => t + r.amount, 0);
+const changed = r => r.mode === 'Waived' || r.amount !== r.standard;
+$('ffrom').value = $('fto').value = VR.today();
+
+function filt() {
+  const f = $('ffrom').value, t = $('fto').value, d = $('fdesk').value, m = $('fmode').value, s = $('fsrc').value, st = $('fst').value;
+  return all.filter(r => (!f || r.date >= f) && (!t || r.date <= t) && (!d || r.deskId === d) && (!m || r.mode === m) && (!s || r.source === s) && (!st || r.status === st));
+}
+const group = (rows, key) => { const o = {}; rows.forEach(r => { const k = key(r); (o[k] = o[k] || { n: 0, t: 0 }); o[k].n++; o[k].t += r.amount; }); return o; };
+const lines = o => Object.keys(o).sort().map(k => '<div class="row"><span>' + esc(k || '—') + ' <span class="tiny" style="display:inline;">' + o[k].n + ' payment(s)</span></span><b>' + I(o[k].t) + '</b></div>').join('') || '<div class="empty">Nothing in this range.</div>';
+
+function render() {
+  view = filt();
+  const act = view.filter(r => r.status === 'Active'), cash = act.filter(r => r.mode === 'Cash'), chg = act.filter(changed);
+  $('stats').innerHTML = [['fa-user-plus', 'Payments', act.length, view.length - act.length + ' void in this view'], ['fa-indian-rupee-sign', 'Total collected', I(sum(act)), 'all modes'],
+    ['fa-money-bill-wave', 'Cash', I(sum(cash)), cash.length + ' payment(s)'], ['fa-building-columns', 'UPI, card, bank', I(sum(act) - sum(cash)), act.length - cash.length + ' payment(s)']]
+    .map(c => '<div class="sc"><i class="fa-solid ' + c[0] + '"></i><h4>' + c[1] + '</h4><div class="v">' + c[2] + '</div><div class="s">' + c[3] + '</div></div>').join('');
+  $('bm').innerHTML = lines(group(act, r => r.mode)); $('bu').innerHTML = lines(group(act, r => r.deskName + ' (' + r.deskId + ')')); $('bd').innerHTML = lines(group(act, r => fmtD(r.date)));
+  $('chgCard').style.display = chg.length ? '' : 'none';
+  $('chg').innerHTML = chg.map(r => '<tr class="chg"><td class="id">' + esc(r.bill) + '</td><td class="id">' + esc(r.id) + '</td><td class="nm">' + esc(r.name) + '</td><td>' + I(r.standard) + '</td><td>' + (r.mode === 'Waived' ? 'Waived' : I(r.amount)) + '</td><td>' + esc(r.mode) + '</td><td>' + esc(r.deskName) + '</td><td>' + esc(r.reason) + '</td></tr>').join('');
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length;
+  $('tb').innerHTML = view.length ? view.map(r => {
+    const o = open.has(r.bill);
+    let h = '<tr class="main ' + (r.status === 'Void' ? 'void' : changed(r) ? 'chg' : '') + '" data-b="' + esc(r.bill) + '"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td><td class="id">' + esc(r.bill) + '</td><td>' + esc(fmtD(r.date)) + '</td><td>' + esc(r.hm) + '</td><td class="id">' + esc(r.id) + '</td><td class="nm">' + esc(r.name) + '</td><td>' + esc(r.category) + '</td><td>' + (r.mode === 'Waived' ? 'Waived' : I(r.amount)) + '</td><td>' + esc(r.mode) + '</td><td>' + esc(r.deskName) + '</td><td>' + (r.source === 'Spot' ? 'On-spot' : 'Desk') + '</td>'
+      + '<td class="noprint">' + (canVoid && r.status === 'Active' ? '<button class="btn btn-sm btn-danger" data-void="' + esc(r.bill) + '">Void</button>' : r.status === 'Void' ? '<span class="badge b-bad">Void</span>' : '') + '</td></tr>';
+    if (o) h += '<tr class="detail"><td colspan="12"><b>Reference:</b> ' + esc(r.ref || '—') + ' &nbsp; <b>Standard fee:</b> ' + I(r.standard) + (r.usd != null ? ' ($' + r.usd + ' × ₹' + r.fx + ')' : '') + ' &nbsp; <b>Reason:</b> ' + esc(r.reason || '—') + ' &nbsp; <b>Receipt:</b> ' + esc(r.receipt) + (r.status === 'Void' ? ' &nbsp; <b>Void reason:</b> ' + esc(r.voidReason) : '') + '</td></tr>';
+    return h;
+  }).join('') : '<tr><td class="empty" colspan="12">' + (all.length ? 'No payments match these filters.' : 'No payments yet.') + '</td></tr>';
+}
+
+async function load() {
+  hideAlerts();
+  try {
+    const r = await VR.api('adminSpotReport', {}); if (!r.ok) { showErr(r.error || 'Could not load the report.'); $('tb').innerHTML = ''; return; }
+    all = r.rows; canVoid = r.canVoid;
+    const users = {}; all.forEach(x => { users[x.deskId] = x.deskName; });
+    $('fdesk').innerHTML = '<option value="">All</option>' + Object.keys(users).map(k => '<option value="' + esc(k) + '">' + esc(users[k]) + '</option>').join('');
+    $('fmode').innerHTML = '<option value="">All</option>' + r.payModes.map(m => '<option>' + esc(m) + '</option>').join('');
+    render();
+  } catch (e) { showErr('Could not reach the server.'); }
+}
+['ffrom', 'fto', 'fdesk', 'fmode', 'fsrc', 'fst'].forEach(i => $(i).addEventListener('change', render));
+$('refresh').onclick = load;
+$('tb').onclick = async e => {
+  const v = e.target.closest('[data-void]');
+  if (v) { const why = prompt('Reason for voiding ' + v.dataset.void + ' (at least 5 characters):'); if (!why) return;
+    const r = await VR.api('adminSpotVoid', { bill: v.dataset.void, reason: why }); if (!r.ok) return showErr(r.error || 'Could not void.'); showOk('Bill voided.'); return load(); }
+  const tr = e.target.closest('tr.main'); if (!tr) return; const k = tr.dataset.b; open.has(k) ? open.delete(k) : open.add(k); render();
+};
+
+// cash reconciliation: one sheet per desk user per day, ready to sign
+$('recon').onclick = () => {
+  const act = view.filter(r => r.status === 'Active'); if (!act.length) return showErr('Nothing to reconcile in this view.');
+  const g = {}; act.forEach(r => { const k = r.deskId + '|' + r.date; (g[k] = g[k] || { name: r.deskName, id: r.deskId, date: r.date, rows: [] }).rows.push(r); });
+  const html = Object.keys(g).sort().map(k => { const x = g[k], m = group(x.rows, r => r.mode);
+    return '<div style="page-break-after:always;"><h3 style="margin:0 0 4px;">' + VR.esc(x.name) + ' (' + VR.esc(x.id) + ') — ' + VR.esc(fmtD(x.date)) + '</h3>'
+      + VR.tableHtml(['Payment mode', 'Payments', 'Amount'], Object.keys(m).map(q => [q, m[q].n, I(m[q].t)]).concat([['Total', x.rows.length, I(sum(x.rows))]]))
+      + '<p style="margin-top:12px;"><b>Cash to hand over: ' + I(sum(x.rows.filter(r => r.mode === 'Cash'))) + '</b></p>'
+      + '<table style="margin-top:26px;border:none;"><tr><td style="border:none;padding-top:34px;">Collected by (signature): ____________________</td><td style="border:none;padding-top:34px;">Received by (signature): ____________________</td></tr></table></div>'; }).join('');
+  VR.printHtml('Cash reconciliation', html);
+};
+
+VR.exportBar($('xp'), { name: 'Spot_Registrations', title: 'Spot registration report', imageEl: () => $('tc'),
+  getData: () => ({ headers: ['Bill', 'Date', 'Time', 'VRMIC ID', 'Name', 'Institution', 'Category', 'Amount (INR)', 'Mode', 'Reference', 'Standard fee', 'Reason', 'Desk user', 'Type', 'Status'],
+    rows: view.map(r => [r.bill, r.date, r.hm, r.id, r.name, r.institution, r.category, r.amount, r.mode, r.ref, r.standard, r.reason, r.deskName, r.source === 'Spot' ? 'On-spot' : 'Desk', r.status]) }) });
+load();
+})();
+</script>
+</body>
+</html>

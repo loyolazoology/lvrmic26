@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Desk | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.pick{cursor:pointer;} .pick small{color:var(--text-3);display:block;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-cash-register" style="color:var(--gold-light);"></i> Payment desk</h1>
+  <div style="display:flex;gap:8px;"><a class="btn btn-sm" href="spot-registration.html"><i class="fa-solid fa-user-plus"></i> New spot registration</a><a class="btn btn-sm" href="spot-report.html"><i class="fa-solid fa-table-list"></i> Report</a></div></div>
+<div class="wrap" style="max-width:900px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" style="grid-template-columns:repeat(2,1fr);">
+    <div class="sc"><i class="fa-solid fa-money-bill-wave"></i><h4>Your cash today</h4><div class="v" id="cash">—</div><div class="s" id="cashn"></div></div>
+    <div class="sc"><i class="fa-solid fa-envelope"></i><h4>Mails left today</h4><div class="v" id="quota">—</div><div class="s">One per QR email</div></div>
+  </div>
+
+  <div class="card">
+    <label>Find a participant</label>
+    <input id="q" placeholder="Name, VRMIC ID, phone or email — or scan the QR code here" autocomplete="off" autofocus>
+    <div class="suggest" id="list" style="display:none;"></div>
+  </div>
+
+  <div id="sel" style="display:none;">
+    <div class="card"><h3><i class="fa-solid fa-id-card"></i> <span id="s-name"></span></h3>
+      <div class="hint"><span class="mono" id="s-id"></span> · <span id="s-inst"></span> · <span id="s-src"></span></div>
+      <div class="chips" id="chips"></div></div>
+
+    <div class="card" id="payBox" style="display:none;"><h3><i class="fa-solid fa-indian-rupee-sign"></i> Record payment</h3><div id="pay"></div>
+      <div style="margin-top:16px;"><button class="btn btn-gold" id="payGo"><i class="fa-solid fa-check"></i> Record payment</button></div></div>
+
+    <div class="card" id="paidBox" style="display:none;"><h3><i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> Paid</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-sm" id="bBill"><i class="fa-solid fa-print"></i> Print bill</button>
+        <button class="btn btn-sm" id="bMail"><i class="fa-solid fa-envelope"></i> Send QR code by email</button>
+        <button class="btn btn-sm" id="bCard"><i class="fa-solid fa-pen"></i> Show card details</button></div>
+      <div id="mf" style="margin-top:14px;"></div><div id="cardv" style="margin-top:14px;"></div>
+      <div id="att" style="margin-top:18px;"></div></div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="spot-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+if (!VR.can('spotRegistration', 'transaction')) { VR.denied('You do not have permission to use the payment desk.'); return; }
+let cfg = null, cur = null, pf = null, payReq = SPOT.uid();
+
+async function loadCfg() {
+  const c = await VR.api('adminSpotConfig', {}); if (!c.ok) return showErr(c.error || 'Could not load settings.');
+  cfg = c; $('cash').textContent = SPOT.inr(c.myCash); $('cashn').textContent = c.myCashCount + ' cash payment(s) · for hand-over'; $('quota').textContent = c.quota == null ? '—' : c.quota;
+}
+const chip = (t, cls) => '<span class="badge ' + cls + '">' + t + '</span>';
+
+async function search(q, auto) {
+  q = q.trim(); const box = $('list');
+  if (q.length < 2) { box.style.display = 'none'; return; }
+  const r = await VR.api('adminSpotFind', { q });
+  if (!r.ok) { showErr(r.error || 'Search failed.'); return; }
+  if (auto && r.people.length === 1) { box.style.display = 'none'; return show(r.people[0]); }
+  box.style.display = '';
+  box.innerHTML = r.people.length ? r.people.map(p => '<div class="pick" data-id="' + esc(p.id) + '"><b>' + esc(p.name) + '</b> <span class="mono">' + esc(p.id) + '</span><small>' + esc(p.institution || '') + ' · ' + esc(p.source) + ' · ' + (p.paid ? 'Paid' : 'Not paid') + '</small></div>').join('') : '<div style="cursor:default;">No match.</div>';
+  box._p = r.people;
+}
+let qt; $('q').addEventListener('input', e => { clearTimeout(qt); qt = setTimeout(() => search(e.target.value), 350); });
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); clearTimeout(qt); search($('q').value, true); } });
+$('list').onclick = e => { const d = e.target.closest('[data-id]'); if (!d) return; const p = ($('list')._p || []).find(x => x.id === d.dataset.id); $('list').style.display = 'none'; if (p) show(p); };
+
+async function refresh(id) { const r = await VR.api('adminSpotFind', { q: id }); const p = r.ok && r.people.find(x => x.id === id); if (p) show(p, true); }
+
+function show(p, keepReq) {
+  hideAlerts(); cur = p; if (!keepReq) payReq = SPOT.uid();
+  $('sel').style.display = ''; $('s-name').textContent = p.name; $('s-id').textContent = p.id; $('s-inst').textContent = p.institution || '—'; $('s-src').textContent = p.source;
+  $('chips').innerHTML = chip('Registered', 'b-ok') + chip(p.paid ? (p.bill ? 'Paid ' + SPOT.inr(p.bill.amount) : 'Paid ' + SPOT.inr(p.amount)) : 'Not paid', p.paid ? 'b-ok' : 'b-bad')
+    + chip(p.mailed ? 'QR emailed' : 'QR not emailed', p.mailed ? 'b-ok' : 'b-warn') + chip(p.card ? 'Card issued' : 'Card not issued', p.card ? 'b-ok' : 'b-neu');
+  $('payBox').style.display = p.paid ? 'none' : ''; $('paidBox').style.display = p.paid ? '' : 'none';
+  $('mf').innerHTML = ''; $('cardv').innerHTML = '';
+  if (!p.paid) { pf = SPOT.payFields($('pay'), cfg); }
+  else { $('bBill').style.display = p.bill ? '' : 'none'; if (cfg.canAttend) SPOT.attendance($('att'), p.id); else $('att').innerHTML = ''; }
+  $('sel').scrollIntoView({ behavior: 'smooth' });
+}
+
+$('payGo').onclick = function () {
+  const e = pf.check(); if (e) return showErr(e);
+  return VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = await VR.api('adminSpotPay', Object.assign({ id: cur.id, reqId: payReq }, pf.get()));
+      if (!r.ok) return showErr(r.error || 'Could not record the payment.');
+      const id = cur.id; await refresh(id); loadCfg(); showOk('Payment recorded. Bill ' + r.bill + '. Now send the QR code.');
+      openMail();
+    } catch (er) { showErr('Could not reach the server. A retry will not record the payment twice.'); }
+  });
+};
+$('bBill').onclick = () => { const b = cur.bill; SPOT.printBill({ bill: b.bill, id: b.id, name: b.name, institution: b.institution, category: b.category, amount: b.amount, mode: b.mode, ref: b.ref, time: b.time }); };
+function openMail() { SPOT.mailFlow($('mf'), cur, () => { refresh(cur.id); }); }
+$('bMail').onclick = openMail;
+$('bCard').onclick = () => { $('cardv').innerHTML = SPOT.cardHtml(cur); };
+
+await loadCfg();
+const pre = new URLSearchParams(location.search).get('id');
+if (pre) { $('q').value = pre; search(pre, true); }
+})();
+</script>
+</body>
+</html>

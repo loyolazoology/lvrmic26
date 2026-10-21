@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Spot Registration | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.chip{display:inline-flex;gap:8px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;color:var(--gold-light);background:var(--navy-950);border:1px solid var(--navy-border);padding:8px 18px;border-radius:999px;}
+.sum{display:flex;gap:22px;flex-wrap:wrap;align-items:center;font-size:13.5px;color:var(--text-2);}
+.sum b{color:var(--text-1);}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-user-plus" style="color:var(--gold-light);"></i> New spot registration</h1>
+  <div style="display:flex;gap:8px;"><a class="btn btn-sm" href="spot-desk.html"><i class="fa-solid fa-cash-register"></i> Payment desk</a><a class="btn btn-sm" href="spot-report.html"><i class="fa-solid fa-table-list"></i> Report</a></div></div>
+<div class="wrap" style="max-width:900px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="banner" id="quota" style="display:none;"><i class="fa-solid fa-envelope"></i><div id="quota-t"></div></div>
+
+  <form id="frm" autocomplete="off">
+    <div class="card">
+      <h3><i class="fa-solid fa-user"></i> Participant</h3>
+      <div class="grid">
+        <div class="full"><label>Full name *</label><input id="f-name" maxlength="100"></div>
+        <div><label>Email *</label><input id="f-email" type="email" placeholder="The QR code is sent here"></div>
+        <div><label>Mobile number *</label><input id="f-phone" inputmode="numeric" placeholder="Also the first login password"></div>
+        <div class="full"><label>Institution *</label><input id="f-inst" maxlength="150" placeholder="Written on the card"></div>
+      </div>
+      <div id="dups" style="margin-top:12px;"></div>
+    </div>
+    <div class="card"><h3><i class="fa-solid fa-indian-rupee-sign"></i> Fee and payment</h3><div id="pay"><span class="spinner"></span></div></div>
+    <div style="display:flex;justify-content:flex-end;"><button type="submit" class="btn btn-gold" id="go"><i class="fa-solid fa-check"></i> Register and record payment</button></div>
+  </form>
+
+  <div id="res" style="display:none;">
+    <div class="card">
+      <h3><i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> Registered and paid</h3>
+      <div class="sum"><span class="chip" id="r-id"></span><span>Name: <b id="r-name"></b></span><span>Paid: <b id="r-amt"></b></span><span>Bill: <b class="mono" id="r-bill"></b></span></div>
+      <div style="margin-top:14px;"><button type="button" class="btn btn-sm" id="r-bp"><i class="fa-solid fa-print"></i> Print bill</button></div>
+    </div>
+    <div class="card" id="st2"><h3><i class="fa-solid fa-envelope"></i> Send the QR code</h3><div id="mf"></div></div>
+    <div class="card" id="st3" style="display:none;"><h3><i class="fa-solid fa-pen"></i> Write these details on the blank card</h3><div id="cardbox"></div>
+      <div style="margin-top:16px;"><button type="button" class="btn btn-gold" id="cdone"><i class="fa-solid fa-check"></i> Card written</button></div></div>
+    <div class="card" id="st4" style="display:none;"><h3><i class="fa-solid fa-flag-checkered"></i> Done</h3><div id="att" style="margin-bottom:16px;"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn btn-gold" id="again"><i class="fa-solid fa-plus"></i> Register another</button></div></div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="spot-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+if (!VR.can('spotRegistration', 'transaction')) { VR.denied('You do not have permission to register spot participants.'); return; }
+let cfg = null, pf = null, res = null, reqId = SPOT.uid(), dupHard = false, via = 'mail';
+const val = id => $(id).value.trim();
+
+const c = await VR.api('adminSpotConfig', {});
+if (!c.ok) { showErr(c.error || 'Could not load the fee settings.'); return; }
+cfg = c; pf = SPOT.payFields($('pay'), cfg);
+if (cfg.quota != null) { $('quota').style.display = ''; $('quota-t').innerHTML = 'Every registration sends one email. <b>' + cfg.quota + '</b> mails left today.'; if (cfg.quota < 20) $('quota').classList.add('warn'); }
+
+let dt;
+const dupCheck = () => { clearTimeout(dt); dt = setTimeout(async () => {
+  const em = val('f-email'), ph = val('f-phone').replace(/\s+/g, '');
+  if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em) || ph.length >= 7 || (val('f-name') && val('f-inst')))) { $('dups').innerHTML = ''; dupHard = false; return; }
+  const r = await VR.api('adminSpotCheck', { name: val('f-name'), email: em, phone: ph, institution: val('f-inst') });
+  if (!r.ok) return;
+  dupHard = r.matches.some(m => m.hard);
+  $('dups').innerHTML = r.matches.map(m => '<div class="banner warn"><i class="fa-solid fa-triangle-exclamation"></i><div><b>' + esc(m.why) + ':</b> ' + esc(m.name) + ' · ' + esc(m.institution) + ' <span class="mono">(' + esc(m.id) + ')</span> — <a href="spot-desk.html?id=' + encodeURIComponent(m.id) + '">open existing</a></div></div>').join('');
+}, 400); };
+['f-name', 'f-email', 'f-phone', 'f-inst'].forEach(i => $(i).addEventListener('blur', dupCheck));
+
+$('frm').addEventListener('submit', async e => {
+  e.preventDefault(); hideAlerts();
+  const name = val('f-name'), email = val('f-email'), phone = val('f-phone').replace(/\s+/g, ''), inst = val('f-inst');
+  if (!name) return showErr('Full name is required.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('Enter a valid email address.');
+  if (!/^\+?\d{7,15}$/.test(phone)) return showErr('Enter a valid mobile number (7–15 digits).');
+  if (!inst) return showErr('Institution is required.');
+  if (dupHard) return showErr('This person is already registered. Use “open existing” above.');
+  const pe = pf.check(); if (pe) return showErr(pe);
+  await VR.busy($('go'), 'Registering…', async () => {
+    try {
+      const go = async force => {
+        const r = await VR.api('adminSpotRegister', Object.assign({ name, email, phone, institution: inst, reqId, force }, pf.get()));
+        if (r.warning && !force) return confirm(r.error) ? go(true) : null;
+        if (!r.ok) return showErr(r.error || 'Could not register.');
+        success(r);
+      };
+      await go(false);
+    } catch (er) { showErr('Could not reach the server. Check the connection and try again; a retry will not create a second account.'); }
+  });
+});
+
+function success(r) {
+  res = r; via = 'mail';
+  $('r-id').textContent = r.id; $('r-name').textContent = r.name; $('r-bill').textContent = r.bill;
+  $('r-amt').textContent = r.paymentMode === 'Waived' ? 'Waived' : SPOT.inr(r.amount) + ' (' + r.paymentMode + ')';
+  $('r-bp').onclick = () => SPOT.printBill(billOf(r));
+  $('frm').style.display = 'none'; $('res').style.display = '';
+  $('st2').style.display = ''; $('st3').style.display = 'none'; $('st4').style.display = 'none';
+  $('cardbox').innerHTML = SPOT.cardHtml(r);
+  SPOT.mailFlow($('mf'), r, v => { via = v; $('st2').style.display = 'none'; $('st3').style.display = ''; $('st3').scrollIntoView({ behavior: 'smooth' }); });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+const billOf = r => ({ bill: r.bill, id: r.id, name: r.name, institution: r.institution, category: r.category, amount: r.amount, mode: r.paymentMode, ref: pf.get().paymentRef, time: r.time });
+
+$('cdone').onclick = function () {
+  return VR.busy(this, 'Saving…', async () => {
+    const r = await VR.api('adminSpotCardDone', { id: res.id, fallback: via === 'screen' });
+    if (!r.ok) return showErr(r.error || 'Could not save.');
+    $('st3').style.display = 'none'; $('st4').style.display = '';
+    if (cfg.canAttend) SPOT.attendance($('att'), res.id); else $('att').innerHTML = '';
+  });
+};
+$('again').onclick = () => {
+  $('frm').reset(); pf.reset(); reqId = SPOT.uid(); dupHard = false; $('dups').innerHTML = '';
+  $('res').style.display = 'none'; $('frm').style.display = ''; hideAlerts(); $('f-name').focus();
+  VR.api('adminSpotConfig', {}).then(x => { if (x.ok && x.quota != null) $('quota-t').innerHTML = 'Every registration sends one email. <b>' + x.quota + '</b> mails left today.'; });
+};
+})();
+</script>
+</body>
+</html>
