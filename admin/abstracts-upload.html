@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Abstract | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.btn-success{background:rgba(79,169,128,.14);border-color:rgba(79,169,128,.4);color:var(--teal-light);}
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
+.sec{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+.sec i{color:var(--gold-light);} .sec h2{font-size:1.05rem;margin:0;}
+.sec .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.a-Info{background:rgba(120,160,230,.14);color:#a9c3f0;}
+.note{text-align:center;padding:38px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
+.note i{font-size:24px;color:var(--gold-light);display:block;margin-bottom:8px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px;}
+.tab{background:var(--navy-900);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab b{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-left:6px;color:var(--text-3);}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);} .tab.on b{color:var(--gold-light);}
+.qi{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;cursor:pointer;}
+.qi-name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--text-1);}
+.qi-meta{font-size:12.5px;color:var(--text-3);}
+.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
+.qi-theme{font-size:12.5px;color:var(--teal-light);}
+.qi-body{display:none;margin-top:10px;} .qi.open .qi-body{display:block;}
+.rv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:10px 0;white-space:pre-wrap;}
+.remark b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px;margin:8px 0;}
+.facts div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.facts div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;} .chk input{width:auto;}
+textarea{width:100%;min-height:96px;resize:vertical;}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;white-space:pre-wrap;}
+.x-body .wide{grid-column:1/-1;}
+table.list td.ti{white-space:normal;min-width:220px;max-width:380px;}
+table.list td.rm{white-space:normal;min-width:200px;max-width:340px;font-size:12.5px;color:var(--text-2);}
+.over{color:#e8988c;font-weight:600;} .ok{}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+.bars div{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px;color:var(--text-2);}
+.bars .l{flex:0 0 46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .bars .b{flex:1;height:8px;background:var(--navy-950);border-radius:6px;overflow:hidden;} .bars .b i{display:block;height:100%;background:var(--gold);} .bars .c{flex:0 0 32px;text-align:right;font-family:'IBM Plex Mono',monospace;}
+#pl{width:100%;min-height:210px;} #pl option:disabled{color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-upload" style="color:var(--gold-light);"></i> Upload on behalf of participant</h1><div style="display:flex;gap:8px;flex-wrap:wrap;"><a class="btn btn-sm" href="abstracts-review.html"><i class="fa-solid fa-file-circle-check"></i> Review queue</a><a class="btn btn-sm" href="abstracts-revision.html"><i class="fa-solid fa-rotate"></i> Revision requests</a></div></div>
+<div class="wrap" style="max-width:900px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="card">
+    <h3><i class="fa-solid fa-magnifying-glass"></i> 1. Find the participant</h3>
+    <p class="hint" style="margin-bottom:12px;">Use this when a participant e-mailed their abstract. It works only when they have <b>no abstract yet</b>, or were <b>asked to revise</b>. It bypasses the submission deadline. Everything is recorded as uploaded by you.</p>
+    <input id="q" placeholder="Search by name, VRMIC ID or e-mail" autocomplete="off" style="margin-bottom:10px;">
+    <select id="pl" size="9"></select>
+    <div class="tiny" id="cnt" style="margin-top:6px;"></div>
+  </div>
+
+  <div class="card" id="step2" style="margin-top:18px;display:none;">
+    <h3><i class="fa-solid fa-file-arrow-up"></i> 2. Upload the file</h3>
+    <div class="facts" id="ctx"></div>
+    <div id="prev"></div>
+    <div class="grid" style="margin-top:12px;">
+      <div class="full"><label>Title *</label><input id="m-title" maxlength="300" placeholder="Abstract title"></div>
+      <div><label>Theme *</label><select id="m-theme"><option value="">Select theme</option></select></div>
+      <div><label>Abstract file (.doc / .docx) *</label><input type="file" id="m-file" accept=".doc,.docx"></div>
+    </div>
+    <label class="chk"><input type="checkbox" id="m-n" checked> E-mail the participant that the abstract was uploaded for them</label>
+    <div style="margin-top:16px;"><button class="btn btn-gold" id="m-go"><i class="fa-solid fa-upload"></i> Upload abstract</button></div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('abstract', 'transaction')) { VR.denied('You do not have permission to upload abstracts.'); return; }
+
+const url = u => /^https?:\/\//i.test(String(u || '')) ? String(u) : '';
+const ver = p => Number(p.AbstractRevision) || (p.AbstractDocId ? 1 : 0);
+const isAbs = p => p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster';
+const st = p => p.AbstractStatus || 'Not Submitted';
+const aCls = s => 'a-' + String(s).split(' ')[0];
+const dtm = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const dts = v => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); };
+const fact = (k, v) => '<div><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
+const byLine = p => p.AbstractReviewedByName ? p.AbstractReviewedByName + (p.AbstractReviewedBy ? ' (' + p.AbstractReviewedBy + ')' : '') : '';
+
+let all = [], cur = null, file64 = null, fileName = null;
+const MAX_MB = 15;
+const eligible = p => isAbs(p) && (!p.AbstractDocId || p.AbstractStatus === 'Revision Requested');
+const why = p => p.AbstractStatus === 'Revision Requested' ? 'revision requested' : (p.AbstractDocId ? 'abstract ' + st(p).toLowerCase() + ' — locked' : 'no abstract yet');
+function list() {
+  const q = $('q').value.trim().toLowerCase();
+  const f = all.filter(p => !q || [p.Name, p.ID, p.Email].some(v => String(v || '').toLowerCase().indexOf(q) > -1)).sort((a, b) => (eligible(b) - eligible(a)) || String(a.ID).localeCompare(String(b.ID)));
+  $('pl').innerHTML = f.map(p => '<option value="' + esc(p.row) + '"' + (eligible(p) ? '' : ' disabled') + '>' + esc(p.ID) + ' — ' + esc(p.Name) + ' (' + esc(p.ParticipantType) + ') · ' + esc(why(p)) + '</option>').join('');
+  $('cnt').textContent = f.length + ' Oral / Poster participants · ' + f.filter(eligible).length + ' can receive an upload (others are greyed out)';
+  if (cur && f.some(p => String(p.row) === String(cur.row))) $('pl').value = cur.row;
+}
+function pick() {
+  cur = all.find(p => String(p.row) === $('pl').value) || null; file64 = null; fileName = null; $('m-file').value = '';
+  $('step2').style.display = cur ? 'block' : 'none'; if (!cur) return;
+  const rev = cur.AbstractStatus === 'Revision Requested';
+  $('ctx').innerHTML = fact('Participant', cur.Name + ' (' + cur.ID + ')') + fact('Category', cur.ParticipantType) + fact('Current status', st(cur)) + fact('Next version', 'v' + (rev ? ver(cur) + 1 : 1));
+  $('prev').innerHTML = rev && cur.AbstractRemarks ? '<div class="remark"><b>Remarks sent to the participant</b>' + esc(cur.AbstractRemarks) + '</div>' : '';
+  $('m-title').value = cur.AbstractTitle || ''; $('m-theme').value = cur.AbstractTheme || '';
+}
+$('q').addEventListener('input', list); $('pl').addEventListener('change', pick);
+$('m-file').addEventListener('change', function () {
+  file64 = null; fileName = null; const f = this.files[0]; if (!f) return;
+  if (!/\.docx?$/i.test(f.name)) { showErr('Only .doc or .docx files are allowed.'); this.value = ''; return; }
+  if (f.size > MAX_MB * 1024 * 1024) { showErr('The file is larger than ' + MAX_MB + ' MB.'); this.value = ''; return; }
+  const rd = new FileReader(); rd.onload = ev => { file64 = String(ev.target.result).split(',')[1]; fileName = f.name; }; rd.readAsDataURL(f);
+});
+$('m-go').onclick = async function () {
+  hideAlerts(); if (!cur) return;
+  const title = $('m-title').value.trim(), theme = $('m-theme').value;
+  if (!title || !theme || !file64) return showErr('Please enter the title, choose the theme and select a .doc / .docx file.');
+  if (!confirm('Upload this file for ' + cur.Name + ' (' + cur.ID + ')?\nIt will be recorded as uploaded by you and sent to the review queue.')) return;
+  await VR.busy(this, 'Uploading…', async () => {
+    try {
+      const r = await VR.api('adminUploadAbstract', { row: cur.row, id: cur.ID, title, theme, fileName, fileData: file64, notify: $('m-n').checked });
+      if (!r.ok) return showErr(r.error || 'Could not upload the abstract.');
+      showOk('Abstract uploaded for ' + cur.Name + ' — version ' + r.revision + ', document ID ' + r.docId + '. It is now in the review queue' + (r.mailSent === false ? ' (the notification e-mail could NOT be sent).' : r.mailSent ? ' and the participant was e-mailed.' : '.'));
+      cur = null; $('step2').style.display = 'none'; load();
+    } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+  });
+};
+async function themes() {
+  try { const r = await VR.api('getThemes', {}); if (r.ok) $('m-theme').innerHTML = '<option value="">Select theme</option>' + r.themes.map((t, i) => '<option value="' + esc(t) + '">Theme ' + String(i + 1).padStart(2, '0') + ' — ' + esc(t) + '</option>').join(''); } catch (e) {}
+}
+async function load() {
+  try {
+    const r = await VR.api('adminAbstractList', {});
+    if (!r.ok) return showErr(r.error || 'Could not load participants.');
+    all = r.participants || []; list();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+themes(); load();
+})();
+</script>
+</body>
+</html>

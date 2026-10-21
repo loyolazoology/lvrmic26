@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abstract Status | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.btn-success{background:rgba(79,169,128,.14);border-color:rgba(79,169,128,.4);color:var(--teal-light);}
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
+.sec{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+.sec i{color:var(--gold-light);} .sec h2{font-size:1.05rem;margin:0;}
+.sec .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.a-Info{background:rgba(120,160,230,.14);color:#a9c3f0;}
+.note{text-align:center;padding:38px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
+.note i{font-size:24px;color:var(--gold-light);display:block;margin-bottom:8px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px;}
+.tab{background:var(--navy-900);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab b{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-left:6px;color:var(--text-3);}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);} .tab.on b{color:var(--gold-light);}
+.qi{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;cursor:pointer;}
+.qi-name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--text-1);}
+.qi-meta{font-size:12.5px;color:var(--text-3);}
+.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
+.qi-theme{font-size:12.5px;color:var(--teal-light);}
+.qi-body{display:none;margin-top:10px;} .qi.open .qi-body{display:block;}
+.rv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:10px 0;white-space:pre-wrap;}
+.remark b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px;margin:8px 0;}
+.facts div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.facts div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;} .chk input{width:auto;}
+textarea{width:100%;min-height:96px;resize:vertical;}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;white-space:pre-wrap;}
+.x-body .wide{grid-column:1/-1;}
+table.list td.ti{white-space:normal;min-width:220px;max-width:380px;}
+table.list td.rm{white-space:normal;min-width:200px;max-width:340px;font-size:12.5px;color:var(--text-2);}
+.over{color:#e8988c;font-weight:600;} .ok{}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+.bars div{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px;color:var(--text-2);}
+.bars .l{flex:0 0 46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .bars .b{flex:1;height:8px;background:var(--navy-950);border-radius:6px;overflow:hidden;} .bars .b i{display:block;height:100%;background:var(--gold);} .bars .c{flex:0 0 32px;text-align:right;font-family:'IBM Plex Mono',monospace;}
+
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Abstract status</h1><div style="display:flex;gap:8px;flex-wrap:wrap;"><a class="btn btn-sm" href="abstracts-history.html"><i class="fa-solid fa-clock-rotate-left"></i> Review history</a><a class="btn btn-sm" id="rv" href="abstracts-review.html"><i class="fa-solid fa-file-circle-check"></i> Review queue</a></div></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <div class="grid" style="margin-bottom:14px;"><div class="card"><h3>By category</h3><div class="bars" id="bt"></div></div><div class="card"><h3>By theme</h3><div class="bars" id="bh"></div></div></div>
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by name, VRMIC ID, title or document ID" autocomplete="off">
+    <select id="ft"><option value="">All categories</option><option>Oral</option><option>Poster</option></select>
+    <select id="fa"><option value="">All statuses</option><option>Not Submitted</option><option>Submitted</option><option>Accepted</option><option>Revision Requested</option><option>Rejected</option></select>
+    <select id="fh"><option value="">All themes</option></select>
+    <select id="fr"><option value="">All reviewers</option></select>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <div id="xp" style="margin-left:auto;"></div>
+  </div>
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list"><thead><tr><th style="width:26px;"></th><th>VRMIC ID</th><th>Name</th><th>Category</th><th>Doc ID</th><th>Title</th><th>Theme</th><th>Status</th><th>Ver.</th><th>Reviewer</th><th>Decision date</th><th class="noprint">File</th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="12">Loading abstracts…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny noprint" style="margin-top:10px;">Click a row to see remarks, contact details and every file version. Only Oral and Poster participants have abstracts. "Decision date" is the date of the last decision or revision request. Versions uploaded before history tracking began are not listed individually.</p>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('abstract', 'report')) { VR.denied('You do not have permission to view the abstract report.'); return; }
+if (!VR.can('abstract', 'transaction')) $('rv').style.display = 'none';
+
+const url = u => /^https?:\/\//i.test(String(u || '')) ? String(u) : '';
+const ver = p => Number(p.AbstractRevision) || (p.AbstractDocId ? 1 : 0);
+const isAbs = p => p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster';
+const st = p => p.AbstractStatus || 'Not Submitted';
+const aCls = s => 'a-' + String(s).split(' ')[0];
+const dtm = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const dts = v => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); };
+const fact = (k, v) => '<div><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
+const byLine = p => p.AbstractReviewedByName ? p.AbstractReviewedByName + (p.AbstractReviewedBy ? ' (' + p.AbstractReviewedBy + ')' : '') : '';
+
+let all = [], view = [], open = new Set(), hist = {};
+const decided = r => ['Accepted', 'Rejected', 'Revision Requested'].indexOf(st(r)) > -1;
+const revName = r => decided(r) ? byLine(r) : '';
+const decDate = r => decided(r) ? r.AbstractReviewedAt : '';
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), t = $('ft').value, a = $('fa').value, h = $('fh').value, rv = $('fr').value;
+  return all.filter(r => (!q || [r.Name, r.ID, r.AbstractTitle, r.AbstractDocId].some(v => String(v || '').toLowerCase().indexOf(q) > -1))
+    && (!t || r.ParticipantType === t) && (!a || st(r) === a) && (!h || r.AbstractTheme === h) && (!rv || r.AbstractReviewedByName === rv));
+}
+function versions(r) {
+  const h = hist[r.ID]; if (!h) return '<i>Loading versions…</i>';
+  const up = h.filter(x => x.FileLink).reverse();
+  if (!up.length) return (url(r.AbstractLink) ? '<a href="' + esc(url(r.AbstractLink)) + '" target="_blank" rel="noopener">Current file (v' + ver(r) + ')</a>' : '—') + ' <span class="tiny" style="display:inline;">(uploaded before history began)</span>';
+  return up.map(x => 'v' + esc(x.Version) + ' · ' + esc(dtm(x.Time)) + ' · ' + esc(x.ByName || '') + (x.ByRole && x.ByRole !== 'Participant' ? ' (admin)' : '') + ' · <a href="' + esc(url(x.FileLink)) + '" target="_blank" rel="noopener">open file</a>').join('<br>');
+}
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map(r => {
+    const o = open.has(String(r.row)), link = url(r.AbstractLink);
+    let h = '<tr data-row="' + esc(r.row) + '" style="cursor:pointer;"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td>'
+      + '<td class="id">' + esc(r.ID) + '</td><td class="nm">' + esc(r.Name) + '</td><td><span class="badge t-' + esc(r.ParticipantType) + '">' + esc(r.ParticipantType) + '</span></td>'
+      + '<td class="mono">' + esc(r.AbstractDocId || '—') + '</td><td class="ti">' + esc(r.AbstractTitle || '—') + '</td><td>' + esc(r.AbstractTheme || '—') + '</td>'
+      + '<td><span class="badge ' + aCls(st(r)) + '">' + esc(st(r)) + '</span></td><td>' + (ver(r) ? 'v' + ver(r) : '—') + '</td><td>' + esc(revName(r) || '—') + '</td><td>' + (decDate(r) ? dtm(decDate(r)) : '—') + '</td>'
+      + '<td class="noprint">' + (link ? '<a class="btn btn-sm" target="_blank" rel="noopener" href="' + esc(link) + '"><i class="fa-solid fa-arrow-up-right-from-square"></i> View</a>' : '—') + '</td></tr>';
+    if (o) h += '<tr><td></td><td colspan="11" style="background:rgba(232,201,131,.04);"><div class="x-body">'
+      + fact('E-mail', r.Email) + fact('Phone', r.Phone) + fact('Institution', r.Institution) + fact('Mode', r.Mode)
+      + fact('Last uploaded', r.uploadedAt ? dtm(r.uploadedAt) + (r.uploadedByRole && r.uploadedByRole !== 'Participant' ? ' · by admin ' + r.uploadedBy : '') : '')
+      + fact('Slot', [r.SlotVenue, r.SlotRoom, r.SlotDate, r.SlotTime].filter(Boolean).join(' · '))
+      + '<div class="wide"><span>Reviewer remarks</span><b>' + (r.AbstractRemarks ? esc(r.AbstractRemarks) : '—') + '</b></div>'
+      + '<div class="wide"><span>File versions</span><b style="white-space:normal;">' + versions(r) + '</b></div></div></td></tr>';
+    return h;
+  }).join('') : '<tr><td class="empty" colspan="12">' + (all.length ? 'No abstracts match these filters.' : 'No abstracts yet.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length + ' Oral / Poster participants';
+  stats();
+}
+function bars(el, pairs) {
+  const mx = Math.max(1, ...pairs.map(p => p[1]));
+  $(el).innerHTML = pairs.length ? pairs.map(p => '<div><span class="l" title="' + esc(p[0]) + '">' + esc(p[0]) + '</span><span class="b"><i style="width:' + Math.round(p[1] * 100 / mx) + '%"></i></span><span class="c">' + p[1] + '</span></div>').join('') : '<span class="hint">No data</span>';
+}
+function stats() {
+  const n = s => view.filter(r => st(r) === s).length;
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  const sub = view.length - n('Not Submitted');
+  $('stats').innerHTML = c('fa-file-lines', 'Submitted', sub, 'of ' + view.length + ' Oral / Poster')
+    + c('fa-hourglass-half', 'Awaiting review', n('Submitted'), n('Revision Requested') + ' revision requested')
+    + c('fa-circle-check', 'Accepted', n('Accepted'), sub ? Math.round(n('Accepted') * 100 / sub) + '% of submitted' : '—')
+    + c('fa-circle-xmark', 'Rejected · Not submitted', n('Rejected') + ' · ' + n('Not Submitted'), 'needs follow-up');
+  const cnt = (key, f) => { const m = {}; view.forEach(r => { const k = f ? f(r) : r[key]; if (k) m[k] = (m[k] || 0) + 1; }); return Object.entries(m).sort((a, b) => b[1] - a[1]); };
+  bars('bt', cnt('ParticipantType')); bars('bh', cnt('AbstractTheme'));
+}
+async function load() {
+  $('tb').innerHTML = '<tr><td class="empty" colspan="12">Loading abstracts…</td></tr>';
+  try {
+    const r = await VR.api('adminAbstractList', {});
+    if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="12">Could not load.</td></tr>'; return showErr(r.error || 'Could not load abstracts.'); }
+    all = r.participants || []; hist = {};
+    const k = ['fh', 'fr'].map(i => $(i).value);
+    $('fh').innerHTML = '<option value="">All themes</option>' + [...new Set(all.map(x => x.AbstractTheme).filter(Boolean))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+    $('fr').innerHTML = '<option value="">All reviewers</option>' + [...new Set(all.map(x => x.AbstractReviewedByName).filter(Boolean))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+    $('fh').value = k[0]; $('fr').value = k[1]; render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+['ft', 'fa', 'fh', 'fr'].forEach(i => $(i).addEventListener('change', render)); $('q').addEventListener('input', render); $('refresh').onclick = load;
+$('tb').onclick = async e => {
+  if (e.target.closest('a,button')) return; const tr = e.target.closest('tr[data-row]'); if (!tr) return;
+  const k = tr.dataset.row, r = all.find(x => String(x.row) === k);
+  if (open.has(k)) open.delete(k); else { open.add(k); if (r && !hist[r.ID]) { hist[r.ID] = null; render(); try { const h = await VR.api('adminAbstractHistory', { participantId: r.ID }); hist[r.ID] = h.ok ? h.history : []; } catch (er) { hist[r.ID] = []; } } }
+  render();
+};
+VR.exportBar($('xp'), { name: 'VRMIC2026_Abstracts', title: 'VRMIC 2026 — Abstract status', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['VRMIC ID', 'Name', 'Category', 'Institution', 'Doc ID', 'Title', 'Theme', 'Status', 'Version', 'Reviewer', 'Decision date', 'Remarks'],
+    rows: view.map(r => [r.ID, r.Name, r.ParticipantType, r.Institution || '', r.AbstractDocId || '', r.AbstractTitle || '', r.AbstractTheme || '', st(r), ver(r) || '', revName(r), decDate(r) ? dtm(decDate(r)) : '', r.AbstractRemarks || '']) }) });
+load();
+})();
+</script>
+</body>
+</html>

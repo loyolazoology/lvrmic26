@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revision Requests | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.btn-success{background:rgba(79,169,128,.14);border-color:rgba(79,169,128,.4);color:var(--teal-light);}
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
+.sec{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+.sec i{color:var(--gold-light);} .sec h2{font-size:1.05rem;margin:0;}
+.sec .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.a-Info{background:rgba(120,160,230,.14);color:#a9c3f0;}
+.note{text-align:center;padding:38px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
+.note i{font-size:24px;color:var(--gold-light);display:block;margin-bottom:8px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px;}
+.tab{background:var(--navy-900);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab b{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-left:6px;color:var(--text-3);}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);} .tab.on b{color:var(--gold-light);}
+.qi{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;cursor:pointer;}
+.qi-name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--text-1);}
+.qi-meta{font-size:12.5px;color:var(--text-3);}
+.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
+.qi-theme{font-size:12.5px;color:var(--teal-light);}
+.qi-body{display:none;margin-top:10px;} .qi.open .qi-body{display:block;}
+.rv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:10px 0;white-space:pre-wrap;}
+.remark b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px;margin:8px 0;}
+.facts div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.facts div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;} .chk input{width:auto;}
+textarea{width:100%;min-height:96px;resize:vertical;}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;white-space:pre-wrap;}
+.x-body .wide{grid-column:1/-1;}
+table.list td.ti{white-space:normal;min-width:220px;max-width:380px;}
+table.list td.rm{white-space:normal;min-width:200px;max-width:340px;font-size:12.5px;color:var(--text-2);}
+.over{color:#e8988c;font-weight:600;} .ok{}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+.bars div{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px;color:var(--text-2);}
+.bars .l{flex:0 0 46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .bars .b{flex:1;height:8px;background:var(--navy-950);border-radius:6px;overflow:hidden;} .bars .b i{display:block;height:100%;background:var(--gold);} .bars .c{flex:0 0 32px;text-align:right;font-family:'IBM Plex Mono',monospace;}
+.modal .box input[type=datetime-local]{width:100%;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-rotate" style="color:var(--gold-light);"></i> Revision requests</h1><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><span id="xp"></span><a class="btn btn-sm" href="abstracts-review.html"><i class="fa-solid fa-file-circle-check"></i> Review queue</a><a class="btn btn-sm" href="abstracts-upload.html"><i class="fa-solid fa-upload"></i> Upload on behalf</a></div></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar noprint"><input id="q" placeholder="Search by name, ID or title" autocomplete="off"><select id="fs"><option value="">All waiting</option><option value="over">Past deadline</option><option value="open">Within deadline</option></select><button class="btn btn-sm btn-warn" id="bulk"><i class="fa-solid fa-bell"></i> Remind selected</button><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+  <div class="table-card"><div class="scroll-x" id="tc"><table class="list"><thead><tr><th style="width:28px;"><input type="checkbox" id="all" style="width:auto;"></th><th>VRMIC ID</th><th>Name</th><th>Title</th><th>Ver.</th><th>Requested</th><th>Days waiting</th><th>Deadline</th><th>Remarks sent</th><th class="noprint">Actions</th></tr></thead><tbody id="tb"><tr><td class="empty" colspan="10">Loading…</td></tr></tbody></table></div></div>
+  <p class="tiny noprint" style="margin-top:10px;">The deadline is the one set in Settings (Revised abstract closes), unless you extend it for one participant. A reminder uses one e-mail from today's mail quota.</p>
+
+  <div class="sec" style="margin-top:30px;"><i class="fa-solid fa-file-circle-check"></i><h2>Resubmitted — back in review</h2><span class="n" id="n2"></span></div>
+  <div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>VRMIC ID</th><th>Name</th><th>Title</th><th>Version</th><th>Uploaded</th><th>Status</th><th class="noprint"></th></tr></thead><tbody id="tb2"></tbody></table></div></div>
+</div>
+
+<div class="modal" id="m-ext"><div class="box wide">
+  <h3 style="margin-bottom:8px;"><i class="fa-solid fa-calendar-plus" style="color:var(--gold-light);"></i> Extend deadline <span class="tiny" style="display:inline;" id="x-who"></span></h3>
+  <p class="hint" id="x-cur" style="margin-bottom:10px;"></p>
+  <div class="alert alert-error" id="x-err"></div>
+  <label>New deadline (IST) *</label><input type="datetime-local" id="x-dt">
+  <label style="margin-top:12px;display:block;">Reason (kept in the history)</label><textarea id="x-r" style="min-height:64px;"></textarea>
+  <label class="chk"><input type="checkbox" id="x-n" checked> E-mail the new deadline to the participant</label>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="x-x">Cancel</button><button class="btn btn-gold" id="x-ok">Extend</button></div>
+</div></div>
+<div class="modal" id="m-can"><div class="box wide">
+  <h3 style="margin-bottom:8px;"><i class="fa-solid fa-ban" style="color:var(--warn);"></i> Cancel revision request <span class="tiny" style="display:inline;" id="c-who"></span></h3>
+  <p class="hint" style="margin-bottom:10px;">The abstract goes back to the review queue as "Submitted", with the file already on record. The participant does not need to upload anything.</p>
+  <div class="alert alert-error" id="c-err"></div>
+  <label>Reason *</label><textarea id="c-r" style="min-height:70px;"></textarea>
+  <label class="chk"><input type="checkbox" id="c-n" checked> E-mail the participant that no revision is needed</label>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="c-x">Keep request</button><button class="btn btn-warn" id="c-ok">Cancel request</button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('abstract', 'transaction')) { VR.denied('You do not have permission to manage revision requests.'); return; }
+
+const url = u => /^https?:\/\//i.test(String(u || '')) ? String(u) : '';
+const ver = p => Number(p.AbstractRevision) || (p.AbstractDocId ? 1 : 0);
+const isAbs = p => p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster';
+const st = p => p.AbstractStatus || 'Not Submitted';
+const aCls = s => 'a-' + String(s).split(' ')[0];
+const dtm = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const dts = v => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); };
+const fact = (k, v) => '<div><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
+const byLine = p => p.AbstractReviewedByName ? p.AbstractReviewedByName + (p.AbstractReviewedBy ? ' (' + p.AbstractReviewedBy + ')' : '') : '';
+
+let all = [], globalDl = '', view = [], sel = new Set(), target = null;
+const effDl = p => p.RevisionDeadline || globalDl || '';
+const days = p => p.AbstractReviewedAt ? Math.max(0, Math.floor((Date.now() - new Date(p.AbstractReviewedAt).getTime()) / 86400000)) : '';
+const overdue = p => { const d = effDl(p); return !!d && Date.now() > new Date(d).getTime(); };
+const waiting = () => all.filter(p => p.AbstractStatus === 'Revision Requested');
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), s = $('fs').value;
+  return waiting().filter(p => (!q || [p.Name, p.ID, p.AbstractTitle].some(v => String(v || '').toLowerCase().indexOf(q) > -1)) && (!s || (s === 'over') === overdue(p)))
+    .sort((a, b) => new Date(a.AbstractReviewedAt || 0) - new Date(b.AbstractReviewedAt || 0));
+}
+function render() {
+  view = filtered(); const w = waiting();
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  const od = w.filter(overdue).length, avg = w.length ? Math.round(w.reduce((a, p) => a + (days(p) || 0), 0) / w.length) : 0;
+  const back = all.filter(p => p.AbstractStatus === 'Submitted' && ver(p) > 1);
+  $('stats').innerHTML = c('fa-hourglass-half', 'Waiting for revision', w.length, 'participants') + c('fa-clock', 'Past deadline', od, od ? 'follow up or extend' : 'none overdue') + c('fa-calendar-day', 'Average wait', avg + ' d', 'since revision was requested') + c('fa-file-circle-check', 'Back in review', back.length, 'resubmitted files');
+  $('tb').innerHTML = view.length ? view.map(p => {
+    const d = effDl(p), od1 = overdue(p), own = !!p.RevisionDeadline;
+    return '<tr data-row="' + esc(p.row) + '"><td><input type="checkbox" class="sk" style="width:auto;"' + (sel.has(String(p.row)) ? ' checked' : '') + '></td><td class="mono">' + esc(p.ID) + '</td><td class="nm">' + esc(p.Name) + '<div class="tiny">' + esc(p.Email || '') + '</div></td><td class="ti">' + esc(p.AbstractTitle || '—') + '</td><td>v' + ver(p) + '</td><td>' + dtm(p.AbstractReviewedAt) + '</td><td>' + days(p) + ' d</td>'
+      + '<td class="' + (od1 ? 'over' : '') + '">' + (d ? dtm(d) : 'No limit') + (own ? '<div class="tiny">extended for this person</div>' : '') + (od1 ? '<div class="tiny">past deadline</div>' : '') + '</td>'
+      + '<td class="rm" title="' + esc(p.AbstractRemarks || '') + '">' + esc(String(p.AbstractRemarks || '—').slice(0, 170)) + (String(p.AbstractRemarks || '').length > 170 ? '…' : '') + '</td>'
+      + '<td class="noprint"><div class="row-actions"><button class="btn btn-sm" data-a="remind"><i class="fa-solid fa-bell"></i> Remind</button> <button class="btn btn-sm" data-a="extend"><i class="fa-solid fa-calendar-plus"></i> Extend</button> <button class="btn btn-sm btn-warn" data-a="cancel"><i class="fa-solid fa-ban"></i> Cancel</button></div></td></tr>';
+  }).join('') : '<tr><td class="empty" colspan="10">' + (w.length ? 'Nothing matches these filters.' : 'No participants are currently asked to revise.') + '</td></tr>';
+  $('all').checked = !!view.length && view.every(p => sel.has(String(p.row)));
+  $('n2').textContent = back.length ? '(' + back.length + ')' : '';
+  $('tb2').innerHTML = back.length ? back.sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0)).map(p => '<tr><td class="mono">' + esc(p.ID) + '</td><td class="nm">' + esc(p.Name) + '</td><td class="ti">' + esc(p.AbstractTitle || '—') + '</td><td>v' + ver(p) + '</td><td>' + dtm(p.uploadedAt) + '</td><td><span class="badge a-Submitted">Back in review</span></td><td class="noprint"><a class="btn btn-sm" href="abstracts-review.html">Open review queue</a></td></tr>').join('') : '<tr><td class="empty" colspan="7">No resubmitted files are waiting.</td></tr>';
+}
+$('tb').addEventListener('click', async e => {
+  const tr = e.target.closest('tr[data-row]'); if (!tr) return; const row = tr.dataset.row, p = all.find(x => String(x.row) === row);
+  if (e.target.classList.contains('sk')) { e.target.checked ? sel.add(row) : sel.delete(row); $('all').checked = view.every(x => sel.has(String(x.row))); return; }
+  const b = e.target.closest('button[data-a]'); if (!b || !p) return; target = p;
+  if (b.dataset.a === 'remind') return remind([p], b);
+  if (b.dataset.a === 'extend') { $('x-who').textContent = '— ' + p.Name + ' (' + p.ID + ')'; $('x-cur').textContent = 'Current deadline: ' + (effDl(p) ? dtm(effDl(p)) + ' IST' : 'none (no limit)'); $('x-dt').value = ''; $('x-r').value = ''; $('x-err').classList.remove('show'); $('m-ext').classList.add('show'); }
+  if (b.dataset.a === 'cancel') { $('c-who').textContent = '— ' + p.Name + ' (' + p.ID + ')'; $('c-r').value = ''; $('c-err').classList.remove('show'); $('m-can').classList.add('show'); }
+});
+$('all').onchange = function () { view.forEach(p => this.checked ? sel.add(String(p.row)) : sel.delete(String(p.row))); render(); };
+$('bulk').onclick = function () { const list = view.filter(p => sel.has(String(p.row))); if (!list.length) return showErr('Tick at least one participant first.'); remind(list, this); };
+
+async function remind(list, btn) {
+  hideAlerts();
+  if (list.length > 1 && !confirm('Send a reminder e-mail to ' + list.length + ' participants? This uses ' + list.length + ' e-mails from today\'s quota.')) return;
+  await VR.busy(btn, 'Sending…', async () => {
+    try {
+      const r = await VR.api('adminRevisionAction', { act: 'remind', items: list.map(p => ({ row: p.row, id: p.ID })) });
+      if (!r.ok) return showErr(r.error || 'Could not send reminders.');
+      let m = r.sent + ' reminder(s) sent. Mail quota left today: ' + r.quotaLeft + '.';
+      if (r.skipped && r.skipped.length) m += ' Stopped: daily mail quota reached, not sent to ' + r.skipped.join(', ') + '.';
+      if (r.failed && r.failed.length) { showErr(m + ' Failed: ' + r.failed.join('; ')); } else showOk(m);
+      sel.clear(); load();
+    } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+  });
+}
+$('x-x').onclick = () => $('m-ext').classList.remove('show'); $('c-x').onclick = () => $('m-can').classList.remove('show');
+$('x-ok').onclick = async function () {
+  const v = $('x-dt').value; if (!v) { $('x-err').textContent = 'Choose the new deadline.'; return $('x-err').classList.add('show'); }
+  if (new Date(v + ':00+05:30').getTime() <= Date.now()) { $('x-err').textContent = 'The deadline must be in the future.'; return $('x-err').classList.add('show'); }
+  await VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = await VR.api('adminRevisionAction', { act: 'extend', row: target.row, id: target.ID, deadline: v + ':00+05:30', reason: $('x-r').value.trim(), notify: $('x-n').checked });
+      if (!r.ok) { $('x-err').textContent = r.error || 'Could not extend.'; return $('x-err').classList.add('show'); }
+      $('m-ext').classList.remove('show'); showOk('Deadline extended for ' + target.Name + (r.mailSent === false ? ' (the e-mail could NOT be sent).' : r.mailSent ? ' and they were e-mailed.' : '.')); load();
+    } catch (e) { $('x-err').textContent = 'Could not reach the server.'; $('x-err').classList.add('show'); }
+  });
+};
+$('c-ok').onclick = async function () {
+  const reason = $('c-r').value.trim(); if (!reason) { $('c-err').textContent = 'Please give a reason.'; return $('c-err').classList.add('show'); }
+  await VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = await VR.api('adminRevisionAction', { act: 'cancel', row: target.row, id: target.ID, reason, notify: $('c-n').checked });
+      if (!r.ok) { $('m-can').classList.remove('show'); showErr(r.error || 'Could not cancel.'); return load(); }
+      $('m-can').classList.remove('show'); showOk('Revision request cancelled. ' + target.Name + '\'s abstract is back in the review queue' + (r.mailSent === false ? ' (the e-mail could NOT be sent).' : '.')); load();
+    } catch (e) { $('c-err').textContent = 'Could not reach the server.'; $('c-err').classList.add('show'); }
+  });
+};
+async function load() {
+  $('tb').innerHTML = '<tr><td class="empty" colspan="10">Loading…</td></tr>';
+  try {
+    const r = await VR.api('adminAbstractList', {});
+    if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="10">Could not load.</td></tr>'; return showErr(r.error || 'Could not load data.'); }
+    all = r.participants || []; globalDl = r.revisionDeadline || ''; render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('q').addEventListener('input', render); $('fs').addEventListener('change', render); $('refresh').onclick = load;
+VR.exportBar($('xp'), { name: 'VRMIC2026_Revision_Requests', title: 'VRMIC 2026 — Revision requests', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['VRMIC ID', 'Name', 'E-mail', 'Title', 'Version', 'Requested', 'Days waiting', 'Deadline', 'Remarks sent'],
+    rows: view.map(p => [p.ID, p.Name, p.Email || '', p.AbstractTitle || '', ver(p), dtm(p.AbstractReviewedAt), days(p), effDl(p) ? dtm(effDl(p)) : 'No limit', p.AbstractRemarks || '']) }) });
+load();
+})();
+</script>
+</body>
+</html>

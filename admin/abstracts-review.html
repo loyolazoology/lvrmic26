@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Abstracts | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.btn-success{background:rgba(79,169,128,.14);border-color:rgba(79,169,128,.4);color:var(--teal-light);}
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
+.sec{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+.sec i{color:var(--gold-light);} .sec h2{font-size:1.05rem;margin:0;}
+.sec .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.a-Info{background:rgba(120,160,230,.14);color:#a9c3f0;}
+.note{text-align:center;padding:38px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
+.note i{font-size:24px;color:var(--gold-light);display:block;margin-bottom:8px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px;}
+.tab{background:var(--navy-900);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab b{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-left:6px;color:var(--text-3);}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);} .tab.on b{color:var(--gold-light);}
+.qi{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;cursor:pointer;}
+.qi-name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--text-1);}
+.qi-meta{font-size:12.5px;color:var(--text-3);}
+.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
+.qi-theme{font-size:12.5px;color:var(--teal-light);}
+.qi-body{display:none;margin-top:10px;} .qi.open .qi-body{display:block;}
+.rv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:10px 0;white-space:pre-wrap;}
+.remark b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px;margin:8px 0;}
+.facts div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.facts div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;} .chk input{width:auto;}
+textarea{width:100%;min-height:96px;resize:vertical;}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;white-space:pre-wrap;}
+.x-body .wide{grid-column:1/-1;}
+table.list td.ti{white-space:normal;min-width:220px;max-width:380px;}
+table.list td.rm{white-space:normal;min-width:200px;max-width:340px;font-size:12.5px;color:var(--text-2);}
+.over{color:#e8988c;font-weight:600;} .ok{}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+.bars div{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px;color:var(--text-2);}
+.bars .l{flex:0 0 46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .bars .b{flex:1;height:8px;background:var(--navy-950);border-radius:6px;overflow:hidden;} .bars .b i{display:block;height:100%;background:var(--gold);} .bars .c{flex:0 0 32px;text-align:right;font-family:'IBM Plex Mono',monospace;}
+
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-file-circle-check" style="color:var(--gold-light);"></i> Review abstracts</h1><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><span id="xp"></span><a class="btn btn-sm" href="abstracts-revision.html"><i class="fa-solid fa-rotate"></i> Revision requests</a><a class="btn btn-sm" href="abstracts-report.html"><i class="fa-solid fa-table-list"></i> Abstract status</a></div></div>
+<div class="wrap" style="max-width:1100px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="toolbar noprint"><input id="q" placeholder="Search by name, ID or title" autocomplete="off"><select id="ft"><option value="">Oral and Poster</option><option>Oral</option><option>Poster</option></select><select id="fh"><option value="">All themes</option></select><select id="fm"><option value="">All modes</option></select><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="list"><div class="empty">Loading submissions…</div></div>
+</div>
+
+<div class="modal" id="dm"><div class="box wide">
+  <h3 id="dm-t" style="margin-bottom:8px;"></h3>
+  <p class="hint" id="dm-h" style="margin-bottom:10px;"></p>
+  <div class="alert alert-error" id="dm-err"></div>
+  <textarea id="dm-r" placeholder="Remarks for the participant"></textarea>
+  <label class="chk" id="dm-nw" style="display:none;"><input type="checkbox" id="dm-n" checked> E-mail this remark to the participant</label>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;"><button class="btn" id="dm-x">Cancel</button><button class="btn" id="dm-ok"></button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('abstract', 'transaction')) { VR.denied('You do not have permission to review abstracts.'); return; }
+
+const url = u => /^https?:\/\//i.test(String(u || '')) ? String(u) : '';
+const ver = p => Number(p.AbstractRevision) || (p.AbstractDocId ? 1 : 0);
+const isAbs = p => p.ParticipantType === 'Oral' || p.ParticipantType === 'Poster';
+const st = p => p.AbstractStatus || 'Not Submitted';
+const aCls = s => 'a-' + String(s).split(' ')[0];
+const dtm = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const dts = v => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); };
+const fact = (k, v) => '<div><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
+const byLine = p => p.AbstractReviewedByName ? p.AbstractReviewedByName + (p.AbstractReviewedBy ? ' (' + p.AbstractReviewedBy + ')' : '') : '';
+
+let all = [], tab = 'Submitted', open = new Set(), decRow = null, decMode = null, shown = [];
+const TABS = [['Submitted', 'Submitted'], ['Resubmitted', 'Resubmitted'], ['Revision', 'Revision requested'], ['Accepted', 'Accepted'], ['Rejected', 'Rejected']];
+const bucket = p => p.AbstractStatus === 'Submitted' ? (ver(p) > 1 ? 'Resubmitted' : 'Submitted') : p.AbstractStatus === 'Revision Requested' ? 'Revision' : (p.AbstractStatus === 'Accepted' || p.AbstractStatus === 'Rejected') ? p.AbstractStatus : '';
+const canDecide = () => tab === 'Submitted' || tab === 'Resubmitted';
+
+function match(p) {
+  const q = $('q').value.trim().toLowerCase(), t = $('ft').value, h = $('fh').value, m = $('fm').value;
+  return (!q || [p.Name, p.ID, p.AbstractTitle].some(v => String(v || '').toLowerCase().indexOf(q) > -1)) && (!t || p.ParticipantType === t) && (!h || p.AbstractTheme === h) && (!m || p.Mode === m);
+}
+function card(p) {
+  const o = open.has(String(p.row)), link = url(p.AbstractLink), b = bucket(p);
+  const dec = (b === 'Accepted' || b === 'Rejected' || b === 'Revision') && p.AbstractReviewedAt ? '<div class="facts">' + fact(b === 'Revision' ? 'Revision requested by' : b + ' by', byLine(p)) + fact('Decision date', dtm(p.AbstractReviewedAt)) + '</div>' : '';
+  return '<div class="qi' + (o ? ' open' : '') + '" data-row="' + esc(p.row) + '">'
+    + '<div class="qi-top" data-tog="1"><div><div class="qi-name"><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);margin-right:8px;"></i>' + esc(p.Name) + (ver(p) > 1 ? '<span class="rv">VERSION ' + ver(p) + '</span>' : '') + '</div>'
+    + '<div class="qi-meta"><span class="mono">' + esc(p.ID) + '</span> · ' + esc(p.Institution || '—') + '</div></div>'
+    + '<span class="badge t-' + esc(p.ParticipantType) + '">' + esc(p.ParticipantType) + '</span></div>'
+    + '<div class="qi-title">' + esc(p.AbstractTitle || '—') + '</div>' + (p.AbstractTheme ? '<div class="qi-theme"><i class="fa-solid fa-tag"></i> ' + esc(p.AbstractTheme) + '</div>' : '')
+    + '<div class="qi-body"><div class="facts">' + fact('Version', 'v' + ver(p)) + fact('Uploaded', dtm(p.uploadedAt) + (p.uploadedByRole && p.uploadedByRole !== 'Participant' ? ' · by admin ' + p.uploadedBy : '')) + fact('Mode', p.Mode) + fact('E-mail', p.Email) + fact('Phone', p.Phone) + '</div>' + dec
+    + (p.AbstractRemarks ? '<div class="remark"><b>' + (canDecide() ? 'Previous remarks' : 'Latest remarks') + '</b>' + esc(p.AbstractRemarks) + '</div>' : '')
+    + '<div class="row-actions" style="margin-top:10px;align-items:center;">' + (link ? '<a class="btn btn-sm" href="' + esc(link) + '" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> View file</a>' : '<span class="hint">No file link</span>')
+    + ' <button class="btn btn-sm" data-act="remark"><i class="fa-solid fa-comment-dots"></i> Add remark</button>'
+    + (canDecide() ? ' <button class="btn btn-sm btn-warn" data-act="revise"><i class="fa-solid fa-rotate"></i> Request revision</button> <button class="btn btn-sm btn-success" data-act="accept"><i class="fa-solid fa-check"></i> Accept</button> <button class="btn btn-sm btn-danger" data-act="reject"><i class="fa-solid fa-xmark"></i> Reject</button>' : '')
+    + (b === 'Revision' ? ' <a class="btn btn-sm" href="abstracts-revision.html">Manage in Revision requests</a>' : '')
+    + '</div></div></div>';
+}
+function render() {
+  const f = all.filter(match), cnt = {};
+  TABS.forEach(t => cnt[t[0]] = f.filter(p => bucket(p) === t[0]).length);
+  $('tabs').innerHTML = TABS.map(t => '<button class="tab' + (tab === t[0] ? ' on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '<b>' + cnt[t[0]] + '</b></button>').join('');
+  shown = f.filter(p => bucket(p) === tab);
+  shown.sort(canDecide() ? (a, b) => new Date(a.uploadedAt || 0) - new Date(b.uploadedAt || 0) : (a, b) => new Date(b.AbstractReviewedAt || 0) - new Date(a.AbstractReviewedAt || 0));
+  const label = TABS.find(t => t[0] === tab)[1].toLowerCase();
+  $('list').innerHTML = shown.length ? shown.map(card).join('') : '<div class="note"><i class="fa-solid fa-circle-check"></i>No ' + esc(label) + ' abstracts' + (all.length && all.filter(match).length !== all.length ? ' match these filters' : ' right now') + '.</div>';
+}
+document.addEventListener('click', e => {
+  const tb = e.target.closest('[data-tab]'); if (tb) { tab = tb.dataset.tab; render(); return; }
+  const t = e.target.closest('[data-tog]'); if (t && !e.target.closest('a,button')) { const k = t.parentElement.dataset.row; open.has(k) ? open.delete(k) : open.add(k); render(); return; }
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  openDecision(b.closest('.qi').dataset.row, b.dataset.act);
+});
+
+const MODES = {
+  accept: { t: '<i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> Accept abstract', h: 'Optional remarks (e.g. suggestions for the final presentation) are stored and included in the acceptance e-mail. The participant keeps the type (Oral / Poster) they registered with.', b: '<i class="fa-solid fa-check"></i> Confirm accept', c: 'btn btn-success', req: false },
+  reject: { t: '<i class="fa-solid fa-circle-xmark" style="color:var(--danger);"></i> Reject abstract', h: 'Remarks are required. They are stored and included in the rejection e-mail.', b: '<i class="fa-solid fa-xmark"></i> Confirm reject', c: 'btn btn-danger', req: true },
+  revise: { t: '<i class="fa-solid fa-rotate" style="color:var(--warn);"></i> Request revision', h: 'Remarks are required. The participant is e-mailed and can upload a new file from their dashboard (or the admin can upload it for them); it then returns to this queue as a new version.', b: '<i class="fa-solid fa-paper-plane"></i> Send remarks &amp; request revision', c: 'btn btn-warn', req: true },
+  remark: { t: '<i class="fa-solid fa-comment-dots" style="color:var(--gold-light);"></i> Add remark', h: 'Saves a remark without changing the abstract status. Every remark is kept in the Review history.', b: '<i class="fa-solid fa-floppy-disk"></i> Save remark', c: 'btn btn-gold', req: true }
+};
+function openDecision(row, mode) {
+  decRow = row; decMode = mode; const m = MODES[mode], p = all.find(x => String(x.row) === String(row));
+  $('dm-t').innerHTML = m.t + (p ? ' <span class="tiny" style="display:inline;">— ' + esc(p.Name) + ' (' + esc(p.ID) + ', v' + ver(p) + ')</span>' : ''); $('dm-h').textContent = m.h; $('dm-err').classList.remove('show');
+  $('dm-r').value = '';
+  const ok = $('dm-ok'); ok.className = m.c; ok.innerHTML = m.b; ok.disabled = false;
+  $('dm-nw').style.display = mode === 'remark' ? 'flex' : 'none'; $('dm').classList.add('show'); $('dm-r').focus();
+}
+$('dm-x').onclick = () => $('dm').classList.remove('show');
+$('dm-ok').onclick = async function () {
+  hideAlerts(); const m = MODES[decMode], remarks = $('dm-r').value.trim(), p = all.find(x => String(x.row) === String(decRow));
+  if (!p) return;
+  if (m.req && !remarks) { $('dm-err').textContent = 'Remarks are required for this action.'; $('dm-err').classList.add('show'); return $('dm-r').focus(); }
+  await VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = decMode === 'remark' ? await VR.api('adminSaveAbstractRemarks', { row: decRow, id: p.ID, remarks, notify: $('dm-n').checked })
+        : await VR.api('adminVerifyAbstract', { row: decRow, id: p.ID, version: ver(p), decision: { accept: 'Accepted', reject: 'Rejected', revise: 'Revision Requested' }[decMode], remarks });
+      $('dm').classList.remove('show');
+      if (!r.ok) { showErr(r.error || 'Could not update this abstract.'); if (r.stale) load(); return; }
+      const note = r.mailSent === false ? ' (the notification e-mail could NOT be sent — contact them directly)' : (r.mailSent ? ' — participant notified by e-mail.' : '.');
+      showOk({ accept: 'Abstract accepted', reject: 'Abstract rejected', revise: 'Revision requested', remark: 'Remark saved' }[decMode] + note); load();
+    } catch (e) { $('dm').classList.remove('show'); showErr('Could not reach the server. Check your connection and try again.'); }
+  });
+};
+
+async function load() {
+  try {
+    const r = await VR.api('adminAbstractList', {});
+    if (!r.ok) { $('list').innerHTML = ''; return showErr(r.error || 'Could not load data.'); }
+    all = r.participants || [];
+    const keep = ['fh', 'fm'].map(i => $(i).value);
+    $('fh').innerHTML = '<option value="">All themes</option>' + [...new Set(all.map(x => x.AbstractTheme).filter(Boolean))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+    $('fm').innerHTML = '<option value="">All modes</option>' + [...new Set(all.map(x => x.Mode).filter(Boolean))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+    $('fh').value = keep[0]; $('fm').value = keep[1];
+    render();
+  } catch (e) { $('list').innerHTML = ''; showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('q').addEventListener('input', render); ['ft', 'fh', 'fm'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+
+VR.exportBar($('xp'), { name: 'VRMIC2026_Abstracts_Review', title: 'VRMIC 2026 — Abstract review queue', pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['VRMIC ID', 'Name', 'Category', 'Institution', 'Title', 'Theme', 'Mode', 'Version', 'Status', 'Uploaded', 'Reviewer', 'Decision date'],
+    rows: shown.map(p => [p.ID, p.Name, p.ParticipantType, p.Institution || '', p.AbstractTitle || '', p.AbstractTheme || '', p.Mode || '', ver(p), st(p), dtm(p.uploadedAt), byLine(p), p.AbstractReviewedAt ? dtm(p.AbstractReviewedAt) : '']) }) });
+
+load();
+})();
+</script>
+</body>
+</html>
