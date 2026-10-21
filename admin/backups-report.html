@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backup List | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+table.list td{vertical-align:middle;white-space:nowrap;}
+table.list td.wrapc{white-space:normal;min-width:160px;max-width:320px;overflow-wrap:anywhere;line-height:1.4;}
+.banner code{font-family:'IBM Plex Mono',monospace;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:5px;color:var(--gold-light);}
+.steps{margin:8px 0 0 18px;font-size:13px;color:var(--text-2);}
+.steps li{margin-bottom:3px;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-cloud-arrow-down" style="color:var(--gold-light);"></i> Backup list</h1>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button><button class="btn btn-gold btn-sm" id="run" style="display:none;"><i class="fa-solid fa-floppy-disk"></i> Backup now</button></div></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div id="notes"></div>
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar noprint"><div id="xp" style="margin-left:auto;"></div></div>
+
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list"><thead><tr><th>Date and time</th><th>Type</th><th>By</th><th>Size</th><th>Status</th><th>Contents</th><th class="noprint"></th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="7">Loading backups…</td></tr></tbody></table></div>
+  </div>
+
+  <div class="banner" style="margin-top:14px;"><i class="fa-solid fa-circle-info"></i><div><b>Restoring is manual and safe.</b> The portal never overwrites your live Sheet. To restore, open the backup copy in Drive, then copy the tab you need back into the live Sheet.<br>Google Sheets often report a size of 0, so size may show a dash. The contents column (tabs and rows) is the better check.</div></div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('trash', 'report') && !VR.can('trash', 'transaction')) { VR.denied('You do not have permission to view the backup list.'); return; }
+
+const S = v => String(v == null ? '' : v);
+let info = null, list = [];
+
+const fdt = s => { const d = new Date(S(s)); return isNaN(d) ? S(s) || '—' : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const sz = n => !n ? '—' : n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+const stCls = s => s === 'Success' ? 'b-ok' : s === 'Failed' ? 'b-bad' : 'b-neu';
+
+function notes() {
+  let h = '';
+  if (!info.triggerInstalled) h += '<div class="banner warn"><i class="fa-solid fa-triangle-exclamation"></i><div><b>The daily backup is not scheduled yet.</b> One-time setup in the Apps Script editor:<ol class="steps"><li>Open the project, choose the function <code>installBackupTrigger</code> in the toolbar.</li><li>Click <b>Run</b> and allow the permissions.</li><li>Refresh this page.</li></ol></div></div>';
+  if (!info.enabled) h += '<div class="banner warn"><i class="fa-solid fa-toggle-off"></i><div><b>Daily backup is switched off.</b> Turn it on in Settings, under Backup. “Backup now” still works while it is off.</div></div>';
+  if (info.folderUrl) h += '<div class="banner"><i class="fa-brands fa-google-drive"></i><div>Backups are saved in the Drive folder <b>VRMIC Backups</b>. <a href="' + esc(info.folderUrl) + '" target="_blank" rel="noopener">Open the folder</a>. The copies belong to the portal’s Google account, so the links only open for accounts that can see that folder.</div></div>';
+  $('notes').innerHTML = h;
+}
+
+function stats() {
+  const ok = list.filter(b => b.status === 'Success'), last = list.find(b => b.status === 'Success'), lastAny = list[0];
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v" style="font-size:1.35rem;">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-clock-rotate-left', 'Last good backup', last ? esc(fdt(last.time)) : 'None yet', last ? esc(last.trigger) + ' backup' : 'Run “Backup now”')
+    + c('fa-box-archive', 'Backups kept', ok.length, 'older than ' + info.retentionDays + ' days are removed')
+    + c('fa-calendar-day', 'Retention', info.retentionDays + ' days', 'change in Settings > Backup')
+    + c('fa-robot', 'Automatic backup', info.enabled && info.triggerInstalled ? 'On' : 'Off', lastAny && lastAny.status === 'Failed' ? 'last attempt FAILED' : (info.triggerInstalled ? 'about 2 AM IST' : 'trigger not installed'));
+}
+
+function render() {
+  list = info.backups || [];
+  notes(); stats();
+  $('tb').innerHTML = list.length ? list.map(b =>
+    '<tr><td>' + esc(fdt(b.time)) + '</td><td>' + esc(b.trigger || '—') + '</td><td>' + esc(b.by || '—') + '</td><td>' + sz(b.size) + '</td>'
+    + '<td><span class="badge ' + stCls(b.status) + '">' + esc(b.status) + '</span></td>'
+    + '<td class="wrapc">' + esc(b.note || '—') + (b.status === 'Success' || b.status === 'Expired' ? '<span class="tiny">' + esc(b.fileName) + '</span>' : '') + '</td>'
+    + '<td class="noprint">' + (b.status === 'Success' && b.url ? '<a class="btn btn-sm" href="' + esc(b.url) + '" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open copy</a>' : '') + '</td></tr>').join('')
+    : '<tr><td class="empty" colspan="7">No backups yet.</td></tr>';
+  $('info').textContent = list.length + ' entr' + (list.length === 1 ? 'y' : 'ies') + ' (latest 200)';
+  $('run').style.display = info.canRun ? '' : 'none';
+}
+
+async function load() {
+  hideAlerts();
+  $('tb').innerHTML = '<tr><td class="empty" colspan="7">Loading backups…</td></tr>';
+  try {
+    const r = await VR.api('adminListBackups', {});
+    if (!r.ok) { showErr(r.error || 'Could not load backups.'); $('tb').innerHTML = '<tr><td class="empty" colspan="7">Could not load.</td></tr>'; return; }
+    info = r; render();
+  } catch (e) {
+    showErr('Could not reach the server. Check your connection and try again.');
+    $('tb').innerHTML = '<tr><td class="empty" colspan="7">Could not load.</td></tr>';
+  }
+}
+
+$('run').onclick = () => {
+  if (!confirm('Make a full backup copy of the portal Sheet now?')) return;
+  VR.busy($('run'), 'Backing up…', async () => {
+    hideAlerts();
+    try {
+      const r = await VR.api('adminRunBackup', {});
+      if (!r.ok) { showErr(r.error || 'The backup failed.'); }
+      else showOk('Backup saved: ' + r.fileName + (r.expired ? ' (' + r.expired + ' old backup' + (r.expired === 1 ? '' : 's') + ' removed).' : '.'));
+      await load();
+    } catch (e) { showErr('Could not reach the server. The backup may still have run; refresh to check.'); }
+  });
+};
+$('refresh').onclick = load;
+
+VR.exportBar($('xp'), { name: 'VRMIC2026_Backups', title: 'VRMIC 2026 — Backup list', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['Date and time', 'Type', 'By', 'Size', 'Status', 'Contents', 'File'], rows: list.map(b => [fdt(b.time), b.trigger, b.by, sz(b.size), b.status, b.note, b.fileName]) }) });
+
+load();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.hsec{margin-bottom:26px;}
+.hsec > h2.sh{font-size:1.15rem;margin:0 0 12px;display:flex;gap:9px;align-items:center;}
+.hsec > h2.sh i{color:var(--gold-light);font-size:.95rem;}
+.hsec .lead{font-size:13px;color:var(--text-3);margin:-6px 0 12px;}
+details.hitem{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:12px;margin-bottom:10px;}
+details.hitem > summary{cursor:pointer;padding:13px 16px;font-weight:600;font-size:14px;color:var(--text-1);list-style:none;display:flex;gap:10px;align-items:center;}
+details.hitem > summary::-webkit-details-marker{display:none;}
+details.hitem > summary::after{content:'\f078';font-family:'Font Awesome 6 Free';font-weight:900;font-size:11px;color:var(--text-3);margin-left:auto;transition:transform .15s;}
+details.hitem[open] > summary::after{transform:rotate(180deg);}
+details.hitem > summary i{color:var(--gold-light);width:18px;text-align:center;}
+details.hitem > .body{padding:2px 18px 16px 44px;font-size:13.5px;color:var(--text-2);}
+details.hitem ol{margin:0 0 0 18px;}
+details.hitem li{margin-bottom:7px;}
+.qs{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:12px;}
+.qs.mine{border-color:var(--gold);}
+.qs h3{font-size:1.02rem;margin-bottom:4px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;}
+.qs p{font-size:13px;color:var(--text-3);margin-bottom:10px;}
+.qs .links{display:flex;flex-wrap:wrap;gap:8px;}
+.qs .links a{font-size:12.5px;font-weight:600;padding:6px 11px;border:1px solid var(--navy-border);border-radius:999px;background:var(--navy-950);cursor:pointer;}
+.qs .links a:hover{border-color:var(--gold);}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.cbox{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:13.5px;color:var(--text-2);}
+.cbox input{width:auto;margin-top:4px;}
+.cbox.done span{text-decoration:line-through;color:var(--text-3);}
+.cl h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold-light);margin:14px 0 4px;font-weight:500;}
+.cl h4:first-child{margin-top:0;}
+dl.gl{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:10px 18px;font-size:13.5px;}
+dl.gl dt{font-weight:600;color:var(--text-1);}
+dl.gl dd{color:var(--text-2);}
+@media(max-width:600px){dl.gl{grid-template-columns:1fr;gap:2px;}dl.gl dd{margin-bottom:8px;}}
+.can-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0 28px;}
+#nores{display:none;}
+@media print{.noprint{display:none !important}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-circle-question" style="color:var(--gold-light);"></i> Help</h1>
+  <div class="noprint" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><input id="hq" placeholder="Search all help…" autocomplete="off" style="width:260px;"><button class="btn btn-sm" id="pr"><i class="fa-solid fa-print"></i> Print my cheat sheet</button></div></div>
+<div class="wrap" style="max-width:980px;">
+
+  <section class="hsec" id="s-can"><h2 class="sh"><i class="fa-solid fa-user-shield"></i> What can I do?</h2><div id="can"></div></section>
+  <section class="hsec" id="s-quick"><h2 class="sh"><i class="fa-solid fa-rocket"></i> Quick start for your role</h2><div id="quick"></div></section>
+  <section class="hsec" id="s-guides"><h2 class="sh"><i class="fa-solid fa-list-check"></i> Step-by-step guides</h2><p class="lead">Only the guides for things you are allowed to do are shown.</p><div id="guides"></div></section>
+  <section class="hsec" id="s-faq"><h2 class="sh"><i class="fa-solid fa-comments"></i> Rules and FAQs</h2><div id="faq"></div></section>
+  <section class="hsec" id="s-check"><h2 class="sh"><i class="fa-solid fa-clipboard-check"></i> Event-day checklist</h2><p class="lead">Ticks are saved on this device only.</p><div id="check"></div></section>
+  <section class="hsec" id="s-trouble"><h2 class="sh"><i class="fa-solid fa-screwdriver-wrench"></i> Troubleshooting</h2><div id="trouble"></div></section>
+  <section class="hsec" id="s-contact"><h2 class="sh"><i class="fa-solid fa-address-book"></i> Contacts and glossary</h2><div id="contact"></div></section>
+  <div class="empty" id="nores">Nothing in Help matches your search.</div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+const ls = k => localStorage.getItem('vrmic_admin_' + k) || '';
+const ME = { id: ls('id'), name: ls('name'), position: ls('position'), role: ls('category') };
+let PERMS = {}; try { PERMS = JSON.parse(ls('permissions') || '{}'); } catch (e) {}
+const can = (m, a) => VR.can(m, a);
+const backdate = ME.id === '1001' || !!(PERMS._special && PERMS._special.backdate);
+const allowed = need => !need || !need.length || need.some(n => can(n[0], n[1]));
+
+/* ---------- what the user can open (module key, label) ---------- */
+const AREAS = [['liveBoard', 'Live Event Board'], ['participants', 'Participants'], ['spotRegistration', 'Spot Registration'], ['abstract', 'Abstracts'], ['slot', 'Slots and Posters'],
+  ['schedule', 'Programme and Schedule'], ['scoring', 'Scoring and Evaluation'], ['attendanceConfig', 'Participant attendance sessions'], ['attendance', 'Participant attendance'],
+  ['studentConfig', 'Student attendance sessions'], ['students', 'Students'], ['studentAttendance', 'Student attendance'], ['presentationAccess', 'Presentations'],
+  ['badges', 'Badges and ID Cards'], ['certificates', 'Certificates'], ['receipts', 'Receipts'], ['feedback', 'Feedback'], ['mail', 'Mail'], ['announcements', 'Announcements'],
+  ['volunteers', 'Volunteers'], ['settings', 'Settings'], ['adminUsers', 'Admin Users'], ['auditLog', 'Audit Log'], ['trash', 'Trash and Backups']];
+
+/* ---------- guides: id, title, icon, need (any of [module, action]), steps ---------- */
+const G = [
+{ id: 'scan', t: 'Scan attendance', ic: 'fa-qrcode', need: [['attendance', 'transaction'], ['studentAttendance', 'transaction']], s: [
+  'Open Participant attendance or Student attendance, then QR scan. Use the page that matches the person: a student QR is rejected on the participant page, and the other way round.',
+  'Choose the session. Only sessions dated today are offered to you.',
+  'Choose Entry (IN) or Exit (OUT). Exit works only for sessions that use exit marking.',
+  'Allow the camera and hold the QR code in front of it. A green result shows the name and Present or Late. A red result shows exactly why it was rejected.',
+  'If the internet drops, keep scanning. Scans are queued on the device and sent when the connection returns (accepted for up to 36 hours).'] },
+{ id: 'manual', t: 'Manual attendance entry', ic: 'fa-keyboard', need: [['attendance', 'transaction'], ['studentAttendance', 'transaction']], s: [
+  'Open Participant attendance or Student attendance, then Manual entry.',
+  'Choose the session, then search for the person by name or ID and pick them.',
+  'Choose IN or OUT and type a reason. A reason is always required for manual entry.',
+  'Save. You can mark only sessions dated today' + (backdate ? '. Your account may also pick past session dates (back-dating).' : '. Past dates need the back-dating permission; ask the Convener or Administrator.'),
+  'Future sessions can never be marked.'] },
+{ id: 'spot', t: 'Spot registration (walk-ins)', ic: 'fa-person-walking-luggage', need: [['spotRegistration', 'transaction']], s: [
+  'Open Spot Registration and start a new registration.',
+  'Enter full name, email (the participant logs in with it), mobile number (it becomes the first password), institution, category and the registration type (Oral, Poster or Participant).',
+  'Pick the fee category. The standard fee is filled in. If you change the amount you must type a reason.',
+  'Choose the payment mode: Cash, UPI, Card, Bank transfer or Waived. UPI, Card and Bank transfer need the payment reference number. Waived needs a reason.',
+  'Submit. The system warns if the same name and institution already exist, and blocks a repeated email or mobile number.',
+  'Print the badge with the QR code, and hand it over. The account email goes to the participant automatically.'] },
+{ id: 'abstract-review', t: 'Review an abstract and request a revision', ic: 'fa-file-circle-check', need: [['abstract', 'transaction']], s: [
+  'Open Abstracts, then Abstract review, and open the submitted abstract file.',
+  'Choose Accepted, Rejected or Revision requested. The participant gets an email with your decision.',
+  'Revision requested needs remarks that explain what must change. Accepted and Rejected can carry optional remarks.',
+  'After a revision request the participant can upload a new Word file. It returns to your review queue automatically, and the earlier versions are kept.',
+  'To add a remark without deciding, use Save remarks, and tick the box to email it.'] },
+{ id: 'abstract-upload', t: 'Upload an abstract on behalf of a participant', ic: 'fa-file-arrow-up', need: [['abstract', 'transaction']], s: [
+  'Open Abstracts, then Upload on behalf of participant, and pick the participant.',
+  'Enter the title and choose the theme from the list.',
+  'Attach the Word file (.doc or .docx, within the size limit set in Settings).',
+  'This works only when no abstract exists yet, or when a revision was requested. Delegate-only participants cannot hold an abstract.'] },
+{ id: 'ppt-upload', t: 'Upload a PPT for a presenter', ic: 'fa-file-powerpoint', need: [['abstract', 'transaction']], s: [
+  'Open the participant in Abstracts and choose the PPT upload.',
+  'It is available only for Oral presenters whose abstract is Accepted.',
+  'Attach the file. Allowed types and the size limit come from Settings (pptx, pdf, ppt; 25 MB by default).',
+  'A presentation can be uploaded once. If a wrong file went in, ask the Administrator.'] },
+{ id: 'slots', t: 'Slots: allot, no-show, waiting list, poster boards', ic: 'fa-calendar-days', need: [['slot', 'transaction']], s: [
+  'Open Slots and Posters, then Slot allotment. Pick the presenter and set venue, room, date, time, token number and map link. Choose venues from the Settings list so names always match.',
+  'Participants see their slot only while Slots visible is switched on in Settings.',
+  'If a presenter does not turn up, open No-show and reallocation and mark the no-show. The freed slot appears under Free slots.',
+  'Move the next waiting presenter into that slot, and update the venue volunteers if needed.',
+  'For posters, open Poster board allotment, pick the presenter and enter the board number.'] },
+{ id: 'badges', t: 'Print badges and ID cards', ic: 'fa-id-badge', need: [['badges', 'transaction']], s: [
+  'Open Badges and ID Cards, then Print all or by category.',
+  'Choose the category (for example Oral, Poster, Participant, or a team role) or select people one by one.',
+  'Print. Every print is written to the audit log.',
+  'To reprint a lost badge, search for the person and print that one badge. The QR code stays the same, so the old one still works until you tell the scanners otherwise.',
+  'Team members have their own Team ID cards in the same section.'] },
+{ id: 'mail', t: 'Send an invitation', ic: 'fa-envelope', need: [['mail', 'transaction']], s: [
+  'Open Mail, then Send invitation.',
+  'Choose the type: General, Head of Department, Institute or College. The wording and the extra fields change with the type.',
+  'Enter name and email. The brochure is attached automatically.',
+  'An address that already received an invitation is blocked unless you choose to send again.',
+  'Google limits how many emails the portal can send in one day (roughly 100 on a free Gmail account and 1,500 on Google Workspace). Anything beyond the limit fails and shows as Failed in the Mail log. Check the Mail log before resending.'] },
+{ id: 'announce', t: 'Post an announcement', ic: 'fa-bullhorn', need: [['announcements', 'transaction']], s: [
+  'Open Announcements, then Post announcement.',
+  'Enter a title and message, and add a poster image link if you have one.',
+  'Post. It appears on every participant’s dashboard (latest ten are shown).',
+  'A deleted announcement goes to Trash and can be restored.'] },
+{ id: 'scoring', t: 'Enter scores (judges)', ic: 'fa-star-half-stroke', need: [['scoring', 'transaction']], s: [
+  'Open Scoring and Evaluation, then Score entry.',
+  'Pick the presenter you are judging. Use Presentations to read their abstract or view the PPT if you have access.',
+  'Enter a mark for each criterion and save. You can come back and correct a score until scoring is closed.',
+  'Rankings and winners are on the report pages.'] },
+{ id: 'ppt-download', t: 'Download presentations (volunteers)', ic: 'fa-download', need: [['presentationAccess', 'report']], s: [
+  'Open Presentations, then Venue presentation list.',
+  'Volunteers see only the presentations assigned to them (a whole venue, one slot, or hand-picked participants). Organisers see everyone.',
+  'Click Download for a presenter. The portal records when you downloaded it, so the organisers can see what is already done.',
+  'A presenter who has not uploaded yet shows no file. Files over 30 MB cannot be downloaded through the portal; ask the organisers.'] },
+{ id: 'cert', t: 'Certificates and receipts', ic: 'fa-certificate', need: [['certificates', 'transaction'], ['certificates', 'report'], ['receipts', 'transaction'], ['receipts', 'report']], s: [
+  'Certificates: participants can ask for one from their dashboard only after Certificates released is switched on in Settings. The request shows up in Certificates, where you check their attendance against the minimum percentage.',
+  'Generate the certificate, paste its link, and mark it fulfilled. The participant receives an email and the link appears on their dashboard.',
+  'Receipts: a participant’s receipt request is emailed to the contact address in Settings. Generate it in Receipts and send it to the participant’s email.',
+  'Receipts can be generated from the college ERP or entered manually. Use the ERP type when an ERP receipt exists, and the manual type for cash or desk payments.'] },
+{ id: 'reports', t: 'Find, filter and export a report', ic: 'fa-file-export', need: [], s: [
+  'Open any report page. Use the search box and the filters at the top to narrow the list.',
+  'Click a row to expand the full record where the page allows it.',
+  'Use the export buttons: CSV, Excel, PDF, Image or Print. Exports and prints are written to the audit log.',
+  'The export contains what you see after filtering, so clear the filters first if you want everyone.'] },
+{ id: 'trash', t: 'Delete and restore a record', ic: 'fa-trash-can-arrow-up', need: [['trash', 'transaction']], s: [
+  'Deleting a participant, student, announcement or attendance session only hides it. It moves to Trash with who deleted it, when and why.',
+  'Open Trash and Backups, then Restore deleted records. Choose the tab, find the item, and click Restore. It returns with the same ID, password and files.',
+  'Restore is blocked if the email, phone number, department number or session title is now used by someone else. The message tells you who.',
+  'To restore you also need edit permission on that record’s own section.',
+  'Delete permanently is limited to the Administrator and needs the ID typed in. Nothing in Trash is removed automatically.'] },
+{ id: 'backup', t: 'Check or run a backup', ic: 'fa-cloud-arrow-down', need: [['trash', 'report'], ['trash', 'transaction']], s: [
+  'Open Trash and Backups, then Backup list.',
+  'A full copy of the portal Sheet is saved to the Drive folder “VRMIC Backups” at about 2 AM IST every day, when daily backup is on in Settings.',
+  'Check that the newest row says Success. A failed backup also emails the organiser address.',
+  'Before the event, or after a big change, use Backup now.',
+  'To restore, open the copy in Drive and copy the tab you need into the live Sheet. The portal never overwrites the live Sheet by itself.'] }
+];
+const GM = {}; G.forEach(g => GM[g.id] = g);
+
+/* ---------- role cards ---------- */
+const ALL = G.map(g => g.id);
+const ROLES = [
+ { k: 'admin', t: 'Administrator', ic: 'fa-crown', b: 'Full access to everything, including permanent delete and Admin Users.', g: ALL },
+ { k: 'convener', t: 'Convener', ic: 'fa-user-tie', b: 'Runs the conference. Can usually back-date attendance and sees every section you were given.', g: ALL },
+ { k: 'staff', t: 'Staff', ic: 'fa-user-gear', b: 'Works on the sections the Administrator ticked for you.', g: ['reports', 'scan', 'manual', 'spot', 'abstract-review', 'abstract-upload', 'ppt-upload', 'slots', 'badges', 'mail', 'announce', 'cert'] },
+ { k: 'volunteer', t: 'Volunteer', ic: 'fa-hands-helping', b: 'Marks attendance and downloads the presentations assigned to you.', g: ['scan', 'manual', 'ppt-download'] },
+ { k: 'desk', t: 'Registration desk', ic: 'fa-desktop', b: 'Registers walk-ins, takes payment and prints badges.', g: ['spot', 'scan', 'manual', 'badges'] },
+ { k: 'official', t: 'Official', ic: 'fa-clipboard-user', b: 'Read-only access to reports.', g: ['reports', 'ppt-download'] },
+ { k: 'judge', t: 'Judge / scorer', ic: 'fa-gavel', b: 'Reads presentations and enters scores.', g: ['scoring', 'ppt-download', 'reports'] }
+];
+function myKey() {
+  if (ME.id === '1001') return 'admin';
+  if (ME.role === 'Volunteer') return 'volunteer';
+  if (ME.role === 'Official') return 'official';
+  if (/convener/i.test(ME.position)) return 'convener';
+  if (can('spotRegistration', 'transaction') && !can('participants', 'transaction')) return 'desk';
+  if (can('scoring', 'transaction') && !can('participants', 'transaction')) return 'judge';
+  return 'staff';
+}
+const mine = () => ROLES.find(r => r.k === myKey());
+const guidesFor = r => r.g.map(id => GM[id]).filter(g => g && allowed(g.need));
+
+/* ---------- 1. what can I do ---------- */
+function renderCan() {
+  const rows = AREAS.filter(a => can(a[0], 'transaction') || can(a[0], 'report')).map(a => {
+    const tx = can(a[0], 'transaction');
+    return '<div class="row"><span>' + esc(a[1]) + '</span><span class="badge ' + (tx ? 'b-ok' : 'b-neu') + '">' + (tx ? 'Can change' : 'View only') + '</span></div>';
+  });
+  const hidden = AREAS.length - rows.length;
+  $('can').innerHTML = '<div class="card hitem" style="margin:0;">'
+    + '<div class="row" style="border:0;padding-top:0;"><span><b>' + esc(ME.name || 'You') + '</b>' + (ME.id ? ' <span class="mono tiny" style="display:inline;">' + esc(ME.id) + '</span>' : '') + '</span>'
+    + '<span class="chips" style="margin:0;"><span class="badge b-oral">' + esc(ME.role || 'Staff') + '</span>' + (ME.position ? '<span class="badge b-neu">' + esc(ME.position) + '</span>' : '') + '</span></div>'
+    + (rows.length ? '<div class="can-grid" style="margin-top:8px;">' + rows.join('') + '</div>' : '<p class="hint">No sections are switched on for your account yet. Ask the Administrator.</p>')
+    + '<div class="chips"><span class="badge ' + (backdate ? 'b-ok' : 'b-neu') + '"><i class="fa-solid fa-clock-rotate-left" style="margin-right:6px;"></i>' + (backdate ? 'You can back-date attendance' : 'Attendance: today’s sessions only') + '</span></div>'
+    + '<p class="hint" style="margin-top:10px;">' + (hidden > 0 ? hidden + ' section' + (hidden === 1 ? ' is' : 's are') + ' not available to you, so those menus and guides are hidden. ' : '')
+    + 'If something is missing, ask the Administrator to change your access, then sign out and in again.</p></div>';
+}
+
+/* ---------- 2. quick start ---------- */
+function qCard(r, isMine) {
+  const gs = guidesFor(r);
+  return '<div class="qs' + (isMine ? ' mine hitem' : '') + '"><h3><i class="fa-solid ' + r.ic + '" style="color:var(--gold-light);"></i> ' + esc(r.t) + (isMine ? ' <span class="badge b-oral">Your role</span>' : '') + '</h3><p>' + esc(r.b) + '</p>'
+    + '<div class="links">' + gs.map(g => '<a data-g="' + g.id + '"><i class="fa-solid ' + g.ic + '"></i> ' + esc(g.t) + '</a>').join('') + '</div></div>';
+}
+function renderQuick() {
+  const m = mine(), others = ROLES.filter(r => r !== m && guidesFor(r).length);
+  $('quick').innerHTML = qCard(m, true) + (others.length ? '<details class="hitem"><summary><i class="fa-solid fa-users"></i> Quick start for other roles</summary><div class="body" style="padding-left:18px;">' + others.map(r => qCard(r, false)).join('') + '</div></details>' : '');
+}
+
+/* ---------- 3. guides ---------- */
+function renderGuides() {
+  $('guides').innerHTML = G.filter(g => allowed(g.need)).map(g =>
+    '<details class="hitem" id="g-' + g.id + '"><summary><i class="fa-solid ' + g.ic + '"></i> ' + esc(g.t) + '</summary><div class="body"><ol>' + g.s.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol></div></details>').join('');
+}
+
+/* ---------- 4. FAQ ---------- */
+const FAQ = [
+ ['Why can’t I mark yesterday’s attendance?', 'Everyone can mark only sessions dated today (India time). Past sessions can be marked only by accounts with the back-dating permission, such as the Convener and Administrator, and a reason is mandatory. Future sessions can never be marked. This rule is enforced by the server, not only by the page.'],
+ ['Why was a scan rejected?', 'The common reasons: the person was already marked for that session and direction; the QR belongs to the other type (student vs participant); the session is not today; the QR is forged or damaged; entry has closed after the late limit; the registration is cancelled or the person was deleted; or there is no entry yet when you tried to mark exit. The red message on the scan page states which one.'],
+ ['What are Present, Late, Absent and Missing exit?', 'Present: marked in on time. Late: marked in after the session’s on-time limit but before the late limit. Absent: the session has started and there is no entry. Missing exit: the session needs an exit mark, it is over, and no exit was recorded.'],
+ ['What do the abstract statuses mean?', 'Not Submitted: nothing uploaded yet. Submitted: waiting for review. Accepted: approved (Oral presenters then upload a PPT). Revision Requested: the participant must upload a corrected file. Rejected: not accepted. Not Applicable: delegate-only registrations have no abstract.'],
+ ['What happens if the internet drops while scanning?', 'The scan page keeps the scans on the device and sends them when the connection comes back. Scans are accepted if they were made within the last 36 hours and still follow the session-date rule.'],
+ ['I forgot my password, or I am locked out.', 'Five wrong passwords lock that sign-in for 15 minutes. Wait, then try again. The Administrator can reset your password; you will be asked to set a new one at your next login.'],
+ ['My permissions changed but the menu did not.', 'Your access is loaded when you sign in. Use Refresh if your menu has one, or sign out and sign in again.'],
+ ['What happens when I delete something?', 'Participants, students, announcements and attendance sessions are not erased. They move to Trash and can be restored with their ID, password and files. Admin accounts are never deleted, only disabled.'],
+ ['Can a participant see their slot or certificate?', 'Only when the matching switch is on in Settings: Slots visible to participants, and Certificates released. Attendance for the certificate rule is counted from the scanned and manual attendance records.']
+];
+function renderFaq() { $('faq').innerHTML = FAQ.map(f => '<details class="hitem"><summary><i class="fa-solid fa-circle-question"></i> ' + esc(f[0]) + '</summary><div class="body">' + esc(f[1]) + '</div></details>').join(''); }
+
+/* ---------- 5. event-day checklist ---------- */
+const CHECK = [
+ ['Before opening', ['Attendance sessions for today are created and active, with the right entry, on-time and late times.', 'Settings checked: dates, venues, slots visible, certificates not released yet.', 'Scanners tested with a real badge on every device that will be used.', 'Desk accounts are signed in on their devices and each person can open their pages.', 'Badges printed for every category, plus a few blanks for walk-ins.', 'A backup has been run (Trash and Backups, Backup now).']],
+ ['During the day', ['Volunteers can see their assigned presentations and have downloaded the files.', 'Spot registrations are printed with badges straight away.', 'Changes of room or time are posted as announcements.', 'Failed sign-ins are checked now and then in the Audit log.']],
+ ['At closing', ['Missed attendance is fixed today, with reasons (past dates need back-dating rights).', 'Exit marks are complete for sessions that need them.', 'Another backup has been run.', 'Certificates are released only when the attendance records are final.']]
+];
+let ticks = {}; try { ticks = JSON.parse(localStorage.getItem('vrmic_help_check') || '{}'); } catch (e) {}
+function renderCheck() {
+  $('check').innerHTML = '<div class="card hitem" style="margin:0;"><div class="cl">' + CHECK.map((g, gi) => '<h4>' + esc(g[0]) + '</h4>' + g[1].map((t, i) => {
+    const k = gi + '-' + i, on = !!ticks[k];
+    return '<label class="cbox' + (on ? ' done' : '') + '"><input type="checkbox" data-k="' + k + '"' + (on ? ' checked' : '') + '><span>' + esc(t) + '</span></label>';
+  }).join('')).join('') + '</div><button class="btn btn-sm noprint" id="rst" style="margin-top:12px;">Clear ticks</button></div>';
+}
+
+/* ---------- 6. troubleshooting ---------- */
+const TR = [
+ ['The camera does not start', 'Click the lock or camera icon in the address bar, set Camera to Allow, and reload the page. On a phone also check that the browser app itself is allowed to use the camera. The page must be opened from the portal address (https); another app using the camera can also block it.'],
+ ['Scanning is slow or misses', 'Hold the code steady about 10 to 15 cm from the lens, in good light and without glare on the print. A creased or low-quality print is the usual cause; reprint it. Check that the connection is working.'],
+ ['A page says “Access denied”', 'Your account does not have permission for that page. Open “What can I do?” at the top of this page to see your access, ask the Administrator, then sign out and sign in again.'],
+ ['What is the last-login line?', 'It shows when and from which address your account was last used before this session. If it is not you, change your password and tell the Administrator.'],
+ ['I am sent back to the login page', 'Admin sessions last 8 hours. Sign in again. If it happens repeatedly, check that the device clock and date are correct.'],
+ ['My login code (OTP) did not arrive', 'Check the spam folder and wait a minute; the code lasts 5 minutes. If your account has no email on file, the code step is skipped. Contact the Administrator if it still fails.'],
+ ['The portal will not load', 'Check the internet, refresh the page, and try another browser. The portal depends on Google’s servers, which can be slow for a minute at busy times. If it stays down, use the contact details below and note the time and the page.']
+];
+function renderTrouble() { $('trouble').innerHTML = TR.map(f => '<details class="hitem"><summary><i class="fa-solid fa-wrench"></i> ' + esc(f[0]) + '</summary><div class="body">' + esc(f[1]) + '</div></details>').join(''); }
+
+/* ---------- 7. contacts + glossary ---------- */
+const GL = [
+ ['VRMIC ID', 'A participant’s unique ID, for example VRMIC26-0042. Students use VRMIC26-S001.'],
+ ['Session', 'One attendance period with a date, entry time and optionally an exit time and on-time and late limits.'],
+ ['Slot', 'The venue, room, date and time given to a presenter.'],
+ ['Token', 'The presenter’s order number within a slot.'],
+ ['Board number', 'The poster board a poster presenter is assigned to.'],
+ ['No-show', 'A presenter who did not turn up for their slot, whose slot can then be reused.'],
+ ['Back-dating', 'Marking attendance for a past session date. Only accounts with that permission can do it, and a reason is required.'],
+ ['Trash', 'Where deleted records wait. They are hidden, not erased, and can be restored.']
+];
+async function renderContact() {
+  let s = {}; try { s = await VR.settings(); } catch (e) {}
+  const em = s['conf.contactEmail'], ph = s['conf.contactPhone'];
+  $('contact').innerHTML = '<div class="card hitem" style="margin-bottom:12px;"><h3><i class="fa-solid fa-headset"></i> Who to contact</h3>'
+    + (em || ph ? '<div class="row"><span>Email</span><b>' + (em ? '<a href="mailto:' + esc(em) + '">' + esc(em) + '</a>' : '—') + '</b></div><div class="row"><span>Phone</span><b>' + esc(ph || '—') + '</b></div>' : '<p class="hint">The contact details are not set yet. The Administrator can add them in Settings.</p>')
+    + '<p class="hint" style="margin-top:8px;">These come from Settings, so they update automatically.</p></div>'
+    + '<div class="card hitem" style="margin:0;"><h3><i class="fa-solid fa-book"></i> Glossary</h3><dl class="gl">' + GL.map(x => '<dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd>').join('') + '</dl></div>';
+}
+
+/* ---------- search ---------- */
+function applySearch() {
+  const q = $('hq').value.trim().toLowerCase();
+  document.querySelectorAll('.hitem').forEach(el => {
+    if (el.parentElement.closest('.hitem')) return;           // only top-level blocks
+    const m = !q || el.textContent.toLowerCase().indexOf(q) > -1;
+    el.style.display = m ? '' : 'none';
+    if (el.tagName === 'DETAILS' && q && m) el.open = true;
+  });
+  let shown = 0;
+  document.querySelectorAll('.hsec').forEach(s => {
+    const items = [...s.querySelectorAll('.hitem')].filter(el => !el.parentElement.closest('.hitem'));
+    const any = items.some(el => el.style.display !== 'none');
+    s.style.display = !q || any ? '' : 'none';
+    if (s.style.display !== 'none') shown++;
+  });
+  $('nores').style.display = q && !shown ? 'block' : 'none';
+}
+
+/* ---------- print cheat sheet ---------- */
+function cheatHtml() {
+  const r = mine(), gs = guidesFor(r);
+  const acc = AREAS.filter(a => can(a[0], 'transaction') || can(a[0], 'report')).map(a => VR.esc(a[1]) + (can(a[0], 'transaction') ? '' : ' (view only)')).join(', ');
+  return '<p><b>' + VR.esc(ME.name || '') + '</b> · ' + VR.esc(r.t) + (ME.id ? ' · ID ' + VR.esc(ME.id) : '') + '</p>'
+    + '<p><b>Your access:</b> ' + (acc || 'none set') + '. ' + (backdate ? 'You may back-date attendance.' : 'Attendance: today’s sessions only.') + '</p>'
+    + gs.map(g => '<h3 style="font-size:12px;margin:10px 0 3px;">' + VR.esc(g.t) + '</h3><ol style="margin:0 0 0 16px;padding:0;font-size:10.5px;">' + g.s.map(s => '<li>' + VR.esc(s) + '</li>').join('') + '</ol>').join('');
+}
+
+/* ---------- wiring ---------- */
+renderCan(); renderQuick(); renderGuides(); renderFaq(); renderCheck(); renderTrouble(); renderContact();
+
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[data-g]');
+  if (a) { e.preventDefault(); const d = $('g-' + a.dataset.g); if (d) { d.style.display = ''; d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'start' }); } return; }
+  if (e.target.id === 'rst') { ticks = {}; try { localStorage.removeItem('vrmic_help_check'); } catch (er) {} renderCheck(); }
+});
+document.addEventListener('change', e => {
+  const c = e.target.closest('input[data-k]'); if (!c) return;
+  ticks[c.dataset.k] = c.checked; c.closest('.cbox').classList.toggle('done', c.checked);
+  try { localStorage.setItem('vrmic_help_check', JSON.stringify(ticks)); } catch (er) {}
+});
+$('hq').addEventListener('input', applySearch);
+$('pr').onclick = () => VR.printHtml('Cheat sheet — ' + mine().t, cheatHtml());
+})();
+</script>
+</body>
+</html>

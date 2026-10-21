@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trash | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.tab{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;border:1px solid var(--navy-border);background:var(--navy-900);color:var(--text-2);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.tab:hover{border-color:var(--gold);}
+.tab.on{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
+.tab .n{font-family:'IBM Plex Mono',monospace;font-size:11px;padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.1);}
+.tab.on .n{background:rgba(36,26,6,.15);}
+table.list td{vertical-align:middle;}
+table.list td.wrapc{white-space:normal;min-width:160px;max-width:300px;overflow-wrap:anywhere;line-height:1.4;}
+.toolbar input[type=date]{width:auto;min-width:0;flex:none;}
+.toolbar label{margin:0;font-size:12px;color:var(--text-3);}
+.mbox h3{font-size:1.1rem;margin-bottom:10px;}
+.mbox p{font-size:13.5px;color:var(--text-2);margin-bottom:10px;}
+.mbox .who{background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.mbox .who b{color:var(--text-1);display:block;}
+.mbox .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-trash-can-arrow-up" style="color:var(--gold-light);"></i> Trash</h1><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+<div class="wrap" style="max-width:1400px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+
+  <div class="banner"><i class="fa-solid fa-circle-info"></i><div>Deleted items are <b>hidden, not erased</b>. A restored item comes back exactly as it was, with the same ID, password, files and history. Nothing here is removed automatically. Attendance history of a deleted participant is kept, so reports stay correct.</div></div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by ID, name, who deleted it or the reason" autocomplete="off">
+    <label for="df">Deleted from</label><input type="date" id="df">
+    <label for="dt">to</label><input type="date" id="dt">
+    <button class="btn btn-sm" id="clr">Clear</button>
+  </div>
+
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x"><table class="list"><thead><tr><th>ID</th><th>Item</th><th>Deleted by</th><th>Deleted on</th><th>Reason</th><th>In Trash</th><th class="noprint"></th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="7">Loading…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny" style="margin-top:10px;">Restore is blocked if the email, phone number, department number or session title is now used by another record; you will see who has it. Permanent delete needs the Administrator account and a typed confirmation of the ID.</p>
+</div>
+
+<div class="modal" id="md"><div class="box mbox" id="mbox"></div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('trash', 'transaction')) { VR.denied('You do not have permission to open Trash.'); return; }
+
+const S = v => String(v == null ? '' : v);
+let data = null, tab = 'participant', view = [];
+const ORDER = ['participant', 'student', 'announcement', 'session'];
+const ICON = { participant: 'fa-users', student: 'fa-user-graduate', announcement: 'fa-bullhorn', session: 'fa-calendar-check' };
+
+const fdate = s => S(s).slice(0, 10);
+const ftime = s => { const m = S(s).match(/T(\d{2}):(\d{2})/); return m ? hm12(m[1] + ':' + m[2]) : ''; };
+
+function openModal(html) { $('mbox').innerHTML = html; $('md').classList.add('show'); }
+function closeModal() { $('md').classList.remove('show'); $('mbox').innerHTML = ''; }
+$('md').addEventListener('mousedown', e => { if (e.target === $('md')) closeModal(); });
+function modalErr(m) { const e = $('me'); if (!e) return; e.textContent = m; e.className = 'alert alert-error show'; }
+
+function renderTabs() {
+  $('tabs').innerHTML = ORDER.filter(k => data.types[k]).map(k => '<button class="tab' + (k === tab ? ' on' : '') + '" data-t="' + k + '"><i class="fa-solid ' + ICON[k] + '"></i> ' + esc(data.types[k].label) + ' <span class="n">' + data.types[k].items.length + '</span></button>').join('');
+}
+
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), from = $('df').value, to = $('dt').value;
+  return data.types[tab].items.filter(it => {
+    if (q && ![it.id, it.title, it.sub, it.deletedBy, it.reason].some(v => S(v).toLowerCase().indexOf(q) > -1)) return false;
+    const d = fdate(it.deletedAt);
+    if (from && d < from) return false;
+    if (to && d > to) return false;
+    return true;
+  });
+}
+
+function render() {
+  if (!data) return;
+  renderTabs();
+  view = filtered();
+  const total = data.types[tab].items.length;
+  $('tb').innerHTML = view.length ? view.map((it, i) =>
+    '<tr><td class="id">' + esc(it.id) + '</td>'
+    + '<td class="wrapc"><span class="nm">' + esc(it.title || '—') + '</span><span class="tiny">' + esc(it.sub) + '</span></td>'
+    + '<td class="wrapc">' + esc(it.deletedBy || '—') + '</td>'
+    + '<td>' + esc(fmtD(fdate(it.deletedAt))) + '<span class="tiny">' + esc(ftime(it.deletedAt)) + '</span></td>'
+    + '<td class="wrapc">' + esc(it.reason || '—') + '</td>'
+    + '<td><span class="badge ' + (it.days > 30 ? 'b-warn' : 'b-neu') + '">' + it.days + (it.days === 1 ? ' day' : ' days') + '</span></td>'
+    + '<td class="noprint"><div class="row-actions">'
+    + (it.canRestore ? '<button class="btn btn-sm" data-a="restore" data-i="' + i + '"><i class="fa-solid fa-rotate-left"></i> Restore</button>' : '<span class="tiny" title="You also need edit permission on this module">No restore access</span>')
+    + (data.canPurge ? '<button class="btn btn-sm btn-danger" data-a="purge" data-i="' + i + '"><i class="fa-solid fa-ban"></i> Delete permanently</button>' : '')
+    + '</div></td></tr>').join('')
+    : '<tr><td class="empty" colspan="7">' + (total ? 'Nothing matches these filters.' : 'Trash is empty for this type.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + total;
+}
+
+async function load() {
+  hideAlerts();
+  $('tb').innerHTML = '<tr><td class="empty" colspan="7">Loading…</td></tr>';
+  try {
+    const r = await VR.api('adminListTrash', {});
+    if (!r.ok) { showErr(r.error || 'Could not load Trash.'); $('tb').innerHTML = '<tr><td class="empty" colspan="7">Could not load.</td></tr>'; return; }
+    data = r; render();
+  } catch (e) {
+    showErr('Could not reach the server. Check your connection and try again.');
+    $('tb').innerHTML = '<tr><td class="empty" colspan="7">Could not load.</td></tr>';
+  }
+}
+
+function summary(it) {
+  return '<div class="who"><b>' + esc(it.title || it.id) + '</b><span class="tiny">' + esc(it.id) + (it.sub ? ' · ' + esc(it.sub) : '') + '</span>'
+    + '<span class="tiny">Deleted by ' + esc(it.deletedBy || '—') + ' on ' + esc(fmtD(fdate(it.deletedAt))) + (it.reason ? ' · ' + esc(it.reason) : '') + '</span></div>';
+}
+
+function askRestore(it) {
+  openModal('<h3>Restore this record?</h3>' + summary(it)
+    + '<p>It comes back exactly as it was: same ID, password, files and history.</p>'
+    + '<div class="alert alert-error" id="me"></div>'
+    + '<div class="acts"><button class="btn" id="mc">Cancel</button><button class="btn btn-gold" id="mo"><i class="fa-solid fa-rotate-left"></i> Restore</button></div>');
+  $('mc').onclick = closeModal;
+  $('mo').onclick = () => VR.busy($('mo'), 'Restoring…', async () => {
+    try {
+      const r = await VR.api('adminRestoreTrash', { type: tab, row: it.row, id: it.id });
+      if (!r.ok) { modalErr(r.error || 'Could not restore.'); return; }
+      closeModal(); showOk((it.title || it.id) + ' was restored.'); await load();
+    } catch (e) { modalErr('Could not reach the server. Try again.'); }
+  });
+}
+
+function askPurge(it) {
+  const isP = tab === 'participant';
+  openModal('<h3 style="color:#e8988c;">Delete permanently?</h3>' + summary(it)
+    + '<p>This removes the record from the sheet for good. It <b>cannot be undone</b>' + (isP ? '. Their attendance history is kept so reports stay correct.' : '.') + '</p>'
+    + (isP ? '<label class="chk" style="margin-bottom:12px;"><input type="checkbox" id="mf"> Also move their Drive folder (photo, abstracts, PPT) to the Drive bin</label>' : '')
+    + '<label for="mt">Type <b class="mono" style="color:var(--gold-light);">' + esc(it.id) + '</b> to confirm</label><input id="mt" autocomplete="off" placeholder="' + esc(it.id) + '" style="margin-bottom:12px;">'
+    + '<div class="alert alert-error" id="me"></div>'
+    + '<div class="acts"><button class="btn" id="mc">Cancel</button><button class="btn btn-danger" id="mo" disabled><i class="fa-solid fa-ban"></i> Delete permanently</button></div>');
+  $('mc').onclick = closeModal;
+  $('mt').oninput = () => { $('mo').disabled = $('mt').value.trim() !== it.id; };
+  $('mo').onclick = () => VR.busy($('mo'), 'Deleting…', async () => {
+    try {
+      const r = await VR.api('adminPurgeTrash', { type: tab, row: it.row, id: it.id, confirmId: $('mt').value.trim(), deleteFiles: isP && $('mf') ? $('mf').checked : false });
+      if (!r.ok) { modalErr(r.error || 'Could not delete.'); return; }
+      closeModal(); showOk((it.title || it.id) + ' was deleted permanently' + (r.filesTrashed ? ' and its Drive folder moved to the Drive bin.' : '.')); await load();
+    } catch (e) { modalErr('Could not reach the server. Try again.'); }
+  });
+}
+
+$('tabs').onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; tab = b.dataset.t; render(); };
+$('tb').onclick = e => {
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const it = view[Number(b.dataset.i)]; if (!it) return;
+  b.dataset.a === 'restore' ? askRestore(it) : askPurge(it);
+};
+$('q').addEventListener('input', render);
+['df', 'dt'].forEach(i => $(i).addEventListener('change', render));
+$('clr').onclick = () => { $('q').value = ''; $('df').value = ''; $('dt').value = ''; render(); };
+$('refresh').onclick = load;
+
+load();
+})();
+</script>
+</body>
+</html>
