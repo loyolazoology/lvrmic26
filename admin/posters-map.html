@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poster Board Map | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;}
+.bd{border:1px solid var(--navy-border);border-radius:10px;padding:12px 14px;background:var(--navy-900);min-height:112px;}
+.bd .n{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:20px;color:var(--gold-light);line-height:1;}
+.bd .p{font-weight:600;margin-top:8px;color:var(--text-1);}
+.bd .t{font-size:12px;color:var(--text-2);margin-top:3px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.bd.nov{border-style:dashed;opacity:.8;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-map" style="color:var(--gold-light);"></i> Poster board map</h1><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;"><span id="xp"></span><a class="btn btn-sm" id="al" href="posters-manage.html"><i class="fa-solid fa-chalkboard"></i> Poster boards</a></div></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="toolbar noprint"><select id="fv"></select><select id="fd"></select><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button><span class="tiny" id="cnt"></span></div>
+  <div id="warn" class="alert alert-error"></div>
+  <div class="table-card" style="padding:18px;" id="tc"><div id="grid" class="bgrid"><div class="empty">Loading…</div></div></div>
+  <p class="tiny noprint" style="margin-top:10px;">Pick a venue and a day. Print uses A4 landscape, one board per cell, ready to put up at the venue.</p>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="slots-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('slot', 'report') && !VR.can('slot', 'transaction')) { VR.denied('You do not have permission to view the poster board map.'); return; }
+if (!VR.can('slot', 'transaction')) $('al').style.display = 'none';
+let all = [], days = [], list = [], un = [];
+const num = b => { const m = /(\d+)\s*$/.exec(b || ''); return m ? +m[1] : 1e9; };
+function render() {
+  const v = $('fv').value, d = $('fd').value;
+  const mine = all.filter(r => r.type === 'Poster' && r.eligible && r.venue === v && r.date === d);
+  list = mine.filter(r => r.board).sort((a, b) => num(a.board) - num(b.board) || a.board.localeCompare(b.board)); un = mine.filter(r => !r.board);
+  $('grid').innerHTML = (list.length || un.length) ? list.map(r => '<div class="bd"><div class="n">' + esc(r.board) + '</div><div class="p">' + esc(r.name) + '</div><div class="t">' + esc(r.title || '') + '</div></div>').join('')
+    + un.map(r => '<div class="bd nov"><div class="n" style="color:var(--text-3);">—</div><div class="p">' + esc(r.name) + '</div><div class="t">No board yet</div></div>').join('') : '<div class="empty" style="grid-column:1/-1;">No poster presenters at this venue on this day.</div>';
+  $('cnt').textContent = list.length + ' board' + (list.length === 1 ? '' : 's') + ' · ' + un.length + ' without a board';
+  $('warn').className = 'alert alert-error' + (un.length ? ' show' : ''); $('warn').textContent = un.length ? un.length + ' presenter(s) here have no board yet. They are shown dashed and left out of the printout. Give them boards on the Poster boards page.' : '';
+}
+async function load() {
+  try {
+    const r = await SL.load('posters-map'); if (!r.ok) { $('grid').innerHTML = '<div class="empty">Could not load.</div>'; return showErr(r.error || 'Could not load.'); }
+    all = r.presenters || []; const pv = [...new Set(all.filter(x => x.type === 'Poster' && x.venue).map(x => x.venue))].sort(), used = [...new Set(all.filter(x => x.type === 'Poster' && x.date).map(x => x.date))];
+    SL.fill('fv', pv.length ? pv : ['No poster venue yet'], null); SL.fill('fd', days.concat(used.filter(x => days.indexOf(x) < 0)), null); if (used.length && !used.includes($('fd').value)) $('fd').value = used[0]; render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+['fv', 'fd'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+const title = () => 'Poster board map — ' + $('fv').value + ' — ' + $('fd').value;
+VR.exportBar($('xp'), { name: 'VRMIC2026_Poster_Map', title: 'VRMIC 2026 — Poster board map', imageEl: () => $('tc'),
+  getData: () => ({ headers: ['Board', 'Presenter', 'VRMIC ID', 'Poster title'], rows: list.map(r => [r.board, r.name, r.id, r.title]) }),
+  pdf: () => VR.exportPDF('Poster_Map', title(), ['Board', 'Presenter', 'VRMIC ID', 'Poster title'], list.map(r => [r.board, r.name, r.id, r.title]), { orientation: 'landscape', fontSize: 10 }),
+  print: async () => {
+    const s = await VR.settings(), w = window.open('', '_blank'); if (!w) return alert('Allow pop-ups to print.');
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>' + esc(title()) + '</title><style>@page{size:A4 landscape;margin:10mm}body{font:12px Arial,sans-serif;color:#111;margin:0}h1{font-size:15px;margin:0 0 2px}h2{font-size:13px;margin:0 0 8px;font-weight:600}'
+      + '.g{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.c{border:1px solid #999;border-radius:4px;padding:6px 8px;min-height:62px;page-break-inside:avoid}.n{font:700 17px monospace}.p{font-weight:700;margin-top:3px;font-size:11.5px}.t{font-size:9.5px;color:#444;margin-top:2px;max-height:3.6em;overflow:hidden}</style></head><body>'
+      + '<h1>' + esc(s['conf.name'] || 'VRMIC 2026') + '</h1><h2>' + esc(title()) + ' · ' + list.length + ' boards</h2><div class="g">'
+      + list.map(r => '<div class="c"><div class="n">' + esc(r.board) + '</div><div class="p">' + esc(r.name) + '</div><div class="t">' + esc(r.title || '') + '</div></div>').join('') + '</div></body></html>');
+    w.document.close(); w.focus(); setTimeout(() => w.print(), 400);
+  } });
+(async () => { days = await SL.days(); load(); })();
+})();
+</script>
+</body>
+</html>

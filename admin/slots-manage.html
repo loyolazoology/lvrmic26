@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Allot Slots | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.bulk{display:none;position:sticky;bottom:0;z-index:20;margin-top:12px;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--gold);border-radius:12px;padding:12px 16px;}
+.bulk.show{display:flex;}
+.pv{max-height:260px;overflow:auto;margin-top:12px;border:1px solid var(--navy-border);border-radius:10px;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-location-crosshairs" style="color:var(--gold-light);"></i> Allot slots</h1><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;"><span id="xp"></span><a class="btn btn-sm" href="slots-report.html"><i class="fa-solid fa-table-list"></i> Slot report</a></div></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="alert alert-error" id="vis" style="display:none;"></div>
+  <div class="stats" id="stats"></div>
+  <p class="hint" style="margin-bottom:14px;">Presenters whose abstract is <b>Accepted</b>. Oral slots are 10 minutes (7 talk + 3 discussion) by default and cannot overlap in the same venue and room. Tick several Oral presenters and use <b>Auto-fill times</b> to schedule them one after another, or tick Poster presenters to give them a venue and day together.</p>
+
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by name, VRMIC ID or token" autocomplete="off">
+    <select id="fs"><option value="">All</option><option value="unset">Not yet allotted</option><option value="set">Already allotted</option></select>
+    <select id="ft"><option value="">Oral and Poster</option><option>Oral</option><option>Poster</option></select>
+    <select id="fv"><option value="">All venues</option></select>
+    <select id="fd"><option value="">All days</option></select>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+  </div>
+
+  <div class="table-card"><div class="scroll-x" id="tc">
+    <table class="list"><thead><tr><th class="noprint" style="width:30px;"><input type="checkbox" class="ck" id="all" aria-label="Select all"></th><th>VRMIC ID</th><th>Name</th><th>Category</th><th>Venue</th><th>Room</th><th>Day</th><th>Time</th><th>Token</th><th>Status</th><th class="noprint"></th></tr></thead>
+    <tbody id="tb"><tr><td class="empty" colspan="11">Loading accepted presenters…</td></tr></tbody></table>
+  </div></div>
+  <div class="bulk" id="bulk"><div><b id="bn">0</b> selected</div><div class="row-actions"><button class="btn btn-sm" id="bclear">Clear</button><button class="btn btn-sm btn-gold" id="baf"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-fill times</button><button class="btn btn-sm btn-gold" id="bps"><i class="fa-solid fa-layer-group"></i> Venue and day for posters</button></div></div>
+</div>
+
+<datalist id="dl-v"></datalist><datalist id="dl-r"></datalist><datalist id="dl-ar"></datalist><datalist id="dl-pr"></datalist>
+
+<!-- Single slot -->
+<div class="modal" id="dm"><div class="box mid">
+  <h3 style="margin-bottom:2px;"><i class="fa-solid fa-location-crosshairs" style="color:var(--gold-light);"></i> Set slot</h3>
+  <p class="hint" id="dm-sub" style="margin-bottom:14px;"></p>
+  <div class="alert alert-error" id="dm-err"></div>
+  <div class="grid">
+    <div><label>Venue</label><input id="f-venue" list="dl-v" maxlength="120" autocomplete="off"></div>
+    <div><label>Room <span class="hint" style="display:inline;" id="f-rh"></span></label><input id="f-room" list="dl-r" maxlength="40" autocomplete="off"></div>
+    <div><label>Day</label><select id="f-date"></select></div>
+    <div><label>Start time <span class="hint" style="display:inline;" id="f-th"></span></label><input id="f-time" type="time"></div>
+    <div class="oral"><label>Length (minutes)</label><input id="f-dur" type="number" min="1" max="180" value="10"></div>
+    <div class="oral"><label>Token <span class="hint" style="display:inline;">(blank = next number)</span></label><input id="f-token" maxlength="40" placeholder="OR-001"></div>
+    <div><label>Mode</label><select id="f-mode"><option>Offline</option><option>Online</option></select></div>
+    <div id="f-linkw" style="display:none;"><label>Meeting link</label><input id="f-link" maxlength="500" placeholder="https://meet.google.com/…"></div>
+    <div class="full"><label>Custom map link <span class="hint" style="display:inline;">(optional)</span></label><input id="f-map" placeholder="https://maps.google.com/…" maxlength="500"></div>
+    <div class="full"><label style="display:flex;gap:8px;align-items:center;font-weight:500;"><input type="checkbox" class="ck" id="f-notify"> Email the participant about this slot <span class="hint" style="display:inline;" id="f-nh"></span></label></div>
+  </div>
+  <div style="display:flex;gap:10px;justify-content:space-between;margin-top:16px;flex-wrap:wrap;"><button class="btn" id="dm-clear" style="display:none;color:#e8988c;"><i class="fa-solid fa-eraser"></i> Remove slot</button><span style="margin-left:auto;display:flex;gap:10px;"><button class="btn" id="dm-x">Cancel</button><button class="btn btn-gold" id="dm-ok"><i class="fa-solid fa-check"></i> Save slot</button></span></div>
+</div></div>
+
+<!-- Auto-fill -->
+<div class="modal" id="am"><div class="box wide">
+  <h3 style="margin-bottom:2px;"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--gold-light);"></i> Auto-fill times for <span id="am-n">0</span> Oral presenters</h3>
+  <p class="hint" style="margin-bottom:14px;">They are placed one after another in the order shown in the list, skipping any time already taken in that room. Nothing is saved until you press Apply.</p>
+  <div class="alert alert-error" id="am-err"></div>
+  <div class="grid">
+    <div><label>Venue</label><input id="a-venue" list="dl-v" maxlength="120" autocomplete="off"></div>
+    <div><label>Room</label><input id="a-room" list="dl-ar" maxlength="40" autocomplete="off"></div>
+    <div><label>Day</label><select id="a-date"></select></div>
+    <div><label>First slot starts</label><input id="a-start" type="time"></div>
+    <div><label>Length (minutes)</label><input id="a-dur" type="number" min="1" max="180" value="10"></div>
+    <div><label>Gap between talks (minutes)</label><input id="a-gap" type="number" min="0" max="120" value="0"></div>
+    <div class="full"><label>Stop by <span class="hint" style="display:inline;">(optional — presenters that do not fit stay unallotted, so you can place them after a break)</span></label><input id="a-end" type="time"></div>
+    <div class="full"><label style="display:flex;gap:8px;align-items:center;font-weight:500;"><input type="checkbox" class="ck" id="a-notify"> Email each presenter</label></div>
+  </div>
+  <div id="a-pv"></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="am-x">Cancel</button><button class="btn" id="am-pv"><i class="fa-solid fa-eye"></i> Preview</button><button class="btn btn-gold" id="am-ok" disabled><i class="fa-solid fa-check"></i> Apply</button></div>
+</div></div>
+
+<!-- Posters in bulk -->
+<div class="modal" id="bm"><div class="box mid">
+  <h3 style="margin-bottom:2px;"><i class="fa-solid fa-layer-group" style="color:var(--gold-light);"></i> Venue and day for <span id="bm-n">0</span> posters</h3>
+  <p class="hint" style="margin-bottom:14px;">Poster presenters need a venue and a day only. Board numbers are given on the Poster boards page.</p>
+  <div class="alert alert-error" id="bm-err"></div>
+  <div class="grid"><div><label>Venue</label><input id="b-venue" list="dl-v" maxlength="120" autocomplete="off"></div><div><label>Room</label><input id="b-room" list="dl-pr" maxlength="40" autocomplete="off"></div><div class="full"><label>Day</label><select id="b-date"></select></div></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="bm-x">Cancel</button><button class="btn btn-gold" id="bm-ok"><i class="fa-solid fa-check"></i> Apply</button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="slots-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('slot', 'transaction')) { VR.denied('You do not have permission to allot slots.'); return; }
+let all = [], view = [], venues = [], days = [], sel = new Set(), cur = null, meta = {}, pv = null;
+const nz = SL.nz, locked = r => r.status === 'Presented' || r.status === 'No-show';
+const el = r => r.eligible;
+const roomsOf = v => { const x = venues.find(y => y.name.toLowerCase() === nz(v).toLowerCase()); return x ? x.rooms : []; };
+const rd = (dl, v) => { $(dl).innerHTML = roomsOf(v).map(r => '<option value="' + esc(r) + '">').join(''); };
+function nextTok(venue, date) { const k = SL.dayKey(date); let m = 0; all.forEach(o => { if (nz(o.venue).toLowerCase() === nz(venue).toLowerCase() && o.dateKey === k) { const x = /^OR-(\d+)$/i.exec(o.token || ''); if (x) m = Math.max(m, +x[1]); } }); return 'OR-' + ('00' + (m + 1)).slice(-3); }
+
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), s = $('fs').value, t = $('ft').value, v = $('fv').value, d = $('fd').value;
+  return all.filter(r => el(r) && (!q || [r.name, r.id, r.token].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) && (!s || (s === 'set') === !!r.venue) && (!t || r.type === t) && (!v || r.venue === v) && (!d || r.date === d));
+}
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map(r => '<tr><td class="noprint"><input type="checkbox" class="ck" data-sel="' + r.row + '"' + (sel.has(r.row) ? ' checked' : '') + ' aria-label="Select ' + esc(r.name) + '"></td>'
+    + '<td class="id">' + esc(r.id) + '</td><td class="nm">' + esc(r.name) + '</td><td>' + SL.typeBadge(r.type) + '</td><td>' + esc(r.venue || '—') + '</td><td>' + esc(r.room || '—') + '</td><td>' + esc(r.date || '—') + '</td>'
+    + '<td>' + esc(r.type === 'Poster' ? (r.board ? 'Board ' + r.board : '—') : SL.range(r)) + '</td><td class="id" style="color:var(--text-2);">' + esc(r.token || '—') + '</td><td>' + SL.badge(r) + '</td>'
+    + '<td class="noprint">' + (locked(r) ? '<span class="tiny">Marked on No-show page</span>' : '<button class="btn btn-sm btn-gold" data-set="' + r.row + '"><i class="fa-solid fa-pen"></i> ' + (r.venue ? 'Edit' : 'Set slot') + '</button>') + '</td></tr>').join('')
+    : '<tr><td class="empty" colspan="11">' + (all.some(el) ? 'No accepted presenters match these filters.' : 'No accepted presenters yet. Accept abstracts first on the Abstract review page.') + '</td></tr>';
+  $('all').checked = view.length > 0 && view.every(r => sel.has(r.row)); stats(); bulkBar();
+}
+function stats() {
+  const e = all.filter(el), set = e.filter(r => r.venue).length, c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-user-check', 'Accepted presenters', e.length, e.filter(r => r.type === 'Oral').length + ' Oral · ' + e.filter(r => r.type === 'Poster').length + ' Poster')
+    + c('fa-location-dot', 'Slot allotted', set, e.length ? Math.round(set * 100 / e.length) + '% done' : '—') + c('fa-hourglass-half', 'Pending', e.length - set, 'still to allot')
+    + c('fa-building', 'Venues in use', new Set(e.map(r => r.venue).filter(Boolean)).size, 'of ' + (venues.length || 'any') + ' in Settings');
+}
+function bulkBar() { sel = new Set([...sel].filter(r => all.some(x => x.row === r && el(x)))); $('bn').textContent = sel.size; $('bulk').classList.toggle('show', sel.size > 0); }
+const selRows = () => [...sel].map(r => all.find(x => x.row === r)).filter(Boolean);
+
+$('tb').onclick = e => {
+  const b = e.target.closest('[data-set]'); if (b) return openOne(Number(b.dataset.set));
+  const c = e.target.closest('[data-sel]'); if (c) { const r = Number(c.dataset.sel); c.checked ? sel.add(r) : sel.delete(r); $('all').checked = view.every(x => sel.has(x.row)); bulkBar(); }
+};
+$('all').onchange = function () { view.forEach(r => this.checked ? sel.add(r.row) : sel.delete(r.row)); render(); };
+$('bclear').onclick = () => { sel.clear(); render(); };
+const dayOpts = c0 => '<option value="">Select day</option>' + (c0 && days.indexOf(c0) < 0 ? '<option>' + esc(c0) + '</option>' : '') + days.map((d, i) => '<option value="' + esc(d) + '">Day ' + (i + 1) + ' — ' + esc(d) + '</option>').join('');
+const err = (id, m) => { $(id).textContent = m; $(id).classList.add('show'); };
+
+/* ---- single ---- */
+function modeUi() { $('f-linkw').style.display = $('f-mode').value === 'Online' ? '' : 'none'; }
+function openOne(row) {
+  cur = all.find(x => x.row === row); if (!cur) return; const oral = cur.type === 'Oral';
+  $('dm-err').classList.remove('show'); $('dm-sub').textContent = cur.id + ' — ' + cur.name + ' (' + cur.type + ')';
+  $('f-venue').value = cur.venue || ''; $('f-room').value = cur.room || ''; rd('dl-r', cur.venue);
+  $('f-date').innerHTML = dayOpts(cur.date); $('f-date').value = cur.date || '';
+  $('f-time').value = SL.to24(cur.time) || (oral ? '' : ''); $('f-dur').value = cur.duration || meta.oralMinutes || 10; $('f-token').value = cur.token || ''; $('f-token').placeholder = 'Next: ' + nextTok(cur.venue || '', cur.date || '');
+  $('f-mode').value = cur.mode === 'Online' ? 'Online' : 'Offline'; $('f-link').value = cur.meetingLink || ''; modeUi(); $('f-map').value = cur.mapUrl || '';
+  document.querySelectorAll('#dm .oral').forEach(x => x.style.display = oral ? '' : 'none');
+  $('f-th').textContent = oral ? '' : '(optional for posters)'; $('f-rh').textContent = roomsOf(cur.venue).length ? '' : '(none in Settings — optional)';
+  $('f-notify').checked = false; $('f-notify').disabled = !meta.slotsVisible; $('f-nh').textContent = meta.slotsVisible ? '' : '(slots are hidden, so no email can go out)';
+  $('dm-clear').style.display = cur.venue ? '' : 'none'; $('dm').classList.add('show'); $('f-venue').focus();
+}
+$('f-venue').oninput = () => { rd('dl-r', $('f-venue').value); $('f-rh').textContent = roomsOf($('f-venue').value).length ? '' : '(none in Settings — optional)'; };
+$('f-mode').onchange = modeUi; $('dm-x').onclick = () => $('dm').classList.remove('show');
+$('dm-ok').onclick = async function () {
+  hideAlerts(); $('dm-err').classList.remove('show');
+  await VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = await VR.api('adminSaveSlot', { row: cur.row, id: cur.id, venue: $('f-venue').value.trim(), room: $('f-room').value.trim(), date: $('f-date').value, time: $('f-time').value, duration: $('f-dur').value,
+        token_no: $('f-token').value.trim(), mapUrl: $('f-map').value.trim(), mode: $('f-mode').value, meetingLink: $('f-link').value.trim(), notify: $('f-notify').checked });
+      if (!r.ok) return err('dm-err', r.error || 'Could not save the slot.');
+      $('dm').classList.remove('show'); showOk('Slot saved for ' + cur.name + (r.token ? ' (token ' + r.token + ')' : '') + '.' + (r.boardCleared ? ' Poster board was cleared because the venue or day changed.' : '') + (r.mail && r.mail.sent ? ' Email sent.' : (r.mail && r.mail.skipped ? ' ' + r.mail.skipped : ''))); load();
+    } catch (e) { err('dm-err', 'Could not reach the server. Check your connection and try again.'); }
+  });
+};
+$('dm-clear').onclick = async () => {
+  const why = await SL.ask('Remove this slot?', cur.name + ' will go back to "Pending". Board number and token are cleared too.', true); if (why === null) return;
+  const r = await VR.api('adminSaveSlot', { row: cur.row, id: cur.id, clear: true, reason: why }); if (!r.ok) return err('dm-err', r.error || 'Could not remove the slot.');
+  $('dm').classList.remove('show'); showOk('Slot removed for ' + cur.name + '.'); load();
+};
+
+/* ---- auto-fill ---- */
+function openAuto() {
+  const rows = selRows().filter(r => r.type === 'Oral'); if (!rows.length) return showErr('Tick at least one Oral presenter first.');
+  $('am-n').textContent = rows.length; $('am-err').classList.remove('show'); $('a-pv').innerHTML = ''; $('am-ok').disabled = true; pv = null;
+  $('a-date').innerHTML = dayOpts(''); $('a-notify').checked = false; $('a-notify').disabled = !meta.slotsVisible; $('am').classList.add('show');
+}
+const afBody = () => ({ rows: view.filter(r => sel.has(r.row) && r.type === 'Oral').map(r => r.row), venue: $('a-venue').value.trim(), room: $('a-room').value.trim(), date: $('a-date').value, startTime: $('a-start').value, duration: $('a-dur').value, gap: $('a-gap').value, endTime: $('a-end').value });
+['a-venue', 'a-room', 'a-date', 'a-start', 'a-dur', 'a-gap', 'a-end'].forEach(i => $(i).addEventListener('input', () => { $('am-ok').disabled = true; pv = null; if (i === 'a-venue') rd('dl-ar', $('a-venue').value); }));
+$('baf').onclick = openAuto; $('am-x').onclick = () => $('am').classList.remove('show');
+$('am-pv').onclick = async function () {
+  $('am-err').classList.remove('show');
+  await VR.busy(this, 'Planning…', async () => {
+    const r = await VR.api('adminAutoFill', Object.assign(afBody(), { preview: true })); if (!r.ok) return err('am-err', r.error || 'Could not plan.');
+    pv = r; let h = '<div class="pv"><table class="list"><thead><tr><th>Token</th><th>Name</th><th>Time</th></tr></thead><tbody>' + (r.plan.length ? r.plan.map(x => '<tr><td class="id">' + esc(x.token) + '</td><td class="nm">' + esc(x.name) + '</td><td>' + esc(x.time) + ' – ' + esc(x.endTime) + '</td></tr>').join('') : '<tr><td class="empty" colspan="3">Nobody fits.</td></tr>') + '</tbody></table></div>';
+    if (r.unplaced.length) h += '<p class="hint" style="color:var(--warn);margin-top:8px;">Does not fit before the stop time (stays unallotted): ' + r.unplaced.map(x => esc(x.name)).join(', ') + '</p>';
+    if (r.skipped.length) h += '<p class="hint" style="color:var(--warn);margin-top:8px;">Skipped: ' + r.skipped.map(x => esc(x.name) + ' (' + esc(x.why) + ')').join('; ') + '</p>';
+    $('a-pv').innerHTML = h; $('am-ok').disabled = !r.plan.length;
+  });
+};
+$('am-ok').onclick = async function () {
+  if (!pv || !confirm('Save ' + pv.plan.length + ' slots in ' + pv.venue + ' on ' + pv.date + '?')) return;
+  await VR.busy(this, 'Saving…', async () => {
+    const r = await VR.api('adminAutoFill', afBody().notify === undefined ? Object.assign(afBody(), { notify: $('a-notify').checked }) : afBody()); if (!r.ok) return err('am-err', r.error || 'Could not save.');
+    $('am').classList.remove('show'); sel.clear(); showOk(r.count + ' slots saved.' + (r.unplaced.length ? ' ' + r.unplaced.length + ' did not fit and stay unallotted.' : '') + (r.mails ? ' ' + r.mails + ' emails sent.' : '')); load();
+  });
+};
+
+/* ---- posters in bulk ---- */
+$('bps').onclick = () => {
+  const rows = selRows(); if (!rows.length || rows.some(r => r.type !== 'Poster')) return showErr('Tick Poster presenters only for this action. For Oral presenters use Auto-fill times.');
+  $('bm-n').textContent = rows.length; $('bm-err').classList.remove('show'); $('b-date').innerHTML = dayOpts(''); ['b-venue', 'b-room'].forEach(i => $(i).value = ''); $('bm').classList.add('show');
+};
+$('b-venue').oninput = () => rd('dl-pr', $('b-venue').value); $('bm-x').onclick = () => $('bm').classList.remove('show');
+$('bm-ok').onclick = async function () {
+  $('bm-err').classList.remove('show'); const rows = selRows().map(r => r.row);
+  await VR.busy(this, 'Saving…', async () => {
+    const r = await VR.api('adminBulkPoster', { rows, venue: $('b-venue').value.trim(), room: $('b-room').value.trim(), date: $('b-date').value }); if (!r.ok) return err('bm-err', r.error || 'Could not save.');
+    $('bm').classList.remove('show'); sel.clear(); if (r.failed.length) showErr(r.done + ' updated. ' + r.failed.length + ' not changed: ' + r.failed.join('; ')); else showOk(r.done + ' poster presenter' + (r.done === 1 ? '' : 's') + ' updated.'); load();
+  });
+};
+
+async function load() {
+  try {
+    const r = await SL.load('slots-manage');
+    if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="11">Could not load.</td></tr>'; return showErr(r.error || 'Could not load data.'); }
+    all = r.presenters || []; venues = r.venues || []; meta = r;
+    $('dl-v').innerHTML = venues.map(v => '<option value="' + esc(v.name) + '">').join('');
+    $('vis').style.display = r.slotsVisible ? 'none' : ''; $('vis').className = 'alert alert-error' + (r.slotsVisible ? '' : ' show'); $('vis').textContent = 'Slots are hidden from participants right now (Settings > Switches > Slots visible to participants). Allot freely, then turn it on when you are ready.';
+    SL.fill('fv', [...new Set(all.map(x => x.venue).filter(Boolean))].sort(), 'All venues'); SL.fill('fd', days, 'All days'); render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('q').addEventListener('input', render); ['fs', 'ft', 'fv', 'fd'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+VR.exportBar($('xp'), { name: 'VRMIC2026_Slot_Allotment', title: 'VRMIC 2026 — Slot allotment', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['VRMIC ID', 'Name', 'Category', 'Venue', 'Room', 'Day', 'Time', 'Token', 'Status'], rows: view.map(r => [r.id, r.name, r.type, r.venue, r.room, r.date, SL.range(r), r.token, SL.status(r)]) }) });
+(async () => { days = await SL.days(); load(); })();
+})();
+</script>
+</body>
+</html>

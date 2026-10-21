@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poster Boards | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-chalkboard" style="color:var(--gold-light);"></i> Poster boards</h1><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;"><span id="xp"></span><a class="btn btn-sm" href="posters-map.html"><i class="fa-solid fa-map"></i> Board map</a></div></div>
+<div class="wrap" style="max-width:1200px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <p class="hint" style="margin-bottom:14px;">Boards are numbered <b>P-001</b>, <b>P-002</b>… per venue and day, and each number is used once. Poster presenters need a venue and day first (see <a href="slots-manage.html">Allot slots</a>). Changing an existing board needs a reason.</p>
+  <div class="toolbar noprint">
+    <select id="fv"><option value="">All venues</option></select><select id="fd"><option value="">All days</option></select>
+    <select id="fs"><option value="">All</option><option value="no">No board yet</option><option value="yes">Has a board</option><option value="nov">No venue or day yet</option></select>
+    <input id="q" placeholder="Search name, ID or board" autocomplete="off">
+    <button class="btn btn-sm btn-gold" id="auto"><i class="fa-solid fa-wand-magic-sparkles"></i> Give boards in order</button>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+  </div>
+  <div class="table-card"><div class="scroll-x" id="tc"><table class="list"><thead><tr><th>VRMIC ID</th><th>Name</th><th>Venue</th><th>Day</th><th>Board</th><th>Poster title</th><th class="noprint"></th></tr></thead>
+    <tbody id="tb"><tr><td class="empty" colspan="7">Loading poster presenters…</td></tr></tbody></table></div></div>
+</div>
+
+<div class="modal" id="dm"><div class="box mid">
+  <h3 style="margin-bottom:2px;"><i class="fa-solid fa-chalkboard" style="color:var(--gold-light);"></i> Board number</h3>
+  <p class="hint" id="dm-sub" style="margin-bottom:14px;"></p>
+  <div class="alert alert-error" id="dm-err"></div>
+  <div class="grid"><div class="full"><label>Board <span class="hint" style="display:inline;">(leave blank for the next free number, or type 14 for P-014)</span></label><input id="f-b" maxlength="12" placeholder="P-001"></div>
+  <div class="full" id="f-rw"><label>Reason for the change</label><input id="f-r" maxlength="200"></div></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="dm-x">Cancel</button><button class="btn btn-gold" id="dm-ok"><i class="fa-solid fa-check"></i> Save board</button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="slots-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('slot', 'transaction')) { VR.denied('You do not have permission to allot poster boards.'); return; }
+let all = [], view = [], days = [], cur = null;
+const posters = () => all.filter(r => r.type === 'Poster' && r.eligible);
+function render() {
+  const q = $('q').value.trim().toLowerCase(), v = $('fv').value, d = $('fd').value, s = $('fs').value;
+  view = posters().filter(r => (!v || r.venue === v) && (!d || r.date === d) && (!q || [r.name, r.id, r.board].some(x => String(x || '').toLowerCase().indexOf(q) > -1))
+    && (!s || (s === 'no' && r.venue && !r.board) || (s === 'yes' && r.board) || (s === 'nov' && (!r.venue || !r.dateKey)))).sort((a, b) => (a.dateKey || '9').localeCompare(b.dateKey || '9') || a.venue.localeCompare(b.venue) || a.board.localeCompare(b.board, undefined, { numeric: true }) || a.id.localeCompare(b.id));
+  $('tb').innerHTML = view.length ? view.map(r => '<tr><td class="id">' + esc(r.id) + '</td><td class="nm">' + esc(r.name) + '</td><td>' + (r.venue ? esc(r.venue) : '<span class="badge sl-Pending">Needs venue</span>') + '</td><td>' + esc(r.date || '—') + '</td>'
+    + '<td class="id">' + (r.board ? esc(r.board) : '<span class="tiny">—</span>') + '</td><td>' + esc(r.title || '—') + '</td><td class="noprint">' + (r.venue && r.dateKey ? '<button class="btn btn-sm btn-gold" data-b="' + r.row + '"><i class="fa-solid fa-pen"></i> ' + (r.board ? 'Change' : 'Assign') + '</button>' : '<a class="btn btn-sm" href="slots-manage.html">Allot venue</a>') + '</td></tr>').join('')
+    : '<tr><td class="empty" colspan="7">' + (posters().length ? 'No poster presenters match these filters.' : 'No accepted Poster presenters yet.') + '</td></tr>';
+  const p = posters(), has = p.filter(r => r.board).length, ready = p.filter(r => r.venue && r.dateKey && !r.board).length, c = (ic, h, x, y) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + x + '</div><div class="s">' + y + '</div></div>';
+  $('stats').innerHTML = c('fa-users', 'Poster presenters', p.length, 'accepted') + c('fa-chalkboard', 'Boards given', has, p.length ? Math.round(has * 100 / p.length) + '%' : '—') + c('fa-hourglass-half', 'Waiting for a board', ready, 'have venue and day') + c('fa-location-dot', 'Without venue', p.filter(r => !r.venue || !r.dateKey).length, 'allot venue first');
+}
+$('tb').onclick = e => { const b = e.target.closest('[data-b]'); if (!b) return; cur = all.find(x => x.row === Number(b.dataset.b)); $('dm-err').classList.remove('show');
+  $('dm-sub').textContent = cur.id + ' — ' + cur.name + ' · ' + cur.venue + ' · ' + cur.date; $('f-b').value = cur.board || ''; $('f-r').value = ''; $('f-rw').style.display = cur.board ? '' : 'none'; $('dm').classList.add('show'); $('f-b').focus(); };
+$('dm-x').onclick = () => $('dm').classList.remove('show');
+$('dm-ok').onclick = async function () {
+  hideAlerts(); $('dm-err').classList.remove('show');
+  await VR.busy(this, 'Saving…', async () => { try {
+    const r = await VR.api('adminAssignBoard', { row: cur.row, id: cur.id, board: $('f-b').value, reason: $('f-r').value.trim() });
+    if (!r.ok) { $('dm-err').textContent = r.error || 'Could not save.'; return $('dm-err').classList.add('show'); }
+    $('dm').classList.remove('show'); showOk(cur.name + ' now has board ' + r.board + '.'); load();
+  } catch (e) { $('dm-err').textContent = 'Could not reach the server.'; $('dm-err').classList.add('show'); } });
+};
+$('auto').onclick = async function () {
+  const v = $('fv').value, d = $('fd').value; if (!v || !d) return showErr('Choose one venue and one day first. Boards are numbered per venue and day.');
+  const n = posters().filter(r => r.venue === v && r.date === d && !r.board).length; if (!n) return showErr('Everyone at ' + v + ' on ' + d + ' already has a board.');
+  if (!confirm('Give boards to ' + n + ' presenter(s) at ' + v + ' on ' + d + ', in VRMIC ID order?')) return; hideAlerts();
+  await VR.busy(this, 'Assigning…', async () => { try { const r = await VR.api('adminAssignBoard', { autoAll: true, venue: v, date: d }); if (!r.ok) return showErr(r.error || 'Could not assign.'); showOk(r.count + ' boards assigned.'); load(); } catch (e) { showErr('Could not reach the server.'); } });
+};
+async function load() {
+  try {
+    const r = await SL.load('posters-manage'); if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="7">Could not load.</td></tr>'; return showErr(r.error || 'Could not load.'); }
+    all = r.presenters || []; SL.fill('fv', [...new Set(posters().map(x => x.venue).filter(Boolean))].sort(), 'All venues'); SL.fill('fd', days, 'All days'); render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('q').addEventListener('input', render); ['fv', 'fd', 'fs'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+VR.exportBar($('xp'), { name: 'VRMIC2026_Poster_Boards', title: 'VRMIC 2026 — Poster boards', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['VRMIC ID', 'Name', 'Venue', 'Day', 'Board', 'Poster title'], rows: view.map(r => [r.id, r.name, r.venue, r.date, r.board, r.title]) }) });
+(async () => { days = await SL.days(); load(); })();
+})();
+</script>
+</body>
+</html>

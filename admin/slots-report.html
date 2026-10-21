@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slot Report | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.x-body .wide{grid-column:1/-1;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Slot report</h1><a class="btn btn-sm" id="al" href="slots-manage.html"><i class="fa-solid fa-location-crosshairs"></i> Allot slots</a></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by name, VRMIC ID, venue, token or board" autocomplete="off">
+    <select id="ft"><option value="">All categories</option><option>Oral</option><option>Poster</option></select>
+    <select id="fd"><option value="">All days</option></select>
+    <select id="fv"><option value="">All venues</option></select>
+    <select id="fs"><option value="">All statuses</option><option>Pending</option><option>Scheduled</option><option>Presented</option><option>No-show</option></select>
+    <select id="fp"><option value="">PPT: any</option><option value="miss">PPT missing</option><option value="ok">PPT uploaded</option></select>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <div id="xp" style="margin-left:auto;"></div>
+  </div>
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list"><thead><tr><th style="width:26px;"></th><th>VRMIC ID</th><th>Name</th><th>Category</th><th>Venue</th><th>Room</th><th>Day</th><th>Time</th><th>Token</th><th>Board</th><th>Mode</th><th>Status</th><th>PPT</th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="13">Loading slots…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny noprint" style="margin-top:10px;">Sorted by day, venue, room, time, then token. Click a row for the abstract title and contact details. Only presenters with an Accepted abstract appear in the planning pages; this report lists every Oral and Poster participant. To change a slot, use <b>Allot slots</b>.</p>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="slots-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('slot', 'report') && !VR.can('slot', 'transaction')) { VR.denied('You do not have permission to view the slot report.'); return; }
+if (!VR.can('slot', 'transaction')) $('al').style.display = 'none';
+let all = [], view = [], open = new Set(), days = [];
+const cell = (k, v, wide) => '<div' + (wide ? ' class="wide"' : '') + '><span>' + esc(k) + '</span><b>' + (v === '' || v == null ? '—' : esc(v)) + '</b></div>';
+const ppt = r => r.type !== 'Oral' ? 'n/a' : (r.hasPPT ? 'Uploaded' : (r.abstractStatus === 'Accepted' ? 'Missing' : '—'));
+const pptBadge = r => { const t = ppt(r); return t === 'Uploaded' ? '<span class="badge sl-Presented">Uploaded</span>' : (t === 'Missing' ? '<span class="badge sl-No-show">Missing</span>' : '<span class="tiny">' + esc(t) + '</span>'); };
+const when = r => r.type === 'Poster' ? '—' : SL.range(r);
+
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), t = $('ft').value, d = $('fd').value, v = $('fv').value, s = $('fs').value, p = $('fp').value;
+  return all.filter(r => (!q || [r.name, r.id, r.venue, r.token, r.board].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) && (!t || r.type === t) && (!d || r.date === d) && (!v || r.venue === v) && (!s || SL.status(r) === s)
+    && (!p || (p === 'miss' && ppt(r) === 'Missing') || (p === 'ok' && ppt(r) === 'Uploaded'))).sort(SL.cmp);
+}
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map(r => {
+    const o = open.has(String(r.row));
+    let h = '<tr data-row="' + r.row + '" style="cursor:pointer;"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td><td class="id">' + esc(r.id) + '</td><td class="nm">' + esc(r.name) + '</td><td>' + SL.typeBadge(r.type) + '</td>'
+      + '<td>' + esc(r.venue || '—') + '</td><td>' + esc(r.room || '—') + '</td><td>' + esc(r.date || '—') + '</td><td>' + esc(when(r)) + '</td><td class="id" style="color:var(--text-2);">' + esc(r.token || '—') + '</td><td class="id" style="color:var(--text-2);">' + esc(r.board || '—') + '</td>'
+      + '<td>' + esc(r.mode || 'Offline') + '</td><td>' + SL.badge(r) + '</td><td>' + pptBadge(r) + '</td></tr>';
+    if (o) h += '<tr><td></td><td colspan="12" style="background:rgba(232,201,131,.04);"><div class="x-body">' + cell('Title', r.title, true) + cell('Abstract status', r.abstractStatus) + cell('Institution', r.institution) + cell('Email', r.email) + cell('Phone', r.phone)
+      + cell('Length', r.duration ? r.duration + ' minutes' : '') + cell('PPT file', r.pptFile) + (r.mode === 'Online' ? cell('Meeting link', r.meetingLink, true) : '') + '</div></td></tr>';
+    return h;
+  }).join('') : '<tr><td class="empty" colspan="13">' + (all.length ? 'No slots match these filters.' : 'No Oral or Poster presenters yet.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length + ' Oral / Poster participants'; stats();
+}
+function stats() {
+  const set = view.filter(r => r.venue).length, c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-users', 'Presenters shown', view.length, view.filter(r => r.type === 'Oral').length + ' Oral · ' + view.filter(r => r.type === 'Poster').length + ' Poster')
+    + c('fa-location-dot', 'Slot allotted', set, view.length ? Math.round(set * 100 / view.length) + '%' : '—') + c('fa-hourglass-half', 'Pending', view.length - set, view.filter(r => !r.venue && r.eligible).length + ' accepted, waiting for a slot')
+    + c('fa-circle-check', 'Presented', view.filter(r => r.status === 'Presented').length, view.filter(r => r.status === 'No-show').length + ' no-show') + c('fa-file-powerpoint', 'PPT missing', view.filter(r => ppt(r) === 'Missing').length, 'accepted Oral');
+}
+async function load() {
+  $('tb').innerHTML = '<tr><td class="empty" colspan="13">Loading slots…</td></tr>';
+  try {
+    const r = await SL.load('slots-report'); if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; return showErr(r.error || 'Could not load slots.'); }
+    all = r.presenters || []; const used = [...new Set(all.map(x => x.date).filter(Boolean))];
+    SL.fill('fd', days.concat(used.filter(x => days.indexOf(x) < 0)), 'All days'); SL.fill('fv', [...new Set(all.map(x => x.venue).filter(Boolean))].sort(), 'All venues'); render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('q').addEventListener('input', render); ['ft', 'fd', 'fv', 'fs', 'fp'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+$('tb').onclick = e => { if (e.target.closest('a,button')) return; const tr = e.target.closest('tr[data-row]'); if (!tr) return; const k = tr.dataset.row; open.has(k) ? open.delete(k) : open.add(k); render(); };
+VR.exportBar($('xp'), { name: 'VRMIC2026_Slots', title: 'VRMIC 2026 — Slot report', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape', fontSize: 7 },
+  getData: () => ({ headers: ['VRMIC ID', 'Name', 'Category', 'Institution', 'Venue', 'Room', 'Day', 'Time', 'Token', 'Board', 'Mode', 'Status', 'PPT'],
+    rows: view.map(r => [r.id, r.name, r.type, r.institution, r.venue, r.room, r.date, when(r) === '—' ? '' : when(r), r.token, r.board, r.mode || 'Offline', SL.status(r), ppt(r)]) }) });
+(async () => { days = await SL.days(); load(); })();
+})();
+</script>
+</body>
+</html>

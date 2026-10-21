@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Slots | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-hourglass-half" style="color:var(--gold-light);"></i> Free slots</h1><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;"><span id="xp"></span><a class="btn btn-sm" href="slots-noshow.html"><i class="fa-solid fa-user-clock"></i> No-show page</a></div></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <p class="hint" style="margin-bottom:14px;">Open time between oral slots in the same room, including slots freed by no-shows. Lunch and tea breaks show up as gaps too, so set the <b>longest gap</b> to hide them. To fill a gap, use <b>Allot slots</b> (auto-fill) or <b>Move up here</b> on the No-show page.</p>
+  <div class="toolbar noprint">
+    <select id="fd"><option value="">All days</option></select><select id="fv"><option value="">All venues</option></select>
+    <label class="tiny" style="display:flex;gap:6px;align-items:center;">Shortest gap <input id="mn" type="number" min="1" max="240" value="10" style="width:70px;"> min</label>
+    <label class="tiny" style="display:flex;gap:6px;align-items:center;">Longest gap <input id="mx" type="number" min="1" max="480" value="60" style="width:70px;"> min</label>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+  </div>
+  <div class="table-card"><div class="scroll-x" id="tc"><table class="list"><thead><tr><th>Day</th><th>Venue</th><th>Room</th><th>Free from</th><th>to</th><th>Length</th><th>Why it is free</th><th>Next presenters</th></tr></thead>
+    <tbody id="tb"><tr><td class="empty" colspan="8">Loading…</td></tr></tbody></table></div></div>
+  <h3 style="margin:22px 0 8px;font-size:15px;">Waiting for a slot <span class="tiny" id="wn"></span></h3>
+  <div class="table-card"><div class="scroll-x" id="wc"><table class="list"><thead><tr><th>VRMIC ID</th><th>Name</th><th>Institution</th><th>Title</th></tr></thead><tbody id="wb"></tbody></table></div></div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="slots-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('slot', 'report') && !VR.can('slot', 'transaction')) { VR.denied('You do not have permission to view free slots.'); return; }
+let days = [], gaps = [], waiting = [];
+function render() {
+  $('tb').innerHTML = gaps.length ? gaps.map(g => '<tr><td>' + esc(g.date) + '</td><td>' + esc(g.venue) + '</td><td>' + esc(g.room || '—') + '</td><td>' + esc(g.fromText) + '</td><td>' + esc(g.toText) + '</td><td><b>' + g.length + ' min</b></td>'
+    + '<td>' + (g.freedBy.length ? '<span class="badge sl-No-show">No-show</span> ' + g.freedBy.map(esc).join(', ') : '<span class="badge sl-Scheduled">Gap</span> between ' + esc(g.after) + ' and ' + esc(g.before)) + '</td>'
+    + '<td>' + (g.later.length ? g.later.map(x => esc(x.name) + ' <span class="tiny">' + esc(x.time) + '</span>').join('<br>') : '<span class="tiny">—</span>') + '</td></tr>').join('')
+    : '<tr><td class="empty" colspan="8">No free slots found. Try a shorter minimum gap, or check that oral slots have been allotted.</td></tr>';
+  $('wb').innerHTML = waiting.length ? waiting.map(w => '<tr><td class="id">' + esc(w.id) + '</td><td class="nm">' + esc(w.name) + '</td><td>' + esc(w.institution || '—') + '</td><td>' + esc(w.title || '—') + '</td></tr>').join('') : '<tr><td class="empty" colspan="4">Every accepted Oral presenter has a slot.</td></tr>';
+  $('wn').textContent = '(' + waiting.length + ' accepted Oral without a slot)';
+  const mins = gaps.reduce((a, g) => a + g.length, 0), c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-hourglass-half', 'Free slots', gaps.length, mins + ' minutes in total') + c('fa-user-xmark', 'Freed by no-shows', gaps.filter(g => g.freedBy.length).length, 'open right now') + c('fa-user-clock', 'Waiting', waiting.length, 'accepted Oral, no slot');
+}
+async function load() {
+  hideAlerts();
+  try {
+    const r = await VR.api('adminFreeSlots', { venue: $('fv').value, date: $('fd').value, minGap: $('mn').value, maxGap: $('mx').value });
+    if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="8">Could not load.</td></tr>'; return showErr(r.error || 'Could not load.'); }
+    gaps = r.gaps; waiting = r.waiting; render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+async function filters() {
+  const r = await SL.load('slots-free'); if (!r.ok) return; const used = [...new Set(r.presenters.map(x => x.date).filter(Boolean))];
+  SL.fill('fd', days.concat(used.filter(x => days.indexOf(x) < 0)), 'All days'); SL.fill('fv', [...new Set(r.presenters.map(x => x.venue).filter(Boolean))].sort(), 'All venues');
+}
+['fd', 'fv', 'mn', 'mx'].forEach(i => $(i).addEventListener('change', load)); $('refresh').onclick = load;
+VR.exportBar($('xp'), { name: 'VRMIC2026_Free_Slots', title: 'VRMIC 2026 — Free slots', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['Day', 'Venue', 'Room', 'Free from', 'To', 'Minutes', 'Why free', 'Next presenters'], rows: gaps.map(g => [g.date, g.venue, g.room, g.fromText, g.toText, g.length, g.freedBy.length ? 'No-show: ' + g.freedBy.join(', ') : 'Gap between ' + g.after + ' and ' + g.before, g.later.map(x => x.name + ' ' + x.time).join('; ')]) }) });
+(async () => { days = await SL.days(); await filters(); load(); })();
+})();
+</script>
+</body>
+</html>

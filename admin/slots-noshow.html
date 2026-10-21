@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No-show and Reallocation | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-user-clock" style="color:var(--gold-light);"></i> No-show and reallocation</h1><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;"><span id="xp"></span><a class="btn btn-sm" href="slots-free.html"><i class="fa-solid fa-hourglass-half"></i> Free slots</a></div></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <p class="hint" style="margin-bottom:14px;">Mark each presenter <b>Presented</b> or <b>No-show</b> as the session runs. A no-show frees the slot; use <b>Move up here</b> to bring a waiting presenter into it. Presented and no-show marks decide certificate eligibility, so changing a mark needs a reason.</p>
+  <div class="toolbar noprint">
+    <select id="fd"></select><select id="fv"><option value="">All venues</option></select>
+    <select id="ft"><option value="">Oral and Poster</option><option>Oral</option><option>Poster</option></select>
+    <input id="q" placeholder="Search name, ID or token" autocomplete="off">
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <label class="tiny" style="display:flex;gap:6px;align-items:center;"><input type="checkbox" class="ck" id="auto"> Refresh every 30 s</label>
+  </div>
+  <div id="cards"><div class="empty">Loading…</div></div>
+</div>
+
+<div class="modal" id="mm"><div class="box wide">
+  <h3 style="margin-bottom:2px;"><i class="fa-solid fa-arrow-up-right-dots" style="color:var(--gold-light);"></i> Move up here</h3>
+  <p class="hint" id="mm-sub" style="margin-bottom:12px;"></p>
+  <div class="alert alert-error" id="mm-err"></div>
+  <div class="scroll-x"><table class="list"><thead><tr><th>VRMIC ID</th><th>Name</th><th>Now</th><th></th></tr></thead><tbody id="mm-tb"></tbody></table></div>
+  <label style="display:flex;gap:8px;align-items:center;font-weight:500;margin-top:12px;"><input type="checkbox" class="ck" id="mm-notify"> Email the moved presenter <span class="hint" style="display:inline;" id="mm-nh"></span></label>
+  <div style="display:flex;justify-content:flex-end;margin-top:14px;"><button class="btn" id="mm-x">Close</button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="slots-common.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('slot', 'transaction')) { VR.denied('You do not have permission to mark presenters or reallocate slots.'); return; }
+let all = [], days = [], meta = {}, view = [], freed = null, timer = null;
+const nz = SL.nz;
+const active = r => r.venue && r.status !== 'No-show';
+const takenBy = f => all.find(o => o.row !== f.row && active(o) && o.start != null && o.end && o.venue.toLowerCase() === f.venue.toLowerCase() && o.room.toLowerCase() === f.room.toLowerCase() && o.dateKey === f.dateKey && o.start < f.end && f.start < o.end);
+
+function dayRows() { const d = $('fd').value, v = $('fv').value, t = $('ft').value, q = $('q').value.trim().toLowerCase();
+  return all.filter(r => r.venue && r.dateKey === SL.dayKey(d) && (!v || r.venue === v) && (!t || r.type === t) && (!q || [r.name, r.id, r.token].some(x => String(x || '').toLowerCase().indexOf(q) > -1))).sort(SL.cmp); }
+function render() {
+  view = dayRows(); const by = {}; view.forEach(r => (by[r.venue] = by[r.venue] || []).push(r));
+  const open = view.filter(r => r.status === 'No-show' && r.type === 'Oral' && r.start != null && !takenBy(r)).length;
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-calendar-day', 'Slots this day', view.length, view.filter(r => r.type === 'Oral').length + ' Oral · ' + view.filter(r => r.type === 'Poster').length + ' Poster')
+    + c('fa-circle-check', 'Presented', view.filter(r => r.status === 'Presented').length, 'marked so far') + c('fa-user-xmark', 'No-show', view.filter(r => r.status === 'No-show').length, open + ' slot' + (open === 1 ? '' : 's') + ' still free')
+    + c('fa-clock', 'Still to come', view.filter(r => r.status === 'Scheduled').length, 'not marked yet');
+  $('cards').innerHTML = Object.keys(by).length ? Object.keys(by).sort().map(v => '<div class="vcard"><h3><span><i class="fa-solid fa-building" style="color:var(--gold-light);"></i> ' + esc(v) + '</span></h3>'
+    + '<div class="scroll-x"><table class="list"><thead><tr><th>Time</th><th>Token / Board</th><th>Name</th><th>Category</th><th>Room</th><th>Status</th><th class="noprint">Action</th></tr></thead><tbody>'
+    + by[v].map(r => {
+      const nsFree = r.status === 'No-show' && r.type === 'Oral' && r.start != null, tk = nsFree ? takenBy(r) : null;
+      const btns = r.status === 'Scheduled' ? '<button class="btn btn-sm btn-gold" data-p="' + r.row + '"><i class="fa-solid fa-check"></i> Presented</button> <button class="btn btn-sm" data-n="' + r.row + '"><i class="fa-solid fa-user-xmark"></i> No-show</button>'
+        : '<button class="btn btn-sm" data-u="' + r.row + '"><i class="fa-solid fa-rotate-left"></i> Undo</button> ' + (r.status === 'Presented' ? '<button class="btn btn-sm" data-n="' + r.row + '">No-show</button>' : (r.status === 'No-show' ? '<button class="btn btn-sm" data-p="' + r.row + '">Presented</button>' : ''));
+      return '<tr><td>' + esc(r.type === 'Poster' ? 'Poster' : SL.range(r)) + '</td><td class="id">' + esc(r.type === 'Poster' ? (r.board || '—') : (r.token || '—')) + '</td><td class="nm">' + esc(r.name) + '<div class="tiny">' + esc(r.id) + '</div></td><td>' + SL.typeBadge(r.type) + '</td><td>' + esc(r.room || '—') + '</td><td>' + SL.badge(r) + '</td><td class="noprint">' + btns + '</td></tr>'
+        + (nsFree ? '<tr class="note-row"><td></td><td colspan="6">' + (tk ? '<i class="fa-solid fa-link"></i> Slot already taken by <b>' + esc(tk.name) + '</b> (' + esc(tk.id) + ').' : '<i class="fa-solid fa-door-open" style="color:var(--teal-light);"></i> This slot is free (' + esc(r.time) + ' – ' + esc(S2(r.end)) + '). <button class="btn btn-sm btn-gold" data-m="' + r.row + '"><i class="fa-solid fa-arrow-up-right-dots"></i> Move up here</button>') + '</td></tr>' : '');
+    }).join('') + '</tbody></table></div></div>').join('') : '<div class="empty">No slots on this day' + ($('fv').value ? ' in this venue' : '') + '.</div>';
+}
+const S2 = SL.min12;
+
+async function mark(row, status) {
+  const r = all.find(x => x.row === row); if (!r) return; let reason = '';
+  if (status === 'Scheduled' || r.status !== 'Scheduled') { reason = await SL.ask(status === 'Scheduled' ? 'Undo ' + r.status + '?' : 'Change to ' + status + '?', r.name + ' — this changes certificate eligibility, so the reason is logged.', true); if (reason === null) return; }
+  else if (status === 'No-show' && !confirm('Mark ' + r.name + ' as a no-show? Their slot will be freed.')) return;
+  hideAlerts();
+  try { const res = await VR.api('adminSlotStatus', { row: r.row, id: r.id, status: status, reason: reason }); if (!res.ok) return showErr(res.error || 'Could not update.'); showOk(r.name + (status === 'Scheduled' ? ' restored to Scheduled.' : ' marked ' + status + '.')); load(); }
+  catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('cards').onclick = e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.p) mark(Number(b.dataset.p), 'Presented'); else if (b.dataset.n) mark(Number(b.dataset.n), 'No-show'); else if (b.dataset.u) mark(Number(b.dataset.u), 'Scheduled'); else if (b.dataset.m) openMove(Number(b.dataset.m));
+};
+
+function candidates(f) {
+  const later = all.filter(o => o.type === 'Oral' && o.status === 'Scheduled' && o.venue && o.venue.toLowerCase() === f.venue.toLowerCase() && o.dateKey === f.dateKey && o.start != null && o.start > f.start).sort((a, b) => a.start - b.start);
+  const wait = all.filter(o => o.type === 'Oral' && o.eligible && !o.venue).sort((a, b) => a.id.localeCompare(b.id));
+  return { later, wait };
+}
+function openMove(row) {
+  freed = all.find(x => x.row === row); if (!freed) return; const c = candidates(freed); $('mm-err').classList.remove('show');
+  $('mm-sub').textContent = 'Free slot: ' + freed.venue + (freed.room ? ', ' + freed.room : '') + ' · ' + freed.date + ' · ' + freed.time + ' – ' + S2(freed.end) + ' (token ' + (freed.token || 'new') + '). Left by ' + freed.name + '.';
+  $('mm-notify').checked = false; $('mm-notify').disabled = !meta.slotsVisible; $('mm-nh').textContent = meta.slotsVisible ? '' : '(slots are hidden, so no email can go out)';
+  const row2 = (o, tag) => '<tr><td class="id">' + esc(o.id) + '</td><td class="nm">' + esc(o.name) + '</td><td>' + esc(tag) + '</td><td><button class="btn btn-sm btn-gold" data-go="' + o.row + '">Move up here</button></td></tr>';
+  $('mm-tb').innerHTML = (c.later.length || c.wait.length) ? c.later.map(o => row2(o, 'Scheduled ' + o.time + (o.token ? ' · ' + o.token : ''))).concat(c.wait.map(o => row2(o, 'No slot yet'))).join('') : '<tr><td class="empty" colspan="4">Nobody is waiting. Oral presenters scheduled later the same day, or without a slot, would appear here.</td></tr>';
+  $('mm').classList.add('show');
+}
+$('mm-x').onclick = () => $('mm').classList.remove('show');
+$('mm-tb').onclick = async e => {
+  const b = e.target.closest('[data-go]'); if (!b) return; const m = all.find(x => x.row === Number(b.dataset.go));
+  if (!confirm('Move ' + m.name + ' into ' + freed.time + ' (' + freed.venue + ')? ' + (m.venue ? 'Their old slot becomes free.' : ''))) return;
+  await VR.busy(b, 'Moving…', async () => {
+    try { const r = await VR.api('adminMoveUp', { freedRow: freed.row, moverRow: m.row, notify: $('mm-notify').checked }); if (!r.ok) { $('mm-err').textContent = r.error || 'Could not move.'; return $('mm-err').classList.add('show'); }
+      $('mm').classList.remove('show'); showOk(m.name + ' now has ' + freed.time + ' (token ' + r.token + ').' + (r.mail && r.mail.sent ? ' Email sent.' : (r.mail && r.mail.skipped ? ' ' + r.mail.skipped : ''))); load(); }
+    catch (er) { $('mm-err').textContent = 'Could not reach the server.'; $('mm-err').classList.add('show'); }
+  });
+};
+
+async function load() {
+  try {
+    const r = await SL.load('slots-noshow'); if (!r.ok) { $('cards').innerHTML = '<div class="empty">Could not load.</div>'; return showErr(r.error || 'Could not load data.'); }
+    all = r.presenters || []; meta = r;
+    const used = [...new Set(all.map(x => x.date).filter(Boolean))], dl = days.concat(used.filter(x => days.indexOf(x) < 0)), cd = $('fd').value;
+    SL.fill('fd', SL.dayOpts(dl), null, false); const todayTxt = dl.find(d => SL.dayKey(d) === r.today); $('fd').value = cd || todayTxt || dl.find(d => used.indexOf(d) > -1) || dl[0];
+    SL.fill('fv', [...new Set(all.map(x => x.venue).filter(Boolean))].sort(), 'All venues'); render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('q').addEventListener('input', render); ['fd', 'fv', 'ft'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+$('auto').onchange = function () { clearInterval(timer); if (this.checked) timer = setInterval(() => { if (!document.querySelector('.modal.show')) load(); }, 30000); };
+VR.exportBar($('xp'), { name: 'VRMIC2026_Presented_NoShow', title: 'VRMIC 2026 — Presented and no-show', imageEl: () => $('cards'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['Venue', 'Room', 'Day', 'Time', 'Token / Board', 'VRMIC ID', 'Name', 'Category', 'Status'], rows: view.map(r => [r.venue, r.room, r.date, SL.range(r), r.type === 'Poster' ? r.board : r.token, r.id, r.name, r.type, SL.status(r)]) }) });
+(async () => { days = await SL.days(); load(); })();
+})();
+</script>
+</body>
+</html>
