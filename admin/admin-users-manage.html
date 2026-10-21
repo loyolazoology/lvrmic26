@@ -344,7 +344,7 @@ $('saveBtn').onclick = async function () {
       else { body.id = v('f-id'); body.password = $('f-pass').value; body.permissions = perms; r = await VR.api('adminAddAdminUser', body); }
       if (!r.ok) return showErr(r.error || 'Could not save.');
       const id = editing ? cur.id : r.id, pw = $('f-pass').value;
-      showOk(editing ? 'Saved. Permission changes apply at their next login.' : 'Admin "' + r.id + '" created. Initial password: ' + pw + (v('f-email') ? (r.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.') : ' — share it securely.'));
+      showOk(editing ? 'Saved to: ' + (r.savedIn || '(old script version still running!)') + '. Permission changes apply at their next login.' : 'Admin "' + r.id + '" created. Initial password: ' + pw + (v('f-email') ? (r.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.') : ' — share it securely.'));
       if (r.photoWarning) showErr(r.photoWarning);
       await load(id);
     } catch (e) { showErr(netErr(e)); }
