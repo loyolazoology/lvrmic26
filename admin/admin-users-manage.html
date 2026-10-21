@@ -334,17 +334,11 @@ $('saveBtn').onclick = async function () {
     if (editing && String(cur.id) === SELF && !(perms.adminUsers.transaction && perms.adminUsers.report)) return showErr('You cannot remove your own Admin-Users access.');
     if (!counts().pages && !confirm('No pages are ticked, so this person will see nothing. Continue?')) return;
   }
-  let pic = null;
-    const link = v('f-photo-link');
+  const link = v('f-photo-link');
   if (link && !/^https?:\/\/(drive|docs)\.google\.com\//i.test(link)) return showErr('Photo link must be a Google Drive link.');
   await VR.busy(this, editing ? 'Saving…' : 'Creating…', async () => {
     try {
       const body = { name: v('f-name'), email: v('f-email'), contactNo: v('f-contact'), position: v('f-position'), category: $('f-role').value, assignedVenue: v('f-venue'), photoLink: link };
-      let r;
-  await VR.busy(this, editing ? 'Saving…' : 'Creating…', async () => {
-    try {
-      const body = { name: v('f-name'), email: v('f-email'), contactNo: v('f-contact'), position: v('f-position'), category: $('f-role').value, assignedVenue: v('f-venue') };
-      if (pic) Object.assign(body, pic); else if (editing && $('f-photo-rm').checked) body.removePhoto = true;
       let r;
       if (editing) { body.row = cur.row; if (!isSuper) body.permissions = perms; r = await VR.api('adminUpdateAdminUser', body); }
       else { body.id = v('f-id'); body.password = $('f-pass').value; body.permissions = perms; r = await VR.api('adminAddAdminUser', body); }
