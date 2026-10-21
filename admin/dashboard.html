@@ -4,112 +4,201 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard | VRMIC 2026 Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--danger:#d8695a;--warn:#dba43c;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.55;background:var(--navy-950);min-height:100vh;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;}
-a{color:var(--gold-light);text-decoration:none;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-.topbar{padding:14px 24px;border-bottom:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:rgba(6,11,28,.85);position:sticky;top:0;z-index:30;}
-.topbar h1{font-size:1.25rem;}
-.wrap{padding:22px 24px;max-width:1300px;}
-.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:22px;margin-bottom:18px;}
-.card h3{font-size:1rem;margin-bottom:14px;display:flex;gap:9px;align-items:center;}
-.card h3 i{color:var(--gold-light);}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:8px;border:1px solid var(--navy-border);background:var(--navy-850);color:var(--text-1);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;}
-.btn:hover{border-color:var(--gold);}
-.btn:disabled{opacity:.5;cursor:not-allowed;}
-.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
-.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
-.btn-sm{padding:7px 11px;font-size:12px;}
-input,select,textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:14px;}
-input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 5px;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.grid .full{grid-column:1/-1;}
-@media(max-width:700px){.grid{grid-template-columns:1fr;}}
-.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;border:1px solid transparent;display:none;}
-.alert.show{display:block;}
-.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
-.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
-.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
-.btn-gold .spinner{border-color:rgba(36,26,6,.3);border-top-color:#241a06;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.empty{padding:40px 18px;text-align:center;color:var(--text-3);}
-.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
-.scroll-x{overflow-x:auto;}
-table.list{width:100%;border-collapse:collapse;font-size:13px;}
-table.list th{text-align:left;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;position:sticky;top:0;background:var(--navy-900);}
-table.list td{padding:10px 13px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;}
-table.list tr:hover td{background:rgba(232,201,131,.03);}
-.id{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;}
-.nm{color:var(--text-1);font-weight:600;}
-.badge{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
-.b-ok{background:rgba(79,169,128,.14);color:var(--teal-light);}
-.b-warn{background:rgba(219,164,60,.14);color:var(--warn);}
-.b-bad{background:rgba(216,105,90,.14);color:#e8988c;}
-.b-neu{background:rgba(179,188,214,.1);color:var(--text-2);}
-.b-oral{background:rgba(232,201,131,.14);color:var(--gold-light);}
-.b-poster{background:rgba(120,160,230,.14);color:#9db8ee;}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
-.toolbar input{flex:1;min-width:200px;}
-.toolbar select{width:auto;min-width:150px;}
-.modal{position:fixed;inset:0;background:rgba(6,10,26,.72);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 18px;overflow-y:auto;}
-.modal.show{display:flex;}
-.modal .box{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:24px;max-width:480px;width:100%;}
-@media print{body{background:#fff;color:#000}.topbar,.toolbar,.noprint{display:none !important}}
+:root{--n950:#0a1230;--n900:#0e1938;--n850:#122043;--n800:#152750;--bd:rgba(226,187,120,.24);--gold:#c9974f;--gl:#e8c983;--t1:#f3f5fb;--t2:#b3bcd6;--t3:#8390b3;--ok:#6fc9b6;--warn:#dba43c;--bad:#e8988c;--blue:#9db8ee}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--n950);color:var(--t1);line-height:1.5;font-size:14px;min-height:100vh}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500}
+a{color:var(--gl);text-decoration:none}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--gl);outline-offset:2px}
+.top{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 22px;background:rgba(6,11,28,.94);border-bottom:1px solid var(--bd)}
+.top h1{font-size:1.25rem;margin-right:auto;display:flex;gap:10px;align-items:center}
+.top h1 i{color:var(--gl)}
+.btn{height:34px;padding:0 13px;border-radius:8px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{border-color:var(--gold)}
+.btn.on{background:rgba(219,164,60,.18);border-color:var(--warn);color:var(--warn)}
+.st{font-size:12px;color:var(--t3);text-align:right;line-height:1.3}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px}
+.dot.p{background:var(--warn)}.dot.x{background:var(--bad)}
+.spin i{animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.wrap{padding:18px 22px 36px;max-width:1400px}
+.err{display:none;margin-bottom:14px;padding:10px 14px;border-radius:10px;background:rgba(216,105,90,.12);border:1px solid rgba(216,105,90,.4);color:var(--bad);font-size:13px}
+.err.show{display:block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:linear-gradient(180deg,var(--n850),var(--n900));border:1px solid var(--bd);border-radius:12px;padding:14px 16px}
+.kpi small{color:var(--t2);font-size:12px;display:flex;gap:8px;align-items:center}
+.kpi small i{color:var(--gl)}
+.kpi b{display:block;font-family:'IBM Plex Mono',monospace;font-size:1.9rem;line-height:1.15;margin:4px 0 2px;color:var(--t1)}
+.kpi span{font-size:12px;color:var(--t3)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
+.card{background:linear-gradient(180deg,var(--n850),var(--n900));border:1px solid var(--bd);border-radius:14px;padding:18px}
+.card h3{font-size:1rem;margin-bottom:12px;display:flex;gap:9px;align-items:center}
+.card h3 i{color:var(--gl)}
+.card h3 em{margin-left:auto;font-style:normal;font-size:12px;color:var(--t3);font-family:'Inter',sans-serif}
+.act{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(226,187,120,.1)}
+.act:last-child{border:0}
+.act b{display:block;font-weight:600;font-size:13.5px}
+.act span{font-size:12px;color:var(--t3)}
+.act .n{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.1rem;min-width:34px;text-align:center;padding:2px 8px;border-radius:8px;background:rgba(219,164,60,.16);color:var(--warn);margin-right:4px}
+.act .l{display:flex;align-items:center;gap:10px}
+.act a{font-size:12.5px;white-space:nowrap}
+.ok-all{display:flex;gap:10px;align-items:center;color:var(--ok);padding:10px 0}
+.seg{display:flex;height:14px;border-radius:7px;overflow:hidden;background:rgba(255,255,255,.06);margin:6px 0 10px}
+.seg i{display:block;height:100%}
+.leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--t2)}
+.leg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--c)}
+.leg b{color:var(--t1)}
+.row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid rgba(226,187,120,.08);font-size:13px;color:var(--t2)}
+.row:last-child{border:0}
+.row b{color:var(--t1);font-family:'IBM Plex Mono',monospace}
+.bar{height:6px;border-radius:3px;background:rgba(255,255,255,.08);margin-top:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold)}
+.chart{display:flex;align-items:flex-end;gap:5px;height:130px;margin-top:4px}
+.chart div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}
+.chart i{display:block;width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--gl),var(--gold));min-height:2px}
+.chart span{font-size:10px;color:var(--t3);margin-top:4px;white-space:nowrap}
+.chart em{font-style:normal;font-size:10.5px;color:var(--t2);margin-bottom:2px}
+.muted{color:var(--t3);font-size:13px;padding:6px 0}
+.skel{height:84px;border-radius:12px;background:linear-gradient(90deg,var(--n850),var(--n800),var(--n850));background-size:200% 100%;animation:sh 1.2s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
-<link rel="stylesheet" href="admin-common.css">
 </head>
 <body>
-
-<div class="topbar"><h1><i class="fa-solid fa-gauge-high" style="color:var(--gold-light);"></i> Dashboard</h1><span style="font-size:12.5px;color:var(--text-3);" id="upd"></span></div>
+<div class="top">
+  <h1><i class="fa-solid fa-gauge-high"></i> Dashboard</h1>
+  <div class="st"><span class="dot" id="dot"></span><span id="upd">Loading…</span><br><span id="nxt"></span></div>
+  <button class="btn" id="pause" title="Pause automatic refresh"><i class="fa-solid fa-pause"></i> Pause</button>
+  <button class="btn" id="ref" title="Refresh now"><i class="fa-solid fa-rotate"></i> Refresh</button>
+</div>
 <div class="wrap">
-  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
-  <div class="stats" id="stats"><div class="empty"><span class="spinner"></span> Loading…</div></div>
-  <div class="two">
-    <div class="card"><h3><i class="fa-solid fa-chart-pie"></i> Participants by category</h3><div id="breakdown"></div></div>
-    <div class="card"><h3><i class="fa-solid fa-list-check"></i> Needs attention</h3><div id="actions"></div></div>
-  </div>
+  <div class="err" id="err"></div>
+  <div class="kpis" id="kpis"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  <div class="cols" id="cols"></div>
 </div>
 
 <script src="admin-common.js"></script>
 <script>
-
-const $ = id => document.getElementById(id), esc = VR.esc;
+const $ = id => document.getElementById(id), esc = VR.esc, EVERY = 60, IST = 'Asia/Kolkata';
 if (!VR.token()) (window.top || window).location.replace(VR.LOGIN_URL);
-function showErr(m){ const e = $('err'); e.textContent = m; e.className = 'alert alert-error show'; window.scrollTo({top:0,behavior:'smooth'}); }
-function showOk(m){ const e = $('ok'); e.textContent = m; e.className = 'alert alert-success show'; window.scrollTo({top:0,behavior:'smooth'}); }
-function hideAlerts(){ $('err').classList.remove('show'); $('ok').classList.remove('show'); }
-const fmtD = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }); };
-const fmtDT = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
-const yes = v => String(v).toUpperCase() === 'TRUE';
-const typeBadge = t => t === 'Oral' ? 'b-oral' : t === 'Poster' ? 'b-poster' : 'b-neu';
-const absBadge = s => s === 'Accepted' ? 'b-ok' : s === 'Rejected' ? 'b-bad' : (s === 'Submitted' || s === 'Revision Requested') ? 'b-warn' : 'b-neu';
-
-// This page only appears inside the portal frame; opened directly it goes back to the portal.
 if (window.self === window.top) location.replace('home.html#dashboard.html');
-(async function(){
-  const r = await VR.api('adminListParticipants', {});
-  if (!r.ok) { $('stats').innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;color:var(--text-3);">' + (/permission/i.test(r.error || '') ? 'You do not have access to participant statistics. Use the menu to open your modules.' : esc(r.error || 'Could not load.')) + '</div>'; return; }
-  const p = r.participants, n = p.length, c = f => p.filter(f).length;
-  const online = c(x => x.Mode === 'Online'), pend = c(x => x.AbstractStatus === 'Submitted'), revs = c(x => x.AbstractStatus === 'Revision Requested'),
-        certs = c(x => yes(x.CertificateRequested) && !x.CertificateLink), noPpt = c(x => x.ParticipantType === 'Oral' && x.AbstractStatus === 'Accepted' && !x.PPTLink), prof = c(x => yes(x.ProfileCompleted));
-  $('stats').innerHTML = [['fa-users','Total participants',n,online + ' online · ' + (n - online) + ' offline'],['fa-user-check','Profile complete',prof,'of ' + n + ' registered'],['fa-file-lines','Abstracts to review',pend,revs + ' awaiting revision'],['fa-certificate','Certificate requests',certs,'awaiting generation']]
-    .map(x => `<div class="sc"><i class="fa-solid ${x[0]}"></i><h4>${x[1]}</h4><div class="v">${x[2]}</div><div class="s">${x[3]}</div></div>`).join('');
-  $('breakdown').innerHTML = [['Oral','b-oral'],['Poster','b-poster'],['Participant','b-neu']].map(t => `<div class="row"><span class="badge ${t[1]}">${t[0] === 'Participant' ? 'Delegate only' : t[0]}</span><b>${c(x => x.ParticipantType === t[0])}</b></div>`).join('');
-  const a = [];
-  if (pend) a.push(['fa-file-lines', pend + ' abstract' + (pend > 1 ? 's' : '') + ' awaiting review', 'Accept, reject or request revision', 'abstracts-review.html']);
-  if (noPpt) a.push(['fa-display', noPpt + ' accepted Oral presenter' + (noPpt > 1 ? 's' : '') + ' without a PPT', 'Follow up before the deadline', 'participants-report.html']);
-  if (certs) a.push(['fa-certificate', certs + ' certificate request' + (certs > 1 ? 's' : '') + ' pending', 'Generate and send', 'certificates-manage.html']);
-  if (!a.length) a.push(['fa-circle-check', 'All caught up', 'Nothing needs action right now', '']);
-  $('actions').innerHTML = a.map(x => `<div class="act"><div><b><i class="fa-solid ${x[0]}" style="color:var(--gold-light);margin-right:8px;"></i>${esc(x[1])}</b><span>${esc(x[2])}</span></div>${x[3] ? `<a href="${x[3]}">Open →</a>` : ''}</div>`).join('');
-  $('upd').textContent = 'Updated ' + VR.now();
-})();
 
+const yes = v => String(v).toUpperCase() === 'TRUE';
+const istDay = v => { const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-CA', { timeZone: IST }); };
+const money = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
+let paused = false, busy = false, nextAt = Date.now() + EVERY * 1000, last = null;
+
+/* ---------- load: three existing actions; a missing permission just hides that part ---------- */
+async function load() {
+  if (busy) return; busy = true; $('dot').className = 'dot p'; $('ref').classList.add('spin');
+  try {
+    const [pr, sp, at] = await Promise.all([VR.api('adminListParticipants', {}), VR.api('adminSpotReport', {}), VR.api('adminAttendanceReport', { kind: 'participant' })]);
+    if (!pr.ok) {
+      if (!last) { $('kpis').innerHTML = ''; $('cols').innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;color:var(--t3)">${/permission/i.test(pr.error || '') ? 'You do not have access to participant statistics. Use the menu to open your modules.' : esc(pr.error || 'Could not load.')}</div>`; }
+      throw new Error(pr.error || 'Could not load.');
+    }
+    last = { p: pr.participants, spot: sp.ok ? sp : null, att: at.ok ? at : null };
+    $('err').classList.remove('show'); $('dot').className = 'dot'; $('upd').textContent = 'Updated ' + VR.now();
+    render();
+  } catch (e) { $('dot').className = 'dot x'; const m = $('err'); m.textContent = (last ? 'Could not refresh, showing the last data. ' : '') + (e.message || ''); m.classList.add('show'); }
+  finally { busy = false; nextAt = Date.now() + EVERY * 1000; $('ref').classList.remove('spin'); }
+}
+
+/* ---------- render ---------- */
+function render() {
+  const P = last.p.filter(x => String(x.ID) !== ''), n = P.length, c = f => P.filter(f).length;
+  const presenters = P.filter(x => x.ParticipantType === 'Oral' || x.ParticipantType === 'Poster');
+  const accepted = presenters.filter(x => x.AbstractStatus === 'Accepted'), acceptedOral = accepted.filter(x => x.ParticipantType === 'Oral');
+  const fees = P.reduce((s, x) => s + (Number(x.AmountPaid) || 0), 0);
+  const submitted = c(x => x.AbstractStatus === 'Submitted'), revs = c(x => x.AbstractStatus === 'Revision Requested');
+  const noSlot = accepted.filter(x => !String(x.SlotVenue || '').trim()).length;
+  const noPpt = acceptedOral.filter(x => !x.PPTLink).length;
+  const certs = c(x => yes(x.CertificateRequested) && !x.CertificateLink);
+  const profile = c(x => yes(x.ProfileCompleted)), unpaid = c(x => !yes(x.FeePaid) && !Number(x.AmountPaid));
+  const online = c(x => x.Mode === 'Online'), spotN = c(x => x.Source === 'Spot');
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: IST });
+
+  /* today's gate attendance (needs Attendance report permission) */
+  let attKpi = ['fa-qrcode', 'Checked in today', '—', 'Attendance report not available to you'], attCard = '';
+  if (last.att) {
+    const ses = last.att.sessions.filter(s => s.date === today), rows = last.att.rows.filter(r => r.active);
+    if (ses.length) {
+      const per = ses.map(s => [s.title, rows.filter(r => { const st = (r.cells[s.id] || {}).status; return st === 'Present' || st === 'Late'; }).length]);
+      const any = rows.filter(r => ses.some(s => { const st = (r.cells[s.id] || {}).status; return st === 'Present' || st === 'Late'; })).length;
+      attKpi = ['fa-qrcode', 'Checked in today', any, 'of ' + rows.length + ' registered (' + pct(any, rows.length) + '%)'];
+      attCard = card('fa-calendar-check', "Today's attendance", '', per.map(x => `<div class="row"><span>${esc(x[0])}</span><b>${x[1]}</b></div><div class="bar"><i style="width:${pct(x[1], rows.length)}%"></i></div>`).join(''));
+    } else { attKpi = ['fa-qrcode', 'Checked in today', '—', 'No attendance session today']; attCard = card('fa-calendar-check', "Today's attendance", '', '<div class="muted">No attendance session is set for today.</div>'); }
+  }
+
+  $('kpis').innerHTML = [
+    ['fa-users', 'Registered', n, online + ' online · ' + (n - online) + ' on campus'],
+    ['fa-indian-rupee-sign', 'Fees recorded', money(fees), spotN + ' spot registration' + (spotN === 1 ? '' : 's')],
+    ['fa-file-lines', 'Abstracts to review', submitted, revs + ' awaiting revision'],
+    ['fa-location-crosshairs', 'Slots to allot', noSlot, accepted.length + ' accepted presenters'],
+    attKpi
+  ].map(x => `<div class="kpi"><small><i class="fa-solid ${x[0]}"></i>${x[1]}</small><b>${x[2]}</b><span>${esc(x[3])}</span></div>`).join('');
+
+  /* needs attention */
+  const A = [[submitted, 'fa-file-circle-check', 'abstract' + (submitted === 1 ? '' : 's') + ' awaiting review', 'Accept, reject or request revision', 'abstracts-review.html'],
+    [revs, 'fa-rotate-left', 'revision' + (revs === 1 ? '' : 's') + ' waiting on participants', 'Remind or extend the deadline', 'abstracts-revision.html'],
+    [noSlot, 'fa-location-crosshairs', 'accepted presenter' + (noSlot === 1 ? '' : 's') + ' without a slot', 'Allot venue, day and time', 'slots-manage.html'],
+    [noPpt, 'fa-display', 'accepted Oral presenter' + (noPpt === 1 ? '' : 's') + ' without a PPT', 'Follow up or upload for them', 'ppt-upload.html'],
+    [certs, 'fa-certificate', 'certificate request' + (certs === 1 ? '' : 's') + ' pending', 'Generate and send', 'certificates-manage.html'],
+    [n - profile, 'fa-user-pen', 'participant' + (n - profile === 1 ? '' : 's') + ' with incomplete profile', 'Needed before abstract or PPT upload', 'participants-report.html'],
+    [unpaid, 'fa-cash-register', 'registration' + (unpaid === 1 ? '' : 's') + ' with no payment recorded', 'Record at the payment desk', 'spot-desk.html']].filter(x => x[0] > 0);
+  const attn = A.length ? A.map(x => `<div class="act"><div class="l"><span class="n">${x[0]}</span><div><b>${x[2]}</b><span>${x[3]}</span></div></div><a href="${x[4]}">Open</a></div>`).join('')
+    : '<div class="ok-all"><i class="fa-solid fa-circle-check"></i> All caught up. Nothing needs action right now.</div>';
+
+  /* abstract pipeline */
+  const S = [['Accepted', 'var(--ok)'], ['Submitted', 'var(--warn)'], ['Revision Requested', 'var(--blue)'], ['Rejected', 'var(--bad)'], ['Not Submitted', '#5d6a8f']];
+  const cnt = S.map(s => c(x => (x.ParticipantType === 'Oral' || x.ParticipantType === 'Poster') && x.AbstractStatus === s[0])), tot = cnt.reduce((a, b) => a + b, 0);
+  const pipe = tot ? `<div class="seg">${S.map((s, i) => `<i style="width:${cnt[i] * 100 / tot}%;background:${s[1]}"></i>`).join('')}</div><div class="leg">${S.map((s, i) => `<span style="--c:${s[1]}">${s[0]} <b>${cnt[i]}</b></span>`).join('')}</div>` : '<div class="muted">No presenters registered yet.</div>';
+
+  /* category split */
+  const T = [['Oral', n && c(x => x.ParticipantType === 'Oral')], ['Poster', c(x => x.ParticipantType === 'Poster')], ['Delegate only', c(x => x.ParticipantType === 'Participant')]];
+  const cats = {}; P.forEach(x => { const k = String(x.Role || x.Category || 'Not set').trim() || 'Not set'; cats[k] = (cats[k] || 0) + 1; });
+  const catRows = Object.keys(cats).sort((a, b) => cats[b] - cats[a]).map(k => `<div class="row"><span>${esc(k)}</span><b>${cats[k]}</b></div>`).join('');
+  const types = T.map(t => `<div class="row"><span>${t[0]}</span><b>${t[1]}</b></div><div class="bar"><i style="width:${pct(t[1], n)}%"></i></div>`).join('');
+
+  /* presenters: slot + PPT progress */
+  const withSlot = accepted.length - noSlot, withPpt = acceptedOral.length - noPpt;
+  const prog = [['Accepted of submitted', accepted.length, accepted.length + submitted + revs], ['Accepted presenters with a slot', withSlot, accepted.length], ['Accepted Oral with a PPT', withPpt, acceptedOral.length]]
+    .map(x => `<div class="row"><span>${x[0]}</span><b>${x[1]} / ${x[2]}</b></div><div class="bar"><i style="width:${pct(x[1], x[2])}%"></i></div>`).join('');
+
+  /* registrations per day, last 14 days */
+  const days = [], by = {}; P.forEach(x => { const d = istDay(x.RegistrationDate || x.CreatedAt); if (d) by[d] = (by[d] || 0) + 1; });
+  for (let i = 13; i >= 0; i--) days.push(new Date(Date.now() - i * 864e5).toLocaleDateString('en-CA', { timeZone: IST }));
+  const max = Math.max(1, ...days.map(d => by[d] || 0));
+  const chart = `<div class="chart">${days.map(d => `<div title="${d}: ${by[d] || 0}"><em>${by[d] || ''}</em><i style="height:${(by[d] || 0) * 100 / max * 0.8}%"></i><span>${d.slice(8)}</span></div>`).join('')}</div>`;
+
+  /* spot desk collection (needs Spot registration report permission) */
+  let spotCard = '';
+  if (last.spot) {
+    const m = last.spot.byMode || {}, rows = Object.keys(m).map(k => `<div class="row"><span>${esc(k || 'Not set')}</span><b>${money(m[k])}</b></div>`).join('');
+    spotCard = card('fa-bolt', 'Spot registration', last.spot.count + ' registered · ' + money(last.spot.total), rows || '<div class="muted">No spot registrations yet.</div>');
+  }
+
+  $('cols').innerHTML = card('fa-list-check', 'Needs attention', A.length ? A.length + ' item' + (A.length === 1 ? '' : 's') : '', attn) + card('fa-file-lines', 'Abstract pipeline', tot + ' presenters', pipe) +
+    card('fa-bars-progress', 'Presenter progress', '', prog) + attCard + card('fa-chart-column', 'Registrations per day', 'last 14 days', chart) +
+    card('fa-chart-pie', 'Participant type', '', types) + card('fa-tags', 'By fee category', '', catRows || '<div class="muted">No data.</div>') + spotCard;
+}
+const card = (ic, t, em, body) => `<div class="card"><h3><i class="fa-solid ${ic}"></i>${t}${em ? '<em>' + esc(em) + '</em>' : ''}</h3>${body}</div>`;
+
+/* ---------- auto-refresh: every 60 s, only while this tab is visible ---------- */
+setInterval(() => {
+  const left = Math.max(0, Math.round((nextAt - Date.now()) / 1000));
+  $('nxt').textContent = paused ? 'Auto-refresh paused' : 'Next refresh in ' + left + 's';
+  if (!paused && !document.hidden && Date.now() >= nextAt) load();
+}, 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && !paused && Date.now() >= nextAt) load(); });
+$('ref').onclick = load;
+$('pause').onclick = function () { paused = !paused; this.classList.toggle('on', paused); this.innerHTML = paused ? '<i class="fa-solid fa-play"></i> Resume' : '<i class="fa-solid fa-pause"></i> Pause'; if (!paused) load(); };
+load();
 </script>
 </body>
 </html>
