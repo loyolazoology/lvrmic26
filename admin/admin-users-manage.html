@@ -272,36 +272,53 @@ function setDisabled(on) {
   $('f-id').disabled = on || !!cur; $('f-role').disabled = on || !!(cur && cur.isSuper);   // ID never changes; the Administrator stays Admin
   $('fc').classList.toggle('ro', on);
 }
-function fill(a) {
-  cur = a || null; hideAlerts(); photoTok++;
-  const isSuper = !!(a && a.isSuper), editing = !!a;
-  $('ft').innerHTML = editing ? '<i class="fa-solid fa-user-pen"></i> Edit admin ' + esc(a.id) : '<i class="fa-solid fa-user-plus"></i> New admin account';
-  $('rootBadge').style.display = isSuper ? '' : 'none';
-  $('f-id').value = a ? a.id : ''; $('f-id').disabled = editing;
-  $('f-name').value = a ? a.name || '' : ''; $('f-email').value = a ? a.email || '' : ''; $('f-contact').value = a ? a.contactNo || '' : '';
-  $('f-position').value = a ? a.position || '' : ''; $('f-venue').value = a ? a.assignedVenue || '' : '';
-  $('f-role').value = a ? (a.role || 'Staff') : (ROLES.indexOf('Staff') > -1 ? 'Staff' : ROLES[0]);
-  $('f-role').disabled = isSuper;
-  $('f-photo').value = ''; $('f-photo-rm').checked = false;
-  $('f-photo-note').textContent = a ? (a.hasPhoto ? 'A photo is on file. Choose a new file to replace it.' : 'No photo on file yet.') : 'Front-facing, plain background. Resized automatically.';
-  $('f-photo-rm-row').style.display = a && a.hasPhoto ? 'flex' : 'none';
-  $('passRow').style.display = editing ? 'none' : ''; $('f-pass').value = editing ? '' : genPassword();
-  $('editActs').style.display = editing ? 'flex' : 'none';
-  $('saveTxt').textContent = editing ? 'Save changes' : 'Create account';
-  if (editing) {
-    const self = String(a.id) === SELF;
-    $('togBtn').innerHTML = a.active ? '<i class="fa-solid fa-user-slash"></i> Disable account' : '<i class="fa-solid fa-user-check"></i> Enable account';
-    $('togBtn').style.display = (isSuper || self) ? 'none' : '';
-    const al = $('auditLink'); al.style.display = VR.can('auditLog', 'report') ? '' : 'none'; al.href = 'audit-log.html?user=' + encodeURIComponent(a.id);
-  }
-  P = a ? (isSuper ? allTrue() : cloneP(a.permissions)) : cloneP({});
-  OPEN = new Set(CAT.filter(m => P[m.module].pages).map(m => m.module));
-  setDisabled(readOnlyForm());
-  renderTree(); renderList();
+function fill(a) {  
+  cur = a || null; 
+  hideAlerts(); 
+  photoTok++;  
+  const isSuper = !!(a && a.isSuper), editing = !!a;  
+
+  if ($('ft')) $('ft').innerHTML = editing ? '<i class="fa-solid fa-user-pen"></i> Edit admin ' + esc(a.id) : '<i class="fa-solid fa-user-plus"></i> New admin account';  
+  if ($('rootBadge')) $('rootBadge').style.display = isSuper ? '' : 'none';  
+  if ($('f-id')) { $('f-id').value = a ? a.id : ''; $('f-id').disabled = editing; }  
+  if ($('f-name')) $('f-name').value = a ? a.name || '' : ''; 
+  if ($('f-email')) $('f-email').value = a ? a.email || '' : ''; 
+  if ($('f-contact')) $('f-contact').value = a ? a.contactNo || '' : '';  
+  if ($('f-position')) $('f-position').value = a ? a.position || '' : ''; 
+  if ($('f-venue')) $('f-venue').value = a ? a.assignedVenue || '' : '';  
+  if ($('f-role')) { 
+    $('f-role').value = a ? (a.role || 'Staff') : (ROLES.indexOf('Staff') > -1 ? 'Staff' : ROLES[0]);  
+    $('f-role').disabled = isSuper; 
+  }  
+  if ($('f-photo')) $('f-photo').value = ''; 
+  if ($('f-photo-rm')) $('f-photo-rm').checked = false;  
+  if ($('f-photo-note')) $('f-photo-note').textContent = a ? (a.hasPhoto ? 'A photo is on file. Choose a new file to replace it.' : 'No photo on file yet.') : 'Front-facing, plain background. Resized automatically.';  
+  if ($('f-photo-rm-row')) $('f-photo-rm-row').style.display = a && a.hasPhoto ? 'flex' : 'none';  
+  if ($('passRow')) $('passRow').style.display = editing ? 'none' : ''; 
+  if ($('f-pass')) $('f-pass').value = editing ? '' : genPassword();  
+  if ($('editActs')) $('editActs').style.display = editing ? 'flex' : 'none';  
+  if ($('saveTxt')) $('saveTxt').textContent = editing ? 'Save changes' : 'Create account';  
+
+  if (editing) {    
+    const self = String(a.id) === SELF;    
+    if ($('togBtn')) {
+      $('togBtn').innerHTML = a.active ? '<i class="fa-solid fa-user-slash"></i> Disable account' : '<i class="fa-solid fa-user-check"></i> Enable account';    
+      $('togBtn').style.display = (isSuper || self) ? 'none' : '';    
+    }
+    const al = $('auditLink'); 
+    if (al) { 
+      al.style.display = VR.can('auditLog', 'report') ? '' : 'none'; 
+      al.href = 'audit-log.html?user=' + encodeURIComponent(a.id); 
+    }  
+  }  
+
+  P = a ? (isSuper ? allTrue() : cloneP(a.permissions)) : cloneP({});  
+  OPEN = new Set(CAT.filter(m => P[m.module].pages).map(m => m.module));  
+  setDisabled(readOnlyForm());  
+  renderTree(); 
+  renderList();  
   if (readOnlyForm()) showErr('Only the Administrator (' + ROOT + ') can edit this account.');
 }
-$('newBtn').onclick = () => fill(null);
-$('f-gen').onclick = () => { $('f-pass').value = genPassword(); };
 
 /* photo: resized in the browser (max 700 px, JPEG) so the upload stays small */
 function photoToPayload(file) {
@@ -391,15 +408,15 @@ async function load(selectId) {
 function fillKeep(a) { 
   const errEl = $('err');
   const okEl = $('ok');
-  const e = errEl.className, o = okEl.className;
-  const et = errEl.textContent, ot = okEl.textContent; 
-  
+  const e = errEl ? errEl.className : '';
+  const o = okEl ? okEl.className : '';
+  const et = errEl ? errEl.textContent : ''; 
+  const ot = okEl ? okEl.textContent : ''; 
+
   fill(a); 
-  
-  errEl.className = e; 
-  okEl.className = o; 
-  if (et) errEl.textContent = et; 
-  if (ot) okEl.textContent = ot; 
+
+  if (errEl) { errEl.className = e; if (et) errEl.textContent = et; }
+  if (okEl) { okEl.className = o; if (ot) okEl.textContent = ot; }
 }
 try {
   const c = await VR.api('adminPermissionCatalog', {});
