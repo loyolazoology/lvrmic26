@@ -97,8 +97,9 @@
         <div><label>Position / designation</label><input id="f-position" placeholder="e.g. Convener, Registration desk"><div class="hint">Printed as the designation on the ID card. Use "Convener" for the Convener card.</div></div>
         <div><label>Role</label><select id="f-role"></select><div class="hint">A role is a label. The ticked permissions decide what the person can do.</div></div>
         <div><label>Assigned venue</label><input id="f-venue" placeholder="Must match the Slot venue exactly"><div class="hint">Printed as "Venue" on the ID card. For volunteers use Volunteers &gt; Assign instead.</div></div>
-        <div><label>Photo <span class="hint" style="display:inline;">(JPG or PNG)</span></label><input id="f-photo" type="file" accept="image/jpeg,image/png"><div class="hint" id="f-photo-note">Front-facing, plain background. Resized automatically.</div>
-          <label class="rm-row" id="f-photo-rm-row" style="display:none;"><input type="checkbox" id="f-photo-rm"> Remove the current photo</label></div>
+        <div><label>Photo link <span class="hint" style="display:inline;">(Google Drive)</span></label>
+  <input id="f-photo-link" type="url" placeholder="https://drive.google.com/file/d/…/view" autocomplete="off">
+  <div class="hint">Upload the photo to Drive, then Share &gt; Copy link and paste it here. Clear the box to remove the photo.</div></div>
         <div class="full" id="passRow"><label>Initial password *</label><div class="inline"><input id="f-pass" autocomplete="off"><button type="button" class="btn" id="f-gen"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button></div><div class="hint">The admin must change it at first login. Share it securely.</div></div>
       </div>
 
@@ -268,7 +269,7 @@ $('ul').addEventListener('change', async e => {
 /* ---------- form ---------- */
 function readOnlyForm() { return !!(cur && cur.isSuper && SELF !== ROOT); }
 function setDisabled(on) {
-  ['f-id', 'f-name', 'f-email', 'f-contact', 'f-position', 'f-role', 'f-venue', 'f-photo', 'f-pass', 'f-gen', 'saveBtn', 'resetBtn', 'togBtn'].forEach(i => { if ($(i)) $(i).disabled = on; });
+  ['f-id', 'f-name', 'f-email', 'f-contact', 'f-position', 'f-role', 'f-venue', 'f-photo-link', 'f-pass', 'f-gen', 'saveBtn', 'resetBtn', 'togBtn'].forEach(i => { if ($(i)) $(i).disabled = on; });
   $('f-id').disabled = on || !!cur; $('f-role').disabled = on || !!(cur && cur.isSuper);   // ID never changes; the Administrator stays Admin
   $('fc').classList.toggle('ro', on);
 }
@@ -290,10 +291,7 @@ function fill(a) {
     $('f-role').value = a ? (a.role || 'Staff') : (ROLES.indexOf('Staff') > -1 ? 'Staff' : ROLES[0]);  
     $('f-role').disabled = isSuper; 
   }  
-  if ($('f-photo')) $('f-photo').value = ''; 
-  if ($('f-photo-rm')) $('f-photo-rm').checked = false;  
-  if ($('f-photo-note')) $('f-photo-note').textContent = a ? (a.hasPhoto ? 'A photo is on file. Choose a new file to replace it.' : 'No photo on file yet.') : 'Front-facing, plain background. Resized automatically.';  
-  if ($('f-photo-rm-row')) $('f-photo-rm-row').style.display = a && a.hasPhoto ? 'flex' : 'none';  
+  if ($('f-photo-link')) $('f-photo-link').value = a ? (a.photoLink || '') : '';
   if ($('passRow')) $('passRow').style.display = editing ? 'none' : ''; 
   if ($('f-pass')) $('f-pass').value = editing ? '' : genPassword();  
   if ($('editActs')) $('editActs').style.display = editing ? 'flex' : 'none';  
@@ -320,24 +318,6 @@ function fill(a) {
   if (readOnlyForm()) showErr('Only the Administrator (' + ROOT + ') can edit this account.');
 }
 
-/* photo: resized in the browser (max 700 px, JPEG) so the upload stays small */
-function photoToPayload(file) {
-  return new Promise((resolve, reject) => {
-    if (!file) return resolve(null);
-    if (!/^image\/(jpeg|png)$/.test(file.type)) return reject(new Error('Photo must be a JPG or PNG file.'));
-    const img = new Image(), url = URL.createObjectURL(file);
-    img.onload = () => {
-      const k = Math.min(1, 700 / Math.max(img.width, img.height));
-      const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
-      URL.revokeObjectURL(url);
-      resolve({ photoData: c.toDataURL('image/jpeg', 0.85).split(',')[1], photoFileName: 'photo.jpg' });
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('That picture could not be read.')); };
-    img.src = url;
-  });
-}
-
 $('saveBtn').onclick = async function () {
   hideAlerts();
   if (readOnlyForm()) return;
@@ -355,7 +335,12 @@ $('saveBtn').onclick = async function () {
     if (!counts().pages && !confirm('No pages are ticked, so this person will see nothing. Continue?')) return;
   }
   let pic = null;
-  try { pic = await photoToPayload($('f-photo').files[0]); } catch (e) { return showErr(e.message || 'That picture could not be read.'); }
+    const link = v('f-photo-link');
+  if (link && !/^https?:\/\/(drive|docs)\.google\.com\//i.test(link)) return showErr('Photo link must be a Google Drive link.');
+  await VR.busy(this, editing ? 'Saving…' : 'Creating…', async () => {
+    try {
+      const body = { name: v('f-name'), email: v('f-email'), contactNo: v('f-contact'), position: v('f-position'), category: $('f-role').value, assignedVenue: v('f-venue'), photoLink: link };
+      let r;
   await VR.busy(this, editing ? 'Saving…' : 'Creating…', async () => {
     try {
       const body = { name: v('f-name'), email: v('f-email'), contactNo: v('f-contact'), position: v('f-position'), category: $('f-role').value, assignedVenue: v('f-venue') };
@@ -366,7 +351,7 @@ $('saveBtn').onclick = async function () {
       if (!r.ok) return showErr(r.error || 'Could not save.');
       const id = editing ? cur.id : r.id, pw = $('f-pass').value;
       showOk(editing ? 'Saved. Permission changes apply at their next login.' : 'Admin "' + r.id + '" created. Initial password: ' + pw + (v('f-email') ? (r.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.') : ' — share it securely.'));
-      if (r.photoError) showErr('The account was saved, but the photo was not: ' + r.photoError + ' Choose it again and save.');
+      if (r.photoWarning) showErr(r.photoWarning);
       await load(id);
     } catch (e) { showErr(netErr(e)); }
   });
