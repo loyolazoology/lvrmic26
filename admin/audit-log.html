@@ -84,6 +84,7 @@ td.clip{max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowra
 <script src="admin-common.js"></script>
 <script src="admin-page.js"></script>
 <script>
+const netErr = e => { console.error(e); return 'The request failed: ' + (e && e.message ? e.message : e) + ' (details are in the browser console, press F12).'; };
 if (VR.guard() && VR.frameOnly()) (function () {
 if (!VR.can('auditLog', 'report')) { VR.denied('You do not have permission to view the audit log.'); return; }
 
@@ -117,8 +118,9 @@ function permDiff(oldV, newV) {
 
 /* ---------- fetch + render ---------- */
 function apply() {
-  const q = QUICK.find(x => x.k === quick);
-  return q ? rows.filter(q.test) : rows;
+  const q = QUICK.find(x => x.k === quick), a = g('f-act');
+  let out = a ? rows.filter(r => r.action === a) : rows;      // also filtered here, so it works even before Code.gs is updated
+  return q ? out.filter(q.test) : out;
 }
 function render() {
   const list = apply();
@@ -134,7 +136,7 @@ function render() {
 }
 async function fetchRows() {
   const q = QUICK.find(x => x.k === quick);
-  const p = { user: g('f-user'), module: g('f-mod') || (q ? q.mod : ''), action: g('f-act'), recordId: g('f-rec'), from: g('f-from'), to: g('f-to'), q: g('f-q'), limit: q ? 2000 : Number(g('f-lim')) || 300 };
+  const p = { user: g('f-user'), module: g('f-mod') || (q ? q.mod : ''), actionFilter: g('f-act'), recordId: g('f-rec'), from: g('f-from'), to: g('f-to'), q: g('f-q'), limit: q ? 2000 : Number(g('f-lim')) || 300 };
   $('ab').innerHTML = '<tr><td class="empty" colspan="11">Loading…</td></tr>';
   try {
     const r = await VR.api('adminListAuditLog', p);
@@ -142,7 +144,7 @@ async function fetchRows() {
     hideAlerts();
     rows = r.rows || []; info = { users: r.users || [], modules: r.modules || [], actions: r.actions || [], total: r.total || 0, summary: r.summary || null };
     fillLists(); render();
-  } catch (e) { showErr('Could not reach the server.'); }
+  } catch (e) { showErr(netErr(e)); }
 }
 function fillLists() {
   const keepM = $('f-mod').value, keepA = $('f-act').value;

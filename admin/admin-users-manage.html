@@ -134,6 +134,7 @@
 <script src="admin-common.js"></script>
 <script src="admin-page.js"></script>
 <script>
+const netErr = e => { console.error(e); return 'The request failed: ' + (e && e.message ? e.message : e) + ' (details are in the browser console, press F12).'; };
 if (VR.guard() && VR.frameOnly()) (async function () {
 if (!VR.can('adminUsers', 'transaction')) { VR.denied('You do not have permission to manage admin users.'); return; }
 
@@ -350,7 +351,7 @@ $('saveBtn').onclick = async function () {
       showOk(editing ? 'Saved. Permission changes apply at their next login.' : 'Admin "' + r.id + '" created. Initial password: ' + pw + (v('f-email') ? (r.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.') : ' — share it securely.'));
       if (r.photoError) showErr('The account was saved, but the photo was not: ' + r.photoError + ' Choose it again and save.');
       await load(id);
-    } catch (e) { showErr('Could not reach the server.'); }
+    } catch (e) { showErr(netErr(e)); }
   });
 };
 
@@ -366,7 +367,7 @@ $('rp-save').onclick = async function () {
       const r = await VR.api('adminUpdateAdminUser', { row: cur.row, resetPassword: pw });
       if (!r.ok) return inModal('rp-err', r.error || 'Could not reset.');
       $('rp').classList.remove('show'); showOk('Password for ' + cur.id + ' reset. Temporary password: ' + pw + ' — share it securely.');
-    } catch (e) { inModal('rp-err', 'Could not reach the server.'); }
+    } catch (e) { inModal('rp-err', netErr(e)); }
   });
 };
 $('togBtn').onclick = async function () {
@@ -385,7 +386,7 @@ async function load(selectId) {
     admins = r.admins || [];
     const a = selectId != null ? admins.find(x => String(x.id) === String(selectId)) : null;
     if (a) fillKeep(a); else renderList();
-  } catch (e) { showErr('Could not reach the server.'); }
+  } catch (e) { showErr(netErr(e)); }
 }
 function fillKeep(a) { const e = $('err').className, o = $('ok').className, et = $('err').textContent, ot = $('ok').textContent; fill(a); $('err').className = e; $('ok').className = o; $('err').textContent = et; $('ok').textContent = ot; }
 
@@ -393,7 +394,7 @@ try {
   const c = await VR.api('adminPermissionCatalog', {});
   if (!c.ok) { showErr(c.error || 'Could not load the permission list.'); return; }
   CAT = c.catalog || []; PRE = c.presets || {}; ROLES = c.roles || ['Admin', 'Staff', 'Volunteer', 'Official']; ROOT = String(c.superAdminId || '1001');
-} catch (e) { showErr('Could not reach the server.'); return; }
+} catch (e) { showErr(netErr(e)); return; }
 $('f-role').innerHTML = ROLES.map(r => '<option>' + esc(r) + '</option>').join('');
 $('fr').innerHTML = '<option value="">All roles</option>' + ROLES.map(r => '<option>' + esc(r) + '</option>').join('');
 renderPresets();
