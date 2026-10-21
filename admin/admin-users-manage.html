@@ -9,188 +9,300 @@
 <link rel="stylesheet" href="admin-base.css">
 <link rel="stylesheet" href="admin-common.css">
 <style>
-.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
-.inline{display:flex;gap:8px;} .inline input{flex:1;}
-.presets{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;}
-.pchip{background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit;}
-.pchip:hover:not(:disabled){border-color:var(--gold);color:var(--gold-light);} .pchip:disabled{opacity:.45;cursor:not-allowed;}
-.perm{width:100%;border-collapse:collapse;font-size:13.5px;}
-.perm th{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);text-align:center;padding:8px;border-bottom:1px solid var(--navy-border);}
-.perm th:first-child{text-align:left;}
-.perm td{padding:9px 8px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);text-align:center;}
-.perm td:first-child{text-align:left;color:var(--text-1);}
-.perm td small{display:block;color:var(--text-3);font-size:11px;}
-.perm tr.grp td{background:rgba(232,201,131,.06);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--gold-light);text-align:left;padding:6px 8px;}
-.perm input[type=checkbox]{width:17px;height:17px;accent-color:#c9974f;cursor:pointer;}
-.mchip{display:inline-block;background:rgba(232,201,131,.08);border:1px solid var(--navy-border);color:var(--text-2);border-radius:6px;padding:2px 7px;font-size:11px;margin:0 4px 4px 0;white-space:nowrap;}
-.mchip b{color:var(--gold-light);font-weight:600;}
-.modal .box.xl{max-width:780px;}
-.sub-title{font-family:'Fraunces',serif;font-size:1rem;margin:20px 0 10px;color:var(--text-1);}
-.lock-note{margin:0 0 10px;}
-.rm-row{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--text-2);margin-top:8px;font-weight:400;}
-.rm-row input{width:16px;height:16px;accent-color:#c9974f;}
+.split{display:grid;grid-template-columns:minmax(300px,390px) 1fr;gap:18px;align-items:start}
+@media(max-width:1000px){.split{grid-template-columns:1fr}}
+.lp{position:sticky;top:10px;display:flex;flex-direction:column;max-height:calc(100vh - 80px);padding:0;overflow:hidden}
+.lp-h{padding:14px 14px 10px;border-bottom:1px solid var(--navy-border)}
+.lp-h .row{display:flex;gap:8px;margin-top:8px}
+.lp-h .row select{flex:1}
+.lp-l{overflow-y:auto;flex:1}
+.urow{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(226,187,120,.08);cursor:pointer}
+.urow:hover{background:rgba(232,201,131,.05)}
+.urow.sel{background:rgba(232,201,131,.12)}
+.urow .mid{flex:1;min-width:0}
+.urow .t1{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.urow .nm2{font-weight:600;color:var(--text-1);font-size:13.5px}
+.urow .t2{font-size:11.5px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rb{display:inline-block;padding:1px 8px;border-radius:999px;font-size:10.5px;font-weight:600;background:rgba(179,188,214,.12);color:var(--text-2)}
+.rb.Admin{background:rgba(232,201,131,.16);color:var(--gold-light)}
+.rb.Volunteer{background:rgba(79,169,128,.16);color:#6fc9b6}
+.rb.Official{background:rgba(216,105,90,.16);color:#e8988c}
+.rb.root{background:linear-gradient(180deg,#e8c983,#c9974f);color:#241a06}
+.sw{position:relative;width:38px;height:22px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw span{position:absolute;inset:0;background:#2a3358;border-radius:22px;transition:.2s;cursor:pointer}
+.sw span::before{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#b3bcd6;transition:.2s}
+.sw input:checked+span{background:#c9974f}
+.sw input:checked+span::before{transform:translateX(16px);background:#fff}
+.sw input:disabled+span{opacity:.45;cursor:not-allowed}
+.fh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.fh h3{margin:0}
+.inline{display:flex;gap:8px}.inline input{flex:1}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.pchip{background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.pchip:hover:not(:disabled){border-color:var(--gold);color:var(--gold-light)}
+.pchip:disabled{opacity:.45;cursor:not-allowed}
+.sumline{font-size:12.5px;color:var(--text-2);margin:0 0 10px}
+.sumline b{color:var(--gold-light)}
+.mod{border:1px solid var(--navy-border);border-radius:10px;margin-bottom:8px;background:var(--navy-950)}
+.mod.has{border-color:rgba(232,201,131,.45)}
+.mh{display:flex;align-items:center;gap:12px;padding:9px 12px;flex-wrap:wrap}
+.mx{background:none;border:none;color:var(--text-3);cursor:pointer;width:22px;height:22px;font-size:12px}
+.ml{flex:1;min-width:160px;font-size:13.5px;color:var(--text-1);font-weight:600}
+.ml small{display:block;font-weight:400;font-size:11px;color:var(--text-3)}
+.cb{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-2);margin:0;font-weight:500;cursor:pointer}
+.cb input,.pg input{width:16px;height:16px;accent-color:#c9974f;cursor:pointer}
+.tb{background:transparent;border:1px solid var(--navy-border);color:var(--text-2);border-radius:6px;padding:3px 9px;font-size:11.5px;cursor:pointer;font-family:inherit}
+.tb:hover:not(:disabled){border-color:var(--gold);color:var(--gold-light)}
+.mb{border-top:1px solid rgba(226,187,120,.1);padding:8px 14px 12px 46px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:6px 18px}
+.sc .st{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--gold-light);margin:4px 0}
+.pg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-2);margin:0 0 5px;font-weight:400;cursor:pointer}
+.special{border:1px dashed var(--navy-border);border-radius:10px;padding:10px 14px;margin:12px 0 0;display:flex;gap:10px;align-items:flex-start}
+.special input{width:17px;height:17px;accent-color:#c9974f;margin-top:3px}
+.special b{color:var(--text-1);font-size:13.5px}.special small{display:block;color:var(--text-3);font-size:11.5px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn)}
+.rm-row{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--text-2);margin-top:8px;font-weight:400}
+.rm-row input{width:16px;height:16px;accent-color:#c9974f}
+.ro{opacity:.75}
+.sub-title{font-family:'Fraunces',serif;font-size:1rem;margin:20px 0 10px;color:var(--text-1)}
 </style>
 </head>
 <body>
 
-<div class="topbar"><h1><i class="fa-solid fa-user-shield" style="color:var(--gold-light);"></i> Admin users</h1><div id="xp"></div></div>
-<div class="wrap" style="max-width:1250px;">
+<div class="topbar"><h1><i class="fa-solid fa-user-shield" style="color:var(--gold-light);"></i> Admin user management</h1><div></div></div>
+<div class="wrap" style="max-width:1400px;">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
 
-  <div class="card">
-    <h3><i class="fa-solid fa-user-plus"></i> Create admin account</h3>
-    <div class="grid">
-      <div><label>Admin ID *</label><input id="n-id" placeholder="e.g. 1002 or vol-gate1" autocomplete="off"><div class="hint">Used to log in. 3–30 characters; letters, numbers, . _ -</div></div>
-      <div><label>Full name *</label><input id="n-name" autocomplete="off"></div>
-      <div><label>Email <span class="hint" style="display:inline;">(optional)</span></label><input id="n-email" type="email" autocomplete="off"><div class="hint">If filled, every login sends a 6-digit OTP to this address. Leave blank for no OTP step.</div></div>
-      <div><label>Contact number <span class="hint" style="display:inline;">(optional)</span></label><input id="n-contact" type="tel" inputmode="tel" maxlength="18" placeholder="+91 9XXXXXXXXX" autocomplete="off"><div class="hint">Printed on the team ID card.</div></div>
-      <div><label>Position / role title</label><input id="n-position" placeholder="e.g. Volunteer, Abstract Reviewer"><div class="hint">Printed as the designation on the ID card. Type "Convener" for the Convener card.</div></div>
-      <div><label>Category</label><select id="n-category"><option>Admin</option><option>Staff</option><option>Volunteer</option><option>Official</option></select></div>
-      <div><label>Assigned venue <span class="hint" style="display:inline;">(non-volunteers)</span></label><input id="n-venue" placeholder="Must match the Slot venue exactly"><div class="hint">Printed as "Venue" on the ID card. For volunteers use Volunteers &gt; Assign (venues come from there).</div></div>
-      <div><label>Photo <span class="hint" style="display:inline;">(optional, JPG or PNG)</span></label><input id="n-photo" type="file" accept="image/jpeg,image/png"><div class="hint">Front-facing, plain background. Resized automatically.</div></div>
-      <div class="full"><label>Initial password *</label><div class="inline"><input id="n-pass" autocomplete="off"><button type="button" class="btn" id="n-gen"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button></div><div class="hint">The admin must change it at first login. Share it securely.</div></div>
+  <div class="split">
+    <!-- LEFT: user list -->
+    <div class="card lp">
+      <div class="lp-h">
+        <button class="btn btn-gold btn-sm" id="newBtn" type="button" style="width:100%;"><i class="fa-solid fa-user-plus"></i> New admin account</button>
+        <input id="q" placeholder="Search by ID or name" autocomplete="off" style="margin-top:10px;">
+        <div class="row"><select id="fr" aria-label="Role"><option value="">All roles</option></select><select id="fs" aria-label="Status"><option value="">Any status</option><option value="1">Active</option><option value="0">Disabled</option></select></div>
+        <div class="hint" id="cnt" style="margin-top:8px;"></div>
+      </div>
+      <div class="lp-l" id="ul"><div class="empty" style="padding:24px;text-align:center;color:var(--text-3);">Loading…</div></div>
     </div>
-    <div class="sub-title">Access permissions</div>
-    <div id="n-matrix"></div>
-    <div style="display:flex;justify-content:flex-end;margin-top:14px;"><button class="btn btn-gold" id="n-create"><i class="fa-solid fa-user-plus"></i> Create admin account</button></div>
-  </div>
 
-  <div class="sub-title" style="font-size:1.15rem;margin-top:6px;">Existing admin accounts</div>
-  <div class="toolbar noprint"><input id="q" placeholder="Search by ID, name, position or phone" autocomplete="off"><select id="fc"><option value="">All categories</option><option>Admin</option><option>Staff</option><option>Volunteer</option><option>Official</option></select><select id="fs"><option value="">Any status</option><option value="1">Active</option><option value="0">Disabled</option></select><select id="fp"><option value="">Any photo status</option><option value="0">Photo missing</option><option value="1">Has photo</option></select></div>
-  <div class="table-card"><div class="scroll-x" id="tc">
-    <table class="list"><thead><tr><th>ID</th><th>Name</th><th>Position</th><th>Venue</th><th>Photo</th><th>Status</th><th>Access</th><th class="noprint">Actions</th></tr></thead><tbody id="ab"><tr><td class="empty" colspan="8">Loading admins…</td></tr></tbody></table>
-  </div></div>
+    <!-- RIGHT: create / edit -->
+    <div class="card" id="fc">
+      <div class="fh"><h3 id="ft"><i class="fa-solid fa-user-plus"></i> New admin account</h3><span class="rb root" id="rootBadge" style="display:none;">Administrator</span></div>
+      <div class="grid" id="fields">
+        <div><label>Admin ID *</label><input id="f-id" placeholder="e.g. 1002 or vol-gate1" autocomplete="off"><div class="hint">Used to log in. 3–30 characters; letters, numbers, . _ -</div></div>
+        <div><label>Full name *</label><input id="f-name" autocomplete="off"></div>
+        <div><label>Email <span class="hint" style="display:inline;">(optional)</span></label><input id="f-email" type="email" autocomplete="off"><div class="hint">If filled and OTP is on in Settings, every login sends a 6-digit code here. The account details are also e-mailed.</div></div>
+        <div><label>Contact number <span class="hint" style="display:inline;">(optional)</span></label><input id="f-contact" type="tel" inputmode="tel" maxlength="18" placeholder="+91 9XXXXXXXXX" autocomplete="off"><div class="hint">Printed on the team ID card.</div></div>
+        <div><label>Position / designation</label><input id="f-position" placeholder="e.g. Convener, Registration desk"><div class="hint">Printed as the designation on the ID card. Use "Convener" for the Convener card.</div></div>
+        <div><label>Role</label><select id="f-role"></select><div class="hint">A role is a label. The ticked permissions decide what the person can do.</div></div>
+        <div><label>Assigned venue</label><input id="f-venue" placeholder="Must match the Slot venue exactly"><div class="hint">Printed as "Venue" on the ID card. For volunteers use Volunteers &gt; Assign instead.</div></div>
+        <div><label>Photo <span class="hint" style="display:inline;">(JPG or PNG)</span></label><input id="f-photo" type="file" accept="image/jpeg,image/png"><div class="hint" id="f-photo-note">Front-facing, plain background. Resized automatically.</div>
+          <label class="rm-row" id="f-photo-rm-row" style="display:none;"><input type="checkbox" id="f-photo-rm"> Remove the current photo</label></div>
+        <div class="full" id="passRow"><label>Initial password *</label><div class="inline"><input id="f-pass" autocomplete="off"><button type="button" class="btn" id="f-gen"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button></div><div class="hint">The admin must change it at first login. Share it securely.</div></div>
+      </div>
+
+      <div class="sub-title">Access permissions</div>
+      <div class="presets" id="presets"></div>
+      <p class="sumline" id="sum"></p>
+      <div id="tree"></div>
+      <label class="special" id="spRow"><input type="checkbox" id="sp-bd"><span><b>Can back-date attendance</b><small>Special permission: may mark attendance for past session dates (a reason is required). Give it only to people you trust, for example the Convener.</small></span></label>
+
+      <div class="acts">
+        <button class="btn btn-gold" id="saveBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> <span id="saveTxt">Create account</span></button>
+        <span id="editActs" style="display:none;gap:10px;flex-wrap:wrap;">
+          <button class="btn" id="resetBtn" type="button"><i class="fa-solid fa-key"></i> Reset password</button>
+          <button class="btn btn-warn" id="togBtn" type="button"></button>
+          <a class="btn" id="auditLink" href="#" style="display:none;"><i class="fa-solid fa-shield-halved"></i> Activity in audit log</a>
+        </span>
+      </div>
+      <p class="hint" style="margin-top:12px;">Accounts are never deleted: Disable switches an account off and keeps its history. Permission changes apply at the person's next login. Five wrong passwords lock an account for 15 minutes. You cannot remove your own Admin-Users access, and only 1001 can edit 1001.</p>
+    </div>
+  </div>
 </div>
 
-<!-- Edit -->
-<div class="modal" id="ed"><div class="box xl">
-  <h3 style="margin-bottom:14px;"><i class="fa-solid fa-user-pen" style="color:var(--gold-light);"></i> Edit admin <span class="id" id="ed-id" style="font-size:14px;"></span></h3>
-  <div class="alert alert-error" id="ed-err"></div>
-  <div class="grid">
-    <div><label>Full name</label><input id="ed-name"></div>
-    <div><label>Email</label><input id="ed-email" type="email"></div>
-    <div><label>Contact number</label><input id="ed-contact" type="tel" inputmode="tel" maxlength="18" placeholder="+91 9XXXXXXXXX"></div>
-    <div><label>Position</label><input id="ed-position"></div>
-    <div><label>Category</label><select id="ed-category"><option>Admin</option><option>Staff</option><option>Volunteer</option><option>Official</option></select></div>
-    <div><label>Assigned venue</label><input id="ed-venue"></div>
-    <div class="full"><label>Photo <span class="hint" style="display:inline;">(choose a file to replace it)</span></label><input id="ed-photo" type="file" accept="image/jpeg,image/png"><div class="hint" id="ed-photo-note"></div>
-      <label class="rm-row" id="ed-photo-rm-row"><input type="checkbox" id="ed-photo-rm"> Remove the current photo</label></div>
-  </div>
-  <div class="sub-title">Access permissions</div>
-  <div id="ed-matrix"></div>
-  <p class="hint" style="margin-top:12px;">Permission changes take effect the next time this admin logs in.</p>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap;"><button class="btn" id="ed-cancel">Cancel</button><button class="btn btn-gold" id="ed-save"><i class="fa-solid fa-floppy-disk"></i> Save changes</button></div>
-</div></div>
-
-<!-- Reset -->
+<!-- Reset password -->
 <div class="modal" id="rp"><div class="box">
   <h3 style="margin-bottom:10px;"><i class="fa-solid fa-key" style="color:var(--gold-light);"></i> Reset password</h3>
   <p class="hint" id="rp-who" style="margin-bottom:12px;"></p>
   <div class="alert alert-error" id="rp-err"></div>
   <div class="inline"><input id="rp-pass" autocomplete="off"><button type="button" class="btn" id="rp-gen">Generate</button></div>
-  <p class="hint">They will be forced to choose a new password at next login.</p>
+  <p class="hint">A temporary password. They are forced to choose a new one at next login.</p>
   <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="rp-cancel">Cancel</button><button class="btn btn-gold" id="rp-save">Reset password</button></div>
-</div></div>
-
-<!-- Delete -->
-<div class="modal" id="dl"><div class="box">
-  <h3 style="margin-bottom:10px;"><i class="fa-solid fa-trash" style="color:var(--danger);"></i> Delete admin</h3>
-  <p class="hint" id="dl-who" style="margin-bottom:12px;"></p>
-  <div class="alert alert-error" id="dl-err"></div>
-  <p class="hint">To remove access without losing the record, use <b>Disable</b> instead. The server disables the account and keeps its history.</p>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="dl-cancel">Cancel</button><button class="btn btn-danger" id="dl-go"><i class="fa-solid fa-trash"></i> Delete</button></div>
 </div></div>
 
 <script src="admin-common.js"></script>
 <script src="admin-page.js"></script>
 <script>
-if (VR.guard() && VR.frameOnly()) (function () {
+if (VR.guard() && VR.frameOnly()) (async function () {
 if (!VR.can('adminUsers', 'transaction')) { VR.denied('You do not have permission to manage admin users.'); return; }
 
-/* [key, label, description] — a null row is a group heading.
-   Every module the server knows is listed here, so saving never silently removes access that is not shown. */
-const MODULES = [
-  null, 'Participants',
-  ['participants', 'Participants', 'Create / edit / delete accounts; participant list and details'],
-  ['spotRegistration', 'Spot registration', 'Register walk-ins, payment desk, spot report'],
-  ['abstract', 'Abstracts', 'Review, remarks, revision requests, manual upload'],
-  ['slot', 'Slots', 'Allot venue / room / time / token'],
-  ['presentationAccess', 'Presentation access', 'Venue-wise PPT list (uses assignments)'],
-  null, 'Attendance',
-  ['attendanceConfig', 'Participant attendance sessions', 'Create sessions: date, entry / exit times'],
-  ['attendance', 'Participant attendance', 'Mark entry, scan QR, attendance report (volunteers: today only)'],
-  null, 'Students',
-  ['students', 'Student master', 'Create / import students; student list and QR codes'],
-  ['studentConfig', 'Student attendance sessions', 'Create sessions: date, entry / exit times'],
-  ['studentAttendance', 'Student attendance', 'Mark entry, scan QR, attendance report (volunteers: today only)'],
-  null, 'Event day',
-  ['liveBoard', 'Live event board', 'Venue and room status'],
-  ['scoring', 'Scoring and evaluation', 'Criteria, score entry, rankings'],
-  ['badges', 'Badges and ID cards', 'Participant badges, student hand tags, team ID cards (Edit = can print)'],
-  null, 'Desk and communication',
-  ['certificates', 'Certificates', 'Generate and attach certificates'],
-  ['receipts', 'Receipts', 'Payment receipt requests'],
-  ['feedback', 'Feedback', 'View participant feedback'],
-  ['schedule', 'Schedule', 'Edit the common conference schedule'],
-  ['announcements', 'Announcements', 'Post / delete announcements'],
-  ['mail', 'Mail', 'Send invitations; mail log'],
-  ['volunteers', 'Volunteers', 'Assign venues to volunteers'],
-  null, 'System',
-  ['settings', 'Settings', 'Deadlines, fees, files and feedback window'],
-  ['adminUsers', 'Admin users', 'Create admins and grant access (high privilege)'],
-  ['auditLog', 'Audit log', 'View who changed what (high privilege)'],
-  ['trash', 'Trash and backups', 'Restore deleted records, backup list']
-];
-const MODS = []; for (let i = 0; i < MODULES.length; i++) { if (MODULES[i] === null) i++; else MODS.push(MODULES[i]); }
-const NOT_READONLY = ['adminUsers', 'auditLog', 'trash'];
-const PRESETS = {
-  full: { label: 'Full access', all: true },
-  registration: { label: 'Registration desk', perms: { participants: [1, 1], spotRegistration: [1, 1], badges: [1, 0], receipts: [1, 1], certificates: [1, 1], attendance: [1, 1], students: [1, 1], studentAttendance: [1, 1] } },
-  reviewer: { label: 'Abstract reviewer', perms: { abstract: [1, 1], participants: [0, 1] } },
-  venue: { label: 'Venue staff', perms: { presentationAccess: [0, 1], attendance: [1, 1], studentAttendance: [1, 1], slot: [0, 1] } },
-  attendance: { label: 'Attendance only', perms: { attendance: [1, 0], studentAttendance: [1, 0] } },
-  readonly: { label: 'Read-only (all reports)', perms: 'report' },
-  none: { label: 'Clear all', perms: {} }
-};
-// What the server enforces for the Volunteer category.
-const VOLUNTEER = { presentationAccess: { report: true, transaction: false }, attendance: { transaction: true, report: false }, studentAttendance: { transaction: true, report: false } };
+const SELF = String(localStorage.getItem('vrmic_admin_id') || '');
+let CAT = [], PRE = {}, ROLES = [], ROOT = '1001', admins = [], cur = null, P = {}, OPEN = new Set(), photoTok = 0;
+const SECS = [['cf', 'Configuration'], ['tx', 'Transaction'], ['rp', 'Report']];
+const v = id => $(id).value.trim();
+const MOD = k => CAT.find(m => m.module === k);
+const allPages = m => SECS.flatMap(([s]) => m[s].map(x => ({ sec: s, page: x.page, label: x.label })));
+const secFlag = (mp, s) => s === 'tx' ? !!mp.transaction : s === 'rp' ? !!mp.report : !!(mp.transaction || mp.report);
+const pageOn = (mp, s, k) => secFlag(mp, s) && (!mp.pages || mp.pages[k] === true);
+const inModal = (id, msg) => { const e = $(id); e.textContent = msg; e.classList.add('show'); };
+const fmtTime = s => { const d = s ? new Date(s) : null; return d && !isNaN(d) ? d.toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }) : ''; };
+const contactOk = s => !s || /^\+?[\d\s-]{7,18}$/.test(s);
+function genPassword() { const ch = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; let s = ''; const a = new Uint32Array(10); crypto.getRandomValues(a); a.forEach(x => s += ch[x % ch.length]); return s; }
 
-function buildMatrix(id) {
-  const el = $(id);
-  let rows = '';
-  for (let i = 0; i < MODULES.length; i++) {
-    if (MODULES[i] === null) { rows += '<tr class="grp"><td colspan="3">' + esc(MODULES[++i]) + '</td></tr>'; continue; }
-    const m = MODULES[i];
-    rows += '<tr><td>' + esc(m[1]) + '<small>' + esc(m[2]) + '</small></td><td><input type="checkbox" data-m="' + m[0] + '" data-a="report" aria-label="View ' + esc(m[1]) + '"></td><td><input type="checkbox" data-m="' + m[0] + '" data-a="transaction" aria-label="Edit ' + esc(m[1]) + '"></td></tr>';
+/* ---------- permissions model (same shape the server stores) ---------- */
+function cloneP(src) {
+  const o = {};
+  CAT.forEach(m => { const s = (src && src[m.module]) || {}; o[m.module] = { transaction: !!s.transaction, report: !!s.report }; if (s.pages && Object.keys(s.pages).length) o[m.module].pages = Object.assign({}, s.pages); });
+  o._special = { backdate: !!(src && src._special && src._special.backdate) };
+  return o;
+}
+function allTrue() { const o = {}; CAT.forEach(m => o[m.module] = { transaction: true, report: true }); o._special = { backdate: true }; return o; }
+function togglePage(mod, sec, key, on) {
+  const m = MOD(mod), mp = P[mod], set = {};
+  allPages(m).forEach(x => { if (pageOn(mp, x.sec, x.page)) set[x.page] = true; });
+  if (on) set[key] = true; else delete set[key];
+  if (!Object.keys(set).length) { mp.transaction = false; mp.report = false; delete mp.pages; return; }
+  const any = s => m[s].some(x => set[x.page]);
+  if (m.tx.length) mp.transaction = any('tx');
+  if (m.rp.length) mp.report = any('rp');
+  if (any('cf') && !mp.transaction && !mp.report) { mp.transaction = true; mp.report = true; }
+  if (!m.tx.length && !m.rp.length && on) { mp.transaction = true; mp.report = true; }
+  const full = allPages(m).every(x => (set[x.page] === true) === secFlag(mp, x.sec));
+  if (full) delete mp.pages; else mp.pages = set;
+}
+function counts() {
+  let pages = 0, total = 0, mods = 0;
+  CAT.forEach(m => { const mp = P[m.module], ap = allPages(m), n = ap.filter(x => pageOn(mp, x.sec, x.page)).length; total += ap.length; pages += n; if (n) mods++; });
+  return { pages: pages, total: total, mods: mods };
+}
+function serialize() {
+  const o = {};
+  CAT.forEach(m => { const mp = P[m.module]; o[m.module] = { transaction: !!mp.transaction, report: !!mp.report }; if (mp.pages && Object.keys(mp.pages).length) o[m.module].pages = mp.pages; });
+  o._special = { backdate: !!P._special.backdate };
+  return o;
+}
+
+/* ---------- tree ---------- */
+function renderTree() {
+  const locked = !!(cur && cur.isSuper);                    // the Administrator's access is fixed: everything ticked
+  $('tree').innerHTML = CAT.map(m => {
+    const mp = P[m.module], ap = allPages(m), n = ap.filter(x => pageOn(mp, x.sec, x.page)).length, open = OPEN.has(m.module), d = locked ? 'disabled' : '';
+    return `<div class="mod ${n ? 'has' : ''}" data-m="${esc(m.module)}">
+      <div class="mh">
+        <button type="button" class="mx" data-act="open" aria-expanded="${open}" aria-label="Show pages of ${esc(m.label)}"><i class="fa-solid fa-chevron-${open ? 'down' : 'right'}"></i></button>
+        <span class="ml">${esc(m.label)}<small>${n} of ${ap.length} pages${mp.pages ? ' (limited)' : ''}</small></span>
+        <label class="cb"><input type="checkbox" data-act="flag" data-f="transaction" ${mp.transaction ? 'checked' : ''} ${d}> Edit</label>
+        <label class="cb"><input type="checkbox" data-act="flag" data-f="report" ${mp.report ? 'checked' : ''} ${d}> View</label>
+        <button type="button" class="tb" data-act="all" ${d}>Tick all</button>
+      </div>
+      ${open ? `<div class="mb">${SECS.map(([s, t]) => m[s].length ? `<div class="sc"><div class="st">${t}</div>${m[s].map(x => `<label class="pg"><input type="checkbox" data-act="page" data-sec="${s}" data-page="${esc(x.page)}" ${pageOn(mp, s, x.page) ? 'checked' : ''} ${d}> ${esc(x.label)}</label>`).join('')}</div>` : '').join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+  const c = counts();
+  $('sum').innerHTML = `<b>${c.pages}</b> of ${c.total} pages ticked in <b>${c.mods}</b> of ${CAT.length} modules. Edit and View tick every page in that section; open a module to tick individual pages.`;
+  $('sp-bd').checked = !!P._special.backdate; $('sp-bd').disabled = locked;
+  $('presets').querySelectorAll('button').forEach(b => b.disabled = locked);
+}
+$('tree').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if (!b || b.disabled) return;
+  const mod = b.closest('.mod').dataset.m;
+  if (b.dataset.act === 'open') { OPEN.has(mod) ? OPEN.delete(mod) : OPEN.add(mod); renderTree(); }
+  else if (b.dataset.act === 'all') { P[mod] = { transaction: true, report: true }; renderTree(); }
+});
+$('tree').addEventListener('change', e => {
+  const c = e.target; if (c.type !== 'checkbox') return;
+  const mod = c.closest('.mod').dataset.m;
+  if (c.dataset.act === 'flag') { P[mod][c.dataset.f] = c.checked; delete P[mod].pages; }
+  else if (c.dataset.act === 'page') togglePage(mod, c.dataset.sec, c.dataset.page, c.checked);
+  renderTree();
+});
+$('sp-bd').onchange = e => { P._special.backdate = e.target.checked; };
+function renderPresets() {
+  $('presets').innerHTML = Object.keys(PRE).map(k => `<button type="button" class="pchip" data-p="${esc(k)}">${esc(PRE[k].label)}</button>`).join('')
+    + '<button type="button" class="pchip" data-p="__reports">All reports</button><button type="button" class="pchip" data-p="__clear">Clear all</button>';
+}
+$('presets').addEventListener('click', e => {
+  const b = e.target.closest('button[data-p]'); if (!b || b.disabled) return;
+  const k = b.dataset.p, bd = P._special.backdate;
+  if (k === '__clear') P = cloneP({});
+  else if (k === '__reports') { P = cloneP({}); CAT.forEach(m => { if (['adminUsers', 'auditLog', 'trash'].indexOf(m.module) === -1) P[m.module].report = true; }); }
+  else P = cloneP(PRE[k].permissions);
+  P._special.backdate = bd; renderTree();
+});
+
+/* ---------- list ---------- */
+const view = () => { const q = v('q').toLowerCase(), r = $('fr').value, s = $('fs').value;
+  return admins.filter(a => (!q || [a.id, a.name].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) && (!r || a.role === r) && (!s || (s === '1') === a.active)); };
+function renderList() {
+  const list = view();
+  $('cnt').textContent = list.length + ' of ' + admins.length + ' accounts';
+  $('ul').innerHTML = list.length ? list.map(a => {
+    const locked = a.isSuper || String(a.id) === SELF;
+    return `<div class="urow ${cur && String(cur.id) === String(a.id) ? 'sel' : ''}" data-id="${esc(a.id)}">
+      <div class="mid"><div class="t1"><span class="nm2">${esc(a.name)}</span>${a.isSuper ? '<span class="rb root">Administrator</span>' : `<span class="rb ${esc(a.role)}">${esc(a.role)}</span>`}</div>
+        <div class="t2"><span class="mono" style="font-family:'IBM Plex Mono',monospace;color:var(--gold-light);">${esc(a.id)}</span> · ${esc(a.position || 'no position')}</div>
+        <div class="t2">Last login: ${esc(fmtTime(a.lastLoginAt) || 'never')}</div></div>
+      <label class="sw" title="${locked ? 'This account cannot be disabled' : (a.active ? 'Active: switch off to disable' : 'Disabled: switch on to enable')}"><input type="checkbox" data-sw="${esc(a.id)}" ${a.active ? 'checked' : ''} ${locked ? 'disabled' : ''}><span></span></label></div>`;
+  }).join('') : '<div style="padding:24px;text-align:center;color:var(--text-3);">No accounts match.</div>';
+}
+['q'].forEach(i => $(i).addEventListener('input', renderList)); ['fr', 'fs'].forEach(i => $(i).addEventListener('change', renderList));
+$('ul').addEventListener('click', async e => {
+  const sw = e.target.closest('input[data-sw]');
+  if (sw) { e.stopPropagation(); return; }
+  if (e.target.closest('.sw')) return;
+  const row = e.target.closest('.urow'); if (!row) return;
+  fill(admins.find(a => String(a.id) === row.dataset.id));
+});
+$('ul').addEventListener('change', async e => {
+  const sw = e.target.closest('input[data-sw]'); if (!sw) return;
+  const a = admins.find(x => String(x.id) === sw.dataset.sw); if (!a) return;
+  const want = sw.checked;
+  if (!confirm((want ? 'Enable ' : 'Disable ') + a.name + '?')) { sw.checked = !want; return; }
+  const r = await VR.api('adminUpdateAdminUser', { row: a.row, active: want });
+  if (!r.ok) { sw.checked = !want; showErr(r.error || 'Could not change the status.'); return; }
+  showOk(a.name + (want ? ' enabled.' : ' disabled.')); await load(a.id);
+});
+
+/* ---------- form ---------- */
+function readOnlyForm() { return !!(cur && cur.isSuper && SELF !== ROOT); }
+function setDisabled(on) {
+  ['f-id', 'f-name', 'f-email', 'f-contact', 'f-position', 'f-role', 'f-venue', 'f-photo', 'f-pass', 'f-gen', 'saveBtn', 'resetBtn', 'togBtn'].forEach(i => { if ($(i)) $(i).disabled = on; });
+  $('f-id').disabled = on || !!cur; $('f-role').disabled = on || !!(cur && cur.isSuper);   // ID never changes; the Administrator stays Admin
+  $('fc').classList.toggle('ro', on);
+}
+function fill(a) {
+  cur = a || null; hideAlerts(); photoTok++;
+  const isSuper = !!(a && a.isSuper), editing = !!a;
+  $('ft').innerHTML = editing ? '<i class="fa-solid fa-user-pen"></i> Edit admin ' + esc(a.id) : '<i class="fa-solid fa-user-plus"></i> New admin account';
+  $('rootBadge').style.display = isSuper ? '' : 'none';
+  $('f-id').value = a ? a.id : ''; $('f-id').disabled = editing;
+  $('f-name').value = a ? a.name || '' : ''; $('f-email').value = a ? a.email || '' : ''; $('f-contact').value = a ? a.contactNo || '' : '';
+  $('f-position').value = a ? a.position || '' : ''; $('f-venue').value = a ? a.assignedVenue || '' : '';
+  $('f-role').value = a ? (a.role || 'Staff') : (ROLES.indexOf('Staff') > -1 ? 'Staff' : ROLES[0]);
+  $('f-role').disabled = isSuper;
+  $('f-photo').value = ''; $('f-photo-rm').checked = false;
+  $('f-photo-note').textContent = a ? (a.hasPhoto ? 'A photo is on file. Choose a new file to replace it.' : 'No photo on file yet.') : 'Front-facing, plain background. Resized automatically.';
+  $('f-photo-rm-row').style.display = a && a.hasPhoto ? 'flex' : 'none';
+  $('passRow').style.display = editing ? 'none' : ''; $('f-pass').value = editing ? '' : genPassword();
+  $('editActs').style.display = editing ? 'flex' : 'none';
+  $('saveTxt').textContent = editing ? 'Save changes' : 'Create account';
+  if (editing) {
+    const self = String(a.id) === SELF;
+    $('togBtn').innerHTML = a.active ? '<i class="fa-solid fa-user-slash"></i> Disable account' : '<i class="fa-solid fa-user-check"></i> Enable account';
+    $('togBtn').style.display = (isSuper || self) ? 'none' : '';
+    const al = $('auditLink'); al.style.display = VR.can('auditLog', 'report') ? '' : 'none'; al.href = 'audit-log.html?user=' + encodeURIComponent(a.id);
   }
-  el.innerHTML = '<p class="hint lock-note" id="' + id + '-note"></p><div class="presets">' + Object.keys(PRESETS).map(k => '<button type="button" class="pchip" data-preset="' + k + '">' + esc(PRESETS[k].label) + '</button>').join('') + '</div>'
-    + '<table class="perm"><thead><tr><th>Module</th><th>View (report)</th><th>Edit (transaction)</th></tr></thead><tbody>' + rows + '</tbody></table>';
-  el.addEventListener('change', e => {   // Edit implies View, except where a preset deliberately says otherwise
-    const c = e.target; if (c.type !== 'checkbox') return;
-    const rep = el.querySelector('input[data-m="' + c.dataset.m + '"][data-a="report"]'), tx = el.querySelector('input[data-m="' + c.dataset.m + '"][data-a="transaction"]');
-    if (c.dataset.a === 'transaction' && c.checked) rep.checked = true;
-    if (c.dataset.a === 'report' && !c.checked) tx.checked = false;
-  });
-  el.addEventListener('click', e => { const b = e.target.closest('[data-preset]'); if (b) applyPreset(id, b.dataset.preset); });
+  P = a ? (isSuper ? allTrue() : cloneP(a.permissions)) : cloneP({});
+  OPEN = new Set(CAT.filter(m => P[m.module].pages).map(m => m.module));
+  setDisabled(readOnlyForm());
+  renderTree(); renderList();
+  if (readOnlyForm()) showErr('Only the Administrator (' + ROOT + ') can edit this account.');
 }
-function setPerms(id, perms) { perms = perms || {}; $(id).querySelectorAll('input[type=checkbox]').forEach(c => { c.checked = !!(perms[c.dataset.m] && perms[c.dataset.m][c.dataset.a]); }); }
-function getPerms(id) { const out = {}; MODS.forEach(m => out[m[0]] = { transaction: false, report: false }); $(id).querySelectorAll('input[type=checkbox]').forEach(c => { out[c.dataset.m][c.dataset.a] = c.checked; }); return out; }
-function applyPreset(id, key) {
-  const pr = PRESETS[key], perms = {};
-  MODS.forEach(m => { let t = 0, r = 0;
-    if (pr.all) { t = 1; r = 1; } else if (pr.perms === 'report') { r = NOT_READONLY.indexOf(m[0]) > -1 ? 0 : 1; } else if (pr.perms[m[0]]) { t = pr.perms[m[0]][0]; r = pr.perms[m[0]][1]; }
-    perms[m[0]] = { transaction: !!t, report: !!r }; });
-  setPerms(id, perms);
-}
-function genPassword() { const ch = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; let s = ''; const a = new Uint32Array(10); crypto.getRandomValues(a); a.forEach(v => s += ch[v % ch.length]); return s; }
-function permSummary(perms) {
-  perms = perms || {};
-  const chips = MODS.map(m => { const p = perms[m[0]] || {}; if (!p.transaction && !p.report) return ''; return '<span class="mchip">' + esc(m[1]) + ': <b>' + (p.transaction && p.report ? 'Edit' : p.transaction ? 'Mark' : 'View') + '</b></span>'; }).join('');
-  return chips || '<span style="color:var(--text-3);">No access</span>';
-}
-const permText = perms => MODS.map(m => { const p = (perms || {})[m[0]] || {}; return (p.transaction || p.report) ? m[1] + ': ' + (p.transaction && p.report ? 'Edit' : p.transaction ? 'Mark' : 'View') : ''; }).filter(Boolean).join('; ') || 'No access';
+$('newBtn').onclick = () => fill(null);
+$('f-gen').onclick = () => { $('f-pass').value = genPassword(); };
 
-/* ---------- photo: resized in the browser (max 700 px, JPEG) so the upload stays small ---------- */
+/* photo: resized in the browser (max 700 px, JPEG) so the upload stays small */
 function photoToPayload(file) {
   return new Promise((resolve, reject) => {
     if (!file) return resolve(null);
@@ -207,142 +319,87 @@ function photoToPayload(file) {
     img.src = url;
   });
 }
-const contactOk = s => !s || /^\+?[\d\s-]{7,18}$/.test(s);
 
-buildMatrix('n-matrix'); buildMatrix('ed-matrix');
-
-// Volunteer is a locked role. The server forces these permissions whatever is ticked here.
-function applyVolLock(p) {
-  const locked = $(p + '-category').value === 'Volunteer', m = $(p + '-matrix');
-  if (locked) setPerms(p + '-matrix', VOLUNTEER);
-  m.querySelectorAll('input,button').forEach(el => el.disabled = locked);
-  $(p + '-matrix-note').textContent = locked ? 'Volunteer is a locked role: it can open Presentation access and mark attendance (participants and students) on the session day only. Venues, slots and individual participants are chosen in Volunteers > Assign.' : '';
-}
-$('n-category').onchange = () => applyVolLock('n'); $('ed-category').onchange = () => applyVolLock('ed');
-applyVolLock('n');
-
-let admins = [], editing = null, target = null;
-$('n-gen').onclick = () => $('n-pass').value = genPassword(); $('rp-gen').onclick = () => $('rp-pass').value = genPassword();
-$('n-pass').value = genPassword();
-const v = id => $(id).value.trim();
-const inModal = (id, msg) => { const e = $(id); e.textContent = msg; e.classList.add('show'); };
-
-$('n-create').onclick = async function () {
+$('saveBtn').onclick = async function () {
   hideAlerts();
-  if (!v('n-id') || !v('n-name') || !$('n-pass').value) return showErr('Admin ID, name and initial password are required.');
-  if (!/^[A-Za-z0-9._-]{3,30}$/.test(v('n-id'))) return showErr('Admin ID must be 3–30 characters (letters, numbers, . _ -).');
-  if ($('n-pass').value.length < 6) return showErr('Initial password must be at least 6 characters.');
-  if (!contactOk(v('n-contact'))) return showErr('Enter a valid contact number (7–15 digits) or leave it blank.');
-  const perms = getPerms('n-matrix');
-  if ($('n-category').value !== 'Volunteer' && !Object.values(perms).some(p => p.report || p.transaction) && !confirm('No permissions are ticked — this admin will see nothing. Create anyway?')) return;
+  if (readOnlyForm()) return;
+  if (!v('f-name')) return showErr('Name is required.');
+  if (!contactOk(v('f-contact'))) return showErr('Enter a valid contact number (7–15 digits) or leave it blank.');
+  if (v('f-email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('f-email'))) return showErr('Enter a valid email or leave it blank.');
+  const editing = !!cur, isSuper = !!(cur && cur.isSuper);
+  if (!editing) {
+    if (!/^[A-Za-z0-9._-]{3,30}$/.test(v('f-id'))) return showErr('Admin ID must be 3–30 characters (letters, numbers, . _ -).');
+    if ($('f-pass').value.length < 6) return showErr('Initial password must be at least 6 characters.');
+  }
+  const perms = serialize();
+  if (!isSuper) {
+    if (editing && String(cur.id) === SELF && !(perms.adminUsers.transaction && perms.adminUsers.report)) return showErr('You cannot remove your own Admin-Users access.');
+    if (!counts().pages && !confirm('No pages are ticked, so this person will see nothing. Continue?')) return;
+  }
   let pic = null;
-  try { pic = await photoToPayload($('n-photo').files[0]); } catch (e) { return showErr(e.message || 'That picture could not be read.'); }
-  await VR.busy(this, 'Creating…', async () => {
+  try { pic = await photoToPayload($('f-photo').files[0]); } catch (e) { return showErr(e.message || 'That picture could not be read.'); }
+  await VR.busy(this, editing ? 'Saving…' : 'Creating…', async () => {
     try {
-      const pw = $('n-pass').value;
-      const body = { id: v('n-id'), name: v('n-name'), email: v('n-email'), contactNo: v('n-contact'), position: v('n-position'), category: $('n-category').value, assignedVenue: v('n-venue'), password: pw, permissions: perms };
-      if (pic) Object.assign(body, pic);
-      const r = await VR.api('adminAddAdminUser', body);
-      if (!r.ok) return showErr(r.error || 'Could not create the admin.');
-      showOk('Admin "' + r.id + '" created. Initial password: ' + pw + (v('n-email') ? (r.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.') : ' — share it securely.'));
-      if (r.photoError) showErr('The account was created, but the photo was not saved: ' + r.photoError + ' Open Edit on this admin and upload it again.');
-      ['n-id', 'n-name', 'n-email', 'n-contact', 'n-position', 'n-venue', 'n-photo'].forEach(i => $(i).value = '');
-      $('n-pass').value = genPassword(); setPerms('n-matrix', {}); applyVolLock('n'); load();
+      const body = { name: v('f-name'), email: v('f-email'), contactNo: v('f-contact'), position: v('f-position'), category: $('f-role').value, assignedVenue: v('f-venue') };
+      if (pic) Object.assign(body, pic); else if (editing && $('f-photo-rm').checked) body.removePhoto = true;
+      let r;
+      if (editing) { body.row = cur.row; if (!isSuper) body.permissions = perms; r = await VR.api('adminUpdateAdminUser', body); }
+      else { body.id = v('f-id'); body.password = $('f-pass').value; body.permissions = perms; r = await VR.api('adminAddAdminUser', body); }
+      if (!r.ok) return showErr(r.error || 'Could not save.');
+      const id = editing ? cur.id : r.id, pw = $('f-pass').value;
+      showOk(editing ? 'Saved. Permission changes apply at their next login.' : 'Admin "' + r.id + '" created. Initial password: ' + pw + (v('f-email') ? (r.mailSent ? ' (also e-mailed).' : ' — e-mail could not be sent, share it directly.') : ' — share it securely.'));
+      if (r.photoError) showErr('The account was saved, but the photo was not: ' + r.photoError + ' Choose it again and save.');
+      await load(id);
     } catch (e) { showErr('Could not reach the server.'); }
   });
 };
 
-const view = () => { const q = v('q').toLowerCase(), c = $('fc').value, s = $('fs').value, p = $('fp').value;
-  return admins.filter(a => (!q || [a.id, a.name, a.position, a.email, a.contactNo].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) && (!c || a.category === c) && (!s || (s === '1') === a.active) && (!p || (p === '1') === !!a.hasPhoto)); };
-
-function render() {
-  const list = view();
-  $('ab').innerHTML = list.length ? list.map(a => {
-    const main = String(a.id) === '1001';
-    return '<tr><td class="id">' + esc(a.id) + '</td><td><span class="nm">' + esc(a.name) + '</span><span class="tiny">' + esc(a.email || 'no email (no OTP)') + '</span>' + (a.contactNo ? '<span class="tiny">' + esc(a.contactNo) + '</span>' : '') + '</td>'
-      + '<td>' + esc(a.position || '—') + '<span class="tiny">' + esc(a.category || '') + '</span></td><td>' + esc(a.assignedVenue || '—') + '</td>'
-      + '<td>' + (a.hasPhoto ? '<span class="badge s-Present">Yes</span>' : '<span class="badge s-Absent">Missing</span>') + '</td>'
-      + '<td>' + (a.active ? '<span class="badge s-Present">Active</span>' : '<span class="badge s-Absent">Disabled</span>') + '</td>'
-      + '<td style="max-width:380px;">' + permSummary(a.permissions) + '</td>'
-      + '<td class="noprint"><div class="row-actions"><button class="btn btn-sm" data-act="edit" data-id="' + esc(a.id) + '"><i class="fa-solid fa-pen"></i> Edit</button> <button class="btn btn-sm" data-act="reset" data-id="' + esc(a.id) + '" title="Reset password"><i class="fa-solid fa-key"></i></button>'
-      + (main ? '' : ' <button class="btn btn-sm btn-warn" data-act="toggle" data-id="' + esc(a.id) + '">' + (a.active ? 'Disable' : 'Enable') + '</button> <button class="btn btn-sm btn-danger" data-act="delete" data-id="' + esc(a.id) + '" title="Delete"><i class="fa-solid fa-trash"></i></button>') + '</div></td></tr>';
-  }).join('') : '<tr><td class="empty" colspan="8">' + (admins.length ? 'No admins match.' : 'No admin accounts yet.') + '</td></tr>';
-}
-async function load() {
-  try {
-    const r = await VR.api('adminListAdminUsers', {});
-    if (!r.ok) return showErr(r.error || 'Could not load admins.');
-    admins = r.admins || []; render();
-  } catch (e) { showErr('Could not reach the server.'); }
-}
-['q'].forEach(i => $(i).addEventListener('input', render)); ['fc', 'fs', 'fp'].forEach(i => $(i).addEventListener('change', render));
-const byId = id => admins.find(a => String(a.id) === String(id));
-
-$('ab').onclick = async e => {
-  const b = e.target.closest('button[data-act]'); if (!b) return;
-  const a = byId(b.dataset.id); if (!a) return; target = a; hideAlerts();
-  if (b.dataset.act === 'edit') {
-    editing = a; $('ed-err').classList.remove('show'); $('ed-id').textContent = a.id;
-    $('ed-name').value = a.name || ''; $('ed-email').value = a.email || ''; $('ed-contact').value = a.contactNo || ''; $('ed-position').value = a.position || ''; $('ed-venue').value = a.assignedVenue || '';
-    $('ed-photo').value = ''; $('ed-photo-rm').checked = false;
-    $('ed-photo-note').textContent = a.hasPhoto ? 'A photo is on file. Choose a new file to replace it.' : 'No photo on file yet.';
-    $('ed-photo-rm-row').style.display = a.hasPhoto ? 'flex' : 'none';
-    const cat = $('ed-category'); if (a.category && ![...cat.options].some(o => o.value === a.category)) cat.add(new Option(a.category));
-    cat.value = a.category || 'Admin'; setPerms('ed-matrix', a.permissions); applyVolLock('ed'); $('ed').classList.add('show');
-  } else if (b.dataset.act === 'reset') {
-    $('rp-who').textContent = a.name + ' (' + a.id + ')'; $('rp-pass').value = genPassword(); $('rp-err').classList.remove('show'); $('rp').classList.add('show');
-  } else if (b.dataset.act === 'delete') {
-    $('dl-who').textContent = 'Delete ' + a.name + ' (' + a.id + ')? The account is switched off and its history is kept.'; $('dl-err').classList.remove('show'); $('dl').classList.add('show');
-  } else if (b.dataset.act === 'toggle') {
-    if (!confirm((a.active ? 'Disable ' : 'Enable ') + a.name + '?')) return;
-    const r = await VR.api('adminUpdateAdminUser', { row: a.row, active: !a.active });
-    if (!r.ok) showErr(r.error); else { showOk(a.name + (a.active ? ' disabled.' : ' enabled.')); load(); }
-  }
-};
-$('ed-cancel').onclick = () => $('ed').classList.remove('show'); $('rp-cancel').onclick = () => $('rp').classList.remove('show'); $('dl-cancel').onclick = () => $('dl').classList.remove('show');
-
-$('ed-save').onclick = async function () {
-  $('ed-err').classList.remove('show');
-  if (!contactOk(v('ed-contact'))) return inModal('ed-err', 'Enter a valid contact number (7–15 digits) or leave it blank.');
-  let pic = null;
-  try { pic = await photoToPayload($('ed-photo').files[0]); } catch (e) { return inModal('ed-err', e.message || 'That picture could not be read.'); }
-  await VR.busy(this, 'Saving…', async () => {
-    try {
-      const body = { row: editing.row, name: v('ed-name'), email: v('ed-email'), contactNo: v('ed-contact'), position: v('ed-position'), category: $('ed-category').value, assignedVenue: v('ed-venue'), permissions: getPerms('ed-matrix') };
-      if (pic) Object.assign(body, pic); else if ($('ed-photo-rm').checked) body.removePhoto = true;
-      const r = await VR.api('adminUpdateAdminUser', body);
-      if (!r.ok) return inModal('ed-err', r.error || 'Could not save.');
-      $('ed').classList.remove('show'); showOk('Admin updated. Permission changes apply at their next login.'); load();
-    } catch (e) { inModal('ed-err', 'Could not reach the server.'); }
-  });
-};
+/* reset password / enable-disable */
+$('resetBtn').onclick = () => { if (!cur) return; $('rp-who').textContent = cur.name + ' (' + cur.id + ')'; $('rp-pass').value = genPassword(); $('rp-err').classList.remove('show'); $('rp').classList.add('show'); };
+$('rp-gen').onclick = () => { $('rp-pass').value = genPassword(); };
+$('rp-cancel').onclick = () => $('rp').classList.remove('show');
 $('rp-save').onclick = async function () {
   $('rp-err').classList.remove('show'); const pw = $('rp-pass').value;
   if (pw.length < 6) return inModal('rp-err', 'The password must be at least 6 characters.');
   await VR.busy(this, 'Resetting…', async () => {
     try {
-      const r = await VR.api('adminUpdateAdminUser', { row: target.row, resetPassword: pw });
+      const r = await VR.api('adminUpdateAdminUser', { row: cur.row, resetPassword: pw });
       if (!r.ok) return inModal('rp-err', r.error || 'Could not reset.');
-      $('rp').classList.remove('show'); showOk('Password for ' + target.id + ' reset. Temporary password: ' + pw + ' — share it securely.');
+      $('rp').classList.remove('show'); showOk('Password for ' + cur.id + ' reset. Temporary password: ' + pw + ' — share it securely.');
     } catch (e) { inModal('rp-err', 'Could not reach the server.'); }
   });
 };
-$('dl-go').onclick = async function () {
-  $('dl-err').classList.remove('show');
-  await VR.busy(this, 'Deleting…', async () => {
-    try {
-      const r = await VR.api('adminDeleteAdminUser', { row: target.row, id: target.id });
-      if (!r.ok) return inModal('dl-err', r.error || 'Could not delete.');
-      $('dl').classList.remove('show'); showOk('Admin ' + target.id + ' disabled.'); load();
-    } catch (e) { inModal('dl-err', 'Could not reach the server.'); }
-  });
+$('togBtn').onclick = async function () {
+  if (!cur) return; const want = !cur.active;
+  if (!confirm((want ? 'Enable ' : 'Disable ') + cur.name + '?')) return;
+  const r = await VR.api('adminUpdateAdminUser', { row: cur.row, active: want });
+  if (!r.ok) return showErr(r.error || 'Could not change the status.');
+  showOk(cur.name + (want ? ' enabled.' : ' disabled.')); load(cur.id);
 };
 
-// Export (passwords and hashes are never part of the list)
-VR.exportBar($('xp'), { name: 'VRMIC2026_Admin_Users', title: 'VRMIC 2026 — Admin users', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
-  getData: () => ({ headers: ['ID', 'Name', 'Email', 'Contact no.', 'Position', 'Category', 'Venue', 'Photo', 'Status', 'Access'], rows: view().map(a => [a.id, a.name, a.email || '', a.contactNo || '', a.position || '', a.category || '', a.assignedVenue || '', a.hasPhoto ? 'Yes' : 'Missing', a.active ? 'Active' : 'Disabled', permText(a.permissions)]) }) });
+/* ---------- load ---------- */
+async function load(selectId) {
+  try {
+    const r = await VR.api('adminListAdminUsers', {});
+    if (!r.ok) return showErr(r.error || 'Could not load admins.');
+    admins = r.admins || [];
+    const a = selectId != null ? admins.find(x => String(x.id) === String(selectId)) : null;
+    if (a) fillKeep(a); else renderList();
+  } catch (e) { showErr('Could not reach the server.'); }
+}
+function fillKeep(a) { const e = $('err').className, o = $('ok').className, et = $('err').textContent, ot = $('ok').textContent; fill(a); $('err').className = e; $('ok').className = o; $('err').textContent = et; $('ok').textContent = ot; }
 
-load();
+try {
+  const c = await VR.api('adminPermissionCatalog', {});
+  if (!c.ok) { showErr(c.error || 'Could not load the permission list.'); return; }
+  CAT = c.catalog || []; PRE = c.presets || {}; ROLES = c.roles || ['Admin', 'Staff', 'Volunteer', 'Official']; ROOT = String(c.superAdminId || '1001');
+} catch (e) { showErr('Could not reach the server.'); return; }
+$('f-role').innerHTML = ROLES.map(r => '<option>' + esc(r) + '</option>').join('');
+$('fr').innerHTML = '<option value="">All roles</option>' + ROLES.map(r => '<option>' + esc(r) + '</option>').join('');
+renderPresets();
+P = cloneP({}); fill(null);
+const want = new URLSearchParams(location.search).get('id');
+await load(want);
 })();
 </script>
 </body>

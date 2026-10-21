@@ -9,32 +9,46 @@
 <link rel="stylesheet" href="admin-base.css">
 <link rel="stylesheet" href="admin-common.css">
 <style>
-.mchip{display:inline-block;background:rgba(232,201,131,.08);border:1px solid var(--navy-border);color:var(--text-2);border-radius:6px;padding:2px 7px;font-size:11px;margin:0 4px 4px 0;white-space:nowrap;}
-.mchip b{color:var(--gold-light);font-weight:600;}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px;}
-.stat{background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;padding:8px 14px;font-size:12.5px;color:var(--text-2);}
-.stat b{display:block;font-size:18px;color:var(--gold-light);font-family:'IBM Plex Mono',monospace;line-height:1.2;}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.stat{background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;padding:8px 14px;font-size:12.5px;color:var(--text-2)}
+.stat b{display:block;font-size:18px;color:var(--gold-light);font-family:'IBM Plex Mono',monospace;line-height:1.2}
+.rb{display:inline-block;padding:1px 8px;border-radius:999px;font-size:10.5px;font-weight:600;background:rgba(179,188,214,.12);color:var(--text-2)}
+.rb.Admin{background:rgba(232,201,131,.16);color:var(--gold-light)}
+.rb.Volunteer{background:rgba(79,169,128,.16);color:#6fc9b6}
+.rb.Official{background:rgba(216,105,90,.16);color:#e8988c}
+.rb.root{background:linear-gradient(180deg,#e8c983,#c9974f);color:#241a06}
+.mchip{display:inline-block;background:rgba(232,201,131,.08);border:1px solid var(--navy-border);color:var(--text-2);border-radius:6px;padding:2px 7px;font-size:11px;margin:0 4px 4px 0;white-space:nowrap}
+.mchip b{color:var(--gold-light);font-weight:600}
+.xb{background:none;border:1px solid var(--navy-border);color:var(--text-2);border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:11px}
+.xb:hover{border-color:var(--gold);color:var(--gold-light)}
+tr.dt td{background:rgba(232,201,131,.04);padding:14px 18px}
+.pl{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px 22px}
+.pl div{font-size:12.5px;color:var(--text-2)}
+.pl b{color:var(--text-1);display:block}
+.pl i{font-style:normal;color:var(--gold-light);font-size:11px;margin-left:6px}
+.pl span{display:block;color:var(--text-3);font-size:11.5px;line-height:1.45}
+@media print{.xb,.noprint{display:none!important}}
 </style>
 </head>
 <body>
 
 <div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Admin user report</h1><div id="xp"></div></div>
-<div class="wrap" style="max-width:1400px;">
+<div class="wrap" style="max-width:1450px;">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
-
   <div class="stats noprint" id="stats"></div>
 
   <div class="toolbar noprint">
-    <input id="q" placeholder="Search by ID, name, position, phone or email" autocomplete="off">
-    <select id="fc"><option value="">All categories</option><option>Admin</option><option>Staff</option><option>Volunteer</option><option>Official</option></select>
+    <input id="q" placeholder="Search ID, name, position, phone or email" autocomplete="off">
+    <select id="fr"><option value="">All roles</option></select>
     <select id="fs"><option value="">Any status</option><option value="1">Active</option><option value="0">Disabled</option></select>
+    <select id="fm" title="Show only people who have access to this module"><option value="">Who has access to… (any)</option></select>
+    <select id="fl"><option value="">Any level</option><option value="edit">Edit</option><option value="view">View</option></select>
     <select id="fp"><option value="">Any photo status</option><option value="0">Photo missing</option><option value="1">Has photo</option></select>
-    <select id="fn"><option value="">Any contact status</option><option value="0">No contact number</option><option value="1">Has contact number</option></select>
     <a href="admin-users-manage.html" class="btn btn-gold"><i class="fa-solid fa-user-shield"></i> Manage admins</a>
   </div>
 
   <div class="table-card"><div class="scroll-x" id="tc">
-    <table class="list"><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Contact no.</th><th>Position</th><th>Category</th><th>Venue</th><th>Photo</th><th>Status</th><th>Last login</th><th>Access</th><th>Created</th></tr></thead>
+    <table class="list"><thead><tr><th class="noprint"></th><th>ID</th><th>Name</th><th>Role</th><th>Position</th><th>Email</th><th>Contact no.</th><th>Photo</th><th>Status</th><th>Last login</th><th>Access</th><th>Created</th></tr></thead>
     <tbody id="ab"><tr><td class="empty" colspan="12">Loading admins…</td></tr></tbody></table>
   </div></div>
 </div>
@@ -42,61 +56,77 @@
 <script src="admin-common.js"></script>
 <script src="admin-page.js"></script>
 <script>
-if (VR.guard() && VR.frameOnly()) (function () {
+if (VR.guard() && VR.frameOnly()) (async function () {
 if (!VR.can('adminUsers', 'report')) { VR.denied('You do not have permission to view the admin user report.'); return; }
 
-/* every module the server knows: [key, label] */
-const MODS = [
-  ['participants', 'Participants'], ['spotRegistration', 'Spot registration'], ['abstract', 'Abstracts'], ['slot', 'Slots'], ['presentationAccess', 'Presentation access'],
-  ['attendanceConfig', 'Participant attendance sessions'], ['attendance', 'Participant attendance'],
-  ['students', 'Student master'], ['studentConfig', 'Student attendance sessions'], ['studentAttendance', 'Student attendance'],
-  ['liveBoard', 'Live event board'], ['scoring', 'Scoring'], ['badges', 'Badges and ID cards'],
-  ['certificates', 'Certificates'], ['receipts', 'Receipts'], ['feedback', 'Feedback'], ['schedule', 'Schedule'], ['announcements', 'Announcements'], ['mail', 'Mail'], ['volunteers', 'Volunteers'],
-  ['settings', 'Settings'], ['adminUsers', 'Admin users'], ['auditLog', 'Audit log'], ['trash', 'Trash and backups']
-];
-const level = p => p.transaction && p.report ? 'Edit' : p.transaction ? 'Mark' : 'View';
-function permSummary(perms) {
-  perms = perms || {};
-  const chips = MODS.map(m => { const p = perms[m[0]] || {}; return (p.transaction || p.report) ? '<span class="mchip">' + esc(m[1]) + ': <b>' + level(p) + '</b></span>' : ''; }).join('');
-  return chips || '<span style="color:var(--text-3);">No access</span>';
-}
-const permText = perms => MODS.map(m => { const p = (perms || {})[m[0]] || {}; return (p.transaction || p.report) ? m[1] + ': ' + level(p) : ''; }).filter(Boolean).join('; ') || 'No access';
-const fmtDate = s => { const d = s ? new Date(s) : null; return d && !isNaN(d) ? d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''; };
-const fmtTime = s => { const d = s ? new Date(s) : null; return d && !isNaN(d) ? d.toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }) : ''; };
-
-let admins = [];
+let CAT = [], admins = [], OPENID = new Set();
+const SECS = [['cf', 'Configuration'], ['tx', 'Transaction'], ['rp', 'Report']];
 const v = id => $(id).value.trim();
-const view = () => { const q = v('q').toLowerCase(), c = $('fc').value, s = $('fs').value, p = $('fp').value, n = $('fn').value;
-  return admins.filter(a => (!q || [a.id, a.name, a.position, a.email, a.contactNo].some(x => String(x || '').toLowerCase().indexOf(q) > -1))
-    && (!c || a.category === c) && (!s || (s === '1') === a.active) && (!p || (p === '1') === !!a.hasPhoto) && (!n || (n === '1') === !!a.contactNo)); };
+const allPages = m => SECS.flatMap(([s]) => m[s].map(x => ({ sec: s, page: x.page, label: x.label })));
+const secFlag = (mp, s) => s === 'tx' ? !!mp.transaction : s === 'rp' ? !!mp.report : !!(mp.transaction || mp.report);
+const pageOn = (mp, s, k) => secFlag(mp, s) && (!mp.pages || mp.pages[k] === true);
+const lvl = mp => mp.transaction && mp.report ? 'Edit' : mp.transaction ? 'Mark' : 'View';
+const fmtTime = s => { const d = s ? new Date(s) : null; return d && !isNaN(d) ? d.toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }) : ''; };
+const fmtDate = s => { const d = s ? new Date(s) : null; return d && !isNaN(d) ? d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''; };
+
+/* what a person can open, by module: [{ label, level, limited, pages[], total }] */
+function access(a) {
+  return CAT.map(m => {
+    const mp = (a.permissions || {})[m.module]; if (!mp || (!mp.transaction && !mp.report)) return null;
+    const ap = allPages(m), on = ap.filter(x => pageOn(mp, x.sec, x.page)); if (!on.length) return null;
+    return { key: m.module, label: m.label, level: lvl(mp), edit: !!mp.transaction, view: !!mp.report, limited: !!mp.pages, pages: on.map(x => x.label), total: ap.length };
+  }).filter(Boolean);
+}
+const summaryHtml = a => { const ac = access(a); return ac.length ? ac.map(x => '<span class="mchip">' + esc(x.label) + (x.limited ? ' *' : '') + ': <b>' + x.level + '</b></span>').join('') : '<span style="color:var(--text-3);">No access</span>'; };
+const summaryText = a => { const ac = access(a); return ac.length ? ac.map(x => x.label + (x.limited ? ' (limited)' : '') + ': ' + x.level).join('; ') : 'No access'; };
+const special = a => a.permissions && a.permissions._special && a.permissions._special.backdate;
+
+const view = () => { const q = v('q').toLowerCase(), r = $('fr').value, s = $('fs').value, m = $('fm').value, l = $('fl').value, p = $('fp').value;
+  return admins.filter(a => {
+    if (q && ![a.id, a.name, a.position, a.email, a.contactNo].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) return false;
+    if (r && a.role !== r) return false;
+    if (s && (s === '1') !== a.active) return false;
+    if (p && (p === '1') !== !!a.hasPhoto) return false;
+    if (m) { const x = access(a).find(y => y.key === m); if (!x) return false; if (l === 'edit' && !x.edit) return false; if (l === 'view' && !x.view) return false; }
+    return true; }); };
 
 function render() {
   const list = view();
-  $('stats').innerHTML = [['Accounts', admins.length], ['Active', admins.filter(a => a.active).length], ['Photo missing', admins.filter(a => !a.hasPhoto).length], ['No contact no.', admins.filter(a => !a.contactNo).length]]
+  $('stats').innerHTML = [['Accounts', admins.length], ['Active', admins.filter(a => a.active).length], ['Disabled', admins.filter(a => !a.active).length], ['Photo missing', admins.filter(a => !a.hasPhoto).length], ['Back-date allowed', admins.filter(special).length]]
     .map(x => '<div class="stat"><b>' + x[1] + '</b>' + x[0] + '</div>').join('');
-  $('ab').innerHTML = list.length ? list.map(a => '<tr>'
-    + '<td class="id">' + esc(a.id) + '</td><td><span class="nm">' + esc(a.name) + '</span></td><td>' + esc(a.email || '—') + '</td><td>' + esc(a.contactNo || '—') + '</td>'
-    + '<td>' + esc(a.position || '—') + '</td><td>' + esc(a.category || '—') + '</td><td>' + esc(a.assignedVenue || '—') + '</td>'
-    + '<td>' + (a.hasPhoto ? '<span class="badge s-Present">Yes</span>' : '<span class="badge s-Absent">Missing</span>') + '</td>'
-    + '<td>' + (a.active ? '<span class="badge s-Present">Active</span>' : '<span class="badge s-Absent">Disabled</span>') + '</td>'
-    + '<td>' + (a.lastLoginAt ? esc(fmtTime(a.lastLoginAt)) + (a.lastLoginIP ? '<span class="tiny">IP ' + esc(a.lastLoginIP) + '</span>' : '') : '—') + '</td>'
-    + '<td style="max-width:380px;">' + permSummary(a.permissions) + '</td><td>' + esc(fmtDate(a.createdAt) || '—') + '</td></tr>').join('')
-    : '<tr><td class="empty" colspan="12">' + (admins.length ? 'No admins match.' : 'No admin accounts yet.') + '</td></tr>';
+  $('ab').innerHTML = list.length ? list.map(a => {
+    const open = OPENID.has(String(a.id)), ac = access(a);
+    const row = '<tr><td class="noprint"><button class="xb" data-x="' + esc(a.id) + '" aria-expanded="' + open + '" title="Show full permission list"><i class="fa-solid fa-chevron-' + (open ? 'down' : 'right') + '"></i></button></td>'
+      + '<td class="id">' + esc(a.id) + '</td><td><span class="nm">' + esc(a.name) + '</span></td>'
+      + '<td>' + (a.isSuper ? '<span class="rb root">Administrator</span>' : '<span class="rb ' + esc(a.role) + '">' + esc(a.role) + '</span>') + '</td>'
+      + '<td>' + esc(a.position || '—') + '</td><td>' + esc(a.email || '—') + '</td><td>' + esc(a.contactNo || '—') + '</td>'
+      + '<td>' + (a.hasPhoto ? '<span class="badge s-Present">Yes</span>' : '<span class="badge s-Absent">Missing</span>') + '</td>'
+      + '<td>' + (a.active ? '<span class="badge s-Present">Active</span>' : '<span class="badge s-Absent">Disabled</span>') + '</td>'
+      + '<td>' + (a.lastLoginAt ? esc(fmtTime(a.lastLoginAt)) + (a.lastLoginIP ? '<span class="tiny">IP ' + esc(a.lastLoginIP) + '</span>' : '') : '—') + '</td>'
+      + '<td style="max-width:360px;">' + summaryHtml(a) + (special(a) ? '<span class="mchip"><b>Can back-date attendance</b></span>' : '') + '</td><td>' + esc(fmtDate(a.createdAt) || '—') + '</td></tr>';
+    const detail = open ? '<tr class="dt"><td colspan="12"><div class="pl">' + (ac.length ? ac.map(x => '<div><b>' + esc(x.label) + '<i>' + x.level + (x.limited ? ' · limited' : ' · all pages') + '</i></b><span>' + esc(x.pages.join(', ')) + (x.limited ? ' (' + x.pages.length + ' of ' + x.total + ' pages)' : '') + '</span></div>').join('') : '<div>No access to any page.</div>') + '</div></td></tr>' : '';
+    return row + detail;
+  }).join('') : '<tr><td class="empty" colspan="12">' + (admins.length ? 'No admins match these filters.' : 'No admin accounts yet.') + '</td></tr>';
 }
-async function load() {
-  try {
-    const r = await VR.api('adminListAdminUsers', {});
-    if (!r.ok) { showErr(r.error || 'Could not load admins.'); $('ab').innerHTML = '<tr><td class="empty" colspan="12">No data</td></tr>'; return; }
-    admins = r.admins || []; render();
-  } catch (e) { showErr('Could not reach the server.'); }
-}
-$('q').addEventListener('input', render); ['fc', 'fs', 'fp', 'fn'].forEach(i => $(i).addEventListener('change', render));
+$('ab').addEventListener('click', e => { const b = e.target.closest('button[data-x]'); if (!b) return; const id = b.dataset.x; OPENID.has(id) ? OPENID.delete(id) : OPENID.add(id); render(); });
+$('q').addEventListener('input', render); ['fr', 'fs', 'fm', 'fl', 'fp'].forEach(i => $(i).addEventListener('change', render));
+
+try {
+  const c = await VR.api('adminPermissionCatalog', {});
+  if (!c.ok) { showErr(c.error || 'Could not load the permission list.'); return; }
+  CAT = c.catalog || [];
+  $('fr').innerHTML = '<option value="">All roles</option>' + (c.roles || []).map(r => '<option>' + esc(r) + '</option>').join('');
+  $('fm').innerHTML = '<option value="">Who has access to… (any)</option>' + CAT.map(m => '<option value="' + esc(m.module) + '">' + esc(m.label) + '</option>').join('');
+  const r = await VR.api('adminListAdminUsers', {});
+  if (!r.ok) { showErr(r.error || 'Could not load admins.'); $('ab').innerHTML = '<tr><td class="empty" colspan="12">No data</td></tr>'; return; }
+  admins = r.admins || []; render();
+} catch (e) { showErr('Could not reach the server.'); }
 
 VR.exportBar($('xp'), { name: 'VRMIC2026_Admin_User_Report', title: 'VRMIC 2026 — Admin user report', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
-  getData: () => ({ headers: ['ID', 'Name', 'Email', 'Contact no.', 'Position', 'Category', 'Venue', 'Photo', 'Status', 'Last login', 'Access', 'Created'],
-    rows: view().map(a => [a.id, a.name, a.email || '', a.contactNo || '', a.position || '', a.category || '', a.assignedVenue || '', a.hasPhoto ? 'Yes' : 'Missing', a.active ? 'Active' : 'Disabled', fmtTime(a.lastLoginAt), permText(a.permissions), fmtDate(a.createdAt)]) }) });
-
-load();
+  getData: () => ({ headers: ['ID', 'Name', 'Role', 'Position', 'Email', 'Contact no.', 'Photo', 'Status', 'Last login', 'IP', 'Back-date attendance', 'Access', 'Created'],
+    rows: view().map(a => [a.id, a.name, a.isSuper ? 'Administrator' : a.role, a.position || '', a.email || '', a.contactNo || '', a.hasPhoto ? 'Yes' : 'Missing', a.active ? 'Active' : 'Disabled', fmtTime(a.lastLoginAt), a.lastLoginIP || '', special(a) ? 'Yes' : 'No', summaryText(a), fmtDate(a.createdAt)]) }) });
+// Exports happen in the browser, so record them in the audit log (needs the adminLogEvent action).
+$('xp').addEventListener('click', e => { const b = e.target.closest('button,a'); if (b) VR.api('adminLogEvent', { event: 'export', module: 'AdminUsers', what: 'Admin user report', detail: ((b.textContent || '').trim().slice(0, 30) + ' · ' + view().length + ' rows') }).catch(() => {}); });
 })();
 </script>
 </body>

@@ -31,7 +31,7 @@
 </head>
 <body>
 
-<div class="topbar"><h1><i class="fa-solid fa-qrcode" style="color:var(--gold-light);"></i> <span id="ttl">Attendance entry by scan</span></h1><a class="btn btn-sm" id="tomanual" href="#"><i class="fa-solid fa-keyboard"></i> Manual entry</a></div>
+<div class="topbar"><h1><i class="fa-solid fa-qrcode" style="color:var(--gold-light);"></i> <span id="ttl">Attendance entry by scan</span></h1><a class="btn btn-sm" id="tomanual" href="#"><i class="fa-solid fa-keyboard"></i>Manual</a></div>
 <div class="wrap">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
   <div class="banner" id="rule"><i class="fa-solid fa-circle-info"></i><div><b>Scanning works only on the day of the session.</b> A QR code scanned on any other day is rejected by the server.</div></div>
@@ -69,7 +69,7 @@
 if (VR.guard() && VR.frameOnly()) (function () {
 const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'studentAttendance' : 'attendance', label = isStudent ? 'Student' : 'Participant';
 const JSQR = 'https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';
-$('ttl').textContent = label + ' attendance entry by scan'; document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
+$('ttl').textContent = label + ' (Scan)'; document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
 $('tomanual').href = 'attendance-entry.html?kind=' + kind;
 if (!VR.can(MOD, 'transaction')) { VR.denied('You do not have permission to mark attendance.'); return; }
 

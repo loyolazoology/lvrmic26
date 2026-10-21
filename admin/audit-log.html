@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Log | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.stat{background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;padding:8px 14px;font-size:12.5px;color:var(--text-2);min-width:130px}
+.stat b{display:block;font-size:18px;color:var(--gold-light);font-family:'IBM Plex Mono',monospace;line-height:1.2}
+.stat.warn b{color:#e8988c}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;align-items:end}
+.fgrid label{margin:0 0 4px;font-size:11.5px;color:var(--text-3);font-weight:500}
+.qf{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0;align-items:center}
+.qf .lbl{font-size:12px;color:var(--text-3);margin-right:4px}
+.qc{background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.qc:hover{border-color:var(--gold);color:var(--gold-light)}
+.qc.on{border-color:var(--gold);background:rgba(232,201,131,.14);color:var(--gold-light)}
+.frow{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+table.list tbody tr{cursor:pointer}
+table.list tbody tr:hover td{background:rgba(232,201,131,.05)}
+td.clip{max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;background:rgba(179,188,214,.12);color:var(--text-2);white-space:nowrap}
+.act.bad{background:rgba(216,105,90,.16);color:#e8988c}
+.act.good{background:rgba(79,169,128,.14);color:#6fc9b6}
+.act.chg{background:rgba(232,201,131,.14);color:var(--gold-light)}
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 18px;margin-bottom:14px}
+.dg div small{display:block;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);font-family:'IBM Plex Mono',monospace}
+.dg div span{font-size:13.5px;color:var(--text-1);word-break:break-word}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.vs{grid-template-columns:1fr}}
+.vs h4{font-size:12px;color:var(--text-3);margin:0 0 6px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
+.vs pre{background:var(--navy-950);border:1px solid var(--navy-border);border-radius:8px;padding:10px;font-size:11.5px;color:var(--text-2);white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:auto;margin:0;font-family:'IBM Plex Mono',monospace}
+.vs pre.old{border-color:rgba(216,105,90,.4)}.vs pre.new{border-color:rgba(79,169,128,.4)}
+.diff{margin:0 0 14px;padding:10px 14px;border:1px solid var(--navy-border);border-radius:8px;background:rgba(232,201,131,.05)}
+.diff h4{font-size:12px;color:var(--gold-light);margin:0 0 6px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
+.diff div{font-size:12.5px;color:var(--text-2);padding:2px 0}
+.diff .add{color:#6fc9b6}.diff .rem{color:#e8988c}
+.modal .box.xl{max-width:860px}
+@media print{.noprint,.modal{display:none!important}td.clip{max-width:none;white-space:normal}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-shield-halved" style="color:var(--gold-light);"></i> Audit log</h1><div id="xp"></div></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div>
+  <p class="hint noprint" style="margin:0 0 12px;">Read-only. Nobody can edit or delete entries. Times are Indian Standard Time.</p>
+  <div class="stats noprint" id="stats"></div>
+
+  <div class="card noprint" style="padding:16px;">
+    <div class="fgrid">
+      <div><label for="f-user">User (ID or name)</label><input id="f-user" list="dl-users" autocomplete="off"><datalist id="dl-users"></datalist></div>
+      <div><label for="f-mod">Module</label><select id="f-mod"><option value="">All modules</option></select></div>
+      <div><label for="f-act">Action</label><select id="f-act"><option value="">All actions</option></select></div>
+      <div><label for="f-rec">Record ID</label><input id="f-rec" autocomplete="off"></div>
+      <div><label for="f-from">From date</label><input id="f-from" type="date"></div>
+      <div><label for="f-to">To date</label><input id="f-to" type="date"></div>
+      <div><label for="f-q">Search all columns</label><input id="f-q" autocomplete="off"></div>
+      <div><label for="f-lim">Show up to</label><select id="f-lim"><option value="300">300 entries</option><option value="1000">1,000 entries</option><option value="2000">2,000 entries</option></select></div>
+    </div>
+    <div class="frow"><button class="btn btn-gold" id="go" type="button"><i class="fa-solid fa-magnifying-glass"></i> Apply filters</button><button class="btn" id="reset" type="button">Clear</button></div>
+    <div class="qf" id="qf"><span class="lbl">Quick filters:</span></div>
+  </div>
+
+  <div class="table-card"><div class="scroll-x" id="tc">
+    <table class="list"><thead><tr><th>Time (IST)</th><th>User ID</th><th>Name</th><th>Role</th><th>Module</th><th>Action</th><th>Record ID</th><th>Old value</th><th>New value</th><th>Reason</th><th>IP</th></tr></thead>
+    <tbody id="ab"><tr><td class="empty" colspan="11">Loading…</td></tr></tbody></table>
+  </div></div>
+  <p class="hint noprint" id="foot" style="margin-top:10px;"></p>
+</div>
+
+<!-- Row detail -->
+<div class="modal" id="dt"><div class="box xl">
+  <h3 style="margin-bottom:14px;"><i class="fa-solid fa-file-lines" style="color:var(--gold-light);"></i> Audit entry</h3>
+  <div id="dt-body"></div>
+  <div style="display:flex;justify-content:flex-end;margin-top:16px;"><button class="btn" id="dt-close">Close</button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('auditLog', 'report')) { VR.denied('You do not have permission to view the audit log.'); return; }
+
+const QUICK = [
+  { k: 'login',  label: 'Logins',             mod: 'Auth',       test: r => r.action === 'login' },
+  { k: 'failed', label: 'Failed logins',      mod: 'Auth',       test: r => /failed/.test(r.action) },
+  { k: 'perm',   label: 'Permission changes', mod: 'AdminUsers', test: r => (r.action === 'update' && String(r.oldValue).charAt(0) === '{') || r.action === 'create' },
+  { k: 'dl',     label: 'Downloads',          mod: '',           test: r => r.action === 'download' },
+  { k: 'manual', label: 'Manual attendance',  mod: 'Attendance', test: r => /^manual-/.test(r.action) },
+  { k: 'del',    label: 'Deletes',            mod: '',           test: r => /delete|disable|deactivate/.test(r.action) }
+];
+let rows = [], quick = '', info = { users: [], modules: [], actions: [], total: 0, summary: null };
+const g = id => $(id).value.trim();
+const fmtTime = s => { const d = s ? new Date(s) : null; return d && !isNaN(d) ? d.toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }) : String(s || ''); };
+const pretty = k => String(k).replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase());
+const actClass = a => /failed/.test(a) ? 'bad' : (/^login$|^scan-|^manual-|^create|^import/.test(a) ? 'good' : (/update|assign|disable|delete|deactivate|password/.test(a) ? 'chg' : ''));
+
+/* ---------- permission diff (for AdminUsers entries that hold permission JSON) ---------- */
+function permObj(s) { s = String(s || ''); const i = s.indexOf('{'); if (i < 0) return null; try { return JSON.parse(s.slice(i)); } catch (e) { return null; } }
+function level(mp) { if (!mp || (!mp.transaction && !mp.report)) return 'No access'; const l = mp.transaction && mp.report ? 'Edit + View' : mp.transaction ? 'Edit only' : 'View only'; return l + (mp.pages ? ' (' + Object.keys(mp.pages).length + ' pages)' : ''); }
+function permDiff(oldV, newV) {
+  const o = permObj(oldV), n = permObj(newV); if (!n) return '';
+  const base = o || {}, keys = Array.from(new Set(Object.keys(base).concat(Object.keys(n)))).filter(k => k !== '_special');
+  const lines = [];
+  keys.forEach(k => { const a = level(base[k]), b = level(n[k]); if (a !== b) lines.push('<div class="' + (b === 'No access' ? 'rem' : 'add') + '">' + esc(pretty(k)) + ': ' + esc(a) + ' &rarr; ' + esc(b) + '</div>'); });
+  const ob = !!(base._special && base._special.backdate), nb = !!(n._special && n._special.backdate);
+  if (ob !== nb) lines.push('<div class="' + (nb ? 'add' : 'rem') + '">Back-date attendance: ' + (ob ? 'allowed' : 'not allowed') + ' &rarr; ' + (nb ? 'allowed' : 'not allowed') + '</div>');
+  if (!lines.length) return '';
+  return '<div class="diff"><h4>' + (o ? 'What changed' : 'Access given') + '</h4>' + lines.join('') + '</div>';
+}
+
+/* ---------- fetch + render ---------- */
+function apply() {
+  const q = QUICK.find(x => x.k === quick);
+  return q ? rows.filter(q.test) : rows;
+}
+function render() {
+  const list = apply();
+  const s = info.summary;
+  $('stats').innerHTML = [['Entries in the log', info.total, ''], ['Showing', list.length, ''],
+    ['Failed logins, last 24 h', s ? s.failedLogins24h : '–', s && s.failedLogins24h ? 'warn' : ''], ['Distinct users today', s ? s.usersToday : '–', '']]
+    .map(x => '<div class="stat ' + x[2] + '"><b>' + x[1] + '</b>' + x[0] + '</div>').join('');
+  $('ab').innerHTML = list.length ? list.map((r, i) => '<tr data-i="' + i + '"><td style="white-space:nowrap;">' + esc(fmtTime(r.time)) + '</td><td class="id">' + esc(r.userId) + '</td><td>' + esc(r.name) + '</td><td>' + esc(r.role) + '</td>'
+    + '<td>' + esc(r.module) + '</td><td><span class="act ' + actClass(r.action) + '">' + esc(r.action) + '</span></td><td>' + esc(r.recordId) + '</td>'
+    + '<td class="clip" title="' + esc(r.oldValue) + '">' + esc(r.oldValue) + '</td><td class="clip" title="' + esc(r.newValue) + '">' + esc(r.newValue) + '</td><td class="clip" title="' + esc(r.reason) + '">' + esc(r.reason) + '</td><td>' + esc(r.ip) + '</td></tr>').join('')
+    : '<tr><td class="empty" colspan="11">No entries match these filters.</td></tr>';
+  $('foot').textContent = 'The viewer reads the most recent 8,000 entries and shows up to 2,000. Older entries stay in the Sheet. Click a row for details.';
+}
+async function fetchRows() {
+  const q = QUICK.find(x => x.k === quick);
+  const p = { user: g('f-user'), module: g('f-mod') || (q ? q.mod : ''), action: g('f-act'), recordId: g('f-rec'), from: g('f-from'), to: g('f-to'), q: g('f-q'), limit: q ? 2000 : Number(g('f-lim')) || 300 };
+  $('ab').innerHTML = '<tr><td class="empty" colspan="11">Loading…</td></tr>';
+  try {
+    const r = await VR.api('adminListAuditLog', p);
+    if (!r.ok) { showErr(r.error || 'Could not load the audit log.'); $('ab').innerHTML = '<tr><td class="empty" colspan="11">No data</td></tr>'; return; }
+    hideAlerts();
+    rows = r.rows || []; info = { users: r.users || [], modules: r.modules || [], actions: r.actions || [], total: r.total || 0, summary: r.summary || null };
+    fillLists(); render();
+  } catch (e) { showErr('Could not reach the server.'); }
+}
+function fillLists() {
+  const keepM = $('f-mod').value, keepA = $('f-act').value;
+  $('dl-users').innerHTML = info.users.map(u => { const p = u.split('|'); return '<option value="' + esc(p[0]) + '">' + esc(p[1] || '') + '</option>'; }).join('');
+  $('f-mod').innerHTML = '<option value="">All modules</option>' + info.modules.map(m => '<option>' + esc(m) + '</option>').join(''); $('f-mod').value = keepM;
+  $('f-act').innerHTML = '<option value="">All actions</option>' + info.actions.map(m => '<option>' + esc(m) + '</option>').join(''); $('f-act').value = keepA;
+}
+function drawQuick() {
+  $('qf').innerHTML = '<span class="lbl">Quick filters:</span>' + QUICK.map(x => '<button type="button" class="qc ' + (quick === x.k ? 'on' : '') + '" data-q="' + x.k + '">' + esc(x.label) + '</button>').join('') + (quick ? '<button type="button" class="qc" data-q="">Clear quick filter</button>' : '');
+}
+$('qf').addEventListener('click', e => { const b = e.target.closest('button[data-q]'); if (!b) return; quick = b.dataset.q; drawQuick(); fetchRows(); });
+$('go').onclick = fetchRows;
+$('reset').onclick = () => { ['f-user', 'f-rec', 'f-from', 'f-to', 'f-q'].forEach(i => $(i).value = ''); $('f-mod').value = ''; $('f-act').value = ''; $('f-lim').value = '300'; quick = ''; drawQuick(); fetchRows(); };
+['f-user', 'f-rec', 'f-q'].forEach(i => $(i).addEventListener('keydown', e => { if (e.key === 'Enter') fetchRows(); }));
+
+/* ---------- row detail ---------- */
+$('ab').addEventListener('click', e => {
+  const tr = e.target.closest('tr[data-i]'); if (!tr) return;
+  const r = apply()[Number(tr.dataset.i)]; if (!r) return;
+  const f = (k, val) => '<div><small>' + k + '</small><span>' + (esc(val) || '—') + '</span></div>';
+  $('dt-body').innerHTML = '<div class="dg">' + f('Time (IST)', fmtTime(r.time)) + f('User', r.userId + ' · ' + (r.name || '')) + f('Role', r.role) + f('Module', r.module) + f('Action', r.action) + f('Record ID', r.recordId) + f('IP', r.ip) + f('Reason', r.reason) + '</div>'
+    + (r.module === 'AdminUsers' ? permDiff(r.oldValue, r.newValue) : '')
+    + '<div class="vs"><div><h4>Old value</h4><pre class="old">' + (esc(r.oldValue) || '—') + '</pre></div><div><h4>New value</h4><pre class="new">' + (esc(r.newValue) || '—') + '</pre></div></div>';
+  $('dt').classList.add('show');
+});
+$('dt-close').onclick = () => $('dt').classList.remove('show');
+$('dt').addEventListener('click', e => { if (e.target === $('dt')) $('dt').classList.remove('show'); });
+
+/* ---------- exports ---------- */
+VR.exportBar($('xp'), { name: 'VRMIC2026_Audit_Log', title: 'VRMIC 2026 — Audit log', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['Time (IST)', 'User ID', 'Name', 'Role', 'Module', 'Action', 'Record ID', 'Old value', 'New value', 'Reason', 'IP'],
+    rows: apply().map(r => [fmtTime(r.time), r.userId, r.name, r.role, r.module, r.action, r.recordId, r.oldValue, r.newValue, r.reason, r.ip]) }) });
+$('xp').addEventListener('click', e => { const b = e.target.closest('button,a'); if (b) VR.api('adminLogEvent', { event: 'export', module: 'AuditLog', what: 'Audit log', detail: ((b.textContent || '').trim().slice(0, 30) + ' · ' + apply().length + ' rows') }).catch(() => {}); });
+
+/* ---------- start (supports links like audit-log.html?user=1002 from the admin pages) ---------- */
+const qs = new URLSearchParams(location.search);
+if (qs.get('user')) $('f-user').value = qs.get('user');
+if (qs.get('module')) $('f-mod').innerHTML = '<option>' + esc(qs.get('module')) + '</option>';
+if (qs.get('recordId')) $('f-rec').value = qs.get('recordId');
+drawQuick(); fetchRows();
+})();
+</script>
+</body>
+</html>
