@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Announcements | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+textarea{min-height:130px;resize:vertical;line-height:1.5;}
+.cnt{font-size:11.5px;color:var(--text-3);text-align:right;margin-top:3px;}
+.cnt.over{color:#e8988c;}
+.pv{border:1px solid var(--navy-border);border-radius:12px;background:var(--navy-950);overflow:hidden;}
+.pv img{display:block;width:100%;max-height:220px;object-fit:cover;background:var(--navy-800);}
+.pv .pb{padding:14px 16px;}
+.pv h4{font-family:'Fraunces',serif;font-weight:500;font-size:1.02rem;margin-bottom:6px;color:var(--text-1);}
+.pv p{font-size:13.5px;color:var(--text-2);white-space:pre-wrap;overflow-wrap:anywhere;}
+.pv .pd{font-size:11px;color:var(--text-3);margin-top:8px;}
+table.list td{vertical-align:middle;}
+table.list td.wrapc{white-space:normal;min-width:200px;max-width:420px;overflow-wrap:anywhere;line-height:1.4;}
+.msg{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text-3);font-size:12.5px;margin-top:2px;}
+tr.off td{opacity:.55;}
+.mbox h3{font-size:1.1rem;margin-bottom:10px;}
+.mbox p{font-size:13.5px;color:var(--text-2);margin-bottom:10px;}
+.mbox .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;}
+.two-col{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px;align-items:start;margin-bottom:18px;}
+@media(max-width:900px){.two-col{grid-template-columns:1fr;}}
+.two-col .card{margin-bottom:0;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-bullhorn" style="color:var(--gold-light);"></i> Announcements</h1><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3><i class="fa-solid fa-pen-to-square"></i> <span id="ftitle">New announcement</span></h3>
+      <div class="grid">
+        <div class="full"><label for="t">Title</label><input id="t" maxlength="120" autocomplete="off" placeholder="For example: Venue change for Oral session 2">
+          <div class="cnt" id="tc2">0 / 120</div></div>
+        <div class="full"><label for="m">Message</label><textarea id="m" maxlength="2000" placeholder="Write the announcement participants will read on their dashboard."></textarea>
+          <div class="cnt" id="mc">0 / 2000</div></div>
+        <div class="full"><label for="u">Poster image link (optional)</label><input id="u" autocomplete="off" placeholder="https://…  (a public image link)">
+          <div class="hint">Use a public https link to an image. Leave blank for a text-only announcement.</div></div>
+        <div class="full"><label class="chk"><input type="checkbox" id="a" checked> Visible to participants</label></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn btn-gold" id="save"><i class="fa-solid fa-paper-plane"></i> <span id="stxt">Post announcement</span></button>
+        <button class="btn" id="cancel" style="display:none;">Cancel edit</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-eye"></i> How participants will see it</h3>
+      <div class="pv"><img id="pimg" alt="" style="display:none;"><div class="pb"><h4 id="ptitle">Your title appears here</h4><p id="pmsg">Your message appears here.</p><div class="pd" id="pdate"></div></div></div>
+      <p class="hint" style="margin-top:10px;">Participants see the latest 10 visible announcements, newest first, on their dashboard.</p>
+    </div>
+  </div>
+
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search title or message" autocomplete="off">
+    <select id="fs"><option value="">All</option><option value="on">Visible</option><option value="off">Hidden</option></select>
+  </div>
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x"><table class="list"><thead><tr><th>Posted</th><th>Announcement</th><th>Poster</th><th>Posted by</th><th>Status</th><th class="noprint"></th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="6">Loading…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny" style="margin-top:10px;">Hide an announcement to take it off participant dashboards without losing it. Delete moves it to Trash, where it can be restored.</p>
+</div>
+
+<div class="modal" id="md"><div class="box mbox" id="mbox"></div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('announcements', 'transaction')) { VR.denied('You do not have permission to manage announcements. The Announcement report page shows them read-only.'); return; }
+
+const S = v => String(v == null ? '' : v);
+let all = [], view = [], editing = null;
+
+const fdt = s => { const d = new Date(S(s)); return isNaN(d) ? '—' : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+
+function openModal(h) { $('mbox').innerHTML = h; $('md').classList.add('show'); }
+function closeModal() { $('md').classList.remove('show'); $('mbox').innerHTML = ''; }
+$('md').addEventListener('mousedown', e => { if (e.target === $('md')) closeModal(); });
+function modalErr(m) { const e = $('me'); if (!e) return; e.textContent = m; e.className = 'alert alert-error show'; }
+
+/* ---------- form + live preview ---------- */
+function preview() {
+  const t = $('t').value.trim(), m = $('m').value.trim(), u = $('u').value.trim();
+  $('ptitle').textContent = t || 'Your title appears here';
+  $('pmsg').textContent = m || 'Your message appears here.';
+  $('pdate').textContent = editing ? 'Originally posted ' + fdt(editing.createdAt) : 'Posted just now';
+  const img = $('pimg');
+  if (/^https:\/\/\S+$/i.test(u)) { img.src = u; img.style.display = 'block'; img.onerror = () => { img.style.display = 'none'; }; } else { img.removeAttribute('src'); img.style.display = 'none'; }
+  $('tc2').textContent = $('t').value.length + ' / 120';
+  $('mc').textContent = $('m').value.length + ' / 2000';
+}
+['t', 'm', 'u'].forEach(i => $(i).addEventListener('input', preview));
+
+function resetForm() {
+  editing = null; $('t').value = ''; $('m').value = ''; $('u').value = ''; $('a').checked = true;
+  $('ftitle').textContent = 'New announcement'; $('stxt').textContent = 'Post announcement'; $('cancel').style.display = 'none'; preview();
+}
+function startEdit(a) {
+  editing = a; $('t').value = a.title; $('m').value = a.message; $('u').value = a.posterImageUrl; $('a').checked = a.active;
+  $('ftitle').textContent = 'Edit announcement'; $('stxt').textContent = 'Save changes'; $('cancel').style.display = ''; preview();
+  window.scrollTo({ top: 0, behavior: 'smooth' }); $('t').focus();
+}
+$('cancel').onclick = resetForm;
+
+$('save').onclick = () => VR.busy($('save'), editing ? 'Saving…' : 'Posting…', async () => {
+  hideAlerts();
+  const body = { title: $('t').value, message: $('m').value, posterImageUrl: $('u').value, active: $('a').checked };
+  try {
+    let r;
+    if (editing) r = await VR.api('adminUpdateAnnouncement', Object.assign({ row: editing.row, id: editing.id }, body));
+    else {
+      r = await VR.api('adminPostAnnouncement', body);
+      if (!r.ok && r.warning && confirm(r.error)) r = await VR.api('adminPostAnnouncement', Object.assign({ force: true }, body));
+    }
+    if (!r.ok) { if (!r.warning) showErr(r.error || 'Could not save.'); return; }
+    showOk(editing ? (r.changed ? 'Changes saved.' : 'Nothing was changed.') : 'Announcement posted.');
+    resetForm(); await load();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+});
+
+/* ---------- list ---------- */
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), s = $('fs').value;
+  return all.filter(a => (!q || (a.title + ' ' + a.message).toLowerCase().indexOf(q) > -1) && (!s || (s === 'on') === a.active))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map((a, i) =>
+    '<tr class="' + (a.active ? '' : 'off') + '"><td>' + esc(fdt(a.createdAt)) + '</td>'
+    + '<td class="wrapc"><span class="nm">' + esc(a.title) + '</span><div class="msg">' + esc(a.message) + '</div></td>'
+    + '<td>' + (a.posterImageUrl ? '<a href="' + esc(a.posterImageUrl) + '" target="_blank" rel="noopener">View</a>' : '—') + '</td>'
+    + '<td>' + esc(a.postedByName || a.postedBy || '—') + '</td>'
+    + '<td><span class="badge ' + (a.active ? 'b-ok' : 'b-neu') + '">' + (a.active ? 'Visible' : 'Hidden') + '</span></td>'
+    + '<td class="noprint"><div class="row-actions">'
+    + '<button class="btn btn-sm" data-a="edit" data-i="' + i + '"><i class="fa-solid fa-pen"></i> Edit</button>'
+    + '<button class="btn btn-sm" data-a="toggle" data-i="' + i + '"><i class="fa-solid ' + (a.active ? 'fa-eye-slash' : 'fa-eye') + '"></i> ' + (a.active ? 'Hide' : 'Show') + '</button>'
+    + '<button class="btn btn-sm btn-danger" data-a="del" data-i="' + i + '"><i class="fa-solid fa-trash"></i> Delete</button></div></td></tr>').join('')
+    : '<tr><td class="empty" colspan="6">' + (all.length ? 'No announcements match these filters.' : 'No announcements yet. Post the first one above.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length;
+}
+async function load() {
+  $('tb').innerHTML = '<tr><td class="empty" colspan="6">Loading…</td></tr>';
+  try {
+    const r = await VR.api('adminListAnnouncements', {});
+    if (!r.ok) { showErr(r.error || 'Could not load announcements.'); $('tb').innerHTML = '<tr><td class="empty" colspan="6">Could not load.</td></tr>'; return; }
+    all = r.announcements || []; render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); $('tb').innerHTML = '<tr><td class="empty" colspan="6">Could not load.</td></tr>'; }
+}
+
+function askDelete(a) {
+  openModal('<h3>Delete this announcement?</h3><p><b>' + esc(a.title) + '</b></p><p>It is removed from participant dashboards and moved to Trash, where it can be restored.</p>'
+    + '<label for="mr">Reason</label><input id="mr" maxlength="200" autocomplete="off" placeholder="For example: posted by mistake">'
+    + '<div class="alert alert-error" id="me" style="margin-top:12px;"></div>'
+    + '<div class="acts"><button class="btn" id="mc2">Cancel</button><button class="btn btn-danger" id="mo"><i class="fa-solid fa-trash"></i> Delete</button></div>');
+  $('mc2').onclick = closeModal;
+  $('mo').onclick = () => VR.busy($('mo'), 'Deleting…', async () => {
+    try {
+      const r = await VR.api('adminDeleteAnnouncement', { row: a.row, reason: $('mr').value.trim() });
+      if (!r.ok) { modalErr(r.error || 'Could not delete.'); return; }
+      if (editing && editing.id === a.id) resetForm();
+      closeModal(); showOk('Announcement moved to Trash.'); await load();
+    } catch (e) { modalErr('Could not reach the server. Try again.'); }
+  });
+}
+
+$('tb').onclick = async e => {
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const a = view[Number(b.dataset.i)]; if (!a) return;
+  if (b.dataset.a === 'edit') startEdit(a);
+  else if (b.dataset.a === 'del') askDelete(a);
+  else if (b.dataset.a === 'toggle') VR.busy(b, '…', async () => {
+    hideAlerts();
+    try {
+      const r = await VR.api('adminUpdateAnnouncement', { row: a.row, id: a.id, active: !a.active });
+      if (!r.ok) { showErr(r.error || 'Could not update.'); return; }
+      showOk(a.active ? 'Announcement hidden from participants.' : 'Announcement is visible to participants again.'); await load();
+    } catch (er) { showErr('Could not reach the server.'); }
+  });
+};
+$('q').addEventListener('input', render);
+$('fs').addEventListener('change', render);
+$('refresh').onclick = () => { hideAlerts(); load(); };
+
+preview(); load();
+})();
+</script>
+</body>
+</html>
