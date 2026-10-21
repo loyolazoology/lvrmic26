@@ -388,8 +388,19 @@ async function load(selectId) {
     if (a) fillKeep(a); else renderList();
   } catch (e) { showErr(netErr(e)); }
 }
-function fillKeep(a) { const e = $('err').className, o = $('ok').className, et = $('err').textContent, ot = $('ok').textContent; fill(a); $('err').className = e; $('ok').className = o; $('err').textContent = et; $('ok').textContent = ot; }
-
+function fillKeep(a) { 
+  const errEl = $('err');
+  const okEl = $('ok');
+  const e = errEl.className, o = okEl.className;
+  const et = errEl.textContent, ot = okEl.textContent; 
+  
+  fill(a); 
+  
+  errEl.className = e; 
+  okEl.className = o; 
+  if (et) errEl.textContent = et; 
+  if (ot) okEl.textContent = ot; 
+}
 try {
   const c = await VR.api('adminPermissionCatalog', {});
   if (!c.ok) { showErr(c.error || 'Could not load the permission list.'); return; }
