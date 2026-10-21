@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bulk Import and Merge | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.ix-tabs{display:flex;gap:6px;border-bottom:1px solid var(--navy-border);margin-bottom:18px;flex-wrap:wrap;}
+.ix-tab{background:none;border:0;border-bottom:3px solid transparent;color:var(--text-3);font:600 14px Inter,sans-serif;padding:11px 16px;cursor:pointer;}
+.ix-tab[aria-selected=true]{color:var(--gold-light);border-bottom-color:var(--gold);}
+.ix-tab:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+.ix-panel[hidden]{display:none;}
+.ix-steps{margin:0 0 4px;padding-left:20px;color:var(--text-2);font-size:13.5px;line-height:1.7;}
+.ix-drop{border:2px dashed var(--navy-border);border-radius:12px;padding:26px 16px;text-align:center;color:var(--text-2);cursor:pointer;background:var(--navy-950);}
+.ix-drop:hover,.ix-drop.over{border-color:var(--gold);}
+.ix-drop:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.ix-drop b{color:var(--text-1);}
+.ix-cards{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 14px;}
+.ix-stat{flex:1;min-width:120px;border:1px solid var(--navy-border);border-radius:10px;padding:10px 14px;background:var(--navy-950);}
+.ix-stat .n{font:700 24px 'IBM Plex Mono',monospace;color:var(--text-1);}
+.ix-stat .l{font-size:12px;color:var(--text-3);}
+.ix-stat.ok .n{color:var(--success);} .ix-stat.warn .n{color:var(--gold-light);} .ix-stat.bad .n{color:var(--danger,#e5646b);}
+.ix-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.ix-filter button{border:1px solid var(--navy-border);background:var(--navy-950);color:var(--text-2);border-radius:999px;padding:5px 12px;font:600 12px Inter,sans-serif;cursor:pointer;}
+.ix-filter button[aria-pressed=true]{border-color:var(--gold);color:var(--gold-light);}
+.ix-scroll{overflow:auto;max-height:460px;border:1px solid var(--navy-border);border-radius:10px;}
+.ix-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.ix-table th{position:sticky;top:0;background:var(--navy-950);text-align:left;padding:8px 10px;color:var(--text-3);font-weight:600;white-space:nowrap;border-bottom:1px solid var(--navy-border);}
+.ix-table td{padding:7px 10px;border-bottom:1px solid var(--navy-border);color:var(--text-2);vertical-align:top;}
+.ix-table td.note{min-width:240px;font-size:12px;}
+.ix-pill{display:inline-block;padding:2px 9px;border-radius:999px;font:700 11px Inter,sans-serif;white-space:nowrap;}
+.ix-pill.ok{background:rgba(60,180,120,.15);color:var(--success);}
+.ix-pill.warning{background:rgba(232,201,131,.15);color:var(--gold-light);}
+.ix-pill.rejected{background:rgba(229,100,107,.15);color:var(--danger,#e5646b);}
+.ix-err{color:var(--danger,#e5646b);} .ix-wrn{color:var(--gold-light);}
+.ix-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+.ix-check{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--text-2);cursor:pointer;}
+.ix-check input{width:auto;margin-top:3px;}
+.ix-bar{height:10px;border-radius:999px;background:var(--navy-950);border:1px solid var(--navy-border);overflow:hidden;margin:12px 0 6px;}
+.ix-bar>i{display:block;height:100%;width:0;background:var(--gold);transition:width .25s;}
+.ix-result{text-align:center;padding:6px;}
+.ix-result .big{font-size:36px;color:var(--success);}
+.ix-gcard{border:1px solid var(--navy-border);border-radius:12px;padding:14px;margin-bottom:12px;background:var(--navy-950);}
+.ix-member{display:grid;grid-template-columns:110px 1.2fr 1.4fr 1fr 1.4fr;gap:8px;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--navy-border);color:var(--text-2);}
+.ix-member:last-child{border-bottom:0;}
+.ix-member .id{font-family:'IBM Plex Mono',monospace;color:var(--gold-light);}
+.ix-tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--navy-border);color:var(--text-3);margin-right:4px;}
+.ix-tag.high{border-color:var(--danger,#e5646b);color:var(--danger,#e5646b);} .ix-tag.med{border-color:var(--gold);color:var(--gold-light);}
+.ix-pair{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:12.5px;color:var(--text-2);}
+.ix-pick{position:relative;}
+.ix-results{position:absolute;left:0;right:0;top:100%;z-index:5;background:var(--navy-950);border:1px solid var(--navy-border);border-radius:8px;max-height:260px;overflow:auto;}
+.ix-results button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--navy-border);padding:8px 10px;color:var(--text-2);font:13px Inter,sans-serif;cursor:pointer;}
+.ix-results button:hover,.ix-results button:focus{background:rgba(232,201,131,.08);outline:0;}
+.ix-chosen{margin-top:8px;font-size:13px;color:var(--text-1);}
+.ix-cmp{width:100%;border-collapse:collapse;font-size:13px;}
+.ix-cmp th,.ix-cmp td{padding:8px 10px;border-bottom:1px solid var(--navy-border);text-align:left;vertical-align:top;}
+.ix-cmp th{color:var(--text-3);font-weight:600;font-size:12px;}
+.ix-cmp tr.grp td{background:var(--navy-950);color:var(--gold-light);font:700 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:.06em;}
+.ix-cmp tr.same td{color:var(--text-3);}
+.ix-cmp label.v{display:flex;gap:8px;align-items:flex-start;margin:0;cursor:pointer;color:var(--text-2);font-weight:400;font-size:13px;word-break:break-word;}
+.ix-cmp label.v input{width:auto;margin-top:3px;}
+.ix-cmp label.v.sel{color:var(--gold-light);}
+.ix-cmp .empty{color:var(--text-3);font-style:italic;}
+.ix-block{border:1px solid var(--navy-border);border-radius:10px;padding:12px;margin-bottom:10px;}
+.ix-block.clash{border-color:var(--gold);background:rgba(232,201,131,.05);}
+.ix-block h4{margin:0 0 6px;font-size:13.5px;color:var(--text-1);}
+.ix-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ix-moves{margin:6px 0 0;padding-left:18px;color:var(--text-2);font-size:13px;line-height:1.7;}
+@media (max-width:720px){.ix-two{grid-template-columns:1fr;}.ix-member{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-people-arrows" style="color:var(--gold-light);"></i> Bulk import and merge</h1><a class="btn btn-sm" href="participants-report.html"><i class="fa-solid fa-table-list"></i> List view</a></div>
+<div class="wrap" style="max-width:1100px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+
+  <div class="ix-tabs" role="tablist" aria-label="Participants tools">
+    <button class="ix-tab" role="tab" id="tab-import" aria-controls="pan-import" aria-selected="true"><i class="fa-solid fa-file-import"></i> Bulk import</button>
+    <button class="ix-tab" role="tab" id="tab-merge" aria-controls="pan-merge" aria-selected="false"><i class="fa-solid fa-code-merge"></i> Merge duplicates</button>
+  </div>
+
+  <!-- ======================= BULK IMPORT ======================= -->
+  <section class="ix-panel" id="pan-import" role="tabpanel" aria-labelledby="tab-import">
+    <div class="card" id="imp-start">
+      <h3><i class="fa-solid fa-file-excel" style="color:var(--gold-light);"></i> 1. Get the template and upload your file</h3>
+      <ol class="ix-steps">
+        <li>Download the Excel template and fill one participant per row (up to 500). Name, email and phone are required.</li>
+        <li>Upload it here. Nothing is saved yet: you first see every row marked <b>OK</b>, <b>Warning</b> or <b>Rejected</b>.</li>
+        <li>Each person gets a normal <code>VRMIC26-xxxx</code> ID, and their phone number is the first password.</li>
+      </ol>
+      <div class="ix-row"><button class="btn" id="tpl"><i class="fa-solid fa-download"></i> Download Excel template</button></div>
+      <div style="margin-top:14px;">
+        <div class="ix-drop" id="drop" tabindex="0" role="button" aria-label="Choose a file to upload">
+          <i class="fa-solid fa-cloud-arrow-up" style="font-size:26px;color:var(--gold-light);"></i>
+          <div style="margin-top:8px;"><b>Drop the file here</b> or click to choose</div>
+          <div class="hint">.xlsx or .csv, up to 500 rows</div>
+        </div>
+        <input type="file" id="file" accept=".xlsx,.xls,.csv" style="display:none;">
+      </div>
+    </div>
+
+    <div class="card" id="imp-prev" style="display:none;">
+      <h3><i class="fa-solid fa-list-check" style="color:var(--gold-light);"></i> 2. Check the preview <span class="hint" style="display:inline;" id="prev-file"></span></h3>
+      <div class="ix-cards" id="prev-stats"></div>
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;"><div class="ix-filter" id="prev-filter" role="group" aria-label="Filter rows" style="margin:0;"></div><div id="exp-prev"></div></div>
+      <div class="ix-scroll"><table class="ix-table"><thead><tr><th>Row</th><th>Status</th><th>Name</th><th>Email</th><th>Phone</th><th>Institution</th><th>Type</th><th>Notes</th></tr></thead><tbody id="prev-body"></tbody></table></div>
+      <div class="ix-row" style="flex-direction:column;align-items:flex-start;">
+        <label class="ix-check"><input type="checkbox" id="inc-warn" checked><span>Also import rows with a warning <span class="hint" style="display:inline;">(they are saved as shown in Notes)</span></span></label>
+        <label class="ix-check"><input type="checkbox" id="send-mail"><span>Send account emails <span class="hint" style="display:inline;" id="mail-hint">Off by default because of the daily mail limit.</span></span></label>
+      </div>
+      <div class="ix-row">
+        <button class="btn btn-gold" id="go-import"><i class="fa-solid fa-user-plus"></i> <span id="go-label">Import</span></button>
+        <button class="btn" id="cancel-import"><i class="fa-solid fa-xmark"></i> Start over</button>
+        <button class="btn" id="dl-prev-rej" style="display:none;"><i class="fa-solid fa-download"></i> Download rejected rows</button>
+      </div>
+      <div id="progress" style="display:none;" aria-live="polite"><div class="ix-bar"><i id="bar"></i></div><div class="hint" id="bar-text"></div></div>
+    </div>
+
+    <div class="card" id="imp-done" style="display:none;">
+      <div class="ix-result">
+        <div class="big"><i class="fa-solid fa-circle-check"></i></div>
+        <h3 style="margin:6px 0;" id="done-title"></h3>
+        <p class="hint" id="done-sub" style="margin-bottom:14px;"></p>
+        <div class="ix-row" style="justify-content:center;margin-top:0;">
+          <button class="btn btn-gold" id="dl-added"><i class="fa-solid fa-file-arrow-down"></i> Download added list (IDs and logins)</button>
+          <button class="btn" id="dl-rej"><i class="fa-solid fa-file-circle-xmark"></i> Download rejected rows</button>
+          <button class="btn" id="import-again"><i class="fa-solid fa-plus"></i> Import another file</button>
+        </div>
+        <p class="hint" style="margin-top:12px;">The added list shows each person's initial password (their phone number). Keep it private.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= MERGE ======================= -->
+  <section class="ix-panel" id="pan-merge" role="tabpanel" aria-labelledby="tab-merge" hidden>
+    <div id="mg-home">
+      <div class="card">
+        <h3><i class="fa-solid fa-clone" style="color:var(--gold-light);"></i> Suspected duplicates</h3>
+        <div id="exp-dups" style="float:right;"></div><p class="hint" style="margin-bottom:10px;">Finds accounts with the same phone number, the same email (ignoring case, and Gmail dots), or the same name and institution.</p>
+        <button class="btn" id="scan"><i class="fa-solid fa-magnifying-glass"></i> Scan for duplicates</button>
+        <div id="dups" style="margin-top:14px;" aria-live="polite"></div>
+      </div>
+      <div class="card">
+        <h3><i class="fa-solid fa-hand-pointer" style="color:var(--gold-light);"></i> Or pick two accounts</h3>
+        <div class="ix-two">
+          <div class="ix-pick"><label for="q-a">Account A</label><input id="q-a" placeholder="Search name, ID, email or phone" autocomplete="off"><div class="ix-results" id="r-a" hidden></div><div class="ix-chosen" id="c-a"></div></div>
+          <div class="ix-pick"><label for="q-b">Account B</label><input id="q-b" placeholder="Search name, ID, email or phone" autocomplete="off"><div class="ix-results" id="r-b" hidden></div><div class="ix-chosen" id="c-b"></div></div>
+        </div>
+        <div class="ix-row"><button class="btn btn-gold" id="cmp-go" disabled><i class="fa-solid fa-scale-balanced"></i> Compare</button></div>
+      </div>
+    </div>
+
+    <div id="mg-cmp" style="display:none;">
+      <div class="ix-row" style="margin:0 0 12px;"><button class="btn btn-sm" id="back"><i class="fa-solid fa-arrow-left"></i> Back</button></div>
+      <div class="card">
+        <h3><i class="fa-solid fa-user-check" style="color:var(--gold-light);"></i> Which account stays?</h3>
+        <div class="ix-two" id="surv"></div>
+        <p class="hint" style="margin-top:8px;">The other account goes to Trash and can be restored. The staying account keeps its own password (unless you take the other account's email).</p>
+      </div>
+      <div class="card"><h3><i class="fa-solid fa-table-columns" style="color:var(--gold-light);"></i> Choose the value to keep for each field</h3><div class="ix-scroll" style="max-height:none;"><table class="ix-cmp" id="cmp-table"></table></div></div>
+      <div class="card"><h3><i class="fa-solid fa-boxes-stacked" style="color:var(--gold-light);"></i> Abstract, PPT, slot, payment and certificate</h3><div id="blocks"></div></div>
+      <div class="card">
+        <h3><i class="fa-solid fa-eye" style="color:var(--gold-light);"></i> What will happen</h3>
+        <ul class="ix-moves" id="moves"></ul>
+        <div style="margin-top:12px;"><label for="mg-reason">Reason for the merge *</label><input id="mg-reason" placeholder="e.g. Same person registered twice with different emails" maxlength="250"></div>
+        <div class="ix-row"><button class="btn btn-gold" id="mg-go"><i class="fa-solid fa-code-merge"></i> Merge accounts</button></div>
+      </div>
+    </div>
+
+    <div class="card" id="mg-done" style="display:none;">
+      <div class="ix-result">
+        <div class="big"><i class="fa-solid fa-circle-check"></i></div>
+        <h3 style="margin:6px 0;">Accounts merged</h3>
+        <p class="hint" id="mg-done-sub" style="margin-bottom:14px;"></p>
+        <div class="ix-row" style="justify-content:center;margin-top:0;">
+          <a class="btn btn-gold" id="mg-open" href="#"><i class="fa-solid fa-id-card"></i> Open merged account</a>
+          <button class="btn" id="mg-again"><i class="fa-solid fa-plus"></i> Merge another</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('participants', 'transaction')) { VR.denied('You do not have permission to import or merge participants.'); return; }
+
+const MAX_ROWS = 500, CHUNK = 50;
+const COLS = [
+  ['name', 'Name', ['name', 'full name', 'participant name', 'participant']],
+  ['email', 'Email', ['email', 'e mail', 'email id', 'email address', 'mail']],
+  ['phone', 'Phone', ['phone', 'mobile', 'mobile number', 'mobile no', 'phone number', 'contact', 'contact number', 'whatsapp']],
+  ['institution', 'Institution', ['institution', 'institute', 'college', 'organisation', 'organization', 'affiliation']],
+  ['category', 'Category', ['category', 'registration category', 'fee category']],
+  ['participantType', 'Participant type', ['participant type', 'presentation category', 'presentation type', 'type']],
+  ['mode', 'Mode', ['mode', 'attendance mode']],
+  ['amountPaid', 'Amount paid', ['amount paid', 'amount', 'fee paid', 'fee']],
+  ['foodPreference', 'Food preference', ['food preference', 'food', 'meal', 'diet']]
+];
+const REQUIRED = ['name', 'email', 'phone'];
+const ALLOWED = {
+  'Category': ['Student (UG & PG)', 'Research Scholar', 'Faculty / Scientist', 'Industrialist', 'Foreign Delegate'],
+  'Participant type': ['Oral', 'Poster', 'Participant'], 'Mode': ['Offline', 'Online'], 'Food preference': ['Vegetarian', 'Non-Vegetarian']
+};
+const $q = s => document.querySelector(s);
+const val = v => String(v == null ? '' : v).trim();
+let busy = false;
+
+/* ---------------- tabs ---------------- */
+function showTab(which) {
+  ['import', 'merge'].forEach(t => { $('tab-' + t).setAttribute('aria-selected', t === which ? 'true' : 'false'); $('pan-' + t).hidden = t !== which; });
+  hideAlerts();
+}
+$('tab-import').onclick = () => showTab('import'); $('tab-merge').onclick = () => showTab('merge');
+document.querySelector('.ix-tabs').addEventListener('keydown', e => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const next = e.target.id === 'tab-import' ? 'merge' : 'import'; showTab(next); $('tab-' + next).focus();
+});
+
+/* ---------------- shared export bar ---------------- */
+VR.exportBar($('exp-prev'), { name: 'import_preview', title: 'Bulk import preview', getData: () => ({
+  headers: ['Row', 'Status', 'Name', 'Email', 'Phone', 'Institution', 'Participant type', 'Notes'],
+  rows: (prev ? prev.rows : []).filter(x => filter === 'all' || x.status === filter).map(x => { const r = x.raw || {}; return [x.row, x.status, r.name, r.email, r.phone, r.institution, x.clean ? x.clean.participantType : '', x.errors.concat(x.warnings).join(' ')]; }) }) });
+let dupRows = [];
+VR.exportBar($('exp-dups'), { name: 'suspected_duplicates', title: 'Suspected duplicate participants', getData: () => ({
+  headers: ['Account 1', 'Name 1', 'Phone 1', 'Email 1', 'Account 2', 'Name 2', 'Phone 2', 'Email 2', 'Confidence', 'Why'], rows: dupRows }) });
+$('exp-dups').style.display = 'none';
+
+/* ---------------- small utils ---------------- */
+function stamp() { const d = new Date(), p = n => String(n).padStart(2, '0'); return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()); }
+function downloadXlsx(name, header, rows) {
+  const ws = XLSX.utils.aoa_to_sheet([header].concat(rows)); ws['!cols'] = header.map(h => ({ wch: Math.max(12, String(h).length + 2) }));
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Sheet1'); XLSX.writeFile(wb, name);
+}
+function normHead(s) { return String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
+function cellText(v) {
+  if (v == null) return '';
+  if (typeof v === 'number') return Number.isInteger(v) ? v.toFixed(0) : String(v);
+  return String(v).trim();
+}
+
+/* ---------------- template ---------------- */
+$('tpl').onclick = () => {
+  const head = COLS.map(c => c[1]), ws = XLSX.utils.aoa_to_sheet([head]);
+  ws['!cols'] = head.map((h, i) => ({ wch: i === 3 ? 38 : (i === 1 ? 32 : 20) }));
+  const phoneCol = 2; for (let r = 1; r <= MAX_ROWS; r++) ws[XLSX.utils.encode_cell({ r: r, c: phoneCol })] = { t: 's', v: '', z: '@' };
+  ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: MAX_ROWS, c: head.length - 1 } });
+  const help = [['Column', 'Required', 'Allowed values / notes'],
+    ['Name', 'Yes', 'Full name as it should appear on records'], ['Email', 'Yes', 'Used for login. Must be unique.'],
+    ['Phone', 'Yes', 'Mobile number, 7 to 15 digits. It becomes the first password. Unique. (+91 and a leading 0 are ignored when checking for duplicates.)'],
+    ['Institution', 'No', 'College / university / organisation'],
+    ['Category', 'No', ALLOWED['Category'].join('  |  ')], ['Participant type', 'No', ALLOWED['Participant type'].join('  |  ') + '   (blank = Participant)'],
+    ['Mode', 'No', ALLOWED['Mode'].join('  |  ') + '   (blank = Offline)'], ['Amount paid', 'No', 'Number in rupees, for example 2000'],
+    ['Food preference', 'No', ALLOWED['Food preference'].join('  |  ')]];
+  const hs = XLSX.utils.aoa_to_sheet(help); hs['!cols'] = [{ wch: 18 }, { wch: 10 }, { wch: 110 }];
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Participants'); XLSX.utils.book_append_sheet(wb, hs, 'Read me');
+  XLSX.writeFile(wb, 'VRMIC2026_participants_template.xlsx');
+};
+
+/* ---------------- read the file ---------------- */
+let rowsRaw = [], prev = null, fileName = '';
+const drop = $('drop'), fileIn = $('file');
+drop.onclick = () => fileIn.click();
+drop.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileIn.click(); } };
+['dragover', 'dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => { if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+fileIn.onchange = () => { if (fileIn.files[0]) handleFile(fileIn.files[0]); fileIn.value = ''; };
+
+function parseSheet(buf) {
+  const wb = XLSX.read(buf, { type: 'array' });
+  const names = wb.SheetNames.slice().sort((a, b) => (/^participants$/i.test(b) ? 1 : 0) - (/^participants$/i.test(a) ? 1 : 0));
+  for (const n of names) {
+    const grid = XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: true, defval: '' });
+    for (let h = 0; h < Math.min(grid.length, 10); h++) {
+      const map = {}; grid[h].forEach((cell, ci) => { const k = normHead(cell); COLS.forEach(c => { if (map[c[0]] === undefined && (normHead(c[1]) === k || c[2].indexOf(k) > -1)) map[c[0]] = ci; }); });
+      if (REQUIRED.every(k => map[k] !== undefined) || Object.keys(map).length >= 4) {
+        const missing = REQUIRED.filter(k => map[k] === undefined);
+        if (missing.length) throw new Error('The file has no ' + missing.map(k => COLS.find(c => c[0] === k)[1]).join(', ') + ' column. Please use the template.');
+        const rows = [];
+        for (let r = h + 1; r < grid.length; r++) {
+          const o = { rowNo: r + 1 }; let any = false;
+          COLS.forEach(c => { const v = map[c[0]] === undefined ? '' : grid[r][map[c[0]]]; o[c[0]] = c[0] === 'amountPaid' && typeof v === 'number' ? v : cellText(v); if (cellText(v) !== '') any = true; });
+          if (any) rows.push(o);
+        }
+        return rows;
+      }
+    }
+  }
+  throw new Error('Could not find the header row (Name, Email, Phone ...). Please use the template.');
+}
+
+async function handleFile(f) {
+  hideAlerts(); if (busy) return;
+  if (!/\.(xlsx|xls|csv)$/i.test(f.name)) return showErr('Please choose an Excel (.xlsx) or CSV file.');
+  if (f.size > 8 * 1024 * 1024) return showErr('That file is too large. A participant list should be well under 8 MB.');
+  let rows;
+  try { rows = parseSheet(await f.arrayBuffer()); } catch (e) { return showErr(e.message || 'Could not read that file.'); }
+  if (!rows.length) return showErr('The file has no participant rows.');
+  if (rows.length > MAX_ROWS) return showErr('The file has ' + rows.length + ' rows. Import at most ' + MAX_ROWS + ' at a time; split the file and upload it in parts.');
+  fileName = f.name; rowsRaw = rows;
+  busy = true; drop.style.opacity = '.55'; drop.querySelector('b').textContent = 'Checking ' + rows.length + ' rows…';
+  try {
+    const r = await VR.api('adminImportPreview', { rows: rows });
+    if (!r.ok) return showErr(r.error || 'Could not check the file.');
+    prev = r; renderPreview();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+  finally { busy = false; drop.style.opacity = ''; drop.querySelector('b').textContent = 'Drop the file here'; if (prev) updateGo(); }
+}
+
+/* ---------------- preview ---------------- */
+let filter = 'all';
+function renderPreview() {
+  const c = prev.counts, byRow = {}; rowsRaw.forEach(x => byRow[x.rowNo] = x);
+  prev.rows.forEach(x => { x.raw = byRow[x.row]; });
+  $('imp-start').style.display = 'none'; $('imp-prev').style.display = ''; $('imp-done').style.display = 'none';
+  $('prev-file').textContent = '— ' + fileName + ', ' + prev.rows.length + ' rows';
+  $('prev-stats').innerHTML = '<div class="ix-stat"><div class="n">' + prev.rows.length + '</div><div class="l">Rows in file</div></div>'
+    + '<div class="ix-stat ok"><div class="n">' + c.ok + '</div><div class="l">OK</div></div>'
+    + '<div class="ix-stat warn"><div class="n">' + c.warning + '</div><div class="l">Warning</div></div>'
+    + '<div class="ix-stat bad"><div class="n">' + c.rejected + '</div><div class="l">Rejected</div></div>';
+  const fl = [['all', 'All', prev.rows.length], ['ok', 'OK', c.ok], ['warning', 'Warning', c.warning], ['rejected', 'Rejected', c.rejected]];
+  $('prev-filter').innerHTML = fl.map(f => '<button type="button" data-f="' + f[0] + '" aria-pressed="' + (filter === f[0]) + '">' + f[1] + ' (' + f[2] + ')</button>').join('');
+  $('prev-filter').querySelectorAll('button').forEach(b => b.onclick = () => { filter = b.dataset.f; renderPreview(); });
+  $('prev-body').innerHTML = prev.rows.filter(x => filter === 'all' || x.status === filter).map(x => {
+    const r = x.raw || {}, notes = x.errors.map(e => '<div class="ix-err"><i class="fa-solid fa-circle-xmark"></i> ' + esc(e) + '</div>').concat(x.warnings.map(w => '<div class="ix-wrn"><i class="fa-solid fa-triangle-exclamation"></i> ' + esc(w) + '</div>')).join('');
+    return '<tr><td>' + x.row + '</td><td><span class="ix-pill ' + x.status + '">' + (x.status === 'ok' ? 'OK' : x.status === 'warning' ? 'Warning' : 'Rejected') + '</span></td><td>' + esc(r.name) + '</td><td>' + esc(r.email) + '</td><td>' + esc(r.phone) + '</td><td>' + esc(r.institution) + '</td><td>' + esc(x.clean ? x.clean.participantType : '') + '</td><td class="note">' + notes + '</td></tr>';
+  }).join('') || '<tr><td colspan="8" class="hint" style="padding:16px;">No rows in this view.</td></tr>';
+  $('dl-prev-rej').style.display = c.rejected ? '' : 'none';
+  const q = prev.mailQuota;
+  $('mail-hint').textContent = q == null ? 'Off by default because of the daily mail limit.' : 'Off by default. About ' + q + ' emails left today.';
+  updateGo();
+}
+function importable() { const inc = $('inc-warn').checked; return prev.rows.filter(x => x.status === 'ok' || (x.status === 'warning' && inc)); }
+function updateGo() { const n = importable().length; $('go-label').textContent = 'Import ' + n + ' participant' + (n === 1 ? '' : 's'); $('go-import').disabled = busy || !n; }
+$('inc-warn').onchange = updateGo;
+$('cancel-import').onclick = () => { if (busy) return; resetImport(); };
+function resetImport() { prev = null; rowsRaw = []; filter = 'all'; $('imp-start').style.display = ''; $('imp-prev').style.display = 'none'; $('imp-done').style.display = 'none'; $('progress').style.display = 'none'; $('bar').style.width = '0'; hideAlerts(); }
+$('import-again').onclick = resetImport;
+
+function rejectedRowsOut(extra) {
+  const head = ['Row', 'Name', 'Email', 'Phone', 'Institution', 'Reason'];
+  const fromPrev = prev ? prev.rows.filter(x => x.status === 'rejected').map(x => { const r = x.raw || {}; return [x.row, r.name, r.email, r.phone, r.institution, x.errors.join(' ')]; }) : [];
+  const fromSrv = (extra || []).map(x => [x.row, x.name, x.email, x.phone, (byRowRaw(x.row) || {}).institution || '', x.reason]);
+  return { head: head, rows: fromPrev.concat(fromSrv).sort((a, b) => a[0] - b[0]) };
+}
+function byRowRaw(n) { return rowsRaw.find(r => r.rowNo === n); }
+$('dl-prev-rej').onclick = () => { const o = rejectedRowsOut([]); downloadXlsx('VRMIC2026_rejected_rows_' + stamp() + '.xlsx', o.head, o.rows); };
+
+/* ---------------- save in chunks ---------------- */
+let outcome = null;
+$('go-import').onclick = async () => {
+  if (busy || !prev) return; hideAlerts();
+  const queue = importable(); if (!queue.length) return;
+  const warnOn = $('inc-warn').checked, sendMail = $('send-mail').checked;
+  if (sendMail && !confirm('Send an account email to every person added? This uses your daily mail quota.')) return;
+  busy = true; updateGo(); $('cancel-import').disabled = true; $('progress').style.display = '';
+  outcome = { added: [], rejected: [], skipped: [], mail: { sent: 0, failed: 0, skipped: 0 }, stoppedAt: null };
+  let doneRows = 0;
+  for (let i = 0; i < queue.length; i += CHUNK) {
+    const part = queue.slice(i, i + CHUNK).map(x => x.raw);
+    $('bar-text').textContent = 'Saving rows ' + (i + 1) + ' to ' + Math.min(i + CHUNK, queue.length) + ' of ' + queue.length + '…';
+    try {
+      const r = await VR.api('adminImportParticipants', { rows: part, sendMail: sendMail, includeWarnings: warnOn });
+      if (!r.ok) { outcome.stoppedAt = i; showErr((r.error || 'The server stopped the import.') + ' ' + outcome.added.length + ' participants were saved before this.'); break; }
+      outcome.added = outcome.added.concat(r.added); outcome.rejected = outcome.rejected.concat(r.rejected); outcome.skipped = outcome.skipped.concat(r.skipped);
+      ['sent', 'failed', 'skipped'].forEach(k => outcome.mail[k] += (r.mail && r.mail[k]) || 0);
+    } catch (e) {
+      outcome.stoppedAt = i;
+      showErr('The connection was lost while saving rows ' + (i + 1) + ' to ' + Math.min(i + CHUNK, queue.length) + '. ' + outcome.added.length + ' participants were saved before this. Those rows may also have been saved: upload the same file again and the preview will show any saved rows as duplicates, so nothing is added twice.');
+      break;
+    }
+    doneRows = Math.min(i + CHUNK, queue.length); $('bar').style.width = Math.round(doneRows / queue.length * 100) + '%';
+  }
+  busy = false; $('cancel-import').disabled = false;
+  if (outcome.stoppedAt === null) showDone(); else { updateGo(); }
+};
+function showDone() {
+  const o = outcome, rej = rejectedRowsOut(o.rejected).rows.length;
+  $('imp-prev').style.display = 'none'; $('imp-done').style.display = '';
+  $('done-title').textContent = o.added.length + ' participant' + (o.added.length === 1 ? '' : 's') + ' added';
+  const bits = [rej + ' rejected'];
+  if (o.skipped.length) bits.push(o.skipped.length + ' skipped');
+  const withWarn = o.added.filter(a => a.warnings && a.warnings.length).length; if (withWarn) bits.push(withWarn + ' added with a warning');
+  if (o.mail.sent || o.mail.failed || o.mail.skipped) bits.push('emails: ' + o.mail.sent + ' sent, ' + o.mail.failed + ' failed' + (o.mail.skipped ? ', ' + o.mail.skipped + ' not sent (quota)' : ''));
+  else bits.push('no emails sent');
+  $('done-sub').textContent = bits.join('  ·  ');
+  $('dl-rej').style.display = rej ? '' : 'none';
+}
+$('dl-added').onclick = () => downloadXlsx('VRMIC2026_added_participants_' + stamp() + '.xlsx', ['VRMIC ID', 'Name', 'Email', 'Phone (initial password)', 'Institution', 'Warnings'],
+  outcome.added.map(a => [a.id, a.name, a.email, a.phone, a.institution, (a.warnings || []).join(' ')]));
+$('dl-rej').onclick = () => { const x = rejectedRowsOut(outcome.rejected.concat(outcome.skipped)); downloadXlsx('VRMIC2026_rejected_rows_' + stamp() + '.xlsx', x.head, x.rows); };
+
+/* =====================================================================
+   MERGE
+   ===================================================================== */
+let everyone = null, pickA = null, pickB = null, cmp = null, sel = {}, blockSel = {}, survivor = 'A', touched = {};
+
+async function loadEveryone() {
+  if (everyone) return everyone;
+  const r = await VR.api('adminListParticipants', {});
+  if (!r.ok) { showErr(r.error || 'Could not load participants.'); return []; }
+  everyone = r.participants.map(x => ({ id: String(x.ID), name: x.Name, email: x.Email, phone: String(x.Phone), inst: x.Institution || '' })); return everyone;
+}
+function label(p) { return p.id + ' — ' + p.name + ' · ' + p.email + ' · ' + p.phone; }
+function setupPick(side) {
+  const inp = $('q-' + side), box = $('r-' + side);
+  inp.addEventListener('input', async () => {
+    const q = inp.value.trim().toLowerCase(); if (q.length < 2) { box.hidden = true; return; }
+    const list = await loadEveryone(), digits = q.replace(/\D/g, '');
+    const hits = list.filter(p => (p.id + ' ' + p.name + ' ' + p.email + ' ' + p.inst).toLowerCase().indexOf(q) > -1 || (digits.length >= 4 && p.phone.replace(/\D/g, '').indexOf(digits) > -1)).slice(0, 12);
+    box.innerHTML = hits.map(p => '<button type="button" data-id="' + esc(p.id) + '">' + esc(label(p)) + '</button>').join('') || '<div class="hint" style="padding:10px;">No match.</div>';
+    box.hidden = false;
+    box.querySelectorAll('button').forEach(b => b.onclick = () => { const p = list.find(x => x.id === b.dataset.id); if (side === 'a') pickA = p; else pickB = p; inp.value = ''; box.hidden = true; $('c-' + side).textContent = label(p); updCmp(); });
+  });
+  inp.addEventListener('keydown', e => { if (e.key === 'Escape') box.hidden = true; });
+}
+setupPick('a'); setupPick('b');
+document.addEventListener('click', e => { if (!e.target.closest('.ix-pick')) { $('r-a').hidden = true; $('r-b').hidden = true; } });
+function updCmp() { $('cmp-go').disabled = !(pickA && pickB && pickA.id !== pickB.id); if (pickA && pickB && pickA.id === pickB.id) showErr('Pick two different accounts.'); else hideAlerts(); }
+$('cmp-go').onclick = () => openCompare(pickA.id, pickB.id);
+
+$('scan').onclick = () => VR.busy($('scan'), 'Scanning…', async () => {
+  hideAlerts();
+  try {
+    const r = await VR.api('adminFindDuplicates', {}); if (!r.ok) return showErr(r.error || 'Could not scan.');
+    dupRows = []; r.groups.forEach(g => { const m = {}; g.members.forEach(x => m[x.ID] = x); g.edges.forEach(e => { const a = m[e.a], b = m[e.b]; dupRows.push([a.ID, a.Name, a.Phone, a.Email, b.ID, b.Name, b.Phone, b.Email, e.level, e.reasons.join('; ')]); }); });
+    $('exp-dups').style.display = dupRows.length ? '' : 'none';
+    if (!r.groups.length) { $('dups').innerHTML = '<p class="hint">No suspected duplicates found among ' + r.total + ' accounts.</p>'; return; }
+    $('dups').innerHTML = '<p class="hint" style="margin-bottom:10px;">' + r.groups.length + ' group' + (r.groups.length === 1 ? '' : 's') + ' found among ' + r.total + ' accounts.</p>' + r.groups.map(g => {
+      const byId = {}; g.members.forEach(m => byId[m.ID] = m);
+      return '<div class="ix-gcard">' + g.members.map(m => '<div class="ix-member"><span class="id">' + esc(m.ID) + '</span><span>' + esc(m.Name) + '</span><span>' + esc(m.Email) + '</span><span>' + esc(m.Phone) + '</span><span>' + esc(m.Institution)
+        + (m.hasAbstract ? ' <span class="ix-tag">abstract</span>' : '') + (m.hasSlot ? ' <span class="ix-tag">slot</span>' : '') + '</span></div>').join('')
+        + g.edges.map(e => '<div class="ix-pair"><span class="ix-tag ' + (e.level === 'High' ? 'high' : 'med') + '">' + e.level + '</span>' + e.reasons.map(x => '<span class="ix-tag">' + esc(x) + '</span>').join('')
+          + '<span>' + esc(e.a) + ' and ' + esc(e.b) + '</span><button class="btn btn-sm" data-a="' + esc(e.a) + '" data-b="' + esc(e.b) + '"><i class="fa-solid fa-scale-balanced"></i> Compare and merge</button></div>').join('') + '</div>';
+    }).join('');
+    $('dups').querySelectorAll('button[data-a]').forEach(b => b.onclick = () => openCompare(b.dataset.a, b.dataset.b));
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+});
+
+const SIMPLE_SAME = (a, b) => String(a == null ? '' : a).trim() === String(b == null ? '' : b).trim();
+const isBlank = v => String(v == null ? '' : v).trim() === '';
+async function openCompare(idA, idB) {
+  hideAlerts();
+  try {
+    const r = await VR.api('adminMergePreview', { idA: idA, idB: idB }); if (!r.ok) return showErr(r.error || 'Could not open the comparison.');
+    cmp = r; survivor = r.suggestedSurvivor; sel = {}; blockSel = {}; touched = {};
+    r.fields.forEach(f => { const a = r.A[f.key], b = r.B[f.key]; if (!SIMPLE_SAME(a, b)) sel[f.key] = isBlank(a) && !isBlank(b) ? 'B' : (isBlank(b) && !isBlank(a) ? 'A' : (survivor)); });
+    Object.keys(r.blocks).forEach(k => { if (r.blocks[k].conflict) blockSel[k] = null; });
+    $('mg-home').style.display = 'none'; $('mg-done').style.display = 'none'; $('mg-cmp').style.display = ''; $('mg-reason').value = '';
+    renderCompare(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+$('back').onclick = () => { $('mg-cmp').style.display = 'none'; $('mg-home').style.display = ''; hideAlerts(); };
+$('mg-again').onclick = () => { $('mg-done').style.display = 'none'; $('mg-home').style.display = ''; everyone = null; pickA = pickB = null; $('c-a').textContent = ''; $('c-b').textContent = ''; $('dups').innerHTML = ''; updCmp(); };
+
+function blockSummary(k, rec) {
+  const g = c => (isBlank(rec[c]) ? '' : String(rec[c]));
+  switch (k) {
+    case 'abstract': return [g('AbstractTitle') || 'Untitled', g('AbstractStatus') && 'Status: ' + g('AbstractStatus'), rec.AbstractRevision && 'Version ' + rec.AbstractRevision, g('AbstractDocId')].filter(Boolean).join(' · ');
+    case 'ppt': return [g('PPTFileName') || g('PPTDocId'), g('PPTUploadedAt')].filter(Boolean).join(' · ');
+    case 'slot': return [g('SlotVenue'), g('SlotRoom'), g('SlotDate'), g('SlotTime'), g('SlotToken') && 'Token ' + g('SlotToken')].filter(Boolean).join(' · ');
+    case 'payment': return [rec.AmountPaid !== '' && '₹' + rec.AmountPaid, g('PaymentMode'), g('PaymentRef') && 'Ref ' + g('PaymentRef'), g('Source')].filter(Boolean).join(' · ');
+    case 'certificate': return [g('CertificateLink') ? 'Certificate issued' : 'Requested', g('CertificateRequestedAt')].join(' · ');
+  } return '';
+}
+const sideName = s => 'Account ' + s + ' (' + cmp[s].ID + ')';
+function renderCompare() {
+  const r = cmp, other = survivor === 'A' ? 'B' : 'A';
+  $('surv').innerHTML = ['A', 'B'].map(s => '<label class="v ' + (survivor === s ? 'sel' : '') + '" style="border:1.5px solid ' + (survivor === s ? 'var(--gold)' : 'var(--navy-border)') + ';border-radius:10px;padding:12px;"><input type="radio" name="surv" value="' + s + '"' + (survivor === s ? ' checked' : '') + '><span><b>Keep ' + esc(r[s].ID) + '</b> — ' + esc(r[s].Name) + '<br><span class="hint">' + esc(r[s].Email) + ' · ' + esc(r[s].Phone) + '<br>' + esc(r[s].Institution) + '</span></span></label>').join('');
+  $('surv').querySelectorAll('input').forEach(i => i.onchange = () => {
+    survivor = i.value;   // fields the user has not touched follow the account that stays (when both have a value)
+    r.fields.forEach(f => { if (sel[f.key] && !touched[f.key] && !isBlank(r.A[f.key]) && !isBlank(r.B[f.key])) sel[f.key] = survivor; });
+    renderCompare();
+  });
+
+  const groups = {}; r.fields.forEach(f => (groups[f.group] = groups[f.group] || []).push(f));
+  let html = '<thead><tr><th style="width:170px;">Field</th><th>' + esc(sideName('A')) + (survivor === 'A' ? ' · stays' : '') + '</th><th>' + esc(sideName('B')) + (survivor === 'B' ? ' · stays' : '') + '</th></tr></thead><tbody>';
+  Object.keys(groups).forEach(g => {
+    html += '<tr class="grp"><td colspan="3">' + esc(g) + '</td></tr>';
+    groups[g].forEach(f => {
+      const a = r.A[f.key], b = r.B[f.key];
+      if (SIMPLE_SAME(a, b)) { html += '<tr class="same"><td>' + esc(f.label) + '</td><td colspan="2">' + (isBlank(a) ? '<span class="empty">empty on both</span>' : esc(a) + ' <span class="hint">(same on both)</span>') + '</td></tr>'; return; }
+      const cell = s => '<label class="v ' + (sel[f.key] === s ? 'sel' : '') + '"><input type="radio" name="f-' + f.key + '" value="' + s + '"' + (sel[f.key] === s ? ' checked' : '') + '><span>' + (isBlank(r[s][f.key]) ? '<span class="empty">empty</span>' : esc(r[s][f.key])) + '</span></label>';
+      html += '<tr><td>' + esc(f.label) + (f.key === 'Email' ? '<div class="hint">If the email changes, the password resets to the phone number.</div>' : '') + '</td><td>' + cell('A') + '</td><td>' + cell('B') + '</td></tr>';
+    });
+  });
+  $('cmp-table').innerHTML = html + '</tbody>';
+  $('cmp-table').querySelectorAll('input[type=radio]').forEach(i => i.onchange = () => { sel[i.name.slice(2)] = i.value; touched[i.name.slice(2)] = 1; renderCompare(); });
+
+  $('blocks').innerHTML = Object.keys(r.blocks).map(k => {
+    const b = r.blocks[k];
+    if (!b.hasA && !b.hasB) return '<div class="ix-block"><h4>' + esc(b.label) + '</h4><span class="hint">Nothing on either account.</span></div>';
+    if (!b.conflict) { const from = b.hasA ? 'A' : 'B', moves = from !== survivor; return '<div class="ix-block"><h4>' + esc(b.label) + '</h4><div class="hint">' + (moves ? 'Only ' + esc(sideName(from)) + ' has this. It moves to the account that stays.' : 'Only the account that stays has this. It is kept.') + '</div><div style="font-size:13px;margin-top:4px;">' + esc(blockSummary(k, r[from])) + '</div></div>'; }
+    const opt = s => '<label class="v ' + (blockSel[k] === s ? 'sel' : '') + '" style="border:1.5px solid ' + (blockSel[k] === s ? 'var(--gold)' : 'var(--navy-border)') + ';border-radius:8px;padding:10px;"><input type="radio" name="b-' + k + '" value="' + s + '"' + (blockSel[k] === s ? ' checked' : '') + '><span><b>Keep ' + esc(sideName(s)) + '</b><br><span class="hint">' + esc(blockSummary(k, r[s])) + '</span></span></label>';
+    return '<div class="ix-block clash"><h4><i class="fa-solid fa-triangle-exclamation" style="color:var(--gold-light);"></i> ' + esc(b.label) + ' — both accounts have one. You must choose.</h4><div class="ix-two">' + opt('A') + opt('B') + '</div><div class="hint" style="margin-top:6px;">The other one stays on the account in Trash (and its files stay in Drive).</div></div>';
+  }).join('');
+  $('blocks').querySelectorAll('input[type=radio]').forEach(i => i.onchange = () => { blockSel[i.name.slice(2)] = i.value; renderCompare(); });
+
+  const mv = r['moves' + other], lines = [];
+  r.moveLabels.forEach(m => { if (mv[m.key]) lines.push('<b>' + mv[m.key] + '</b> ' + m.label + (mv[m.key] === 1 ? '' : 's') + ' will move to ' + esc(r[survivor].ID)); });
+  if (mv.files) lines.push('<b>' + mv.files + '</b> file' + (mv.files === 1 ? '' : 's') + ' will move from the Drive folder of ' + esc(r[other].ID) + ' to the folder of ' + esc(r[survivor].ID));
+  if (!lines.length) lines.push('No attendance, feedback or files are attached to ' + esc(r[other].ID) + '.');
+  if (r.sessionOverlap) lines.push('<span class="ix-wrn">' + r.sessionOverlap + ' attendance session' + (r.sessionOverlap === 1 ? ' is' : 's are') + ' recorded on both accounts. All records are kept; please check the attendance report afterwards.</span>');
+  lines.push('<b>' + esc(r[other].ID) + '</b> (' + esc(r[other].Name) + ') goes to Trash and can be restored. The audit log records both IDs.');
+  if (String(sel.Email ? r[sel.Email].Email : r[survivor].Email).toLowerCase() !== String(r[survivor].Email).toLowerCase()) lines.push('<span class="ix-wrn">The login email changes, so the password resets to the phone number.</span>');
+  $('moves').innerHTML = lines.map(l => '<li>' + l + '</li>').join('');
+}
+
+$('mg-go').onclick = () => {
+  hideAlerts(); const r = cmp, other = survivor === 'A' ? 'B' : 'A';
+  const open = Object.keys(blockSel).filter(k => blockSel[k] == null);
+  if (open.length) return showErr('Choose which one to keep for: ' + open.map(k => r.blocks[k].label).join(', ') + '.');
+  const reason = $('mg-reason').value.trim(); if (reason.length < 3) { $('mg-reason').focus(); return showErr('Please give a short reason for the merge.'); }
+  if (!confirm('Merge ' + r[other].ID + ' (' + r[other].Name + ') into ' + r[survivor].ID + ' (' + r[survivor].Name + ')?\n\n' + r[other].ID + ' will go to Trash.')) return;
+  const toRole = s => s === survivor ? 'survivor' : 'merged', fieldChoice = {}, blockChoice = {};
+  Object.keys(sel).forEach(k => fieldChoice[k] = toRole(sel[k])); Object.keys(blockSel).forEach(k => blockChoice[k] = toRole(blockSel[k]));
+  VR.busy($('mg-go'), 'Merging…', async () => {
+    try {
+      const res = await VR.api('adminMergeParticipants', { survivorId: r[survivor].ID, mergedId: r[other].ID, fieldChoice: fieldChoice, blockChoice: blockChoice, reason: reason });
+      if (!res.ok) return showErr(res.error || 'The merge failed.');
+      const m = res.moved, bits = []; Object.keys(m).forEach(k => { if (m[k]) bits.push(m[k] + ' ' + k); });
+      $('mg-done-sub').textContent = res.mergedId + ' was merged into ' + res.survivorId + '. Moved: ' + (bits.join(', ') || 'nothing to move') + '.'
+        + (res.credentialsReset ? ' The login email changed, so the password is now the phone number.' : '') + (res.filesError ? ' Some files could not be moved: ' + res.filesError : '');
+      $('mg-open').href = 'participants-details.html?id=' + encodeURIComponent(res.survivorId);
+      $('mg-cmp').style.display = 'none'; $('mg-done').style.display = ''; window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) { showErr('Could not reach the server. Check the Trash and the participant list before trying again, in case the merge went through.'); }
+  });
+};
+})();
+</script>
+</body>
+</html>
