@@ -545,36 +545,6 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
 .pub-chip b{display:block;color:var(--text-1);font-size:13.5px;font-weight:600;}
 .pub-chip small{color:var(--text-3);font-size:11.5px;}
 
-/* Video highlights — horizontal scroll strip: thumbnail + title + view link */
-.video-scroll{
-  display:flex;gap:16px;overflow-x:auto;padding:4px 4px 18px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-  scrollbar-width:thin;scrollbar-color:var(--gold) var(--navy-900);
-}
-.video-scroll::-webkit-scrollbar{height:9px;}
-.video-scroll::-webkit-scrollbar-track{background:var(--navy-900);border-radius:8px;}
-.video-scroll::-webkit-scrollbar-thumb{background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:8px;border:2px solid var(--navy-900);}
-.video-scroll::-webkit-scrollbar-thumb:hover{background:var(--gold-light);}
-.video-card{
-  flex:0 0 220px;scroll-snap-align:start;
-  background:linear-gradient(180deg,var(--navy-850),var(--navy-900));
-  border:1px solid var(--navy-border);border-radius:var(--radius);overflow:hidden;
-  display:flex;flex-direction:column;transition:transform .25s ease, box-shadow .25s ease;
-}
-.video-card:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(0,0,0,.35);}
-.video-thumb{position:relative;aspect-ratio:16/9;background:#050a1c;overflow:hidden;display:flex;align-items:center;justify-content:center;}
-.video-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
-.video-thumb .play-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,18,48,.18);color:#fff;font-size:26px;opacity:0;transition:opacity .2s ease;}
-.video-card:hover .play-badge{opacity:1;}
-.video-title{
-  display:block;padding:10px 12px 2px;font-size:12.5px;font-weight:600;line-height:1.35;
-  color:var(--text-1);font-family:'Fraunces',serif;
-}
-.video-view{
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  padding:8px 12px 11px;font-size:12px;font-weight:600;color:var(--gold-light);
-}
-@media(max-width:600px){.video-card{flex:0 0 190px;}}
-
 /* Live stream section */
 .live-embed-wrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;border:1px solid var(--navy-border);background:#000;}
 .live-embed-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
@@ -706,7 +676,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html" class="active">Home</a></li>
       <li><a href="committee.html">Committee</a></li>
-      <li class="has-dropdown">
+      <!-- <li class="has-dropdown">
         <a href="#" class="dropdown-toggle">About <i class="fa-solid fa-chevron-down caret"></i></a>
         <ul class="dropdown">
           <li><a href="about/college.html">About the College</a></li>
@@ -715,7 +685,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
           <li><a href="about/iaes.html">About IAES</a></li>
           <li><a href="about/conference.html">About the Conference</a></li>
         </ul>
-      </li>
+      </li> -->
       <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
       <li><a href="themes.html">Themes</a></li>
       <li><a href="iaes-award.html">IAES Award</a></li>
@@ -876,97 +846,6 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
     </div>
   </div>
 </div>
-
-<!-- ============ VIDEO HIGHLIGHTS ============ -->
-<section class="section">
-  <div class="wrap">
-    <span class="eyebrow"><i class="fa-solid fa-clapperboard"></i>&nbsp; Loyola in motion</span>
-    <h2>Video highlights from Loyola College</h2>
-    <div class="helix-rule"></div>
-    <div class="video-scroll">
-      <div class="video-card">
-        <a href="https://youtu.be/6cpdxkT6NIM" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/6cpdxkT6NIM/hqdefault.jpg" alt="Advanced Zoology and Biotechnology, Loyola College — A Journey of Remembrance">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">Advanced Zoology and Biotechnology, Loyola College</span>
-        <a href="https://youtu.be/6cpdxkT6NIM" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/kUqSLF2aOsA" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/kUqSLF2aOsA/hqdefault.jpg" alt="UPSC Achievers Connect — Inspiring the next generation of Civil Servants">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">UPSC Achievers Connect</span>
-        <a href="https://youtu.be/kUqSLF2aOsA" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/B_OSFayceMY" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/B_OSFayceMY/hqdefault.jpg" alt="A Year of Excellence — Academic Report (2025–2026)">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">A Year of Excellence</span>
-        <a href="https://youtu.be/B_OSFayceMY" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/0boGBODLQhY" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/0boGBODLQhY/hqdefault.jpg" alt="Mobile Radiation Awareness 2025 — Stay Connected, Stay Safe – Say No to Mobile Radiation">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">Mobile Radiation Awareness 2025</span>
-        <a href="https://youtu.be/0boGBODLQhY" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/x7tjVghMIpw" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/x7tjVghMIpw/hqdefault.jpg" alt="Career Guidance — Career guidance seminar for Life Science students">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">Career Guidance</span>
-        <a href="https://youtu.be/x7tjVghMIpw" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/AD5X39hLhe0" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/AD5X39hLhe0/hqdefault.jpg" alt="Outreach Programme — Chippi Kaalan Valarppu (Pleurotus Mushroom Cultivation)">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">Outreach Programme</span>
-        <a href="https://youtu.be/AD5X39hLhe0" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/I9IfZeESJeE" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/I9IfZeESJeE/hqdefault.jpg" alt="Christmas Carol 2025">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">Christmas Carol 2025</span>
-        <a href="https://youtu.be/I9IfZeESJeE" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/ZMKgKjGAEIw" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/ZMKgKjGAEIw/hqdefault.jpg" alt="Go, Set the world on Fire! — A Jesuit Production">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">Go, Set the World on Fire!</span>
-        <a href="https://youtu.be/ZMKgKjGAEIw" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/rNUdFDCgdTA" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/rNUdFDCgdTA/hqdefault.jpg" alt="Loyola Centennial Song — A Loyola VisCom Production">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">Loyola Centennial Song</span>
-        <a href="https://youtu.be/rNUdFDCgdTA" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-      <div class="video-card">
-        <a href="https://youtu.be/IkSIyyTgoZQ" target="_blank" rel="noopener" class="video-thumb">
-          <img src="https://img.youtube.com/vi/IkSIyyTgoZQ/hqdefault.jpg" alt="Loyola Anthem — A Loyola Centennial Production">
-          <span class="play-badge"><i class="fa-solid fa-circle-play"></i></span>
-        </a>
-        <span class="video-title">Loyola Anthem</span>
-        <a href="https://youtu.be/IkSIyyTgoZQ" target="_blank" rel="noopener" class="video-view">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ============ CONFERENCE THEMES ============ -->
 <section class="section-alt section">
@@ -1249,7 +1128,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
       <div class="info-card reveal reveal-delay-1">
         <i class="fa-solid fa-headset"></i>
         <h3>Technical Support</h3>
-        <p><a href="tel:+918838558646">+91 88385 58646</a><br><a href="mailto:mounishdesk@gmail.com">mounishdesk@gmail.com</a></p>
+        <p><a href="tel:+918838558646">+91 88385 58646</a><br><a href="mailto:cimserloyola@gmail.com">cimserloyola@gmail.com</a></p>
       </div>
       <div class="info-card reveal reveal-delay-2">
         <i class="fa-solid fa-location-dot"></i>
