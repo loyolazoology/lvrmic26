@@ -1,10 +1,13 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://vrmic26.vercel.app/</loc>
-  </url>
-  <url>
-    <loc>https://vrmic26.vercel.app/index.html</loc>
-  </url>
+  <url><loc>https://vrmic26.vercel.app/</loc></url>
+  <url><loc>https://vrmic26.vercel.app/about/conference.html</loc></url>
+  <url><loc>https://vrmic26.vercel.app/about/cimser.html</loc></url>
+  <url><loc>https://vrmic26.vercel.app/about/iaes.html</loc></url>
+  <url><loc>https://vrmic26.vercel.app/about-paper-poster.html</loc></url>
+  <url><loc>https://vrmic26.vercel.app/iaes-award.html</loc></url>
+  <url><loc>https://vrmic26.vercel.app/committee.html</loc></url>
+  <url><loc>https://vrmic26.vercel.app/gallery.html</loc></url>
+  <url><loc>https://vrmic26.vercel.app/contact.html</loc></url>
+  <url><loc>https://vrmic26.vercel.app/participant-login.html</loc></url>
 </urlset>
