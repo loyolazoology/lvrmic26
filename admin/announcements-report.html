@@ -3,282 +3,199 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Participant Individual View | LVRMIC 2026 Admin</title>
+<title>Announcements | VRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<style>
-:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-800:#152750;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--danger:#d8695a;--warn:#dba43c;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.55;background:var(--navy-950);min-height:100vh;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;}
-a{color:var(--gold-light);text-decoration:none;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-.topbar{padding:14px 24px;border-bottom:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:rgba(6,11,28,.85);position:sticky;top:0;z-index:30;}
-.topbar h1{font-size:1.25rem;}
-.wrap{padding:22px 24px;max-width:1300px;}
-.card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:22px;margin-bottom:18px;}
-.card h3{font-size:1rem;margin-bottom:14px;display:flex;gap:9px;align-items:center;}
-.card h3 i{color:var(--gold-light);}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:8px;border:1px solid var(--navy-border);background:var(--navy-850);color:var(--text-1);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;}
-.btn:hover{border-color:var(--gold);}
-.btn:disabled{opacity:.5;cursor:not-allowed;}
-.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
-.btn-danger{background:rgba(216,105,90,.12);border-color:rgba(216,105,90,.4);color:#e8988c;}
-.btn-sm{padding:7px 11px;font-size:12px;}
-input,select,textarea{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:14px;}
-input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-input:disabled{opacity:.6;cursor:wait;}
-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-2);margin:0 0 5px;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.grid .full{grid-column:1/-1;}
-@media(max-width:700px){.grid{grid-template-columns:1fr;}}
-.alert{border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;border:1px solid transparent;display:none;}
-.alert.show{display:block;}
-.alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
-.alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
-.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
-.btn-gold .spinner{border-color:rgba(36,26,6,.3);border-top-color:#241a06;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.empty{padding:40px 18px;text-align:center;color:var(--text-3);}
-.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
-.scroll-x{overflow-x:auto;}
-table.list{width:100%;border-collapse:collapse;font-size:13px;}
-table.list th{text-align:left;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;position:sticky;top:0;background:var(--navy-900);}
-table.list td{padding:10px 13px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;}
-table.list tr:hover td{background:rgba(232,201,131,.03);}
-.id{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;}
-.nm{color:var(--text-1);font-weight:600;}
-.badge{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
-.b-ok{background:rgba(79,169,128,.14);color:var(--teal-light);}
-.b-warn{background:rgba(219,164,60,.14);color:var(--warn);}
-.b-bad{background:rgba(216,105,90,.14);color:#e8988c;}
-.b-neu{background:rgba(179,188,214,.1);color:var(--text-2);}
-.b-oral{background:rgba(232,201,131,.14);color:var(--gold-light);}
-.b-poster{background:rgba(120,160,230,.14);color:#9db8ee;}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
-.toolbar input{flex:1;min-width:200px;}
-.toolbar select{width:auto;min-width:150px;}
-.modal{position:fixed;inset:0;background:rgba(6,10,26,.72);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 18px;overflow-y:auto;}
-.modal.show{display:flex;}
-.modal .box{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:24px;max-width:480px;width:100%;}
-@media print{body{background:#fff;color:#000}.topbar,.toolbar,.noprint{display:none !important}}
-</style>
+<link rel="stylesheet" href="admin-base.css">
 <link rel="stylesheet" href="admin-common.css">
 <style>
-/* photo + QR side by side (loaded after admin-common.css so it wins) */
-.head{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;}
-.head .ph{flex:0 0 auto;display:flex;align-items:center;justify-content:center;}
-.head .ph img{width:100%;height:100%;object-fit:cover;display:block;}
-.qrbox{flex:0 0 auto;width:126px;text-align:center;}
-.qrbox .qrimg{width:126px;height:126px;background:#fff;border-radius:10px;padding:7px;display:flex;align-items:center;justify-content:center;}
-.qrbox .qrimg img{width:100%;height:100%;display:block;}
-.qrbox .qrimg .spinner{border-color:rgba(10,18,48,.2);border-top-color:#0a1230;width:22px;height:22px;}
-.qrbox .qrcap{margin-top:5px;font-size:10.5px;color:var(--text-3);line-height:1.3;}
-.head .info{flex:1 1 260px;min-width:0;}
-.srch-state{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12.5px;color:var(--text-3);}
-.sheet-load{display:flex;align-items:center;justify-content:center;gap:10px;padding:46px 18px;color:var(--text-3);}
-/* attendance by session */
-.att-sum{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:2px 0 10px;font-size:13px;color:var(--text-2);}
-.att-sum b{color:var(--text-1);font-family:'IBM Plex Mono',monospace;}
-.att-tbl{width:100%;border-collapse:collapse;font-size:13px;}
-.att-tbl th{text-align:left;padding:7px 10px;font-size:11.5px;font-weight:600;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;}
-.att-tbl td{padding:8px 10px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);}
-.att-note{font-size:12.5px;color:var(--text-3);padding:4px 0;}
+textarea{min-height:130px;resize:vertical;line-height:1.5;}
+.cnt{font-size:11.5px;color:var(--text-3);text-align:right;margin-top:3px;}
+.cnt.over{color:#e8988c;}
+.pv{border:1px solid var(--navy-border);border-radius:12px;background:var(--navy-950);overflow:hidden;}
+.pv img{display:block;width:100%;max-height:220px;object-fit:cover;background:var(--navy-800);}
+.pv .pb{padding:14px 16px;}
+.pv h4{font-family:'Fraunces',serif;font-weight:500;font-size:1.02rem;margin-bottom:6px;color:var(--text-1);}
+.pv p{font-size:13.5px;color:var(--text-2);white-space:pre-wrap;overflow-wrap:anywhere;}
+.pv .pd{font-size:11px;color:var(--text-3);margin-top:8px;}
+table.list td{vertical-align:middle;}
+table.list td.wrapc{white-space:normal;min-width:200px;max-width:420px;overflow-wrap:anywhere;line-height:1.4;}
+.msg{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text-3);font-size:12.5px;margin-top:2px;}
+tr.off td{opacity:.55;}
+.mbox h3{font-size:1.1rem;margin-bottom:10px;}
+.mbox p{font-size:13.5px;color:var(--text-2);margin-bottom:10px;}
+.mbox .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;}
+.two-col{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px;align-items:start;margin-bottom:18px;}
+@media(max-width:900px){.two-col{grid-template-columns:1fr;}}
+.two-col .card{margin-bottom:0;}
 </style>
 </head>
 <body>
 
-<div class="topbar"><h1><i class="fa-solid fa-id-card" style="color:var(--gold-light);"></i> Participants — Individual View</h1><div id="xp"></div></div>
-<div class="wrap">
+<div class="topbar"><h1><i class="fa-solid fa-bullhorn" style="color:var(--gold-light);"></i> Announcements</h1><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+<div class="wrap" style="max-width:1300px;">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
-  <div class="card noprint">
-    <label for="q">Search by name, LVRMIC ID, email or phone</label>
-    <input id="q" placeholder="Loading participants…" autocomplete="off" disabled>
-    <div class="srch-state" id="state"><span class="spinner"></span> Loading participants…</div>
-    <div id="results" style="margin-top:8px;"></div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3><i class="fa-solid fa-pen-to-square"></i> <span id="ftitle">New announcement</span></h3>
+      <div class="grid">
+        <div class="full"><label for="t">Title</label><input id="t" maxlength="120" autocomplete="off" placeholder="For example: Venue change for Oral session 2">
+          <div class="cnt" id="tc2">0 / 120</div></div>
+        <div class="full"><label for="m">Message</label><textarea id="m" maxlength="2000" placeholder="Write the announcement participants will read on their dashboard."></textarea>
+          <div class="cnt" id="mc">0 / 2000</div></div>
+        <div class="full"><label for="u">Poster image link (optional)</label><input id="u" autocomplete="off" placeholder="https://…  (a public image link)">
+          <div class="hint">Use a public https link to an image. Leave blank for a text-only announcement.</div></div>
+        <div class="full"><label class="chk"><input type="checkbox" id="a" checked> Visible to participants</label></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn btn-gold" id="save"><i class="fa-solid fa-paper-plane"></i> <span id="stxt">Post announcement</span></button>
+        <button class="btn" id="cancel" style="display:none;">Cancel edit</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-eye"></i> How participants will see it</h3>
+      <div class="pv"><img id="pimg" alt="" style="display:none;"><div class="pb"><h4 id="ptitle">Your title appears here</h4><p id="pmsg">Your message appears here.</p><div class="pd" id="pdate"></div></div></div>
+      <p class="hint" style="margin-top:10px;">Participants see the latest 10 visible announcements, newest first, on their dashboard.</p>
+    </div>
   </div>
-  <div id="sheet"><div class="sheet-load"><span class="spinner" style="width:20px;height:20px;"></span> Loading participants…</div></div>
+
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search title or message" autocomplete="off">
+    <select id="fs"><option value="">All</option><option value="on">Visible</option><option value="off">Hidden</option></select>
+  </div>
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x"><table class="list"><thead><tr><th>Posted</th><th>Announcement</th><th>Poster</th><th>Posted by</th><th>Status</th><th class="noprint"></th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="6">Loading…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny" style="margin-top:10px;">Hide an announcement to take it off participant dashboards without losing it. Delete moves it to Trash, where it can be restored.</p>
 </div>
 
+<div class="modal" id="md"><div class="box mbox" id="mbox"></div></div>
+
 <script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
 <script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('announcements', 'transaction')) { VR.denied('You do not have permission to manage announcements. The Announcement report page shows them read-only.'); return; }
 
-const $ = id => document.getElementById(id), esc = VR.esc;
-if (!VR.token()) (window.top || window).location.replace(VR.LOGIN_URL);
-function showErr(m){ const e = $('err'); e.textContent = m; e.className = 'alert alert-error show'; window.scrollTo({top:0,behavior:'smooth'}); }
-function showOk(m){ const e = $('ok'); e.textContent = m; e.className = 'alert alert-success show'; window.scrollTo({top:0,behavior:'smooth'}); }
-function hideAlerts(){ $('err').classList.remove('show'); $('ok').classList.remove('show'); }
-const fmtD = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }); };
-const fmtDT = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
-const yes = v => String(v).toUpperCase() === 'TRUE';
-const typeBadge = t => t === 'Oral' ? 'b-oral' : t === 'Poster' ? 'b-poster' : 'b-neu';
-const stBadge = s => s === 'Present' ? 'b-ok' : s === 'Late' || s === 'Missing exit' ? 'b-warn' : s === 'Absent' ? 'b-bad' : 'b-neu';
-const hm12 = hm => { const m = String(hm || '').match(/^(\d{1,2}):(\d{2})$/); if (!m) return ''; let h = +m[1]; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m[2] + ' ' + ap; };
-/* the sheet stores slot text such as "26 Nov 2026" and "10:30 AM"; only real ISO timestamps are reformatted */
-const slotTxt = v => { const s = String(v == null ? '' : v).trim(); return /^\d{4}-\d{2}-\d{2}T/.test(s) ? fmtD(s) : s; };
+const S = v => String(v == null ? '' : v);
+let all = [], view = [], editing = null;
 
-if (!VR.can('participants', 'report')) document.querySelector('.wrap').innerHTML = '<div class="alert alert-error show">You do not have permission to view participant details.</div>';
-else {
-const QR_URL = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
-let all = [], cur = null, ready = false;
-let curExtra = null;        // { attendance, slot } for the open participant, from adminParticipantAttendance
-const qrText = {};          // LVRMIC ID -> signed QR text (from the server)
-let qrError = '';           // reason the QR list could not be loaded, if any
-const qrCache = {};
+const fdt = s => { const d = new Date(S(s)); return isNaN(d) ? '—' : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
 
-const hay = p => [p.ID, p.Name, p.Email, p.Phone].join(' ').toLowerCase();
+function openModal(h) { $('mbox').innerHTML = h; $('md').classList.add('show'); }
+function closeModal() { $('md').classList.remove('show'); $('mbox').innerHTML = ''; }
+$('md').addEventListener('mousedown', e => { if (e.target === $('md')) closeModal(); });
+function modalErr(m) { const e = $('me'); if (!e) return; e.textContent = m; e.className = 'alert alert-error show'; }
 
-/* ---- QR image (same generator as the QR codes page) ---- */
-async function qrImg(text, px) {
-  const key = text + '|' + px; if (qrCache[key]) return qrCache[key];
-  await VR.load(QR_URL);
-  const d = document.createElement('div');
-  new QRCode(d, { text: text, width: px, height: px, correctLevel: QRCode.CorrectLevel.M });
-  const c = d.querySelector('canvas');
-  return (qrCache[key] = c ? c.toDataURL('image/png') : '');
+/* ---------- form + live preview ---------- */
+function preview() {
+  const t = $('t').value.trim(), m = $('m').value.trim(), u = $('u').value.trim();
+  $('ptitle').textContent = t || 'Your title appears here';
+  $('pmsg').textContent = m || 'Your message appears here.';
+  $('pdate').textContent = editing ? 'Originally posted ' + fdt(editing.createdAt) : 'Posted just now';
+  const img = $('pimg');
+  if (/^https:\/\/\S+$/i.test(u)) { img.src = u; img.style.display = 'block'; img.onerror = () => { img.style.display = 'none'; }; } else { img.removeAttribute('src'); img.style.display = 'none'; }
+  $('tc2').textContent = $('t').value.length + ' / 120';
+  $('mc').textContent = $('m').value.length + ' / 2000';
 }
+['t', 'm', 'u'].forEach(i => $(i).addEventListener('input', preview));
 
-/* ---- search ---- */
-function results(){
-  const q = $('q').value.trim().toLowerCase();
-  if (!q) { $('results').innerHTML = ''; return; }
-  if (!ready) { $('results').innerHTML = '<div class="srch-state"><span class="spinner"></span> Still loading participants…</div>'; return; }
-  const l = all.filter(p => hay(p).includes(q)).slice(0, 8);
-  $('results').innerHTML = l.length ? l.map(p => `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(226,187,120,.08);cursor:pointer;" data-pick="${esc(p.ID)}"><span><span class="id">${esc(p.ID)}</span> &nbsp;<b class="nm">${esc(p.Name)}</b> <span style="font-size:12px;color:var(--text-3);">· ${esc(p.Institution || '')}</span></span><span class="badge ${typeBadge(p.ParticipantType)}">${esc(p.ParticipantType)}</span></div>`).join('') : '<div class="empty" style="padding:12px;">No match.</div>';
+function resetForm() {
+  editing = null; $('t').value = ''; $('m').value = ''; $('u').value = ''; $('a').checked = true;
+  $('ftitle').textContent = 'New announcement'; $('stxt').textContent = 'Post announcement'; $('cancel').style.display = 'none'; preview();
 }
-const kv = (l, v, link) => `<div><span>${l}</span><b>${v ? (link ? `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a>` : esc(v)) : '—'}</b></div>`;
+function startEdit(a) {
+  editing = a; $('t').value = a.title; $('m').value = a.message; $('u').value = a.posterImageUrl; $('a').checked = a.active;
+  $('ftitle').textContent = 'Edit announcement'; $('stxt').textContent = 'Save changes'; $('cancel').style.display = ''; preview();
+  window.scrollTo({ top: 0, behavior: 'smooth' }); $('t').focus();
+}
+$('cancel').onclick = resetForm;
 
-/* ---- QR box ---- */
-function qrBoxHtml(){ return `<div class="qrbox"><div class="qrimg" id="qrb"><span class="spinner"></span></div><div class="qrcap" id="qrcap">Attendance QR</div></div>`; }
-async function fillQr(p){
-  const box = $('qrb'), cap = $('qrcap'); if (!box) return;
-  const txt = qrText[p.ID];
-  if (!txt) {
-    if (cur && cur.ID === p.ID) { box.innerHTML = '<i class="fa-solid fa-qrcode" style="font-size:34px;color:#9aa3bd;"></i>'; cap.textContent = qrError ? 'QR not available: ' + qrError : 'No QR for this participant'; }
-    return;
-  }
+$('save').onclick = () => VR.busy($('save'), editing ? 'Saving…' : 'Posting…', async () => {
+  hideAlerts();
+  const body = { title: $('t').value, message: $('m').value, posterImageUrl: $('u').value, active: $('a').checked };
   try {
-    const src = await qrImg(txt, 360);
-    if (cur && cur.ID === p.ID && $('qrb')) { $('qrb').innerHTML = `<img alt="Attendance QR code of ${esc(p.ID)}" src="${src}">`; $('qrcap').textContent = 'Attendance QR · ' + p.ID; }
-  } catch (e) { if (cur && cur.ID === p.ID && $('qrb')) { $('qrb').innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="font-size:30px;color:#c9974f;"></i>'; $('qrcap').textContent = 'Could not draw the QR code'; } }
-}
+    let r;
+    if (editing) r = await VR.api('adminUpdateAnnouncement', Object.assign({ row: editing.row, id: editing.id }, body));
+    else {
+      r = await VR.api('adminPostAnnouncement', body);
+      if (!r.ok && r.warning && confirm(r.error)) r = await VR.api('adminPostAnnouncement', Object.assign({ force: true }, body));
+    }
+    if (!r.ok) { if (!r.warning) showErr(r.error || 'Could not save.'); return; }
+    showOk(editing ? (r.changed ? 'Changes saved.' : 'Nothing was changed.') : 'Announcement posted.');
+    resetForm(); await load();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+});
 
-/* ---- slot block: clean server text when loaded, raw sheet text until then ---- */
-function slotHtml(p){
-  const s = curExtra && curExtra.slot;
-  const venue = s ? s.venue : p.SlotVenue, room = s ? s.room : p.SlotRoom, date = s ? s.date : slotTxt(p.SlotDate), token = s ? s.token : p.SlotToken;
-  const time = s ? (s.time ? s.time + (s.endTime ? ' – ' + s.endTime : '') : '') : slotTxt(p.SlotTime);
-  const dur = s ? (s.duration ? s.duration + ' min' : '') : (p.SlotDuration ? p.SlotDuration + ' min' : '');
-  const board = s ? s.board : p.PosterBoard, status = s ? s.status : p.SlotStatus;
-  return `<div class="kv">${kv('Venue', venue)}${kv('Room', room)}${kv('Date', date)}${kv('Time', time)}${kv('Duration', dur)}${kv('Token', token)}${kv('Poster board', board)}${kv('Slot status', status)}</div>`;
+/* ---------- list ---------- */
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), s = $('fs').value;
+  return all.filter(a => (!q || (a.title + ' ' + a.message).toLowerCase().indexOf(q) > -1) && (!s || (s === 'on') === a.active))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 }
-
-/* ---- attendance block: per session, from AttendanceLog ---- */
-function attHtml(){
-  if (curExtra === null) return '<div class="att-note"><span class="spinner"></span> Loading attendance…</div>';
-  if (curExtra === false) return '<div class="att-note">Attendance could not be loaded.</div>';
-  const a = curExtra.attendance, ss = a.sessions || [];
-  if (!ss.length) return '<div class="att-note">No attendance sessions have been set up yet.</div>';
-  const sum = a.total ? `<div class="att-sum"><span>Attended <b>${a.attended} of ${a.total}</b> counted sessions</span><span><b>${a.percent == null ? '—' : a.percent + '%'}</b></span>${a.minPercent ? `<span class="badge ${a.percent != null && a.percent >= a.minPercent ? 'b-ok' : 'b-warn'}">Certificate minimum ${a.minPercent}%</span>` : ''}</div>` : '<div class="att-note">No counted session has started yet.</div>';
-  return sum + `<div class="scroll-x"><table class="att-tbl"><thead><tr><th>Session</th><th>Date</th><th>In</th><th>Out</th><th>Status</th></tr></thead><tbody>${ss.map(s => `<tr><td>${esc(s.title)}${s.counts ? '' : ' <span class="badge b-neu">not counted</span>'}</td><td>${esc(fmtD(s.date))}</td><td>${esc(hm12(s.in) || '—')}</td><td>${esc(hm12(s.out) || '—')}</td><td>${s.status ? `<span class="badge ${stBadge(s.status)}">${esc(s.status)}</span>` : '<span class="badge b-neu">Upcoming</span>'}</td></tr>`).join('')}</tbody></table></div>`;
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map((a, i) =>
+    '<tr class="' + (a.active ? '' : 'off') + '"><td>' + esc(fdt(a.createdAt)) + '</td>'
+    + '<td class="wrapc"><span class="nm">' + esc(a.title) + '</span><div class="msg">' + esc(a.message) + '</div></td>'
+    + '<td>' + (a.posterImageUrl ? '<a href="' + esc(a.posterImageUrl) + '" target="_blank" rel="noopener">View</a>' : '—') + '</td>'
+    + '<td>' + esc(a.postedByName || a.postedBy || '—') + '</td>'
+    + '<td><span class="badge ' + (a.active ? 'b-ok' : 'b-neu') + '">' + (a.active ? 'Visible' : 'Hidden') + '</span></td>'
+    + '<td class="noprint"><div class="row-actions">'
+    + '<button class="btn btn-sm" data-a="edit" data-i="' + i + '"><i class="fa-solid fa-pen"></i> Edit</button>'
+    + '<button class="btn btn-sm" data-a="toggle" data-i="' + i + '"><i class="fa-solid ' + (a.active ? 'fa-eye-slash' : 'fa-eye') + '"></i> ' + (a.active ? 'Hide' : 'Show') + '</button>'
+    + '<button class="btn btn-sm btn-danger" data-a="del" data-i="' + i + '"><i class="fa-solid fa-trash"></i> Delete</button></div></td></tr>').join('')
+    : '<tr><td class="empty" colspan="6">' + (all.length ? 'No announcements match these filters.' : 'No announcements yet. Post the first one above.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length;
 }
-async function loadExtra(p){
-  curExtra = null;
+async function load() {
+  $('tb').innerHTML = '<tr><td class="empty" colspan="6">Loading…</td></tr>';
   try {
-    const r = await VR.api('adminParticipantAttendance', { id: p.ID });
-    if (!cur || cur.ID !== p.ID) return;
-    curExtra = r && r.ok ? { attendance: r.attendance, slot: r.slot } : false;
-  } catch (e) { if (!cur || cur.ID !== p.ID) return; curExtra = false; }
-  if ($('slotsec')) $('slotsec').innerHTML = slotHtml(p);
-  if ($('attsec')) $('attsec').innerHTML = attHtml();
+    const r = await VR.api('adminListAnnouncements', {});
+    if (!r.ok) { showErr(r.error || 'Could not load announcements.'); $('tb').innerHTML = '<tr><td class="empty" colspan="6">Could not load.</td></tr>'; return; }
+    all = r.announcements || []; render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); $('tb').innerHTML = '<tr><td class="empty" colspan="6">Could not load.</td></tr>'; }
 }
 
-function show(p, photo){
-  cur = p; curExtra = null; history.replaceState(null, '', '?id=' + encodeURIComponent(p.ID));
-  const initials = String(p.Name || '?').replace(/^(Dr|Mr|Ms|Mrs|Prof)\.?\s*/i, '').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
-  const src = String(p.Source || '') === 'Spot' ? 'Spot registration' : 'Portal';
-  $('sheet').innerHTML = `<div class="card" id="card">
-    <div class="head"><div class="ph" id="ph">${photo ? `<img src="${photo}" alt="Photo of ${esc(p.Name)}">` : (p.PhotoURL ? '<span class="spinner" style="width:22px;height:22px;"></span>' : esc(initials))}</div>
-      ${qrBoxHtml()}
-      <div class="info"><h2>${esc(p.Name)}</h2><div class="id" style="font-size:15px;margin-bottom:8px;">${esc(p.ID)}</div>
-        <span class="badge ${typeBadge(p.ParticipantType)}">${esc(p.ParticipantType || 'Participant')}</span> <span class="badge ${p.RegistrationStatus === 'Cancelled' ? 'b-bad' : 'b-ok'}">${esc(p.RegistrationStatus || 'Registered')}</span> <span class="badge ${yes(p.ProfileCompleted) ? 'b-ok' : 'b-warn'}">Profile ${yes(p.ProfileCompleted) ? 'completed' : 'pending'}</span>
-        <div style="margin-top:10px;font-size:13px;color:var(--text-2);">${esc(p.Designation === 'Other' ? (p.DesignationOther || 'Other') : (p.Designation || ''))}${p.Department ? ' · ' + esc(p.Department) : ''}<br>${esc(p.Institution || '')}</div></div></div>
-    <div class="sec"><h4>Contact</h4><div class="kv">${kv('Email', p.Email)}${kv('Phone', p.Phone)}${kv('City', p.City)}${kv('State', p.State)}${kv('Country', p.Country)}</div></div>
-    <div class="sec"><h4>Personal &amp; profile</h4><div class="kv">${kv('Gender', p.Gender)}${kv('Date of birth', p.DOB ? fmtD(p.DOB) : '')}${kv('Category', p.Category)}${kv('Food preference', p.FoodPreference)}${kv('ORCID', p.OrcidId)}${kv('Google Scholar', p.GoogleScholar, 1)}${kv('LinkedIn', p.LinkedIn, 1)}</div></div>
-    <div class="sec"><h4>Registration &amp; payment</h4><div class="kv">${kv('Registration type', p.Role)}${kv('Registered via', src)}${kv('Registered on', fmtDT(p.RegistrationDate || p.CreatedAt))}${kv('Amount paid', p.AmountPaid ? '₹' + p.AmountPaid : '')}${kv('Fee paid', yes(p.FeePaid) || Number(p.AmountPaid) ? 'Yes' : 'No')}${kv('Payment mode', p.PaymentMode)}${kv('Payment reference', p.PaymentRef)}${kv('Fee note', p.FeeNote)}${kv('Created by', p.CreatedBy)}${kv('Attending', p.Mode || 'Offline')}${kv(p.Mode === 'Online' ? 'Meeting link' : 'Venue', p.Mode === 'Online' ? p.MeetingLink : p.Location, p.Mode === 'Online')}</div></div>
-    <div class="sec"><h4>Abstract &amp; presentation</h4><div class="kv">${kv('Abstract status', p.AbstractStatus || 'Not Submitted')}${kv('Title', p.AbstractTitle)}${kv('Theme', p.AbstractTheme)}${kv('Document ID', p.AbstractDocId)}${kv('Version', p.AbstractRevision)}${kv('Reviewer remarks', p.AbstractRemarks)}${kv('Reviewed on', p.AbstractReviewedAt ? fmtDT(p.AbstractReviewedAt) : '')}${kv('PPT', p.PPTLink ? (p.PPTFileName || 'Uploaded') : '')}${kv('PPT uploaded', p.PPTUploadedAt ? fmtDT(p.PPTUploadedAt) : '')}</div></div>
-    <div class="sec"><h4>Slot</h4><div id="slotsec">${slotHtml(p)}</div></div>
-    <div class="sec"><h4>Attendance</h4><div id="attsec">${attHtml()}</div></div>
-    <div class="sec"><h4>Badge, feedback &amp; certificate</h4><div class="kv">${kv('Badge / card issued', p.CardIssuedAt ? fmtDT(p.CardIssuedAt) : '')}${kv('QR e-mailed', p.QrMailedAt ? fmtDT(p.QrMailedAt) : '')}${kv('Feedback submitted', yes(p.FeedbackSubmitted) ? 'Yes' : 'No')}${kv('Certificate requested', yes(p.CertificateRequested) ? 'Yes (' + fmtD(p.CertificateRequestedAt) + ')' : 'No')}${kv('Certificate', p.CertificateLink ? 'Issued' : '')}${kv('WhatsApp group joined', yes(p.WhatsappJoined) ? 'Yes' : 'No')}</div></div>
-  </div>
-  ${VR.can('participants', 'transaction') ? `<p class="noprint" style="margin-top:-4px;"><a class="btn btn-sm" href="participants-details.html?id=${encodeURIComponent(p.ID)}"><i class="fa-solid fa-user-pen"></i> Edit this participant</a></p>` : ''}`;
-  fillQr(p);
-  loadExtra(p);
-  if (!photo && p.PhotoURL) VR.api('adminGetParticipantPhoto', { id: p.ID }).then(r => { if (cur && cur.ID === p.ID && r.ok && r.photo) $('ph').innerHTML = `<img src="${r.photo}" alt="Photo of ${esc(p.Name)}">`; else if (cur && cur.ID === p.ID) $('ph').textContent = initials; }).catch(() => { if (cur && cur.ID === p.ID) $('ph').textContent = initials; });
+function askDelete(a) {
+  openModal('<h3>Delete this announcement?</h3><p><b>' + esc(a.title) + '</b></p><p>It is removed from participant dashboards and moved to Trash, where it can be restored.</p>'
+    + '<label for="mr">Reason</label><input id="mr" maxlength="200" autocomplete="off" placeholder="For example: posted by mistake">'
+    + '<div class="alert alert-error" id="me" style="margin-top:12px;"></div>'
+    + '<div class="acts"><button class="btn" id="mc2">Cancel</button><button class="btn btn-danger" id="mo"><i class="fa-solid fa-trash"></i> Delete</button></div>');
+  $('mc2').onclick = closeModal;
+  $('mo').onclick = () => VR.busy($('mo'), 'Deleting…', async () => {
+    try {
+      const r = await VR.api('adminDeleteAnnouncement', { row: a.row, reason: $('mr').value.trim() });
+      if (!r.ok) { modalErr(r.error || 'Could not delete.'); return; }
+      if (editing && editing.id === a.id) resetForm();
+      closeModal(); showOk('Announcement moved to Trash.'); await load();
+    } catch (e) { modalErr('Could not reach the server. Try again.'); }
+  });
 }
-function pick(id){ const p = all.find(x => x.ID === id); if (p) { $('results').innerHTML = ''; $('q').value = ''; show(p); } else showErr('No participant found with ID ' + id + '.'); }
-$('results').onclick = e => { const r = e.target.closest('[data-pick]'); if (r) pick(r.dataset.pick); };
-$('q').oninput = results;
-$('q').onkeydown = e => { if (e.key === 'Enter' && ready) { const l = all.filter(p => hay(p).includes($('q').value.trim().toLowerCase())); if (l.length) pick(l[0].ID); } };
 
-/* ---- export helpers ---- */
-function slotFlat(p){
-  const s = curExtra && curExtra.slot;
-  return s ? [s.venue, s.room, s.date, s.time ? s.time + (s.endTime ? ' – ' + s.endTime : '') : ''].filter(Boolean).join(' · ')
-           : [p.SlotVenue, p.SlotRoom, slotTxt(p.SlotDate), slotTxt(p.SlotTime)].filter(Boolean).join(' · ');
-}
-function attFlat(){
-  if (!curExtra) return 'Not loaded';
-  const a = curExtra.attendance, ss = a.sessions || [];
-  if (!ss.length) return 'No sessions';
-  return (a.percent == null ? '' : a.percent + '% (' + a.attended + '/' + a.total + '). ') + ss.map(s => s.title + ' ' + fmtD(s.date) + ': ' + (s.status || 'Upcoming')).join('; ');
-}
-function flat(p){ return [['LVRMIC ID', p.ID], ['Name', p.Name], ['Category', p.ParticipantType], ['Registration status', p.RegistrationStatus], ['Registered via', String(p.Source || '') === 'Spot' ? 'Spot registration' : 'Portal'], ['Email', p.Email], ['Phone', p.Phone], ['Institution', p.Institution], ['Designation', p.Designation === 'Other' ? p.DesignationOther : p.Designation], ['Department', p.Department], ['City / State / Country', [p.City, p.State, p.Country].filter(Boolean).join(', ')], ['Gender', p.Gender], ['Date of birth', p.DOB ? fmtD(p.DOB) : ''], ['Registration type', p.Role], ['Food preference', p.FoodPreference], ['Amount paid', p.AmountPaid], ['Payment mode', p.PaymentMode], ['Payment reference', p.PaymentRef], ['Attending', p.Mode || 'Offline'], ['Abstract status', p.AbstractStatus], ['Abstract title', p.AbstractTitle], ['Theme', p.AbstractTheme], ['Reviewer remarks', p.AbstractRemarks], ['Slot', slotFlat(p)], ['Token', curExtra && curExtra.slot ? curExtra.slot.token : p.SlotToken], ['Poster board', curExtra && curExtra.slot ? curExtra.slot.board : p.PosterBoard], ['Attendance', attFlat()]].map(r => [r[0], r[1] == null ? '' : String(r[1])]); }
+$('tb').onclick = async e => {
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const a = view[Number(b.dataset.i)]; if (!a) return;
+  if (b.dataset.a === 'edit') startEdit(a);
+  else if (b.dataset.a === 'del') askDelete(a);
+  else if (b.dataset.a === 'toggle') VR.busy(b, '…', async () => {
+    hideAlerts();
+    try {
+      const r = await VR.api('adminUpdateAnnouncement', { row: a.row, id: a.id, active: !a.active });
+      if (!r.ok) { showErr(r.error || 'Could not update.'); return; }
+      showOk(a.active ? 'Announcement hidden from participants.' : 'Announcement is visible to participants again.'); await load();
+    } catch (er) { showErr('Could not reach the server.'); }
+  });
+};
+$('q').addEventListener('input', render);
+$('fs').addEventListener('change', render);
+$('refresh').onclick = () => { hideAlerts(); load(); };
 
-const photoEl = () => $('ph') && $('ph').querySelector('img');
-const qrEl = () => $('qrb') && $('qrb').querySelector('img');
-
-VR.exportBar($('xp'), { name: 'Participant', title: 'Participant Details', imageEl: () => $('card'),   // the image export captures the whole card, photo and QR included
-  getData: () => cur ? { headers: ['Field', 'Value'], rows: flat(cur) } : (alert('Select a participant first.'), { headers: [], rows: [] }),
-  pdf: async () => { if (!cur) return alert('Select a participant first.');   // PDF with photo and QR embedded
-    await VR.load('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); await VR.load('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
-    const s = await VR.settings(), doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' }), W = doc.internal.pageSize.getWidth();
-    const put = (img, x, y, w, h) => { try { let t = 'JPEG'; try { t = doc.getImageProperties(img.src).fileType || 'JPEG'; } catch (e) {} doc.addImage(img.src, t, x, y, w, h); } catch (e) {} };
-    doc.setFontSize(12); doc.text(s['conf.name'] || 'LVRMIC 2026', 36, 34, { maxWidth: W - 72 }); doc.setFontSize(10); doc.setTextColor(110); doc.text('Participant details · generated ' + VR.now(), 36, 62);
-    const px = W - 36 - 100, qx = px - 12 - 100;                    // photo on the far right, QR to its left
-    const pimg = photoEl(); if (pimg) put(pimg, px, 74, 100, 126);
-    const qimg = qrEl();
-    if (qimg) { doc.setDrawColor(200); doc.rect(qx, 74, 100, 100); put(qimg, qx + 4, 78, 92, 92); doc.setFontSize(7.5); doc.setTextColor(110); doc.text('Attendance QR', qx + 50, 184, { align: 'center' }); }
-    doc.setTextColor(0); doc.setFontSize(16); doc.text(cur.Name || '', 36, 92, { maxWidth: qx - 36 - 14 }); doc.setFontSize(11); doc.text(cur.ID, 36, 126);
-    doc.autoTable({ body: flat(cur).slice(2), startY: 214, theme: 'grid', styles: { fontSize: 9, cellPadding: 4 }, columnStyles: { 0: { cellWidth: 130, fontStyle: 'bold', fillColor: [240, 242, 248] } }, margin: { left: 36, right: 36 } });
-    doc.save(VR.fileName('Participant_' + cur.ID, 'pdf')); },
-  print: async () => { if (!cur) return alert('Select a participant first.'); const img = photoEl(), qr = qrEl();
-    const pics = '<div style="float:right;display:flex;gap:12px;margin-left:14px;align-items:flex-start;">'
-      + (qr ? '<div style="text-align:center;font:9px Arial,sans-serif;color:#444;"><img src="' + qr.src + '" style="width:112px;height:112px;border:1px solid #bbb;padding:3px;background:#fff;display:block;"><div style="margin-top:3px;">Attendance QR</div></div>' : '')
-      + (img ? '<img src="' + img.src + '" style="width:110px;height:140px;object-fit:cover;border:1px solid #888;">' : '') + '</div>';
-    await VR.printHtml('Participant — ' + cur.Name + ' (' + cur.ID + ')', pics + VR.tableHtml(['Field', 'Value'], flat(cur))); } });
-
-/* ---- load participants and the QR list together ---- */
-(async function(){
-  const qrReq = VR.api('adminQrList', { kind: 'participant' }).then(r => {
-    if (r && r.ok) (r.people || []).forEach(x => { if (x.id && x.qr) qrText[x.id] = x.qr; });
-    else qrError = (r && r.error) || 'could not be loaded';
-  }).catch(() => { qrError = 'could not reach the server'; });
-  try {
-    const r = await VR.api('adminListParticipants', {});
-    if (!r.ok) { showErr(r.error || 'Could not load participants.'); $('state').innerHTML = 'Could not load participants.'; $('sheet').innerHTML = '<div class="empty">Could not load participants. Refresh the page to try again.</div>'; return; }
-    all = (r.participants || []).filter(p => String(p.ID || '').trim() !== '');
-    if (!all.length && (r.participants || []).length) showErr('Participants were found but none has an ID. Check that cell A1 of the Participants sheet says exactly "ID".');
-  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); $('state').innerHTML = 'Could not load participants.'; $('sheet').innerHTML = '<div class="empty">Could not load participants.</div>'; return; }
-  ready = true; $('q').disabled = false; $('q').placeholder = 'e.g. Riya or LVRMIC26-0001';
-  $('state').innerHTML = '<i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> ' + all.length + ' participants ready';
-  $('sheet').innerHTML = '<div class="empty">Search for a participant above to see their full details.</div>';
-  const id = new URLSearchParams(location.search).get('id');
-  if (id) { $('sheet').innerHTML = '<div class="sheet-load"><span class="spinner" style="width:20px;height:20px;"></span> Opening participant…</div>'; await qrReq; pick(id); }
-  else $('q').focus();
+preview(); load();
 })();
-}
-
 </script>
 </body>
 </html>
