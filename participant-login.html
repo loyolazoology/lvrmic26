@@ -150,7 +150,7 @@ footer p{font-size:13px;color:var(--text-3);}
 /* Light section + auth card */
 .section-light{background:var(--paper);color:var(--ink-2);}
 .auth-wrap{min-height:calc(100vh - 260px);display:flex;align-items:center;justify-content:center;padding:60px 20px;}
-.auth-card{width:100%;max-width:420px;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:38px 32px;box-shadow:0 30px 70px rgba(0,0,0,.35);}
+.auth-card{width:100%;max-width:420px;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:38px 32px;box-shadow:0 30px 70px rgba(0,0,0,.35);scroll-margin-top:90px;}
 .section-light .auth-card h2{color:var(--text-1);}
 .section-light .auth-card label{color:var(--text-2);}
 .section-light .auth-card .eyebrow{background:rgba(205,163,85,.12);border-color:var(--navy-border);color:var(--gold-light);}
@@ -195,7 +195,17 @@ footer p{font-size:13px;color:var(--text-3);}
 .fab-top{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;opacity:0;pointer-events:none;transform:translateY(8px) scale(.9);}
 .fab-top.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
 @media (max-width:600px){.float-actions{right:16px;bottom:16px;gap:10px;}.fab{width:46px;height:46px;font-size:19px;}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none !important;}}
+
+/* Error pop-up */
+.popup-back{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,8,22,.72);backdrop-filter:blur(3px);}
+.popup-back.show{display:flex;}
+.popup{width:100%;max-width:400px;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid rgba(216,105,90,.45);border-radius:16px;padding:28px 26px 22px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.55);animation:popin .18s ease-out;}
+@keyframes popin{from{opacity:0;transform:translateY(8px) scale(.97);}to{opacity:1;transform:none;}}
+.popup-icon{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(216,105,90,.14);color:#e8988c;border:1px solid rgba(216,105,90,.4);}
+.popup h3{margin:0 0 8px;font-size:1.25rem;}
+.popup p{margin:0 0 20px;font-size:14px;color:var(--text-2);overflow-wrap:anywhere;}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none !important;animation:none !important;}}
 </style>
 <link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -241,16 +251,6 @@ footer p{font-size:13px;color:var(--text-3);}
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="committee.html">Committee</a></li>
-      <!-- <li class="has-dropdown">
-        <a href="#" class="dropdown-toggle">About <i class="fa-solid fa-chevron-down caret"></i></a>
-        <ul class="dropdown">
-          <li><a href="about/college.html">About the College</a></li>
-          <li><a href="about/department.html">About the Department</a></li>
-          <li><a href="about/cimser.html">About CIMSER</a></li>
-          <li><a href="about/iaes.html">About IAES</a></li>
-          <li><a href="about/conference.html">About the Conference</a></li>
-        </ul>
-      </li> -->
       <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
       <li><a href="themes.html">Themes</a></li>
       <li><a href="iaes-award.html">IAES Award</a></li>
@@ -278,9 +278,9 @@ footer p{font-size:13px;color:var(--text-3);}
   </div>
 </header>
 
-<section class="section-light section" style="padding-top:0;">
+<section class="section-light section" style="padding-top:0;" id="login-section">
   <div class="wrap auth-wrap">
-    <div class="auth-card">
+    <div class="auth-card" id="auth-card">
 
       <!-- LOGIN -->
       <div class="auth-view active" id="view-login">
@@ -330,7 +330,6 @@ footer p{font-size:13px;color:var(--text-3);}
         <span class="eyebrow">Reset Password</span>
         <h2>Forgot your password?</h2>
         <p class="auth-sub">Enter your registered email &mdash; we'll send a temporary password to it.</p>
-        <div class="alert alert-error" id="forgot-error"></div>
         <div class="alert alert-success" id="forgot-success"></div>
         <form id="forgot-form" autocomplete="off">
           <div class="field">
@@ -348,7 +347,6 @@ footer p{font-size:13px;color:var(--text-3);}
         <span class="eyebrow">Set New Password</span>
         <h2>Choose a new password</h2>
         <p class="auth-sub">For security, please set a new password before continuing.</p>
-        <div class="alert alert-error" id="reset-error"></div>
         <form id="reset-form" autocomplete="off">
           <div class="field">
             <label for="reset-password">New password (min. 6 characters)</label>
@@ -428,6 +426,16 @@ footer p{font-size:13px;color:var(--text-3);}
   <a href="mailto:conferencecimser@gmail.com" class="fab fab-email" id="email-float-btn" title="Email the conference secretariat" aria-label="Email the conference secretariat"><i class="fa-solid fa-envelope"></i></a>
 </div>
 
+<!-- Error pop-up -->
+<div class="popup-back" id="popup-back">
+  <div class="popup" role="alertdialog" aria-modal="true" aria-labelledby="popup-title" aria-describedby="popup-msg">
+    <div class="popup-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h3 id="popup-title">Something went wrong</h3>
+    <p id="popup-msg"></p>
+    <button type="button" class="btn btn-gold btn-block" id="popup-ok">OK</button>
+  </div>
+</div>
+
 <script>
 function updateClock(){
   const now = new Date();
@@ -476,6 +484,25 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
   }
 })();
 
+// ---- Error pop-up ----
+const popupBack = document.getElementById('popup-back');
+let popupReturnFocus = null;
+function showPopup(message, title) {
+  document.getElementById('popup-title').textContent = title || 'Something went wrong';
+  document.getElementById('popup-msg').textContent = message || 'Please try again.';
+  popupReturnFocus = document.activeElement;
+  popupBack.classList.add('show');
+  document.getElementById('popup-ok').focus();
+}
+function closePopup() {
+  if (!popupBack.classList.contains('show')) return;
+  popupBack.classList.remove('show');
+  if (popupReturnFocus && popupReturnFocus.focus) popupReturnFocus.focus();
+}
+document.getElementById('popup-ok').addEventListener('click', closePopup);
+popupBack.addEventListener('click', function(e){ if (e.target === popupBack) closePopup(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closePopup(); });
+
 // ---- Show / hide password toggles ----
 function setPasswordVisible(btn, visible){
   const input = document.getElementById(btn.dataset.target);
@@ -516,6 +543,7 @@ function validateCaptcha() {
   } else {
     loginBtn.disabled = true;
     loginBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Log in';
+    // typing feedback stays inline: a pop-up on every keystroke would be annoying
     if (userVal.length === 5 && userVal !== generatedCaptcha) showAlert('login-error', 'Incorrect CAPTCHA code. Please try again.');
     else hideAlerts('login');
   }
@@ -534,13 +562,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
 
+// Always resolves to the server's JSON, or throws an Error with a message that is safe to show the person.
 async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action: action }, payload))
-  });
-  return res.json();
+  const ctl = new AbortController(), timer = setTimeout(function(){ ctl.abort(); }, 30000);
+  let res;
+  try {
+    res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(Object.assign({ action: action }, payload)),
+      signal: ctl.signal
+    });
+  } catch (err) {
+    throw new Error(err && err.name === 'AbortError'
+      ? 'The server took too long to respond. Please try again in a moment.'
+      : 'Could not reach the server. Check your internet connection and try again.');
+  } finally { clearTimeout(timer); }
+  if (!res.ok) throw new Error('The server returned an error (' + res.status + '). Please try again shortly.');
+  try { return await res.json(); }
+  catch (err) { throw new Error('The server sent an unexpected reply. Please try again, or contact the organisers if it keeps happening.'); }
 }
 
 function showAuthView(name) {
@@ -550,6 +590,7 @@ function showAuthView(name) {
 }
 function showAlert(id, msg) {
   const el = document.getElementById(id);
+  if (!el) return;
   el.textContent = msg;
   el.classList.add('show');
 }
@@ -589,7 +630,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
 
   try {
     const res = await callApi('login', { email: emailVal, password: document.getElementById('login-password').value });
-    if (!res.ok) { showAlert('login-error', res.error || 'Login failed.'); generateCaptcha(); return; }
+    if (!res.ok) { showPopup(res.error || 'Login failed.', 'Login failed'); generateCaptcha(); return; }
     localStorage.setItem('vrmic_token', res.token);
     localStorage.setItem('vrmic_name', res.name);
     if (res.forceReset) {
@@ -598,7 +639,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
       await routeAfterAuth();
     }
   } catch (err) {
-    showAlert('login-error', 'Could not reach the server. Check your connection and try again.');
+    showPopup(err.message, 'Connection problem');
     generateCaptcha();
   }
 });
@@ -610,10 +651,10 @@ document.getElementById('forgot-form').addEventListener('submit', async function
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Sending...';
   try {
     const res = await callApi('forgotPassword', { email: document.getElementById('forgot-email').value });
-    if (!res.ok) { showAlert('forgot-error', res.error || 'Something went wrong.'); return; }
+    if (!res.ok) { showPopup(res.error || 'Something went wrong.', 'Could not send password'); return; }
     showAlert('forgot-success', 'If that email is registered, a temporary password has been sent to it.');
   } catch (err) {
-    showAlert('forgot-error', 'Could not reach the server. Check your connection and try again.');
+    showPopup(err.message, 'Connection problem');
   } finally {
     btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send temporary password';
   }
@@ -621,22 +662,36 @@ document.getElementById('forgot-form').addEventListener('submit', async function
 
 document.getElementById('reset-form').addEventListener('submit', async function(e) {
   e.preventDefault();
-  hideAlerts('reset');
   const p1 = document.getElementById('reset-password').value;
   const p2 = document.getElementById('reset-password2').value;
-  if (p1 !== p2) { showAlert('reset-error', 'Passwords do not match.'); return; }
+  if (p1 !== p2) { showPopup('The two passwords do not match. Please type them again.', 'Passwords do not match'); return; }
   const btn = document.getElementById('reset-btn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving...';
   try {
     const res = await callApi('setNewPassword', { token: localStorage.getItem('vrmic_token'), newPassword: p1 });
-    if (!res.ok) { showAlert('reset-error', res.error || 'Could not set new password.'); return; }
+    if (!res.ok) { showPopup(res.error || 'Could not set new password.', 'Could not save password'); return; }
     await routeAfterAuth();
   } catch (err) {
-    showAlert('reset-error', 'Could not reach the server. Check your connection and try again.');
+    showPopup(err.message, 'Connection problem');
   } finally {
     btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-key"></i> Set password &amp; continue';
   }
 });
+
+// ---- Opened directly: land on the login card, not the top of the page ----
+(function landOnLogin(){
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  function go(){
+    const hash = (location.hash || '').replace('#', '').toLowerCase();
+    showAuthView(hash === 'forgot' ? 'forgot' : 'login');
+    const card = document.getElementById('auth-card');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    const target = hash === 'forgot' ? 'forgot-email' : (document.getElementById('login-email').value ? 'login-password' : 'login-email');
+    setTimeout(function(){ document.getElementById(target).focus({ preventScroll: true }); }, 450);
+  }
+  if (document.readyState === 'complete') go(); else window.addEventListener('load', go);
+})();
 </script>
 
 </body>
