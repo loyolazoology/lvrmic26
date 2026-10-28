@@ -281,7 +281,7 @@ function qrImg(text) {
 }
 
 /* ---------- convener sign ---------- */
-const SIGN_URLS = ['../assets/convener-sign.png', 'https://vrmic26.vercel.app/assets/convener-sign.png'];
+const SIGN_URLS = ['../assets/convener-sign.png', 'https://lvrmic26.vercel.app/assets/convener-sign.png'];
 let SIGN = '';
 const signTxt = () => S($('fSignTxt').value) || 'Convener';
 const hasSlot = () => $('fSign').value !== 'none';
@@ -303,7 +303,7 @@ $('fSign').onchange = async () => {
   if ($('fSign').value === 'with') {
     setMsg('Loading sign');
     const ok = await loadSign();
-    setMsg(ok ? 'Sign loaded' : 'Could not load the sign image from the assets folder or vrmic26.vercel.app. Badges keep a blank space.', ok ? 'ok' : 'err');
+    setMsg(ok ? 'Sign loaded' : 'Could not load the sign image from the assets folder or lvrmic26.vercel.app. Badges keep a blank space.', ok ? 'ok' : 'err');
     if (!ok) $('fSign').value = 'blank';
   }
   $('fSignTxt').disabled = $('fSign').value === 'none';
@@ -379,7 +379,7 @@ async function generate(keepScroll) {
   }
   const s = CONF || {};
   const head = {
-    short: s['conf.shortName'] || 'VRMIC 2026',
+    short: s['conf.shortName'] || 'LVRMIC 2026',
     name: s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment',
     line: fmtRange(s['conf.startDate'], s['conf.endDate']) + ' · Loyola College (Autonomous), Chennai'
   };
