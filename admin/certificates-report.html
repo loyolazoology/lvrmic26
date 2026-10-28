@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate Report | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<link rel="stylesheet" href="certificates.css">
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Attendance certificates · Report</h1>
+  <a class="btn btn-sm" id="goGen" href="certificates-manage.html"><i class="fa-solid fa-stamp"></i> Generate</a></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="cx-stats" id="stats"></div>
+  <div class="card">
+    <div class="cx-row" style="justify-content:space-between;margin-bottom:10px;">
+      <div class="cx-row"><select id="sf" style="width:auto"><option value="">Any status</option><option value="Active">Active</option><option value="Revoked">Revoked</option></select>
+        <select id="mf" style="width:auto"><option value="">Any e-mail status</option><option>Sent</option><option>Failed</option><option>Not sent</option></select>
+        <select id="src" style="width:auto"><option value="">Requested + admin</option><option>Requested</option><option>Admin</option></select>
+        <input id="q" placeholder="Search name, ID, certificate no." style="width:230px;"></div>
+      <div id="xp"></div></div>
+    <div class="cx-tw"><table><thead><tr><th>Certificate no.</th><th>Participant</th><th>Source</th><th>Attendance</th><th>Generated</th><th>E-mail</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tb"></tbody></table></div>
+  </div>
+  <div class="card" id="pendBox" style="display:none;"><h3><i class="fa-solid fa-hourglass-half" style="color:var(--gold-light);"></i> Requested, not generated yet</h3><div class="cx-tw" style="max-height:260px;"><table><thead><tr><th>ID</th><th>Name</th><th>Institution</th><th>Requested at</th></tr></thead><tbody id="pend"></tbody></table></div></div>
+  <div class="card" id="runBox" style="display:none;"><div class="hint" id="runTxt"></div></div>
+</div>
+
+<div class="cx-modal" id="mReason"><div><h3 style="margin-top:0;" id="mrH">Reason required</h3><p class="hint" id="mrTxt"></p><textarea id="mrIn" maxlength="300"></textarea>
+  <div class="cx-row" style="margin-top:10px;justify-content:flex-end;"><button class="btn btn-sm" id="mrNo">Cancel</button><button class="btn btn-gold btn-sm" id="mrYes">Continue</button></div></div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="certificate-engine.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+const PAGE = 'certificates-report', g = id => document.getElementById(id), api = (a, d) => VR.api(a, Object.assign({ page: PAGE }, d || {}));
+const err = m => (window.showErr ? showErr(m) : alert(m)), ok = m => (window.showOk ? showOk(m) : alert(m)), hide = () => window.hideAlerts && hideAlerts();
+if (!VR.can('certificates', 'report') && !VR.can('certificates', 'transaction')) { VR.denied('You do not have permission to view the certificate report.'); return; }
+const CDN = 'https://cdnjs.cloudflare.com/ajax/libs/';
+let rows = [], pend = [], canEdit = false, cfg = null, DATES = '';
+const pill = (t, c) => '<span class="cx-pill cx-' + c + '">' + VR.esc(t) + '</span>';
+const short = s => String(s || '').replace('T', ' ').slice(0, 16);
+
+function filtered() { const s = g('sf').value, m = g('mf').value, o = g('src').value, q = g('q').value.trim().toLowerCase();
+  return rows.filter(r => (!s || r.status === s) && (!m || r.emailStatus === m) && (!o || r.source === o) && (!q || (r.certNo + ' ' + r.id + ' ' + r.name + ' ' + r.institution).toLowerCase().indexOf(q) > -1)); }
+function draw() {
+  const list = filtered();
+  g('tb').innerHTML = list.map(r => '<tr><td><code>' + VR.esc(r.certNo) + '</code><div class="hint">v' + VR.esc(r.version) + '</div></td>' +
+    '<td><b>' + VR.esc(r.name) + '</b><div class="hint">' + VR.esc(r.id) + ' · ' + VR.esc(r.institution) + '</div></td><td>' + VR.esc(r.source) + '</td>' +
+    '<td>' + (r.percent === '' ? '—' : VR.esc(r.percent) + '%') + (r.overridden === 'Yes' ? '<div>' + pill('Override', 'wn') + '</div><div class="hint">' + VR.esc(r.overrideReason) + '</div>' : '') + '</td>' +
+    '<td>' + VR.esc(short(r.generatedAt)) + '<div class="hint">' + VR.esc(r.generatedBy) + '</div></td>' +
+    '<td>' + pill(r.emailStatus || 'Not sent', r.emailStatus === 'Sent' ? 'ok' : r.emailStatus === 'Failed' ? 'bd' : 'gr') + (r.emailedAt ? '<div class="hint">' + VR.esc(short(r.emailedAt)) + '</div>' : '') + (r.emailError ? '<div class="hint" title="' + VR.esc(r.emailError) + '">error</div>' : '') + '</td>' +
+    '<td>' + (r.status === 'Active' ? pill('Active', 'ok') : pill('Revoked', 'bd') + '<div class="hint">' + VR.esc(r.statusReason) + '</div>') + '</td>' +
+    '<td><div class="cx-row" style="gap:6px;">' + (r.status === 'Active' ? '<a class="btn btn-sm" target="_blank" rel="noopener" href="' + VR.esc(r.link) + '" title="Open file"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
+    (canEdit && r.status === 'Active' ? '<button class="btn btn-sm" data-a="resend" data-n="' + VR.esc(r.certNo) + '"><i class="fa-solid fa-paper-plane"></i> Resend</button><button class="btn btn-sm" data-a="regen" data-n="' + VR.esc(r.certNo) + '"><i class="fa-solid fa-rotate"></i> Regenerate</button><button class="btn btn-sm" data-a="revoke" data-n="' + VR.esc(r.certNo) + '"><i class="fa-solid fa-ban"></i> Revoke</button>' : '') +
+    (canEdit && r.status === 'Revoked' ? '<a class="btn btn-sm" href="certificates-manage.html">Re-issue in Generate</a>' : '') + '</div></td></tr>').join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-3);padding:24px;">No certificates match.</td></tr>';
+  const act = rows.filter(r => r.status === 'Active');
+  g('stats').innerHTML = [[pend.length + rows.length, 'Requested / created'], [act.length, 'Generated (active)'], [rows.filter(r => r.emailStatus === 'Sent' && r.status === 'Active').length, 'E-mailed'], [rows.filter(r => r.emailStatus === 'Failed').length, 'E-mail failed'], [rows.filter(r => r.status === 'Revoked').length, 'Revoked'], [pend.length, 'Pending']].map(x => '<div class="cx-stat"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>').join('');
+  g('pendBox').style.display = pend.length ? '' : 'none';
+  g('pend').innerHTML = pend.map(p => '<tr><td><code>' + VR.esc(p.id) + '</code></td><td>' + VR.esc(p.name) + '</td><td>' + VR.esc(p.institution) + '</td><td>' + VR.esc(short(p.requestedAt)) + '</td></tr>').join('');
+}
+function data() { const l = filtered(); return { headers: ['Certificate no.', 'Participant ID', 'Name', 'Institution', 'Source', 'Attendance %', 'Override reason', 'Version', 'Generated at', 'Generated by', 'E-mail status', 'E-mailed at', 'Status', 'Status reason'],
+  rows: l.map(r => [r.certNo, r.id, r.name, r.institution, r.source, r.percent, r.overrideReason, r.version, short(r.generatedAt), r.generatedBy, r.emailStatus, short(r.emailedAt), r.status, r.statusReason]) }; }
+function askReason(h, text) { return new Promise(res => { g('mrH').textContent = h; g('mrTxt').textContent = text; g('mrIn').value = ''; g('mReason').classList.add('show'); g('mrIn').focus();
+  g('mrNo').onclick = () => { g('mReason').classList.remove('show'); res(null); };
+  g('mrYes').onclick = () => { const v = g('mrIn').value.trim(); if (!v) return g('mrIn').focus(); g('mReason').classList.remove('show'); res(v); }; }); }
+
+g('tb').addEventListener('click', async e => { const b = e.target.closest('[data-a]'); if (!b) return; const r = rows.find(x => x.certNo === b.dataset.n); if (!r) return; hide();
+  try {
+    if (b.dataset.a === 'resend') { if (!confirm('Re-send ' + r.certNo + ' to ' + r.email + '?')) return; await VR.busy(b, 'Sending…', async () => { const j = await api('adminCertResend', { certNo: r.certNo }); j.ok ? ok('E-mail sent to ' + r.email + '.') : err(j.error); }); await load(); }
+    else if (b.dataset.a === 'revoke') { const why = await askReason('Revoke ' + r.certNo, 'The file link stops working and the participant\'s certificate link is removed. A reason is required.'); if (!why) return;
+      const j = await api('adminCertRevoke', { certNo: r.certNo, reason: why }); j.ok ? ok(r.certNo + ' revoked.') : err(j.error); await load(); }
+    else if (b.dataset.a === 'regen') { const why = await askReason('Regenerate ' + r.certNo, 'A new version replaces the old file (same number). Enter the reason, e.g. "Name corrected".'); if (!why) return;
+      g('runBox').style.display = ''; g('runTxt').textContent = 'Regenerating ' + r.certNo + '…';
+      await VR.load(CDN + 'html2canvas/1.4.1/html2canvas.min.js'); await VR.load(CDN + 'jspdf/2.5.1/jspdf.umd.min.js');
+      const c0 = await api('adminCertGetConfig'); if (!c0.ok) throw new Error(c0.error);
+      const c = LVCert.merge(LVCert.DEFAULTS, c0.config || {}); if (!c.dates) c.dates = c0.dates;
+      await LVCert.resolveAssets(c, id => api('adminCertAssetGet', { id }).then(x => { if (!x.ok) throw new Error(x.error); return x.dataUrl; }));
+      const fresh = await api('adminCertQueue'); const pr = fresh.ok && fresh.rows.find(x => x.id === r.id) || { name: r.name, institution: r.institution };
+      const pdf = await LVCert.pdfFrom(c, [{ id: r.id, name: pr.name, institution: pr.institution || '', certNo: r.certNo }]);
+      const j = await api('adminCertIssue', { id: r.id, pdf: pdf.output('datauristring').split('base64,')[1], regenerate: true, reason: why, sendMail: confirm('E-mail the new version to the participant?') });
+      g('runBox').style.display = 'none'; j.ok ? ok(r.certNo + ' regenerated (v' + j.version + ')' + (j.emailed ? ' and e-mailed.' : '.')) : err(j.error); await load(); }
+  } catch (er) { g('runBox').style.display = 'none'; err(er.message || 'Failed.'); } });
+['sf', 'mf', 'src'].forEach(i => g(i).onchange = draw); g('q').oninput = draw;
+async function load() { const r = await api('adminCertReport'); if (!r.ok) return err(r.error || 'Could not load the report.'); rows = r.rows.slice().reverse(); pend = r.pending; canEdit = r.canEdit && VR.can('certificates', 'transaction'); draw(); }
+VR.exportBar(g('xp'), { name: 'Certificates', title: 'Attendance certificate report', getData: data, pdfOpts: { orientation: 'landscape', fontSize: 7 } });
+if (!VR.can('certificates', 'transaction')) g('goGen').style.display = 'none';
+await load();
+})();
+</script>
+</body>
+</html>

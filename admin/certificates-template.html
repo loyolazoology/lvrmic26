@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate Template | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<link rel="stylesheet" href="certificates.css">
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-award" style="color:var(--gold-light);"></i> Attendance certificate · Template</h1>
+  <a class="btn btn-sm" href="certificates-manage.html"><i class="fa-solid fa-stamp"></i> Generate</a></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="cx-grid">
+  <div>
+    <div class="card"><h3><i class="fa-solid fa-image" style="color:var(--gold-light);"></i> Images</h3>
+      <div class="hint">Uploads are resized automatically. <b>Logos:</b> PNG, transparent, 600 × 600 px (printed 24 mm). <b>Signature:</b> PNG, transparent, 600 × 263 px (printed 42 × 18 mm). <b>Background (optional):</b> JPG, 3508 × 2480 px. Maximum 2 MB each.</div>
+      <div id="imgs"></div></div>
+    <div class="card"><h3><i class="fa-solid fa-font" style="color:var(--gold-light);"></i> Wording</h3>
+      <div class="grid">
+        <div class="full"><label>Heading</label><input id="heading"></div>
+        <div class="full"><label>Body text</label><textarea id="body" rows="5"></textarea><div class="hint">Placeholders: {{name}} {{institution}} {{id}} {{conference}} {{department}} {{dates}}</div></div>
+        <div class="full"><label>Conference name used in the body</label><textarea id="conference" rows="2"></textarea></div>
+        <div><label>Department used in the body</label><input id="department"></div>
+        <div><label>Dates (blank = from Settings)</label><input id="dates" placeholder="26-11-2026 to 28-11-2026"></div>
+        <div><label>Header line 1</label><input id="o_topLine"></div><div><label>Header line 2</label><input id="o_topLine2"></div>
+        <div><label>Department (header)</label><input id="o_dept"></div><div><label>CIMSER (header)</label><input id="o_cimser"></div>
+        <div><label>College</label><input id="o_college"></div><div><label>Address</label><input id="o_address"></div>
+        <div class="full"><label>Line shown when there is no signature</label><input id="noSignLine"></div>
+      </div></div>
+    <div class="card"><h3><i class="fa-solid fa-ruler-combined" style="color:var(--gold-light);"></i> Layout (A4)</h3>
+      <div class="grid">
+        <div><label>Orientation</label><select id="orientation"><option value="landscape">Landscape</option><option value="portrait">Portrait</option></select></div>
+        <div><label>Body alignment</label><select id="align"><option value="center">Centre</option><option value="justify">Justify</option><option value="left">Left</option></select></div>
+        <div><label>Body font (pt)</label><input id="bodyPt" type="number" min="11" max="24" step="0.5"></div>
+        <div><label>Heading font (pt)</label><input id="headingPt" type="number" min="16" max="40" step="0.5"></div>
+        <div><label>Header font (pt)</label><input id="titlePt" type="number" min="14" max="26" step="0.5"></div>
+        <div><label>Logo height (mm)</label><input id="logoMm" type="number" min="14" max="34"></div>
+        <div><label>Both logos on</label><select id="logoSide"><option value="left">Left</option><option value="right">Right</option></select></div>
+        <div><label>Watermark</label><select id="watermark"><option value="1">On</option><option value="0">Off</option></select></div>
+        <div><label>Move heading (mm)</label><input id="n_heading" type="number" step="0.5"></div><div><label>Move body (mm)</label><input id="n_body" type="number" step="0.5"></div>
+        <div><label>Move signatures (mm)</label><input id="n_signs" type="number" step="0.5"></div><div><label>Move footer (mm)</label><input id="n_footer" type="number" step="0.5"></div>
+        <div><label>Main colour</label><input id="t_primary"></div><div><label>Accent colour</label><input id="t_accent"></div>
+      </div></div>
+    <div class="card"><h3><i class="fa-solid fa-signature" style="color:var(--gold-light);"></i> Signatures</h3>
+      <label>Default mode</label><select id="signMode"><option value="none">No signature (computer-generated line)</option><option value="signed">With sign (signature images)</option><option value="blank">Manual (blank line to sign by hand)</option></select>
+      <div class="hint">The computer-generated line appears only when no signatory is shown.</div><div id="slots"></div></div>
+    <div class="card"><h3><i class="fa-solid fa-envelope" style="color:var(--gold-light);"></i> E-mail to participant</h3>
+      <div class="grid"><div class="full"><label>Subject</label><input id="m_subject"></div>
+      <div class="full"><label>Message</label><textarea id="m_body" rows="7"></textarea><div class="hint">Placeholders: {{name}} {{certNo}} {{link}} {{conference}}. The PDF is attached automatically.</div></div></div></div>
+    <div class="cx-row"><button class="btn btn-gold" id="save"><i class="fa-solid fa-floppy-disk"></i> Save template</button><button class="btn" id="reset">Reset to default</button></div>
+  </div>
+  <div class="cx-sticky card"><div class="cx-row" style="justify-content:space-between;"><h3 style="margin:0;"><i class="fa-solid fa-eye" style="color:var(--gold-light);"></i> Live preview</h3>
+    <span class="cx-row"><select id="pvMode" style="width:auto;"><option value="">Saved mode</option><option value="none">No sign</option><option value="signed">With sign</option><option value="blank">Manual</option></select><button class="btn btn-sm" id="pvPrint"><i class="fa-solid fa-print"></i> Test print</button></span></div>
+    <div class="cx-prev" id="pv" style="margin-top:10px;"></div></div>
+  </div>
+</div>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="certificate-engine.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+const PAGE = 'certificates-template', g = id => document.getElementById(id), api = (a, d) => VR.api(a, Object.assign({ page: PAGE }, d || {}));
+const err = m => (window.showErr ? showErr(m) : alert(m)), ok = m => (window.showOk ? showOk(m) : alert(m));
+if (!VR.can('certificates', 'report') && !VR.can('certificates', 'transaction')) { VR.denied('You do not have permission to view certificate settings.'); return; }
+let cfg, canEdit = true, SERVER = { dates: '', confName: '' };
+const SAMPLE = () => ({ id: 'LVRMIC26-0002', name: 'Dr.R. KANNADASAN', institution: "KANDASWAMI KANDAR'S COLLEGE, PARAMATHI VELUR", certNo: 'LVRMIC26-AC-0002' });
+const MAP = { heading: 'heading', body: 'body', conference: 'conference', department: 'department', dates: 'dates', noSignLine: 'noSignLine', orientation: 'orientation', align: 'align', bodyPt: 'bodyPt', headingPt: 'headingPt', titlePt: 'titlePt', logoMm: 'logoMm', logoSide: 'logoSide', signMode: 'signMode',
+  o_topLine: 'org.topLine', o_topLine2: 'org.topLine2', o_dept: 'org.dept', o_cimser: 'org.cimser', o_college: 'org.college', o_address: 'org.address', n_heading: 'nudge.heading', n_body: 'nudge.body', n_signs: 'nudge.signs', n_footer: 'nudge.footer', t_primary: 'theme.primary', t_accent: 'theme.accent', m_subject: 'mail.subject', m_body: 'mail.body' };
+const getp = p => p.split('.').reduce((o, k) => o && o[k], cfg);
+const setp = (p, v) => { const a = p.split('.'); let o = cfg; while (a.length > 1) o = o[a.shift()]; o[a[0]] = v; };
+const fetchAsset = id => VR._ac && VR._ac[id] ? Promise.resolve(VR._ac[id]) : api('adminCertAssetGet', { id }).then(r => { if (!r.ok) throw new Error(r.error); (VR._ac = VR._ac || {})[id] = r.dataUrl; return r.dataUrl; });
+
+function imgField(label, obj, key, w, h, type) {
+  const d = document.createElement('div'); d.className = 'cx-slot';
+  d.innerHTML = '<label>' + VR.esc(label) + '</label><div class="cx-row"><input type="file" accept="image/png,image/jpeg"><button type="button" class="btn btn-sm clr">Clear</button></div><div class="hint st"></div>';
+  const st = d.querySelector('.st'), show = () => { st.textContent = obj[key] ? 'Image is set' : 'Not set'; }; show();
+  d.querySelector('input').onchange = async e => { const f = e.target.files[0]; if (!f) return;
+    try { const r = await LVCert.shrinkImage(f, w, h, type); st.textContent = 'Uploading ' + r.w + ' × ' + r.h + ' px (original ' + r.ow + ' × ' + r.oh + ')…';
+      const j = await api('adminCertAssetUpload', { name: label, dataUrl: r.dataUrl }); if (!j.ok) throw new Error(j.error);
+      (VR._ac = VR._ac || {})[j.id] = r.dataUrl; obj[key] = 'asset:' + j.id; st.textContent = 'Uploaded ' + r.w + ' × ' + r.h + ' px'; preview();
+    } catch (er) { err(er.message || 'Upload failed'); show(); } };
+  d.querySelector('.clr').onclick = () => { obj[key] = ''; show(); preview(); };
+  return d; }
+function drawImgs() { const h = g('imgs'); h.innerHTML = ''; h.appendChild(imgField('Logo 1 (Loyola)', cfg.logos[0], 'src', 600, 600)); h.appendChild(imgField('Logo 2 (CIMSER)', cfg.logos[1], 'src', 600, 600)); h.appendChild(imgField('Background (optional)', cfg, 'background', 3508, 2480, 'image/jpeg')); }
+function drawSlots() { const h = g('slots'); h.innerHTML = '';
+  cfg.slots.forEach(s => { const d = document.createElement('div'); d.className = 'cx-slot';
+    d.innerHTML = '<label class="chk"><input type="checkbox" ' + (s.on ? 'checked' : '') + ' style="width:auto"> ' + VR.esc(s.label) + ' — show on certificate</label><div class="grid"><div><label>Name</label><input class="nm" value="' + VR.esc(s.name) + '"></div><div><label>Title under name</label><input class="tt" value="' + VR.esc(s.title) + '"></div></div>';
+    d.querySelector('input[type=checkbox]').onchange = e => { s.on = e.target.checked; preview(); };
+    d.querySelector('.nm').oninput = e => { s.name = e.target.value; preview(); }; d.querySelector('.tt').oninput = e => { s.title = e.target.value; preview(); };
+    d.appendChild(imgField('Signature image', s, 'src', 600, 263)); h.appendChild(d); }); }
+let tm;
+function view() { const c = JSON.parse(JSON.stringify(cfg)); if (g('pvMode').value) c.signMode = g('pvMode').value; if (!c.dates) c.dates = SERVER.dates; return c; }
+function preview() { clearTimeout(tm); tm = setTimeout(() => { const c = view();
+  LVCert.resolveAssets(c, fetchAsset).then(() => { const L = c.orientation !== 'portrait', W = (L ? 297 : 210) * 3.7795, H = (L ? 210 : 297) * 3.7795, box = g('pv'), k = Math.min(1, (box.clientWidth - 24) / W);
+    box.innerHTML = '<div style="width:' + (W * k) + 'px;height:' + (H * k) + 'px"><div class="box" style="transform:scale(' + k + ')">' + LVCert.render(c, SAMPLE()) + '</div></div>'; LVCert.fit(box.querySelector('.lv-cert')); }); }, 150); }
+function fill() { Object.keys(MAP).forEach(id => { g(id).value = getp(MAP[id]); }); g('watermark').value = cfg.watermark ? '1' : '0'; drawImgs(); drawSlots(); preview(); }
+Object.keys(MAP).forEach(id => g(id).addEventListener('input', e => { const v = e.target.type === 'number' ? (parseFloat(e.target.value) || 0) : e.target.value; setp(MAP[id], v); preview(); }));
+g('watermark').onchange = e => { cfg.watermark = e.target.value === '1'; preview(); };
+g('pvMode').onchange = preview; window.addEventListener('resize', preview);
+g('pvPrint').onclick = () => { const c = view(); LVCert.resolveAssets(c, fetchAsset).then(() => LVCert.printHtml(c, [SAMPLE()])); };
+g('reset').onclick = () => { if (confirm('Reset the whole certificate template to default?')) { cfg = JSON.parse(JSON.stringify(LVCert.DEFAULTS)); fill(); } };
+g('save').onclick = async () => { await VR.busy(g('save'), 'Saving…', async () => { const r = await api('adminCertSaveConfig', { config: cfg }); r.ok ? ok('Template saved.') : err(r.error || 'Could not save.'); }); };
+const r = await api('adminCertGetConfig');
+if (!r.ok) { err(r.error || 'Could not load the template.'); cfg = JSON.parse(JSON.stringify(LVCert.DEFAULTS)); }
+else { SERVER = r; canEdit = r.canEdit; cfg = LVCert.merge(LVCert.DEFAULTS, r.config || {}); }
+if (!canEdit) { g('save').style.display = g('reset').style.display = 'none'; document.querySelectorAll('input,select,textarea').forEach(x => x.disabled = true); g('pvMode').disabled = false; }
+fill();
+})();
+</script>
+</body>
+</html>

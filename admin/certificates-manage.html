@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generate Certificates | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<link rel="stylesheet" href="certificates.css">
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-stamp" style="color:var(--gold-light);"></i> Attendance certificates · Generate</h1>
+  <span class="cx-row"><a class="btn btn-sm" href="certificates-template.html"><i class="fa-solid fa-pen-ruler"></i> Template</a><a class="btn btn-sm" href="certificates-report.html"><i class="fa-solid fa-table-list"></i> Report</a></span></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="cx-stats" id="stats"></div>
+
+  <div class="card"><h3><i class="fa-solid fa-sliders" style="color:var(--gold-light);"></i> For this run</h3>
+    <div class="grid">
+      <div><label>Signature</label><select id="rMode"><option value="">As saved in template</option><option value="none">No signature (computer-generated line)</option><option value="signed">With sign (images)</option><option value="blank">Manual (blank line to sign)</option></select></div>
+      <div><label>Signatories shown</label><div class="cx-row" id="rSlots" style="min-height:38px;"></div></div>
+      <div><label>After generating</label><label class="cx-row" style="margin:0;font-weight:600;"><input type="checkbox" id="rMail" checked style="width:auto"> E-mail the certificate (PDF attached + link)</label></div>
+    </div></div>
+
+  <div class="card">
+    <div class="cx-row" style="justify-content:space-between;margin-bottom:10px;">
+      <div class="cx-row"><select id="tab" style="width:auto"><option value="requested">Requested by participants</option><option value="all">All participants (create by admin)</option></select>
+        <select id="sf" style="width:auto"><option value="">Any status</option><option value="none">Not generated</option><option value="Active">Generated</option><option value="Revoked">Revoked</option></select>
+        <input id="q" placeholder="Search name, ID, institution" style="width:230px;"></div>
+      <div class="cx-row"><button class="btn btn-gold" id="goAll"><i class="fa-solid fa-bolt"></i> Generate &amp; e-mail all pending requests</button></div>
+    </div>
+    <div class="cx-row" style="margin-bottom:10px;">
+      <button class="btn btn-sm" id="goSel"><i class="fa-solid fa-stamp"></i> Generate selected</button>
+      <button class="btn btn-sm" id="prSel"><i class="fa-solid fa-print"></i> Print selected</button>
+      <button class="btn btn-sm" id="pdfSel"><i class="fa-solid fa-file-pdf"></i> Download PDF (selected)</button>
+      <span class="hint" id="selInfo">0 selected</span></div>
+    <div class="cx-tw"><table><thead><tr><th style="width:34px;"><input type="checkbox" id="all" style="width:auto"></th><th>ID</th><th>Name</th><th>Institution</th><th>Attendance</th><th>Requested</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tb"></tbody></table></div>
+  </div>
+
+  <div class="card" id="runBox" style="display:none;"><h3 id="runTitle">Working…</h3><div class="cx-bar"><i id="runBar"></i></div><div class="hint" id="runTxt"></div><div class="cx-log" id="runLog"></div>
+    <div class="cx-row" style="margin-top:8px;"><button class="btn btn-sm" id="runStop">Stop</button></div></div>
+</div>
+
+<div class="cx-modal" id="mReason"><div><h3 style="margin-top:0;">Reason required</h3><p class="hint" id="mrTxt"></p><textarea id="mrIn" maxlength="300" placeholder="e.g. Attended remotely, approved by Convener"></textarea>
+  <div class="cx-row" style="margin-top:10px;justify-content:flex-end;"><button class="btn btn-sm" id="mrNo">Cancel</button><button class="btn btn-gold btn-sm" id="mrYes">Continue</button></div></div></div>
+<div class="cx-modal" id="mPrev"><div style="width:min(1000px,96vw);"><div class="cx-row" style="justify-content:space-between;"><h3 style="margin:0;">Preview</h3><button class="btn btn-sm" id="pvClose">Close</button></div><div class="cx-prev" id="pvBox" style="margin-top:10px;"></div></div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="certificate-engine.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+const PAGE = 'certificates-manage', g = id => document.getElementById(id), api = (a, d) => VR.api(a, Object.assign({ page: PAGE }, d || {}));
+const err = m => (window.showErr ? showErr(m) : alert(m)), ok = m => (window.showOk ? showOk(m) : alert(m)), hide = () => window.hideAlerts && hideAlerts();
+if (!VR.can('certificates', 'transaction')) { VR.denied('You do not have permission to generate certificates.'); return; }
+const CDN = 'https://cdnjs.cloudflare.com/ajax/libs/';
+let cfg, rows = [], MIN = 0, QUOTA = null, DATES = '', sel = new Set(), stop = false, busy = false, assetsDone = false;
+const fetchAsset = id => (VR._ac && VR._ac[id]) ? Promise.resolve(VR._ac[id]) : api('adminCertAssetGet', { id }).then(r => { if (!r.ok) throw new Error(r.error); (VR._ac = VR._ac || {})[id] = r.dataUrl; return r.dataUrl; });
+const item = r => ({ id: r.id, name: r.name, institution: r.institution || '', certNo: r.certNo });
+
+function runCfg() {                      // saved template + this run's overrides, with images resolved
+  const c = JSON.parse(JSON.stringify(cfg)); if (g('rMode').value) c.signMode = g('rMode').value;
+  if (!c.dates) c.dates = DATES;
+  document.querySelectorAll('#rSlots input').forEach(x => { c.slots.find(s => s.id === x.dataset.id).on = x.checked; });
+  return LVCert.resolveAssets(c, fetchAsset);
+}
+function drawSlots() { g('rSlots').innerHTML = cfg.slots.map(s => '<label class="cx-row" style="margin:0 10px 0 0;gap:5px;"><input type="checkbox" data-id="' + s.id + '" ' + (s.on ? 'checked' : '') + ' style="width:auto"> ' + VR.esc(s.label) + '</label>').join(''); }
+const pill = (t, c) => '<span class="cx-pill cx-' + c + '">' + VR.esc(t) + '</span>';
+const stPill = r => r.status === 'Active' ? pill('Generated v' + r.version, 'ok') + (r.emailStatus ? ' ' + pill(r.emailStatus, r.emailStatus === 'Sent' ? 'ok' : r.emailStatus === 'Failed' ? 'bd' : 'gr') : '') : r.status === 'Revoked' ? pill('Revoked', 'bd') : pill('Not generated', 'gr');
+const attPill = r => r.percent === null ? pill('No sessions yet', 'gr') : pill(r.percent + '% / min ' + MIN + '%', r.eligible ? 'ok' : 'bd');
+
+function visible() {
+  const t = g('tab').value, s = g('sf').value, q = g('q').value.trim().toLowerCase();
+  return rows.filter(r => (t === 'all' || r.requested) && (!s || r.status === s) && (!q || (r.id + ' ' + r.name + ' ' + r.institution).toLowerCase().indexOf(q) > -1));
+}
+function draw() {
+  const list = visible(); sel = new Set(Array.from(sel).filter(id => list.some(r => r.id === id)));
+  g('tb').innerHTML = list.map(r => '<tr><td><input type="checkbox" class="ck" data-id="' + VR.esc(r.id) + '" ' + (sel.has(r.id) ? 'checked' : '') + ' style="width:auto"></td>' +
+    '<td><code>' + VR.esc(r.id) + '</code></td><td><b>' + VR.esc(r.name) + '</b><div class="hint">' + VR.esc(r.email || '') + '</div></td><td>' + VR.esc(r.institution || '') + '</td><td>' + attPill(r) + '</td>' +
+    '<td>' + (r.requested ? pill('Requested', 'wn') : pill('Not requested', 'gr')) + '</td><td>' + stPill(r) + '</td>' +
+    '<td><div class="cx-row" style="gap:6px;"><button class="btn btn-sm" data-a="view" data-id="' + VR.esc(r.id) + '" title="Preview"><i class="fa-solid fa-eye"></i></button>' +
+    '<button class="btn btn-sm" data-a="print" data-id="' + VR.esc(r.id) + '" title="Print"><i class="fa-solid fa-print"></i></button>' +
+    (r.status === 'Active' ? '' : '<button class="btn btn-gold btn-sm" data-a="gen" data-id="' + VR.esc(r.id) + '">' + (r.status === 'Revoked' ? 'Re-issue' : 'Generate') + '</button>') +
+    (r.link && r.status === 'Active' ? '<a class="btn btn-sm" target="_blank" rel="noopener" href="' + VR.esc(r.link) + '" title="Open file"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') + '</div></td></tr>').join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-3);padding:24px;">Nothing to show.</td></tr>';
+  g('selInfo').textContent = sel.size + ' selected'; g('all').checked = list.length > 0 && sel.size === list.length;
+  const req = rows.filter(r => r.requested), gen = rows.filter(r => r.status === 'Active'), pend = req.filter(r => r.status !== 'Active');
+  g('stats').innerHTML = [[req.length, 'Requested'], [gen.length, 'Generated'], [pend.length, 'Pending requests'], [pend.filter(r => !r.eligible).length, 'Below ' + MIN + '% (need override)'], [QUOTA === null ? '—' : QUOTA, 'E-mails left today']].map(x => '<div class="cx-stat"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>').join('');
+}
+async function load() { hide(); const r = await api('adminCertQueue'); if (!r.ok) return err(r.error || 'Could not load.'); rows = r.rows; MIN = r.min; QUOTA = r.quota; DATES = r.dates; draw(); }
+
+/* ---- reason prompt ---- */
+function askReason(text) { return new Promise(res => { g('mrTxt').textContent = text; g('mrIn').value = ''; g('mReason').classList.add('show'); g('mrIn').focus();
+  g('mrNo').onclick = () => { g('mReason').classList.remove('show'); res(null); };
+  g('mrYes').onclick = () => { const v = g('mrIn').value.trim(); if (!v) { g('mrIn').focus(); return; } g('mReason').classList.remove('show'); res(v); }; }); }
+
+/* ---- generate + store + e-mail, one certificate per call ---- */
+async function libs() { await VR.load(CDN + 'html2canvas/1.4.1/html2canvas.min.js'); await VR.load(CDN + 'jspdf/2.5.1/jspdf.umd.min.js'); }
+async function issue(list, reasons) {
+  if (busy) return; busy = true; stop = false; hide();
+  g('runBox').style.display = ''; g('runLog').innerHTML = ''; g('runTitle').textContent = 'Generating ' + list.length + ' certificate(s)…'; g('runBar').style.width = '0';
+  let done = 0, fail = 0, mailed = 0; const sendMail = g('rMail').checked;
+  try { await libs(); const c = await runCfg();
+    for (const r of list) {
+      if (stop) break;
+      g('runTxt').textContent = (done + fail + 1) + ' of ' + list.length + ' — ' + r.name;
+      try {
+        const pdf = await LVCert.pdfFrom(c, [item(r)]), b64 = pdf.output('datauristring').split('base64,')[1];
+        const j = await api('adminCertIssue', { id: r.id, pdf: b64, sendMail, reason: reasons[r.id] || '', regenerate: r.status === 'Revoked' });
+        if (!j.ok) throw new Error(j.error);
+        done++; if (j.emailed) mailed++; r.status = 'Active'; r.version = j.version; r.link = j.link; r.emailStatus = j.emailed ? 'Sent' : (sendMail ? 'Failed' : 'Not sent');
+        g('runLog').insertAdjacentHTML('beforeend', '<div>✓ ' + VR.esc(j.certNo) + ' ' + VR.esc(r.name) + (sendMail ? (j.emailed ? ' — e-mailed' : ' — e-mail FAILED: ' + VR.esc(j.mailError)) : '') + '</div>');
+      } catch (er) { fail++; g('runLog').insertAdjacentHTML('beforeend', '<div style="color:#f27c7c;">✗ ' + VR.esc(r.name) + ' — ' + VR.esc(er.message) + '</div>'); }
+      g('runBar').style.width = Math.round((done + fail) * 100 / list.length) + '%'; draw();
+    }
+  } catch (er) { err(er.message || 'Could not start.'); }
+  busy = false; g('runTitle').textContent = 'Finished'; g('runTxt').textContent = done + ' generated' + (sendMail ? ', ' + mailed + ' e-mailed' : '') + (fail ? ', ' + fail + ' failed' : '') + (stop ? ' (stopped)' : '');
+  if (QUOTA !== null && sendMail) QUOTA = Math.max(0, QUOTA - mailed); draw();
+}
+async function startIssue(list) {
+  if (!list.length) return err('Nothing to generate.');
+  const low = list.filter(r => !r.eligible || r.status === 'Revoked'), reasons = {};
+  if (low.length) { const why = low.some(r => !r.eligible) ? low.filter(r => !r.eligible).length + ' participant(s) are below the ' + MIN + '% minimum' + (low.some(r => r.status === 'Revoked') ? ' and some certificates were revoked' : '') + '. Enter one reason to override / re-issue them.' : 'These certificates were revoked. Enter a reason to re-issue them.';
+    const v = await askReason(why); if (!v) return; low.forEach(r => { reasons[r.id] = v; }); }
+  await issue(list, reasons);
+}
+
+/* ---- print / PDF (no storage, no e-mail) ---- */
+const picked = () => rows.filter(r => sel.has(r.id));
+async function printList(list) { if (!list.length) return err('Select at least one participant.'); const c = await runCfg(); LVCert.printHtml(c, list.map(item)); }
+async function pdfList(list) { if (!list.length) return err('Select at least one participant.'); await libs(); const c = await runCfg();
+  g('runBox').style.display = ''; g('runTitle').textContent = 'Building PDF…'; g('runLog').innerHTML = '';
+  const pdf = await LVCert.pdfFrom(c, list.map(item), (i, n) => { g('runBar').style.width = Math.round(i * 100 / n) + '%'; g('runTxt').textContent = i + ' of ' + n; });
+  pdf.save(VR.fileName('Attendance_Certificates', 'pdf')); g('runTitle').textContent = 'PDF downloaded'; }
+
+/* ---- events ---- */
+g('tab').onchange = g('sf').onchange = () => { sel.clear(); draw(); }; g('q').oninput = draw;
+g('all').onchange = e => { visible().forEach(r => e.target.checked ? sel.add(r.id) : sel.delete(r.id)); draw(); };
+g('tb').addEventListener('change', e => { const c = e.target.closest('.ck'); if (!c) return; c.checked ? sel.add(c.dataset.id) : sel.delete(c.dataset.id); g('selInfo').textContent = sel.size + ' selected'; });
+g('tb').addEventListener('click', async e => { const b = e.target.closest('[data-a]'); if (!b) return; const r = rows.find(x => x.id === b.dataset.id); if (!r) return;
+  try { if (b.dataset.a === 'gen') await startIssue([r]); else if (b.dataset.a === 'print') await printList([r]);
+    else { const c = await runCfg(), L = c.orientation !== 'portrait', W = (L ? 297 : 210) * 3.7795, H = (L ? 210 : 297) * 3.7795; g('mPrev').classList.add('show'); const k = Math.min(1, (Math.min(window.innerWidth * .94, 980) - 40) / W);
+      g('pvBox').innerHTML = '<div style="width:' + (W * k) + 'px;height:' + (H * k) + 'px"><div class="box" style="transform:scale(' + k + ')">' + LVCert.render(c, item(r)) + '</div></div>'; LVCert.fit(g('pvBox').querySelector('.lv-cert')); }
+  } catch (er) { err(er.message || 'Failed.'); } });
+g('pvClose').onclick = () => g('mPrev').classList.remove('show');
+g('goSel').onclick = () => startIssue(picked().filter(r => r.status !== 'Active'));
+g('goAll').onclick = async () => { const pend = rows.filter(r => r.requested && r.status !== 'Active'), okList = pend.filter(r => r.eligible), skipped = pend.length - okList.length;
+  if (!pend.length) return ok('No pending requests.');
+  if (!okList.length) return err(pend.length + ' pending request(s), all below ' + MIN + '%. Select them and use "Generate selected" to override with a reason.');
+  if (!confirm('Generate' + (g('rMail').checked ? ' and e-mail ' : ' ') + okList.length + ' certificate(s)?' + (skipped ? '\n' + skipped + ' below the minimum will be skipped (override them separately).' : ''))) return;
+  await startIssue(okList); };
+g('prSel').onclick = () => printList(picked()).catch(e => err(e.message)); g('pdfSel').onclick = () => pdfList(picked()).catch(e => err(e.message));
+g('runStop').onclick = () => { stop = true; };
+
+const c0 = await api('adminCertGetConfig'); if (!c0.ok) return err(c0.error || 'Could not load the template.');
+cfg = LVCert.merge(LVCert.DEFAULTS, c0.config || {}); drawSlots(); await load();
+})();
+</script>
+</body>
+</html>
