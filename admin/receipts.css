@@ -1,0 +1,41 @@
+/* receipt pages - extra styles on top of admin-base.css / admin-common.css */
+.rx-prev{background:#d9d5ca;border-radius:12px;padding:12px;overflow:auto}
+.rx-prev .box{transform-origin:top left}
+.rx-grid{display:grid;grid-template-columns:minmax(330px,430px) 1fr;gap:18px;align-items:start}
+@media(max-width:1000px){.rx-grid{grid-template-columns:1fr}}
+.rx-sticky{position:sticky;top:10px}
+.rx-slot{border:1px dashed var(--navy-border);border-radius:10px;padding:12px;margin-top:10px}
+.rx-slot label.chk{display:flex;gap:8px;align-items:center;font-weight:600;margin:0 0 8px}
+.rx-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.rx-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.rx-stat{border:1px solid var(--navy-border);border-radius:10px;padding:10px 14px;background:var(--navy-950)}
+.rx-stat b{display:block;font-size:22px;color:var(--gold-light)}.rx-stat span{font-size:12px;color:var(--text-3)}
+.rx-tw{max-height:60vh;overflow:auto;border:1px solid var(--navy-border);border-radius:10px}
+.rx-tw table{width:100%;border-collapse:collapse;font-size:13px}
+.rx-tw th,.rx-tw td{padding:8px 10px;border-bottom:1px solid var(--navy-border);text-align:left;vertical-align:middle}
+.rx-tw th{position:sticky;top:0;background:var(--navy-950);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-3);z-index:1}
+.rx-pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}
+.rx-ok{background:rgba(52,199,120,.15);color:#53d28a}.rx-wn{background:rgba(240,170,40,.15);color:#f0b84a}.rx-bd{background:rgba(235,87,87,.15);color:#f27c7c}.rx-gr{background:rgba(160,160,160,.15);color:var(--text-3)}
+.rx-bar{height:8px;background:var(--navy-border);border-radius:9px;overflow:hidden;margin:8px 0}.rx-bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .25s}
+.rx-log{max-height:150px;overflow:auto;font:12px/1.5 'IBM Plex Mono',monospace;color:var(--text-2)}
+.rx-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:200}.rx-modal.show{display:flex}
+.rx-modal>div{background:var(--navy-900,#122043);border:1px solid var(--navy-border);border-radius:12px;padding:18px;width:min(480px,92vw)}
+.rx-modal textarea{width:100%;min-height:80px}
+.opt-row{display:flex;gap:10px;flex-wrap:wrap}.opt{flex:1;min-width:150px;position:relative}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt label{display:flex;flex-direction:column;gap:4px;padding:13px 14px;border:1.5px solid var(--navy-border);border-radius:10px;background:var(--navy-950);cursor:pointer;font-weight:600;font-size:13.5px;color:var(--text-2);margin:0}
+.opt label small{font-weight:400;color:var(--text-3);font-size:11px}
+.opt input:checked + label{border-color:var(--gold);background:rgba(232,201,131,.08);color:var(--gold-light)}
+.opt input:focus-visible + label{outline:2px solid var(--gold);outline-offset:2px}
+.rx-frame{width:100%;height:560px;border:1px solid var(--navy-border);border-radius:10px;background:#fff}
+.rx-chip{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--navy-border);background:var(--navy-950);border-radius:999px;padding:6px 12px;font-size:12.5px}
+.rx-hide{display:none!important}
+.rx-grid{display:grid;grid-template-columns:minmax(360px,520px) 1fr;gap:18px;align-items:start}
+@media(max-width:1000px){.rx-grid{grid-template-columns:1fr}}
+.rx-sticky{position:sticky;top:10px}
+.rx-prev{background:#d9d5ca;border-radius:12px;padding:12px;overflow:auto}.rx-prev .box{transform-origin:top left}
+.rx-pick{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.rx-pick button{text-align:left;border:1px solid var(--navy-border);background:var(--navy-950);color:var(--text-1);border-radius:8px;padding:8px 10px;cursor:pointer;font:inherit}
+.rx-pick button:hover{border-color:var(--gold)}
+.rx-slot{border:1px dashed var(--navy-border);border-radius:10px;padding:12px;margin-top:10px}
+.rx-totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px}

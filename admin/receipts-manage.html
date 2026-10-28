@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Receipt Generation | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<link rel="stylesheet" href="receipts.css">
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-receipt" style="color:var(--gold-light);"></i> Receipts · Generation</h1>
+  <a class="btn btn-sm" href="receipts-report.html"><i class="fa-solid fa-table-list"></i> Report</a></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="rx-stats" id="stats"></div>
+
+  <div class="card"><h3><i class="fa-solid fa-inbox" style="color:var(--gold-light);"></i> Request queue</h3>
+    <div class="hint" style="margin-bottom:8px;">Participants who asked for a receipt. They stay <b>Pending</b> until you issue or decline them.</div>
+    <div class="rx-tw" style="max-height:260px;"><table><thead><tr><th>Participant</th><th>Institution</th><th>Category</th><th>Requested</th><th>Amount on file</th><th>Status</th><th></th></tr></thead><tbody id="reqTb"></tbody></table></div></div>
+
+  <div class="rx-grid">
+    <div>
+      <div class="card"><h3><i class="fa-solid fa-file-invoice" style="color:var(--gold-light);"></i> Generate receipt</h3>
+        <div class="grid">
+          <div class="full"><label>Participant *</label><input id="pq" placeholder="Search by name, ID, e-mail or institution" autocomplete="off"><div class="rx-pick" id="pick"></div>
+            <div id="who" class="hint"></div></div>
+        </div>
+        <div class="alert show-info" id="prefill" style="display:none;margin-top:10px;"></div>
+        <div id="have" style="display:none;margin-top:10px;"></div>
+        <div class="opt-row" style="margin:14px 0;">
+          <div class="opt"><input type="radio" name="type" id="ty-e" value="ERP" checked><label for="ty-e"><span><i class="fa-solid fa-globe"></i> ERP receipt</span><small>Paid on the Loyola portal</small></label></div>
+          <div class="opt"><input type="radio" name="type" id="ty-m" value="Manual"><label for="ty-m"><span><i class="fa-solid fa-pen"></i> Manual receipt</span><small>Cash, UPI, bank, spot desk</small></label></div>
+        </div>
+        <div class="grid">
+          <div><label>Transaction date *</label><input id="f-date" type="date"></div>
+          <div id="w-erp"><label>ERP receipt number *</label><input id="f-erp" maxlength="40" placeholder="From the Loyola ERP portal"></div>
+          <div id="w-txn" class="rx-hide"><label>Transaction ID *</label><input id="f-txn" maxlength="40"></div>
+          <div><label>Amount (₹) *</label><input id="f-amt" type="number" min="1" step="0.01"></div>
+          <div id="w-mode" class="rx-hide"><label>Mode of payment *</label><select id="f-mode"></select></div>
+          <div id="w-ref" class="rx-hide"><label>Reference (optional)</label><input id="f-ref" maxlength="80" placeholder="e.g. GPay, cheque no."></div>
+          <div class="full"><label>Purpose (shown on the receipt)</label><textarea id="f-purpose" rows="2" maxlength="250"></textarea></div>
+          <div class="full rx-hide" id="w-reason"><label>Reason for reissuing *</label><input id="f-reason" maxlength="300" placeholder="e.g. Name corrected"></div>
+        </div>
+        <div class="rx-row" style="margin-top:12px;"><label class="rx-row" style="margin:0;font-weight:600;"><input type="checkbox" id="f-mail" checked style="width:auto"> E-mail the PDF to the participant (stored privately in Drive)</label></div>
+        <div class="rx-row" style="margin-top:12px;"><button class="btn btn-gold" id="go"><i class="fa-solid fa-stamp"></i> <span id="goTxt">Generate &amp; e-mail</span></button>
+          <button class="btn" id="prn" type="button"><i class="fa-solid fa-print"></i> Print</button><button class="btn" id="pdf" type="button"><i class="fa-solid fa-file-pdf"></i> Download PDF</button><button class="btn" id="clr" type="button">Clear</button></div>
+        <div class="hint" id="goHint" style="margin-top:6px;"></div>
+      </div>
+
+      <div class="card"><details id="setBox"><summary style="cursor:pointer;font-weight:700;"><i class="fa-solid fa-sliders" style="color:var(--gold-light);"></i> Receipt settings (logos, signatory, wording)</summary>
+        <div class="hint" style="margin:8px 0;">Logos: PNG, transparent, 600 × 600 px (shown 22 mm). Signature: PNG, transparent, 600 × 263 px (shown 44 × 19 mm). Max 2 MB; resized automatically.</div>
+        <div id="imgs"></div>
+        <div class="grid" style="margin-top:10px;">
+          <div><label>Signatory name</label><input id="s-name"></div><div><label>Signatory title</label><input id="s-title"></div>
+          <div class="full"><label>Signature</label><select id="s-mode"><option value="blank">Name and title only, blank space to sign by hand</option><option value="signed">With signature image</option><option value="none">No signatory (computer-generated line)</option></select></div>
+          <div class="full"><label>Default purpose</label><input id="s-purpose"><div class="hint">Placeholders: {{category}} {{conference}}</div></div>
+          <div class="full"><label>E-mail subject</label><input id="s-msub"></div><div class="full"><label>E-mail message</label><textarea id="s-mbody" rows="5"></textarea><div class="hint">Placeholders: {{name}} {{receiptNo}} {{conference}}</div></div>
+        </div>
+        <div class="rx-row" style="margin-top:10px;"><button class="btn btn-gold" id="saveCfg" type="button">Save settings</button></div></details></div>
+    </div>
+    <div class="rx-sticky card"><h3 style="margin:0 0 8px;"><i class="fa-solid fa-eye" style="color:var(--gold-light);"></i> Preview <span class="hint" id="pvNo"></span></h3><div class="rx-prev" id="pv"></div></div>
+  </div>
+</div>
+
+<div class="rx-modal" id="mDec"><div><h3 style="margin-top:0;">Decline request</h3><p class="hint" id="mdTxt"></p><textarea id="mdIn" maxlength="300" placeholder="Reason (kept in the report)"></textarea>
+  <div class="rx-row" style="margin-top:10px;justify-content:flex-end;"><button class="btn btn-sm" id="mdNo">Cancel</button><button class="btn btn-gold btn-sm" id="mdYes">Decline</button></div></div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="receipt-engine.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+const PAGE = 'receipts-manage', g = id => document.getElementById(id), api = (a, d) => VR.api(a, Object.assign({ page: PAGE }, d || {})), CDN = 'https://cdnjs.cloudflare.com/ajax/libs/';
+const err = m => (window.showErr ? showErr(m) : alert(m)), ok = m => (window.showOk ? showOk(m) : alert(m)), hide = () => window.hideAlerts && hideAlerts();
+if (!VR.can('receipts', 'transaction')) { VR.denied('You do not have permission to generate receipts.'); return; }
+let I = {}, cfg, sel = null, spot = null, reissue = null, reqId = '', busy = false, tm;
+const radio = () => document.querySelector('input[name=type]:checked').value, pill = (t, c) => '<span class="rx-pill rx-' + c + '">' + VR.esc(t) + '</span>', inr = n => LVReceipt.money(n, 'INR');
+const fetchAsset = id => (VR._ra && VR._ra[id]) ? Promise.resolve(VR._ra[id]) : api('adminReceiptAssetGet', { id }).then(r => { if (!r.ok) throw new Error(r.error); (VR._ra = VR._ra || {})[id] = r.dataUrl; return r.dataUrl; });
+const purposeFor = p => LVReceipt.fill(cfg.purpose, { conference: I.conf.name, category: (p && p.category) || 'Participant' }).replace(/\s*\(Participant\)/, '');
+
+function data(no) { const c = sel || {}, t = radio(), amt = parseFloat(g('f-amt').value) || 0;
+  return { receiptNo: no || (reissue ? reissue.receiptNo : I.nextNo), name: c.name || 'Participant name', id: c.id || 'LVRMIC26-0000', institution: c.institution || '', email: c.email || '', category: c.category || '', type: t, txnDate: g('f-date').value || I.today,
+    erpNo: g('f-erp').value.trim() || 'ERP/0000', txnId: g('f-txn').value.trim() || '—', amount: amt, currency: 'INR', mode: g('f-mode').value, reference: g('f-ref').value.trim(), purpose: g('f-purpose').value.trim() || purposeFor(c),
+    currencyNote: spot && spot.currency === 'USD' && spot.usd ? 'USD ' + spot.usd + ' at ₹' + spot.fx + ' per USD' : '', conference: I.conf.name, confDates: I.conf.dates, venue: I.conf.venue, site: I.conf.site, contact: I.conf.contact }; }
+function preview() { clearTimeout(tm); tm = setTimeout(() => { const c = JSON.parse(JSON.stringify(cfg)); LVReceipt.resolveAssets(c, fetchAsset).then(() => { const W = 210 * 3.7795, H = 297 * 3.7795, box = g('pv'), k = Math.min(1, (box.clientWidth - 24) / W);
+  box.innerHTML = '<div style="width:' + (W * k) + 'px;height:' + (H * k) + 'px"><div class="box" style="transform:scale(' + k + ')">' + LVReceipt.render(c, data()) + '</div></div>'; g('pvNo').textContent = '· ' + (reissue ? reissue.receiptNo + ' (reissue)' : I.nextNo); }); }, 150); }
+
+function layout() { const t = radio(); g('w-erp').classList.toggle('rx-hide', t !== 'ERP'); ['w-txn', 'w-mode', 'w-ref'].forEach(i => g(i).classList.toggle('rx-hide', t !== 'Manual')); g('w-reason').classList.toggle('rx-hide', !reissue);
+  g('goTxt').textContent = reissue ? 'Reissue & e-mail' : 'Generate & e-mail'; preview(); }
+function stats() { g('stats').innerHTML = [[I.requests.length, 'Pending requests'], [I.issued.length, 'Receipts issued'], [inr(I.issued.reduce((s, r) => s + r.amount, 0)), 'Total issued']].map(x => '<div class="rx-stat"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>').join(''); }
+function drawReq() { g('reqTb').innerHTML = I.requests.map(r => '<tr><td><b>' + VR.esc(r.name) + '</b><div class="hint">' + VR.esc(r.id) + '</div></td><td>' + VR.esc(r.institution) + '</td><td>' + VR.esc(r.category) + '</td><td style="white-space:nowrap;">' + VR.esc(String(r.requestedAt).replace('T', ' ').slice(0, 16)) + '</td><td>' + (r.amount ? inr(r.amount) : '—') + '</td><td>' + pill('Pending', 'wn') + '</td>' +
+  '<td><div class="rx-row" style="gap:6px;"><button class="btn btn-gold btn-sm" data-a="issue" data-r="' + VR.esc(r.requestId) + '">Issue</button><button class="btn btn-sm" data-a="dec" data-r="' + VR.esc(r.requestId) + '">Decline</button></div></td></tr>').join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:22px;">No pending requests.</td></tr>'; }
+
+/* participant picker */
+function search() { const q = g('pq').value.trim().toLowerCase(), box = g('pick'); if (q.length < 2) { box.innerHTML = ''; return; }
+  box.innerHTML = I.participants.filter(p => (p.id + ' ' + p.name + ' ' + p.email + ' ' + p.institution).toLowerCase().indexOf(q) > -1).slice(0, 8).map(p => '<button type="button" data-id="' + VR.esc(p.id) + '"><b>' + VR.esc(p.name) + '</b> · ' + VR.esc(p.id) + '<br><small>' + VR.esc(p.institution || '') + '</small></button>').join('') || '<div class="hint" style="padding:8px;">No match.</div>'; }
+async function choose(id, fromReq) {
+  const p = I.participants.find(x => x.id === id); if (!p) return; sel = p; spot = null; reissue = null; g('pick').innerHTML = ''; g('pq').value = ''; g('who').innerHTML = '<b>' + VR.esc(p.name) + '</b> · ' + VR.esc(p.id) + ' · ' + VR.esc(p.category || '') + ' · ' + VR.esc(p.email || 'no e-mail');
+  ['f-erp', 'f-txn', 'f-ref', 'f-reason'].forEach(i => { g(i).value = ''; }); g('f-date').value = I.today; g('f-amt').value = ''; g('f-mode').value = RECEIPT_MODES()[0]; g('f-purpose').value = purposeFor(p);
+  const j = await api('adminReceiptPrefill', { id }); const pf = g('prefill'); pf.style.display = 'none'; g('have').style.display = 'none';
+  if (j.ok) {
+    if (j.spot) { spot = j.spot; document.getElementById('ty-m').checked = true; g('f-date').value = j.spot.date || I.today; g('f-amt').value = j.spot.amount || ''; if (RECEIPT_MODES().indexOf(j.spot.mode) > -1) g('f-mode').value = j.spot.mode; g('f-ref').value = j.spot.reference || ''; g('f-txn').value = j.spot.reference || '';
+      pf.style.display = ''; pf.textContent = 'Pre-filled from the spot registration bill ' + j.spot.billNo + ' (' + inr(j.spot.amount) + ', ' + (j.spot.mode || '') + (j.spot.reference ? ', ' + j.spot.reference : '') + '). Check the transaction ID before generating.'; }
+    else if (j.onFile && j.onFile.amount) { g('f-amt').value = j.onFile.amount; pf.style.display = ''; pf.textContent = 'Amount on file: ' + inr(j.onFile.amount) + (j.onFile.mode ? ' · ' + j.onFile.mode : '') + '. Enter the date and the ERP receipt number / transaction ID.'; }
+    if (j.existing.length) { g('have').style.display = ''; g('have').innerHTML = '<div class="hint">Already issued to this participant:</div>' + j.existing.map(r => '<div class="rx-row" style="margin-top:6px;">' + pill(r.receiptNo + ' v' + r.version, 'ok') + ' <span class="hint">' + VR.esc(r.type) + ' · ' + inr(r.amount) + ' · ' + VR.esc(LVReceipt.dmy(r.txnDate)) + '</span> <button class="btn btn-sm" data-a="re" data-n="' + VR.esc(r.receiptNo) + '">Reissue…</button></div>').join(''); } }
+  layout(); g('pq').scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+const RECEIPT_MODES = () => I.modes;
+function loadReissue(no) { const r = I.issued.find(x => x.receiptNo === no); if (!r) return; const p = I.participants.find(x => x.id === r.id) || { id: r.id, name: r.name, email: r.email, institution: r.institution, category: r.category };
+  sel = p; spot = null; reissue = r; document.getElementById(r.type === 'ERP' ? 'ty-e' : 'ty-m').checked = true; g('who').innerHTML = '<b>' + VR.esc(p.name) + '</b> · ' + VR.esc(p.id) + ' — <b>reissuing ' + VR.esc(no) + '</b>';
+  g('f-date').value = r.txnDate; g('f-erp').value = r.erpNo || ''; g('f-txn').value = r.txnId || ''; g('f-amt').value = r.amount; g('f-mode').value = r.mode; g('f-ref').value = r.reference || ''; g('f-purpose').value = r.purpose || ''; g('f-reason').value = '';
+  g('prefill').style.display = 'none'; g('have').style.display = 'none'; layout(); g('f-reason').focus(); }
+function clearAll() { sel = null; spot = null; reissue = null; reqId = ''; g('who').textContent = ''; ['f-erp', 'f-txn', 'f-ref', 'f-reason', 'f-amt', 'f-purpose'].forEach(i => { g(i).value = ''; }); g('prefill').style.display = 'none'; g('have').style.display = 'none'; layout(); }
+
+/* validate like the server, then draw the PDF with the final number and send it */
+function check() { if (!sel) return 'Choose a participant.'; const t = radio(), d = g('f-date').value; if (!d) return 'Enter the transaction date.'; if (d > I.today) return 'The transaction date cannot be in the future.';
+  if (t === 'ERP' && g('f-erp').value.trim().length < 3) return 'Enter the ERP receipt number.'; if (t === 'Manual' && g('f-txn').value.trim().length < 3) return 'Enter the transaction ID.';
+  if (!(parseFloat(g('f-amt').value) > 0)) return 'Enter the amount.'; if (reissue && !g('f-reason').value.trim()) return 'Enter the reason for reissuing.'; return ''; }
+async function libs() { await VR.load(CDN + 'html2canvas/1.4.1/html2canvas.min.js'); await VR.load(CDN + 'jspdf/2.5.1/jspdf.umd.min.js'); }
+async function draw(no) { await libs(); const c = JSON.parse(JSON.stringify(cfg)); await LVReceipt.resolveAssets(c, fetchAsset); const pdf = await LVReceipt.pdfFrom(c, [data(no)]); return pdf.output('datauristring').split('base64,')[1]; }
+function payload(b64, no, extra) { return Object.assign({ id: sel.id, requestId: reqId, type: radio(), txnDate: g('f-date').value, erpNo: g('f-erp').value.trim(), txnId: g('f-txn').value.trim(), amount: parseFloat(g('f-amt').value), mode: g('f-mode').value, reference: g('f-ref').value.trim(),
+  purpose: g('f-purpose').value.trim() || purposeFor(sel), billNo: spot ? spot.billNo : '', pdf: b64, expectNo: no, sendMail: g('f-mail').checked, reissueOf: reissue ? reissue.receiptNo : '', reason: g('f-reason').value.trim() }, extra || {}); }
+g('go').onclick = async () => { hide(); const bad = check(); if (bad) return err(bad); if (busy) return; busy = true; g('go').disabled = true; g('goHint').textContent = 'Drawing the PDF and saving…';
+  try { let no = reissue ? reissue.receiptNo : I.nextNo, extra = {}, tries = 0, j;
+    for (;;) { const b64 = await draw(no); j = await api('adminReceiptIssue', payload(b64, no, extra));
+      if (!j.ok && j.retryNo && tries++ < 2) { no = j.retryNo; I.nextNo = no; continue; }
+      if (!j.ok && j.needConfirm && !extra.confirmSecond) { if (confirm(j.error)) { extra.confirmSecond = true; continue; } }
+      break; }
+    if (!j.ok) throw new Error(j.error || 'Could not generate.');
+    ok(j.receiptNo + (reissue ? ' reissued (v' + j.version + ')' : ' generated') + (j.emailed ? ' and e-mailed to ' + sel.email + '.' : (g('f-mail').checked ? '. E-mail FAILED: ' + j.mailError : '.')));
+    clearAll(); await init(); } catch (e) { err(e.message || 'Failed.'); }
+  busy = false; g('go').disabled = false; g('goHint').textContent = ''; };
+g('prn').onclick = async () => { hide(); const bad = check(); if (bad) return err(bad); const c = JSON.parse(JSON.stringify(cfg)); await LVReceipt.resolveAssets(c, fetchAsset); LVReceipt.printHtml(c, [data()]); };
+g('pdf').onclick = async () => { hide(); const bad = check(); if (bad) return err(bad); try { await libs(); const c = JSON.parse(JSON.stringify(cfg)); await LVReceipt.resolveAssets(c, fetchAsset); (await LVReceipt.pdfFrom(c, [data()])).save(VR.fileName('Receipt_' + data().receiptNo, 'pdf')); } catch (e) { err(e.message); } };
+g('clr').onclick = clearAll;
+
+/* settings */
+function imgField(label, obj, key, w, h) { const d = document.createElement('div'); d.className = 'rx-slot'; d.innerHTML = '<label>' + VR.esc(label) + '</label><div class="rx-row"><input type="file" accept="image/png,image/jpeg"><button type="button" class="btn btn-sm clr">Clear</button></div><div class="hint st"></div>';
+  const st = d.querySelector('.st'), show = () => { st.textContent = obj[key] ? 'Image is set' : 'Not set'; }; show();
+  d.querySelector('input').onchange = async e => { const f = e.target.files[0]; if (!f) return; try { const r = await LVReceipt.shrinkImage(f, w, h); st.textContent = 'Uploading ' + r.w + ' × ' + r.h + ' px…'; const j = await api('adminReceiptAssetUpload', { name: label, dataUrl: r.dataUrl }); if (!j.ok) throw new Error(j.error); (VR._ra = VR._ra || {})[j.id] = r.dataUrl; obj[key] = 'asset:' + j.id; st.textContent = 'Uploaded ' + r.w + ' × ' + r.h + ' px'; preview(); } catch (er) { err(er.message || 'Upload failed'); show(); } };
+  d.querySelector('.clr').onclick = () => { obj[key] = ''; show(); preview(); }; return d; }
+function drawSettings() { const h = g('imgs'); h.innerHTML = ''; h.appendChild(imgField('Logo 1 (Loyola)', cfg.logos[0], 'src', 600, 600)); h.appendChild(imgField('Logo 2 (CIMSER)', cfg.logos[1], 'src', 600, 600)); h.appendChild(imgField('Signature image', cfg.signatory, 'src', 600, 263));
+  g('s-name').value = cfg.signatory.name; g('s-title').value = cfg.signatory.title; g('s-mode').value = cfg.signMode; g('s-purpose').value = cfg.purpose; g('s-msub').value = cfg.mail.subject; g('s-mbody').value = cfg.mail.body; }
+[['s-name', v => cfg.signatory.name = v], ['s-title', v => cfg.signatory.title = v], ['s-mode', v => cfg.signMode = v], ['s-purpose', v => { cfg.purpose = v; }], ['s-msub', v => cfg.mail.subject = v], ['s-mbody', v => cfg.mail.body = v]].forEach(x => g(x[0]).addEventListener('input', e => { x[1](e.target.value); if (x[0] === 's-purpose' && sel && !g('f-purpose').dataset.touched) g('f-purpose').value = purposeFor(sel); preview(); }));
+g('f-purpose').addEventListener('input', () => { g('f-purpose').dataset.touched = '1'; });
+g('saveCfg').onclick = async () => { await VR.busy(g('saveCfg'), 'Saving…', async () => { const j = await api('adminReceiptSaveConfig', { config: cfg }); j.ok ? ok('Receipt settings saved.') : err(j.error || 'Could not save.'); }); };
+
+/* events */
+document.querySelectorAll('input[name=type]').forEach(r => r.addEventListener('change', layout));
+['f-date', 'f-erp', 'f-txn', 'f-amt', 'f-mode', 'f-ref', 'f-purpose'].forEach(i => g(i).addEventListener('input', preview));
+g('pq').addEventListener('input', search); g('pick').addEventListener('click', e => { const b = e.target.closest('button[data-id]'); if (b) { reqId = ''; choose(b.dataset.id); } });
+g('have').addEventListener('click', e => { const b = e.target.closest('[data-a=re]'); if (b) loadReissue(b.dataset.n); });
+g('reqTb').addEventListener('click', async e => { const b = e.target.closest('[data-a]'); if (!b) return; const r = I.requests.find(x => x.requestId === b.dataset.r); if (!r) return;
+  if (b.dataset.a === 'issue') { await choose(r.id); reqId = r.requestId; if (r.amount && !g('f-amt').value) g('f-amt').value = r.amount; preview(); }
+  else { g('mdTxt').textContent = 'Decline the receipt request of ' + r.name + '. The reason is kept in the report.'; g('mdIn').value = ''; g('mDec').classList.add('show');
+    g('mdNo').onclick = () => g('mDec').classList.remove('show'); g('mdYes').onclick = async () => { const v = g('mdIn').value.trim(); if (!v) return g('mdIn').focus(); g('mDec').classList.remove('show'); const j = await api('adminReceiptDecline', { requestId: r.requestId, reason: v }); j.ok ? ok('Request declined.') : err(j.error); await init(); }; } });
+window.addEventListener('resize', preview);
+
+async function init() { const j = await api('adminReceiptInit'); if (!j.ok) return err(j.error || 'Could not load.'); I = j; cfg = LVReceipt.merge(LVReceipt.DEFAULTS, j.config || {}); stats(); drawReq(); drawSettings();
+  g('f-mode').innerHTML = I.modes.map(m => '<option>' + VR.esc(m) + '</option>').join(''); g('f-date').max = I.today; if (!g('f-date').value) g('f-date').value = I.today; layout(); }
+await init();
+const q = new URLSearchParams(location.search); if (q.get('reissue')) loadReissue(q.get('reissue')); else if (q.get('id')) choose(q.get('id'));
+})();
+</script>
+</body>
+</html>

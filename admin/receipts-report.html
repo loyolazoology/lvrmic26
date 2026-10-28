@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Receipt Report | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<link rel="stylesheet" href="receipts.css">
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Receipts · Report</h1>
+  <a class="btn btn-sm" id="goGen" href="receipts-manage.html"><i class="fa-solid fa-receipt"></i> Generation</a></div>
+<div class="wrap" style="max-width:1350px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="rx-totals" id="tot"></div>
+  <div class="card">
+    <div class="rx-row" style="justify-content:space-between;margin-bottom:10px;">
+      <div class="rx-row">
+        <select id="ft" style="width:auto"><option value="">All types</option><option value="ERP">ERP receipt</option><option value="Manual">Manual receipt</option></select>
+        <select id="fs" style="width:auto"><option value="Issued">Issued</option><option value="Pending">Pending requests</option><option value="Declined">Declined</option><option value="">All statuses</option></select>
+        <label class="rx-row" style="margin:0;gap:4px;">From <input type="date" id="d1" style="width:auto"></label><label class="rx-row" style="margin:0;gap:4px;">To <input type="date" id="d2" style="width:auto"></label>
+        <input id="q" placeholder="Search name, ID, receipt no., ERP no., txn ID" style="width:260px;"></div>
+      <div id="xp"></div></div>
+    <div class="hint" style="margin-bottom:8px;">Dates filter the <b>transaction date</b> (for pending requests: the request date). Totals count issued receipts in the filter.</div>
+    <div class="rx-tw"><table><thead><tr><th>Receipt no.</th><th>Participant</th><th>Type</th><th>Transaction</th><th>Date</th><th style="text-align:right;">Amount</th><th>E-mail</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tb"></tbody></table></div>
+  </div>
+  <div class="card" id="runBox" style="display:none;"><div class="hint" id="runTxt"></div></div>
+</div>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="receipt-engine.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+const PAGE = 'receipts-report', g = id => document.getElementById(id), api = (a, d) => VR.api(a, Object.assign({ page: PAGE }, d || {}));
+const err = m => (window.showErr ? showErr(m) : alert(m)), ok = m => (window.showOk ? showOk(m) : alert(m)), hide = () => window.hideAlerts && hideAlerts();
+if (!VR.can('receipts', 'report') && !VR.can('receipts', 'transaction')) { VR.denied('You do not have permission to view the receipt report.'); return; }
+let rows = [], canEdit = false; const pill = (t, c) => '<span class="rx-pill rx-' + c + '">' + VR.esc(t) + '</span>', inr = n => LVReceipt.money(n, 'INR'), dmy = LVReceipt.dmy;
+const dateOf = r => r.status === 'Pending' || r.status === 'Declined' ? String(r.requestedAt).slice(0, 10) : r.txnDate;
+function filtered() { const t = g('ft').value, s = g('fs').value, d1 = g('d1').value, d2 = g('d2').value, q = g('q').value.trim().toLowerCase();
+  return rows.filter(r => (!t || r.type === t) && (!s || r.status === s) && (!d1 || dateOf(r) >= d1) && (!d2 || dateOf(r) <= d2) &&
+    (!q || (r.receiptNo + ' ' + r.id + ' ' + r.name + ' ' + r.erpNo + ' ' + r.txnId + ' ' + r.institution).toLowerCase().indexOf(q) > -1)); }
+function totals(list) { const is = list.filter(r => r.status === 'Issued'), sum = a => a.reduce((s, r) => s + r.amount, 0), by = {};
+  is.forEach(r => { const k = r.mode || '—'; by[k] = (by[k] || 0) + r.amount; });
+  const cards = [[is.length, 'Receipts issued'], [inr(sum(is)), 'Total amount'], [is.filter(r => r.type === 'ERP').length + ' · ' + inr(sum(is.filter(r => r.type === 'ERP'))), 'ERP receipts'], [is.filter(r => r.type === 'Manual').length + ' · ' + inr(sum(is.filter(r => r.type === 'Manual'))), 'Manual receipts'],
+    [rows.filter(r => r.status === 'Pending').length, 'Pending requests']].concat(Object.keys(by).sort().map(k => [inr(by[k]), 'By ' + k]));
+  g('tot').innerHTML = cards.map(x => '<div class="rx-stat"><b>' + VR.esc(x[0]) + '</b><span>' + VR.esc(x[1]) + '</span></div>').join(''); }
+function draw() { const list = filtered(); totals(list);
+  g('tb').innerHTML = list.map(r => '<tr><td><code>' + VR.esc(r.receiptNo || '—') + '</code>' + (r.version > 1 ? '<div class="hint">v' + r.version + ' (reissued)</div>' : '') + '</td>' +
+    '<td><b>' + VR.esc(r.name) + '</b><div class="hint">' + VR.esc(r.id) + ' · ' + VR.esc(r.institution) + '</div></td><td>' + (r.type ? VR.esc(r.type === 'ERP' ? 'ERP' : 'Manual') : '—') + '</td>' +
+    '<td>' + (r.type === 'ERP' ? VR.esc(r.erpNo) : VR.esc(r.txnId || '')) + (r.mode && r.type !== 'ERP' ? '<div class="hint">' + VR.esc(r.mode) + (r.reference ? ' · ' + VR.esc(r.reference) : '') + '</div>' : '') + (r.billNo ? '<div class="hint">Bill ' + VR.esc(r.billNo) + '</div>' : '') + '</td>' +
+    '<td style="white-space:nowrap;">' + VR.esc(dmy(dateOf(r))) + '</td><td style="text-align:right;white-space:nowrap;">' + (r.status === 'Issued' ? inr(r.amount) : '—') + '</td>' +
+    '<td>' + (r.status === 'Issued' ? pill(r.emailStatus || 'Not sent', r.emailStatus === 'Sent' ? 'ok' : r.emailStatus === 'Failed' ? 'bd' : 'gr') + (r.emailError ? '<div class="hint">' + VR.esc(r.emailError) + '</div>' : '') : '') + '</td>' +
+    '<td>' + (r.status === 'Issued' ? pill('Issued', 'ok') : r.status === 'Pending' ? pill('Pending', 'wn') : pill('Declined', 'bd') + '<div class="hint">' + VR.esc(r.declineReason) + '</div>') + (r.reissueReason ? '<div class="hint">Reissue: ' + VR.esc(r.reissueReason) + '</div>' : '') + '</td>' +
+    '<td><div class="rx-row" style="gap:6px;">' + (r.status === 'Issued' ? '<a class="btn btn-sm" target="_blank" rel="noopener" href="' + VR.esc(r.link) + '" title="Open (private, needs the Drive owner login)"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
+    (canEdit && r.status === 'Issued' ? '<button class="btn btn-sm" data-a="resend" data-n="' + VR.esc(r.receiptNo) + '"><i class="fa-solid fa-paper-plane"></i> Resend</button><a class="btn btn-sm" href="receipts-manage.html?reissue=' + encodeURIComponent(r.receiptNo) + '"><i class="fa-solid fa-rotate"></i> Reissue</a>' : '') +
+    (canEdit && r.status === 'Pending' ? '<a class="btn btn-gold btn-sm" href="receipts-manage.html?id=' + encodeURIComponent(r.id) + '">Issue</a>' : '') + '</div></td></tr>').join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text-3);padding:24px;">No receipts match.</td></tr>'; }
+function data() { return { headers: ['Receipt no.', 'Version', 'Participant ID', 'Name', 'Institution', 'Type', 'ERP receipt no.', 'Transaction ID', 'Mode', 'Reference', 'Bill no.', 'Transaction date', 'Amount (INR)', 'Status', 'E-mail status', 'Generated at', 'Generated by', 'Reissue reason'],
+  rows: filtered().map(r => [r.receiptNo, r.version || '', r.id, r.name, r.institution, r.type, r.erpNo, r.txnId, r.mode, r.reference, r.billNo, r.txnDate, r.status === 'Issued' ? r.amount : '', r.status, r.emailStatus, String(r.generatedAt).replace('T', ' ').slice(0, 16), r.generatedBy, r.reissueReason]) }; }
+g('tb').addEventListener('click', async e => { const b = e.target.closest('[data-a=resend]'); if (!b) return; hide(); if (!confirm('Re-send receipt ' + b.dataset.n + ' by e-mail?')) return;
+  await VR.busy(b, 'Sending…', async () => { const j = await api('adminReceiptResend', { receiptNo: b.dataset.n }); j.ok ? ok('Receipt e-mailed.') : err(j.error); }); await load(); });
+['ft', 'fs', 'd1', 'd2'].forEach(i => g(i).onchange = draw); g('q').oninput = draw;
+async function load() { const j = await api('adminReceiptReport'); if (!j.ok) return err(j.error || 'Could not load the report.'); rows = j.rows; canEdit = j.canEdit && VR.can('receipts', 'transaction'); draw(); }
+VR.exportBar(g('xp'), { name: 'Receipts', title: 'Receipt report', getData: data, pdfOpts: { orientation: 'landscape', fontSize: 6.5 } });
+if (!VR.can('receipts', 'transaction')) g('goGen').style.display = 'none';
+await load();
+})();
+</script>
+</body>
+</html>
