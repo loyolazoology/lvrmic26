@@ -1,0 +1,32 @@
+/* mail pages — extra styles on top of admin-base.css / admin-common.css */
+.mx-prev{background:#d9d5ca;border-radius:12px;padding:12px;overflow:auto}
+.mx-prev .box{transform-origin:top left}
+.mx-grid{display:grid;grid-template-columns:minmax(330px,430px) 1fr;gap:18px;align-items:start}
+@media(max-width:1000px){.mx-grid{grid-template-columns:1fr}}
+.mx-sticky{position:sticky;top:10px}
+.mx-slot{border:1px dashed var(--navy-border);border-radius:10px;padding:12px;margin-top:10px}
+.mx-slot label.chk{display:flex;gap:8px;align-items:center;font-weight:600;margin:0 0 8px}
+.mx-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mx-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.mx-stat{border:1px solid var(--navy-border);border-radius:10px;padding:10px 14px;background:var(--navy-950)}
+.mx-stat b{display:block;font-size:22px;color:var(--gold-light)}.mx-stat span{font-size:12px;color:var(--text-3)}
+.mx-tw{max-height:60vh;overflow:auto;border:1px solid var(--navy-border);border-radius:10px}
+.mx-tw table{width:100%;border-collapse:collapse;font-size:13px}
+.mx-tw th,.mx-tw td{padding:8px 10px;border-bottom:1px solid var(--navy-border);text-align:left;vertical-align:middle}
+.mx-tw th{position:sticky;top:0;background:var(--navy-950);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-3);z-index:1}
+.mx-pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}
+.mx-ok{background:rgba(52,199,120,.15);color:#53d28a}.mx-wn{background:rgba(240,170,40,.15);color:#f0b84a}.mx-bd{background:rgba(235,87,87,.15);color:#f27c7c}.mx-gr{background:rgba(160,160,160,.15);color:var(--text-3)}
+.mx-bar{height:8px;background:var(--navy-border);border-radius:9px;overflow:hidden;margin:8px 0}.mx-bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .25s}
+.mx-log{max-height:150px;overflow:auto;font:12px/1.5 'IBM Plex Mono',monospace;color:var(--text-2)}
+.mx-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:200}.mx-modal.show{display:flex}
+.mx-modal>div{background:var(--navy-900,#122043);border:1px solid var(--navy-border);border-radius:12px;padding:18px;width:min(480px,92vw)}
+.mx-modal textarea{width:100%;min-height:80px}
+.opt-row{display:flex;gap:10px;flex-wrap:wrap}.opt{flex:1;min-width:150px;position:relative}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt label{display:flex;flex-direction:column;gap:4px;padding:13px 14px;border:1.5px solid var(--navy-border);border-radius:10px;background:var(--navy-950);cursor:pointer;font-weight:600;font-size:13.5px;color:var(--text-2);margin:0}
+.opt label small{font-weight:400;color:var(--text-3);font-size:11px}
+.opt input:checked + label{border-color:var(--gold);background:rgba(232,201,131,.08);color:var(--gold-light)}
+.opt input:focus-visible + label{outline:2px solid var(--gold);outline-offset:2px}
+.mx-frame{width:100%;height:560px;border:1px solid var(--navy-border);border-radius:10px;background:#fff}
+.mx-chip{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--navy-border);background:var(--navy-950);border-radius:999px;padding:6px 12px;font-size:12.5px}
+.mx-hide{display:none!important}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mail Log | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<link rel="stylesheet" href="mail.css">
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Mail log</h1>
+  <a class="btn btn-sm" id="goSend" href="mail-send.html"><i class="fa-solid fa-envelope-open-text"></i> Send invitation</a></div>
+<div class="wrap" style="max-width:1350px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="mx-stats" id="stats"></div>
+  <div class="alert" id="warn" style="display:none;"></div>
+  <div class="card">
+    <div class="mx-row" style="justify-content:space-between;margin-bottom:10px;">
+      <div class="mx-row">
+        <select id="fc" style="width:auto"><option value="">All mails</option><option>Invitation</option><option>Announcement</option><option>System</option></select>
+        <select id="ft" style="width:auto"><option value="">Any type</option></select>
+        <select id="fs" style="width:auto"><option value="">Any status</option><option>Sent</option><option>Failed</option><option>Queued</option></select>
+        <input type="date" id="d1" style="width:auto" title="From"><input type="date" id="d2" style="width:auto" title="To">
+        <input id="q" placeholder="Search name, e-mail, institute" style="width:220px;"></div>
+      <div id="xp"></div></div>
+    <div class="mx-row" id="acts" style="margin-bottom:10px;">
+      <button class="btn btn-sm" id="reSel"><i class="fa-solid fa-rotate"></i> Resend selected failed</button>
+      <button class="btn btn-sm" id="reAll"><i class="fa-solid fa-rotate-right"></i> Resend all failed (filtered)</button>
+      <button class="btn btn-sm" id="flush"><i class="fa-solid fa-forward"></i> Send queued now</button>
+      <span class="hint" id="info"></span></div>
+    <div class="mx-tw"><table><thead><tr><th style="width:30px;"><input type="checkbox" id="all" style="width:auto"></th><th>Time (IST)</th><th>Type</th><th>Recipient</th><th>Institute</th><th>Status</th><th>Sent by</th><th>Error / note</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+  </div>
+  <div class="card" id="runBox" style="display:none;"><div class="mx-bar"><i id="bar"></i></div><div class="hint" id="runTxt"></div><div class="mx-row" style="margin-top:8px;"><button class="btn btn-sm" id="stop">Stop</button></div></div>
+</div>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+const PAGE = 'mail-report', g = id => document.getElementById(id), api = (a, d) => VR.api(a, Object.assign({ page: PAGE }, d || {}));
+const err = m => (window.showErr ? showErr(m) : alert(m)), ok = m => (window.showOk ? showOk(m) : alert(m)), hide = () => window.hideAlerts && hideAlerts();
+if (!VR.can('mail', 'report') && !VR.can('mail', 'transaction')) { VR.denied('You do not have permission to view the mail log.'); return; }
+let all = [], META = {}, canEdit = false, sel = new Set(), stop = false, busy = false;
+const pill = (t, c) => '<span class="mx-pill mx-' + c + '">' + VR.esc(t) + '</span>', SHOW = 500;
+const when = s => s ? s.slice(8, 10) + '-' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+s.slice(5, 7) - 1] + '-' + s.slice(0, 4) + ' ' + s.slice(11, 16) : '';
+function filtered() { const c = g('fc').value, t = g('ft').value, s = g('fs').value, d1 = g('d1').value, d2 = g('d2').value, q = g('q').value.trim().toLowerCase();
+  return all.filter(r => (!c || r.category === c) && (!t || r.type === t) && (!s || r.status === s) && (!d1 || r.time.slice(0, 10) >= d1) && (!d2 || r.time.slice(0, 10) <= d2) && (!q || (r.name + ' ' + r.email + ' ' + r.institute + ' ' + r.type).toLowerCase().indexOf(q) > -1)); }
+function stats() { const q = META.quota, c = META.counts || {};
+  g('stats').innerHTML = [[c.Sent || 0, 'Sent'], [c.Failed || 0, 'Failed'], [c.Queued || 0, 'Queued'], [q === null || q === undefined ? '—' : q, 'E-mails left today']].map(x => '<div class="mx-stat"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>').join('');
+  const w = g('warn'); w.style.display = (META.trigger === false && (c.Queued || 0)) ? '' : 'none'; w.textContent = 'Queued mails exist but the daily continuation job is not installed. Run installMailTrigger() once in Apps Script.'; }
+function draw() {
+  const list = filtered(), shown = list.slice(0, SHOW); sel = new Set(Array.from(sel).filter(id => list.some(r => r.id === id)));
+  g('tb').innerHTML = shown.map(r => '<tr><td>' + (r.canResend && canEdit ? '<input type="checkbox" class="ck" data-id="' + VR.esc(r.id) + '" ' + (sel.has(r.id) ? 'checked' : '') + ' style="width:auto">' : '') + '</td>' +
+    '<td style="white-space:nowrap;">' + VR.esc(when(r.time)) + '</td><td><b>' + VR.esc(r.type) + '</b><div class="hint">' + VR.esc(r.category) + '</div></td>' +
+    '<td><b>' + VR.esc(r.name) + '</b><div class="hint">' + VR.esc(r.email) + '</div></td><td>' + VR.esc(r.institute) + '</td>' +
+    '<td>' + pill(r.status, r.status === 'Sent' ? 'ok' : r.status === 'Failed' ? 'bd' : 'wn') + (r.attempts > 1 ? '<div class="hint">' + r.attempts + ' attempts</div>' : '') + '</td><td>' + VR.esc(r.sentBy) + '</td>' +
+    '<td style="max-width:260px;">' + (r.error ? '<span style="color:#f27c7c;">' + VR.esc(r.error) + '</span>' : VR.esc(r.note)) + '</td>' +
+    '<td>' + (r.canResend && canEdit ? '<button class="btn btn-sm" data-a="re" data-id="' + VR.esc(r.id) + '">Resend</button>' : '') + '</td></tr>').join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text-3);padding:24px;">No mails match.</td></tr>';
+  g('info').textContent = list.length + ' mail(s)' + (list.length > SHOW ? ' — showing the latest ' + SHOW + '; export has all' : '') + ' · ' + sel.size + ' selected';
+  const failed = list.filter(r => r.canResend).length; g('acts').style.display = canEdit ? '' : 'none'; g('reAll').disabled = !failed; g('flush').style.display = (META.counts && META.counts.Queued) ? '' : 'none'; g('all').checked = false; }
+function data() { return { headers: ['Time (IST)', 'Category', 'Type', 'Name', 'E-mail', 'Institute', 'Status', 'Attempts', 'Sent by', 'Subject', 'Error', 'Note'],
+  rows: filtered().map(r => [when(r.time), r.category, r.type, r.name, r.email, r.institute, r.status, r.attempts, r.sentBy, r.subject, r.error, r.note]) }; }
+
+/* resend / flush: first call re-queues and sends a batch, then keep processing until finished or the daily limit */
+async function loop(first, args) { if (busy) return; busy = true; stop = false; hide(); g('runBox').style.display = ''; g('bar').style.width = '0';
+  let sent = 0, failed = 0, total = 0, rem = 0, hit = false;
+  try { let j = await first(); if (!j.ok) throw new Error(j.error || 'Failed.'); total = j.remaining + j.sent + j.failed; const ids = j.ids; sent += j.sent; failed += j.failed; rem = j.remaining; hit = j.quotaHit;
+    const upd = () => { g('bar').style.width = Math.round((sent + failed) * 100 / Math.max(1, total)) + '%'; g('runTxt').textContent = sent + ' sent, ' + failed + ' failed' + (rem ? ', ' + rem + ' waiting' : ''); }; upd();
+    while (rem > 0 && !hit && !stop) { j = await api('adminMailProcess', ids ? { ids: ids } : {}); if (!j.ok) throw new Error(j.error); sent += j.sent; failed += j.failed; rem = j.remaining; hit = j.quotaHit; if (!j.sent && !j.failed) break; upd(); }
+    const msg = sent + ' sent' + (failed ? ', ' + failed + ' failed' : '') + (rem ? ', ' + rem + ' still queued' + (hit ? ' (daily limit reached; the daily job continues automatically)' : '') : '') + '.'; (failed || rem) ? err(msg) : ok(msg);
+  } catch (er) { err(er.message || 'Failed.'); }
+  busy = false; g('runBox').style.display = 'none'; await load(); }
+g('tb').addEventListener('change', e => { const c = e.target.closest('.ck'); if (!c) return; c.checked ? sel.add(c.dataset.id) : sel.delete(c.dataset.id); draw(); });
+g('tb').addEventListener('click', e => { const b = e.target.closest('[data-a=re]'); if (b) loop(() => api('adminMailResend', { ids: [b.dataset.id] })); });
+g('all').onchange = e => { filtered().slice(0, SHOW).filter(r => r.canResend).forEach(r => e.target.checked ? sel.add(r.id) : sel.delete(r.id)); draw(); g('all').checked = e.target.checked; };
+g('reSel').onclick = () => { if (!sel.size) return err('Tick the failed mails to resend.'); loop(() => api('adminMailResend', { ids: Array.from(sel) })); };
+g('reAll').onclick = () => { const ids = filtered().filter(r => r.canResend).map(r => r.id); if (!ids.length) return; if (confirm('Resend ' + ids.length + ' failed mail(s)?')) loop(() => api('adminMailResend', { ids: ids.slice(0, 500) })); };
+g('flush').onclick = () => { if (confirm('Send the queued mails now (up to today\'s limit)?')) loop(() => api('adminMailProcess', {})); };
+g('stop').onclick = () => { stop = true; };
+['fc', 'ft', 'fs', 'd1', 'd2'].forEach(i => g(i).onchange = draw); g('q').oninput = draw;
+async function load() { const r = await api('listMailTransactions'); if (!r.ok) return err(r.error || 'Could not load the log.'); all = r.rows; META = r; canEdit = r.canEdit && VR.can('mail', 'transaction');
+  const types = Array.from(new Set(all.map(x => x.type))).sort(), cur = g('ft').value; g('ft').innerHTML = '<option value="">Any type</option>' + types.map(t => '<option' + (t === cur ? ' selected' : '') + '>' + VR.esc(t) + '</option>').join(''); stats(); draw(); }
+VR.exportBar(g('xp'), { name: 'Mail_log', title: 'Mail log', getData: data, pdfOpts: { orientation: 'landscape', fontSize: 7 } });
+if (!VR.can('mail', 'transaction')) g('goSend').style.display = 'none';
+await load();
+})();
+</script>
+</body>
+</html>

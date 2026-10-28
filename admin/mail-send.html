@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Send Invitation | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<link rel="stylesheet" href="mail.css">
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-envelope-open-text" style="color:var(--gold-light);"></i> Send invitation</h1>
+  <a class="btn btn-sm" href="mail-report.html"><i class="fa-solid fa-table-list"></i> Mail log</a></div>
+<div class="wrap" style="max-width:1100px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="mx-stats" id="stats"></div>
+  <div class="alert" id="warn" style="display:none;"></div>
+
+  <div class="card"><h3><i class="fa-solid fa-tag" style="color:var(--gold-light);"></i> Invitation type</h3>
+    <div class="opt-row" id="types">
+      <div class="opt"><input type="radio" name="type" id="t-g" value="General" checked><label for="t-g"><span><i class="fa-solid fa-user"></i> General</span><small>Individual invitation</small></label></div>
+      <div class="opt"><input type="radio" name="type" id="t-h" value="HOD"><label for="t-h"><span><i class="fa-solid fa-user-tie"></i> HOD</span><small>Head of the department</small></label></div>
+      <div class="opt"><input type="radio" name="type" id="t-i" value="Institute"><label for="t-i"><span><i class="fa-solid fa-building-columns"></i> Institute</span><small>To the institution</small></label></div>
+      <div class="opt"><input type="radio" name="type" id="t-c" value="College"><label for="t-c"><span><i class="fa-solid fa-school"></i> College</span><small>Depute life-science students</small></label></div>
+    </div></div>
+
+  <div class="card"><h3><i class="fa-solid fa-paper-plane" style="color:var(--gold-light);"></i> Recipients</h3>
+    <div class="opt-row" style="margin-bottom:14px;">
+      <div class="opt"><input type="radio" name="mode" id="m-1" value="one" checked><label for="m-1"><span>Send one</span><small>Type the details</small></label></div>
+      <div class="opt"><input type="radio" name="mode" id="m-n" value="bulk"><label for="m-n"><span>Upload a list</span><small>CSV or Excel, many recipients</small></label></div>
+    </div>
+    <div id="one"><div class="grid">
+      <div><label>Title</label><select id="f-title"><option value="">None</option><option>Dr.</option><option>Prof.</option><option>Mr.</option><option>Ms.</option><option>Mrs.</option></select></div>
+      <div><label>Name *</label><input id="f-name" maxlength="120" autocomplete="off"></div>
+      <div class="full"><label>E-mail *</label><input id="f-email" type="email" autocomplete="off"><div class="hint" id="f-dup"></div></div>
+      <div id="w-dept"><label>Department *</label><input id="f-dept" maxlength="150"></div>
+      <div id="w-inst"><label>Institute *</label><input id="f-inst" maxlength="150"></div>
+      <div id="w-col"><label>College *</label><input id="f-col" maxlength="150"></div>
+    </div></div>
+    <div id="bulk" class="mx-hide">
+      <div class="mx-row"><input type="file" id="file" accept=".csv,.xlsx,.xls" style="width:auto"><button class="btn btn-sm" id="sample" type="button"><i class="fa-solid fa-download"></i> Sample CSV</button></div>
+      <div class="hint">Columns: Title, Name, Email, Department, Institute, College, Type (optional; blank = the type chosen above). Up to 2000 rows.</div>
+      <div id="bulkInfo" style="margin-top:12px;display:none;">
+        <div class="mx-row" style="justify-content:space-between;margin-bottom:8px;"><div id="bulkSum" class="hint"></div>
+          <label class="mx-row" style="margin:0;font-weight:600;"><input type="checkbox" id="force" style="width:auto"> Send again to addresses already sent</label></div>
+        <div class="mx-tw" style="max-height:300px;"><table><thead><tr><th>#</th><th>Name</th><th>E-mail</th><th>Type</th><th>Detail</th><th>Status</th></tr></thead><tbody id="bulkTb"></tbody></table></div></div>
+    </div></div>
+
+  <div class="card"><h3><i class="fa-solid fa-eye" style="color:var(--gold-light);"></i> Preview</h3>
+    <div class="mx-row" style="margin-bottom:10px;"><span class="mx-chip"><i class="fa-solid fa-heading"></i> <span id="pvSub"></span></span><span class="mx-chip"><i class="fa-solid fa-paperclip"></i> <span id="pvAtt">Brochure</span></span></div>
+    <iframe class="mx-frame" id="pv" sandbox="" title="E-mail preview"></iframe></div>
+
+  <div class="card"><div class="mx-row"><button class="btn btn-gold" id="go"><i class="fa-solid fa-paper-plane"></i> <span id="goTxt">Send</span></button><span class="hint" id="goHint"></span></div>
+    <div id="run" class="mx-hide" style="margin-top:14px;"><div class="mx-bar"><i id="bar"></i></div><div class="hint" id="runTxt"></div><div class="mx-log" id="log"></div><div class="mx-row" style="margin-top:8px;"><button class="btn btn-sm" id="stop" type="button">Stop</button></div></div></div>
+</div>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (async function () {
+const PAGE = 'mail-send', g = id => document.getElementById(id), api = (a, d) => VR.api(a, Object.assign({ page: PAGE }, d || {}));
+const err = m => (window.showErr ? showErr(m) : alert(m)), ok = m => (window.showOk ? showOk(m) : alert(m)), hide = () => window.hideAlerts && hideAlerts();
+if (!VR.can('mail', 'transaction')) { VR.denied('You do not have permission to send invitations.'); return; }
+const TYPES = ['General', 'HOD', 'Institute', 'College'], EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+let META = {}, bulk = [], busy = false, stop = false, pvTm;
+const radio = n => document.querySelector('input[name=' + n + ']:checked').value, pill = (t, c) => '<span class="mx-pill mx-' + c + '">' + VR.esc(t) + '</span>';
+const need = t => ({ HOD: ['dept', 'col'], Institute: ['inst'], College: ['col'], General: [] }[t]);
+function reasonOf(r) { if (!r.name) return 'Name is required'; if (!EMAIL.test(r.email)) return 'Invalid e-mail address';
+  if (r.type === 'HOD' && (!r.department || !r.college)) return 'HOD needs department and college'; if (r.type === 'Institute' && !r.institute) return 'Institute is required'; if (r.type === 'College' && !r.college) return 'College is required'; return ''; }
+const one = () => ({ type: radio('type'), title: g('f-title').value, name: g('f-name').value.trim(), email: g('f-email').value.trim(), department: g('f-dept').value.trim(), institute: g('f-inst').value.trim(), college: g('f-col').value.trim() });
+
+function stats() { const q = META.quota, can = q === null || q === undefined ? '—' : Math.max(0, q - (META.reserve || 0));
+  g('stats').innerHTML = [[q === null || q === undefined ? '—' : q, 'E-mails left today (all)'], [can, 'Available for invitations'], [META.queued || 0, 'Waiting in queue']].map(x => '<div class="mx-stat"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>').join('');
+  const w = g('warn'), msgs = [];
+  if (META.trigger === false) msgs.push('The daily continuation job is not installed. Large lists will stop when the daily limit is reached. Run installMailTrigger() once in Apps Script.');
+  if (META.brochure && META.brochure.error) msgs.push(META.brochure.error);
+  w.style.display = msgs.length ? '' : 'none'; w.textContent = msgs.join(' '); }
+function layout() { const t = radio('type'), n = need(t); g('w-dept').classList.toggle('mx-hide', n.indexOf('dept') < 0); g('w-inst').classList.toggle('mx-hide', n.indexOf('inst') < 0); g('w-col').classList.toggle('mx-hide', n.indexOf('col') < 0);
+  const bulkMode = radio('mode') === 'bulk'; g('one').classList.toggle('mx-hide', bulkMode); g('bulk').classList.toggle('mx-hide', !bulkMode); button(); preview(); }
+function button() { const bulkMode = radio('mode') === 'bulk', n = bulkMode ? sendable().length : 1;
+  g('goTxt').textContent = bulkMode ? 'Send / queue ' + n + ' invitation(s)' : 'Send invitation'; g('go').disabled = busy || (bulkMode && !n);
+  const q = META.quota, can = q === null || q === undefined ? null : Math.max(0, q - (META.reserve || 0));
+  g('goHint').textContent = bulkMode && can !== null && n > can ? 'Only ' + can + ' can go today; the rest wait in the queue and are sent automatically by the daily job.' : ''; }
+
+/* preview from the server, so it is exactly the mail that will be sent */
+function preview() { clearTimeout(pvTm); pvTm = setTimeout(async () => {
+  const bulkMode = radio('mode') === 'bulk', r = bulkMode ? (bulk.find(x => !x.bad) || bulk[0] || { type: radio('type') }) : one();
+  const j = await api('adminMailPreview', { type: r.type || radio('type'), title: r.title, name: r.name, department: r.department, institute: r.institute, college: r.college });
+  if (!j.ok) return; g('pv').srcdoc = j.html; g('pvSub').textContent = j.subject;
+  g('pvAtt').textContent = META.brochure && META.brochure.name ? 'Brochure attached: ' + META.brochure.name + ' (' + META.brochure.kb + ' KB)' : 'Brochure attached'; }, 350); }
+document.querySelectorAll('input[name=type],input[name=mode]').forEach(r => r.addEventListener('change', () => { if (r.name === 'type') recheck(); layout(); }));
+['f-title', 'f-name', 'f-dept', 'f-inst', 'f-col'].forEach(i => g(i).addEventListener('input', preview));
+let dupTm; g('f-email').addEventListener('input', () => { clearTimeout(dupTm); dupTm = setTimeout(async () => { const e = g('f-email').value.trim(); if (!EMAIL.test(e)) { g('f-dup').textContent = ''; return; }
+  const j = await api('adminMailCheck', { rows: [{ email: e }] }); g('f-dup').textContent = j.ok && j.states[0] === 'sent' ? 'An invitation was already sent to this address. It will be skipped.' : j.ok && j.states[0] === 'queued' ? 'Already waiting in the queue.' : ''; }, 400); });
+
+/* bulk file */
+const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const KEYS = { title: ['title', 'salutation', 'prefix'], name: ['name', 'fullname', 'recipient'], email: ['email', 'emailid', 'mail', 'emailaddress'], department: ['department', 'dept'], institute: ['institute', 'institution', 'organisation', 'organization'], college: ['college'], type: ['type', 'invitationtype'] };
+g('sample').onclick = () => { const b = new Blob(['\ufeffTitle,Name,Email,Department,Institute,College,Type\r\nDr.,Sample Name,sample@example.com,Zoology,,Sample College,HOD\r\n'], { type: 'text/csv' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'LVRMIC_invitation_list_sample.csv'; a.click(); };
+g('file').onchange = async e => { const f = e.target.files[0]; if (!f) return; hide();
+  try { await VR.load('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+    const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' }), raw = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
+    if (!raw.length) return err('The file has no rows.'); if (raw.length > 2000) return err('Too many rows (maximum 2000).');
+    const def = radio('type');
+    bulk = raw.map(o => { const m = {}; Object.keys(o).forEach(k => { m[norm(k)] = String(o[k]).trim(); }); const pick = key => { for (const a of KEYS[key]) if (m[a] !== undefined) return m[a]; return ''; };
+      const t = pick('type'), type = TYPES.find(x => x.toLowerCase() === t.toLowerCase()) || (t ? 'x' : def);
+      return { title: pick('title'), name: pick('name'), email: pick('email'), department: pick('department'), institute: pick('institute'), college: pick('college'), type: type }; });
+    bulk.forEach(r => { r.reason = r.type === 'x' ? 'Unknown type' : reasonOf(r); r.bad = !!r.reason; r.state = r.bad ? 'invalid' : ''; });
+    await recheck(); } catch (er) { err(er.message || 'Could not read the file.'); } };
+async function recheck() { if (!bulk.length) return; const j = await api('adminMailCheck', { rows: bulk.map(r => ({ email: r.email })) });
+  if (j.ok) bulk.forEach((r, i) => { r.state = r.bad ? 'invalid' : j.states[i]; }); drawBulk(); }
+const sendable = () => bulk.filter(r => !r.bad && (r.state === 'new' || (r.state === 'sent' && g('force').checked)));
+function drawBulk() { g('bulkInfo').style.display = bulk.length ? '' : 'none'; const c = s => bulk.filter(r => r.state === s).length;
+  g('bulkSum').textContent = bulk.length + ' rows · ' + c('new') + ' new · ' + c('sent') + ' already sent · ' + c('queued') + ' queued · ' + c('dupfile') + ' repeated · ' + c('invalid') + ' invalid';
+  g('bulkTb').innerHTML = bulk.slice(0, 400).map((r, i) => '<tr><td>' + (i + 1) + '</td><td>' + VR.esc(r.name) + '</td><td>' + VR.esc(r.email) + '</td><td>' + VR.esc(r.type === 'x' ? '?' : r.type) + '</td><td>' + VR.esc(r.reason || '') + '</td><td>' +
+    pill({ new: 'New', sent: 'Already sent', queued: 'Queued', dupfile: 'Repeated', invalid: 'Invalid' }[r.state] || '…', { new: 'ok', sent: 'wn', queued: 'wn', dupfile: 'gr', invalid: 'bd' }[r.state] || 'gr') + '</td></tr>').join('') + (bulk.length > 400 ? '<tr><td colspan="6" class="hint">Showing the first 400 rows.</td></tr>' : '');
+  button(); preview(); }
+g('force').onchange = button;
+
+/* send: first call queues + sends a batch; then keep processing the batch until done or the daily limit is reached */
+g('stop').onclick = () => { stop = true; };
+g('go').onclick = async () => {
+  hide(); const bulkMode = radio('mode') === 'bulk'; let rows, force = false;
+  if (bulkMode) { rows = sendable(); force = g('force').checked; } else { const r = one(), why = reasonOf(r); if (why) return err(why); rows = [r]; }
+  if (!rows.length) return err('Nothing to send.');
+  if (!confirm('Send ' + rows.length + ' invitation(s) with the brochure attached?')) return;
+  busy = true; stop = false; g('go').disabled = true; g('run').classList.remove('mx-hide'); g('log').innerHTML = ''; g('bar').style.width = '0';
+  let sent = 0, failed = 0, skipped = 0, total = rows.length, batch = '', rem = 0, hit = false;
+  const upd = () => { g('bar').style.width = Math.round((sent + failed) * 100 / Math.max(1, total)) + '%'; g('runTxt').textContent = sent + ' sent, ' + failed + ' failed' + (rem ? ', ' + rem + ' waiting' : ''); };
+  try {
+    let j = await api('sendInviteMail', { rows: rows, force: force }); if (!j.ok) throw new Error(j.error || 'Could not send.');
+    batch = j.batchId; sent += j.sent; failed += j.failed; rem = j.remaining; hit = j.quotaHit; skipped = (j.skipped || []).length; total = j.queued;
+    (j.skipped || []).forEach(s => g('log').insertAdjacentHTML('beforeend', '<div>– skipped ' + VR.esc(s.email) + ': ' + VR.esc(s.reason) + '</div>')); upd();
+    while (batch && rem > 0 && !hit && !stop) { j = await api('adminMailProcess', { batchId: batch }); if (!j.ok) throw new Error(j.error); sent += j.sent; failed += j.failed; rem = j.remaining; hit = j.quotaHit; if (!j.sent && !j.failed) break; upd(); }
+    META.quota = j.quota !== undefined ? j.quota : META.quota; stats();
+    const msg = sent + ' sent' + (failed ? ', ' + failed + ' failed (see Mail log)' : '') + (skipped ? ', ' + skipped + ' skipped' : '') + '.' + (rem ? ' ' + rem + ' still queued' + (hit ? ' because the daily limit was reached; the daily job will send them automatically.' : (stop ? ' (stopped).' : '.')) : '');
+    g('runTxt').textContent = msg; (failed || rem) ? err(msg) : ok(msg);
+    if (bulkMode) await recheck(); else { g('f-name').value = g('f-email').value = ''; g('f-dup').textContent = ''; }
+  } catch (er) { err(er.message || 'Failed.'); }
+  busy = false; button(); const m = await api('adminMailMeta'); if (m.ok) { META = m; stats(); } };
+
+const m = await api('adminMailMeta'); if (!m.ok) { err(m.error || 'Could not load.'); return; } META = m; stats(); layout();
+})();
+</script>
+</body>
+</html>
