@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Participant Individual View | VRMIC 2026 Admin</title>
+<title>Participant Individual View | LVRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -77,6 +77,13 @@ table.list tr:hover td{background:rgba(232,201,131,.03);}
 .head .info{flex:1 1 260px;min-width:0;}
 .srch-state{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12.5px;color:var(--text-3);}
 .sheet-load{display:flex;align-items:center;justify-content:center;gap:10px;padding:46px 18px;color:var(--text-3);}
+/* attendance by session */
+.att-sum{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:2px 0 10px;font-size:13px;color:var(--text-2);}
+.att-sum b{color:var(--text-1);font-family:'IBM Plex Mono',monospace;}
+.att-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.att-tbl th{text-align:left;padding:7px 10px;font-size:11.5px;font-weight:600;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;}
+.att-tbl td{padding:8px 10px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);}
+.att-note{font-size:12.5px;color:var(--text-3);padding:4px 0;}
 </style>
 </head>
 <body>
@@ -85,7 +92,7 @@ table.list tr:hover td{background:rgba(232,201,131,.03);}
 <div class="wrap">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
   <div class="card noprint">
-    <label for="q">Search by name or VRMIC ID</label>
+    <label for="q">Search by name, LVRMIC ID, email or phone</label>
     <input id="q" placeholder="Loading participants…" autocomplete="off" disabled>
     <div class="srch-state" id="state"><span class="spinner"></span> Loading participants…</div>
     <div id="results" style="margin-top:8px;"></div>
@@ -105,12 +112,17 @@ const fmtD = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d)
 const fmtDT = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
 const yes = v => String(v).toUpperCase() === 'TRUE';
 const typeBadge = t => t === 'Oral' ? 'b-oral' : t === 'Poster' ? 'b-poster' : 'b-neu';
+const stBadge = s => s === 'Present' ? 'b-ok' : s === 'Late' || s === 'Missing exit' ? 'b-warn' : s === 'Absent' ? 'b-bad' : 'b-neu';
+const hm12 = hm => { const m = String(hm || '').match(/^(\d{1,2}):(\d{2})$/); if (!m) return ''; let h = +m[1]; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m[2] + ' ' + ap; };
+/* the sheet stores slot text such as "26 Nov 2026" and "10:30 AM"; only real ISO timestamps are reformatted */
+const slotTxt = v => { const s = String(v == null ? '' : v).trim(); return /^\d{4}-\d{2}-\d{2}T/.test(s) ? fmtD(s) : s; };
 
 if (!VR.can('participants', 'report')) document.querySelector('.wrap').innerHTML = '<div class="alert alert-error show">You do not have permission to view participant details.</div>';
 else {
 const QR_URL = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
 let all = [], cur = null, ready = false;
-const qrText = {};          // VRMIC ID -> signed QR text (from the server)
+let curExtra = null;        // { attendance, slot } for the open participant, from adminParticipantAttendance
+const qrText = {};          // LVRMIC ID -> signed QR text (from the server)
 let qrError = '';           // reason the QR list could not be loaded, if any
 const qrCache = {};
 
@@ -151,9 +163,40 @@ async function fillQr(p){
   } catch (e) { if (cur && cur.ID === p.ID && $('qrb')) { $('qrb').innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="font-size:30px;color:#c9974f;"></i>'; $('qrcap').textContent = 'Could not draw the QR code'; } }
 }
 
+/* ---- slot block: clean server text when loaded, raw sheet text until then ---- */
+function slotHtml(p){
+  const s = curExtra && curExtra.slot;
+  const venue = s ? s.venue : p.SlotVenue, room = s ? s.room : p.SlotRoom, date = s ? s.date : slotTxt(p.SlotDate), token = s ? s.token : p.SlotToken;
+  const time = s ? (s.time ? s.time + (s.endTime ? ' – ' + s.endTime : '') : '') : slotTxt(p.SlotTime);
+  const dur = s ? (s.duration ? s.duration + ' min' : '') : (p.SlotDuration ? p.SlotDuration + ' min' : '');
+  const board = s ? s.board : p.PosterBoard, status = s ? s.status : p.SlotStatus;
+  return `<div class="kv">${kv('Venue', venue)}${kv('Room', room)}${kv('Date', date)}${kv('Time', time)}${kv('Duration', dur)}${kv('Token', token)}${kv('Poster board', board)}${kv('Slot status', status)}</div>`;
+}
+
+/* ---- attendance block: per session, from AttendanceLog ---- */
+function attHtml(){
+  if (curExtra === null) return '<div class="att-note"><span class="spinner"></span> Loading attendance…</div>';
+  if (curExtra === false) return '<div class="att-note">Attendance could not be loaded.</div>';
+  const a = curExtra.attendance, ss = a.sessions || [];
+  if (!ss.length) return '<div class="att-note">No attendance sessions have been set up yet.</div>';
+  const sum = a.total ? `<div class="att-sum"><span>Attended <b>${a.attended} of ${a.total}</b> counted sessions</span><span><b>${a.percent == null ? '—' : a.percent + '%'}</b></span>${a.minPercent ? `<span class="badge ${a.percent != null && a.percent >= a.minPercent ? 'b-ok' : 'b-warn'}">Certificate minimum ${a.minPercent}%</span>` : ''}</div>` : '<div class="att-note">No counted session has started yet.</div>';
+  return sum + `<div class="scroll-x"><table class="att-tbl"><thead><tr><th>Session</th><th>Date</th><th>In</th><th>Out</th><th>Status</th></tr></thead><tbody>${ss.map(s => `<tr><td>${esc(s.title)}${s.counts ? '' : ' <span class="badge b-neu">not counted</span>'}</td><td>${esc(fmtD(s.date))}</td><td>${esc(hm12(s.in) || '—')}</td><td>${esc(hm12(s.out) || '—')}</td><td>${s.status ? `<span class="badge ${stBadge(s.status)}">${esc(s.status)}</span>` : '<span class="badge b-neu">Upcoming</span>'}</td></tr>`).join('')}</tbody></table></div>`;
+}
+async function loadExtra(p){
+  curExtra = null;
+  try {
+    const r = await VR.api('adminParticipantAttendance', { id: p.ID });
+    if (!cur || cur.ID !== p.ID) return;
+    curExtra = r && r.ok ? { attendance: r.attendance, slot: r.slot } : false;
+  } catch (e) { if (!cur || cur.ID !== p.ID) return; curExtra = false; }
+  if ($('slotsec')) $('slotsec').innerHTML = slotHtml(p);
+  if ($('attsec')) $('attsec').innerHTML = attHtml();
+}
+
 function show(p, photo){
-  cur = p; history.replaceState(null, '', '?id=' + encodeURIComponent(p.ID));
+  cur = p; curExtra = null; history.replaceState(null, '', '?id=' + encodeURIComponent(p.ID));
   const initials = String(p.Name || '?').replace(/^(Dr|Mr|Ms|Mrs|Prof)\.?\s*/i, '').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  const src = String(p.Source || '') === 'Spot' ? 'Spot registration' : 'Portal';
   $('sheet').innerHTML = `<div class="card" id="card">
     <div class="head"><div class="ph" id="ph">${photo ? `<img src="${photo}" alt="Photo of ${esc(p.Name)}">` : (p.PhotoURL ? '<span class="spinner" style="width:22px;height:22px;"></span>' : esc(initials))}</div>
       ${qrBoxHtml()}
@@ -162,22 +205,35 @@ function show(p, photo){
         <div style="margin-top:10px;font-size:13px;color:var(--text-2);">${esc(p.Designation === 'Other' ? (p.DesignationOther || 'Other') : (p.Designation || ''))}${p.Department ? ' · ' + esc(p.Department) : ''}<br>${esc(p.Institution || '')}</div></div></div>
     <div class="sec"><h4>Contact</h4><div class="kv">${kv('Email', p.Email)}${kv('Phone', p.Phone)}${kv('City', p.City)}${kv('State', p.State)}${kv('Country', p.Country)}</div></div>
     <div class="sec"><h4>Personal &amp; profile</h4><div class="kv">${kv('Gender', p.Gender)}${kv('Date of birth', p.DOB ? fmtD(p.DOB) : '')}${kv('Category', p.Category)}${kv('Food preference', p.FoodPreference)}${kv('ORCID', p.OrcidId)}${kv('Google Scholar', p.GoogleScholar, 1)}${kv('LinkedIn', p.LinkedIn, 1)}</div></div>
-    <div class="sec"><h4>Registration &amp; payment</h4><div class="kv">${kv('Registration type', p.Role)}${kv('Registered on', fmtDT(p.RegistrationDate || p.CreatedAt))}${kv('Amount paid', p.AmountPaid ? '₹' + p.AmountPaid : '')}${kv('Fee paid', yes(p.FeePaid) ? 'Yes' : 'No')}${kv('Mode', p.Mode)}${kv(p.Mode === 'Online' ? 'Meeting link' : 'Venue', p.Mode === 'Online' ? p.MeetingLink : p.Location, p.Mode === 'Online')}</div></div>
+    <div class="sec"><h4>Registration &amp; payment</h4><div class="kv">${kv('Registration type', p.Role)}${kv('Registered via', src)}${kv('Registered on', fmtDT(p.RegistrationDate || p.CreatedAt))}${kv('Amount paid', p.AmountPaid ? '₹' + p.AmountPaid : '')}${kv('Fee paid', yes(p.FeePaid) || Number(p.AmountPaid) ? 'Yes' : 'No')}${kv('Payment mode', p.PaymentMode)}${kv('Payment reference', p.PaymentRef)}${kv('Fee note', p.FeeNote)}${kv('Created by', p.CreatedBy)}${kv('Attending', p.Mode || 'Offline')}${kv(p.Mode === 'Online' ? 'Meeting link' : 'Venue', p.Mode === 'Online' ? p.MeetingLink : p.Location, p.Mode === 'Online')}</div></div>
     <div class="sec"><h4>Abstract &amp; presentation</h4><div class="kv">${kv('Abstract status', p.AbstractStatus || 'Not Submitted')}${kv('Title', p.AbstractTitle)}${kv('Theme', p.AbstractTheme)}${kv('Document ID', p.AbstractDocId)}${kv('Version', p.AbstractRevision)}${kv('Reviewer remarks', p.AbstractRemarks)}${kv('Reviewed on', p.AbstractReviewedAt ? fmtDT(p.AbstractReviewedAt) : '')}${kv('PPT', p.PPTLink ? (p.PPTFileName || 'Uploaded') : '')}${kv('PPT uploaded', p.PPTUploadedAt ? fmtDT(p.PPTUploadedAt) : '')}</div></div>
-    <div class="sec"><h4>Slot &amp; attendance</h4><div class="kv">${kv('Venue', p.SlotVenue)}${kv('Room', p.SlotRoom)}${kv('Date', p.SlotDate ? fmtD(p.SlotDate) : '')}${kv('Time', p.SlotTime)}${kv('Token', p.SlotToken)}${kv('Day 1', yes(p.Day1Attendance) ? 'Present' : 'Absent')}${kv('Day 2', yes(p.Day2Attendance) ? 'Present' : 'Absent')}${kv('Day 3', yes(p.Day3Attendance) ? 'Present' : 'Absent')}</div></div>
-    <div class="sec"><h4>Feedback &amp; certificate</h4><div class="kv">${kv('Feedback submitted', yes(p.FeedbackSubmitted) ? 'Yes' : 'No')}${kv('Certificate requested', yes(p.CertificateRequested) ? 'Yes (' + fmtD(p.CertificateRequestedAt) + ')' : 'No')}${kv('Certificate', p.CertificateLink ? 'Issued' : '')}${kv('WhatsApp group joined', yes(p.WhatsappJoined) ? 'Yes' : 'No')}</div></div>
+    <div class="sec"><h4>Slot</h4><div id="slotsec">${slotHtml(p)}</div></div>
+    <div class="sec"><h4>Attendance</h4><div id="attsec">${attHtml()}</div></div>
+    <div class="sec"><h4>Badge, feedback &amp; certificate</h4><div class="kv">${kv('Badge / card issued', p.CardIssuedAt ? fmtDT(p.CardIssuedAt) : '')}${kv('QR e-mailed', p.QrMailedAt ? fmtDT(p.QrMailedAt) : '')}${kv('Feedback submitted', yes(p.FeedbackSubmitted) ? 'Yes' : 'No')}${kv('Certificate requested', yes(p.CertificateRequested) ? 'Yes (' + fmtD(p.CertificateRequestedAt) + ')' : 'No')}${kv('Certificate', p.CertificateLink ? 'Issued' : '')}${kv('WhatsApp group joined', yes(p.WhatsappJoined) ? 'Yes' : 'No')}</div></div>
   </div>
   ${VR.can('participants', 'transaction') ? `<p class="noprint" style="margin-top:-4px;"><a class="btn btn-sm" href="participants-details.html?id=${encodeURIComponent(p.ID)}"><i class="fa-solid fa-user-pen"></i> Edit this participant</a></p>` : ''}`;
   fillQr(p);
+  loadExtra(p);
   if (!photo && p.PhotoURL) VR.api('adminGetParticipantPhoto', { id: p.ID }).then(r => { if (cur && cur.ID === p.ID && r.ok && r.photo) $('ph').innerHTML = `<img src="${r.photo}" alt="Photo of ${esc(p.Name)}">`; else if (cur && cur.ID === p.ID) $('ph').textContent = initials; }).catch(() => { if (cur && cur.ID === p.ID) $('ph').textContent = initials; });
 }
-function pick(id){ const p = all.find(x => x.ID === id); if (p) { $('results').innerHTML = ''; $('q').value = ''; show(p); } }
+function pick(id){ const p = all.find(x => x.ID === id); if (p) { $('results').innerHTML = ''; $('q').value = ''; show(p); } else showErr('No participant found with ID ' + id + '.'); }
 $('results').onclick = e => { const r = e.target.closest('[data-pick]'); if (r) pick(r.dataset.pick); };
 $('q').oninput = results;
 $('q').onkeydown = e => { if (e.key === 'Enter' && ready) { const l = all.filter(p => hay(p).includes($('q').value.trim().toLowerCase())); if (l.length) pick(l[0].ID); } };
 
 /* ---- export helpers ---- */
-function flat(p){ return [['VRMIC ID', p.ID], ['Name', p.Name], ['Category', p.ParticipantType], ['Registration status', p.RegistrationStatus], ['Email', p.Email], ['Phone', p.Phone], ['Institution', p.Institution], ['Designation', p.Designation === 'Other' ? p.DesignationOther : p.Designation], ['Department', p.Department], ['City / State / Country', [p.City, p.State, p.Country].filter(Boolean).join(', ')], ['Gender', p.Gender], ['Date of birth', p.DOB ? fmtD(p.DOB) : ''], ['Registration type', p.Role], ['Food preference', p.FoodPreference], ['Amount paid', p.AmountPaid], ['Mode', p.Mode], ['Abstract status', p.AbstractStatus], ['Abstract title', p.AbstractTitle], ['Theme', p.AbstractTheme], ['Reviewer remarks', p.AbstractRemarks], ['Slot', [p.SlotVenue, p.SlotRoom, p.SlotDate ? fmtD(p.SlotDate) : '', p.SlotTime].filter(Boolean).join(' · ')], ['Token', p.SlotToken], ['Attendance', ['Day 1: ' + (yes(p.Day1Attendance) ? 'Present' : 'Absent'), 'Day 2: ' + (yes(p.Day2Attendance) ? 'Present' : 'Absent'), 'Day 3: ' + (yes(p.Day3Attendance) ? 'Present' : 'Absent')].join(', ')]].map(r => [r[0], r[1] == null ? '' : String(r[1])]); }
+function slotFlat(p){
+  const s = curExtra && curExtra.slot;
+  return s ? [s.venue, s.room, s.date, s.time ? s.time + (s.endTime ? ' – ' + s.endTime : '') : ''].filter(Boolean).join(' · ')
+           : [p.SlotVenue, p.SlotRoom, slotTxt(p.SlotDate), slotTxt(p.SlotTime)].filter(Boolean).join(' · ');
+}
+function attFlat(){
+  if (!curExtra) return 'Not loaded';
+  const a = curExtra.attendance, ss = a.sessions || [];
+  if (!ss.length) return 'No sessions';
+  return (a.percent == null ? '' : a.percent + '% (' + a.attended + '/' + a.total + '). ') + ss.map(s => s.title + ' ' + fmtD(s.date) + ': ' + (s.status || 'Upcoming')).join('; ');
+}
+function flat(p){ return [['LVRMIC ID', p.ID], ['Name', p.Name], ['Category', p.ParticipantType], ['Registration status', p.RegistrationStatus], ['Registered via', String(p.Source || '') === 'Spot' ? 'Spot registration' : 'Portal'], ['Email', p.Email], ['Phone', p.Phone], ['Institution', p.Institution], ['Designation', p.Designation === 'Other' ? p.DesignationOther : p.Designation], ['Department', p.Department], ['City / State / Country', [p.City, p.State, p.Country].filter(Boolean).join(', ')], ['Gender', p.Gender], ['Date of birth', p.DOB ? fmtD(p.DOB) : ''], ['Registration type', p.Role], ['Food preference', p.FoodPreference], ['Amount paid', p.AmountPaid], ['Payment mode', p.PaymentMode], ['Payment reference', p.PaymentRef], ['Attending', p.Mode || 'Offline'], ['Abstract status', p.AbstractStatus], ['Abstract title', p.AbstractTitle], ['Theme', p.AbstractTheme], ['Reviewer remarks', p.AbstractRemarks], ['Slot', slotFlat(p)], ['Token', curExtra && curExtra.slot ? curExtra.slot.token : p.SlotToken], ['Poster board', curExtra && curExtra.slot ? curExtra.slot.board : p.PosterBoard], ['Attendance', attFlat()]].map(r => [r[0], r[1] == null ? '' : String(r[1])]); }
 
 const photoEl = () => $('ph') && $('ph').querySelector('img');
 const qrEl = () => $('qrb') && $('qrb').querySelector('img');
@@ -188,7 +244,7 @@ VR.exportBar($('xp'), { name: 'Participant', title: 'Participant Details', image
     await VR.load('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); await VR.load('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
     const s = await VR.settings(), doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' }), W = doc.internal.pageSize.getWidth();
     const put = (img, x, y, w, h) => { try { let t = 'JPEG'; try { t = doc.getImageProperties(img.src).fileType || 'JPEG'; } catch (e) {} doc.addImage(img.src, t, x, y, w, h); } catch (e) {} };
-    doc.setFontSize(12); doc.text(s['conf.name'] || 'VRMIC 2026', 36, 34, { maxWidth: W - 72 }); doc.setFontSize(10); doc.setTextColor(110); doc.text('Participant details · generated ' + VR.now(), 36, 62);
+    doc.setFontSize(12); doc.text(s['conf.name'] || 'LVRMIC 2026', 36, 34, { maxWidth: W - 72 }); doc.setFontSize(10); doc.setTextColor(110); doc.text('Participant details · generated ' + VR.now(), 36, 62);
     const px = W - 36 - 100, qx = px - 12 - 100;                    // photo on the far right, QR to its left
     const pimg = photoEl(); if (pimg) put(pimg, px, 74, 100, 126);
     const qimg = qrEl();
@@ -211,9 +267,10 @@ VR.exportBar($('xp'), { name: 'Participant', title: 'Participant Details', image
   try {
     const r = await VR.api('adminListParticipants', {});
     if (!r.ok) { showErr(r.error || 'Could not load participants.'); $('state').innerHTML = 'Could not load participants.'; $('sheet').innerHTML = '<div class="empty">Could not load participants. Refresh the page to try again.</div>'; return; }
-    all = r.participants || [];
+    all = (r.participants || []).filter(p => String(p.ID || '').trim() !== '');
+    if (!all.length && (r.participants || []).length) showErr('Participants were found but none has an ID. Check that cell A1 of the Participants sheet says exactly "ID".');
   } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); $('state').innerHTML = 'Could not load participants.'; $('sheet').innerHTML = '<div class="empty">Could not load participants.</div>'; return; }
-  ready = true; $('q').disabled = false; $('q').placeholder = 'e.g. Riya or VRMIC26-0001';
+  ready = true; $('q').disabled = false; $('q').placeholder = 'e.g. Riya or LVRMIC26-0001';
   $('state').innerHTML = '<i class="fa-solid fa-circle-check" style="color:var(--teal-light);"></i> ' + all.length + ' participants ready';
   $('sheet').innerHTML = '<div class="empty">Search for a participant above to see their full details.</div>';
   const id = new URLSearchParams(location.search).get('id');
