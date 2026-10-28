@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Participant badges | VRMIC 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--n950:#0a1230;--n900:#0e1938;--n850:#122043;--n800:#152750;--bd:rgba(226,187,120,.24);--gold:#c9974f;--gl:#e8c983;--t1:#f3f5fb;--t2:#b3bcd6;--t3:#8390b3;--ok:#5cc08a;--bad:#e8988c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--n950);color:var(--t1);line-height:1.5;padding:18px}
+button,select,input{font-family:inherit}
+:focus-visible{outline:2px solid var(--gl);outline-offset:2px}
+h1{font-family:'Fraunces',serif;font-weight:500;font-size:22px}
+.sub{color:var(--t3);font-size:13px;margin:2px 0 16px}
+.panel{background:var(--n900);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:14px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.f label{display:block;font-size:11.5px;color:var(--t3);margin-bottom:3px}
+.f input,.f select{width:100%;height:36px;border-radius:8px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);padding:0 10px;font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:12px}
+.btn{height:38px;padding:0 16px;border-radius:9px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--gold)}
+.btn.pri{background:linear-gradient(180deg,#e8c983,#c9974f);color:#241a06;border-color:transparent}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.grow{flex:1}
+.msg{font-size:12.5px;color:var(--t2)}
+.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+.prog{height:6px;border-radius:4px;background:var(--n800);overflow:hidden;margin-top:10px;display:none}
+.prog i{display:block;height:100%;width:0;background:var(--gl);transition:width .15s}
+.tw{max-height:300px;overflow:auto;border:1px solid var(--bd);border-radius:8px;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:7px 10px;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(226,187,120,.1)}
+th{position:sticky;top:0;background:var(--n850);color:var(--t2);font-weight:600;z-index:1}
+td.w{white-space:normal}
+.chk{width:16px;height:16px;accent-color:#c9974f}
+.yes{color:var(--ok)}.no{color:var(--t3)}
+.stage{background:#2a3358;border-radius:10px;padding:18px;overflow:auto}
+.out{display:flex;flex-wrap:wrap;gap:18px;justify-content:center}
+.empty{color:var(--t3);font-size:13px;text-align:center;padding:30px}
+
+/* ===================== PARTICIPANT BADGE: 8.5 cm x 12 cm (portrait), same design as the team ID card ===================== */
+.pg{display:contents}
+/* theme colours live in variables; .t-classical is the original look */
+.badge{--bgi:url('../assets/badge-bg.png');--bg:linear-gradient(165deg,#fcfaf3 0%,#f2ebd9 100%);--ink:#0a1230;--ink2:#3b4560;--lab:#5b6684;--acc:#8a5f1f;
+  --hd:linear-gradient(135deg,#0a1230,#152750);--hdt:#e8c983;--hdt2:#d3daee;--line:#c9974f;--qrb:#122043;--ft:linear-gradient(135deg,#0a1230,#1b3a7a);--ftt:#fff;
+  --nf:'Fraunces',serif;--wmo:.09;
+  --ov:radial-gradient(circle at 105% 98%,rgba(201,151,79,.28),transparent 42%),radial-gradient(circle at -8% 55%,rgba(18,32,67,.10),transparent 38%),repeating-linear-gradient(135deg,rgba(18,32,67,.028) 0 .12cm,transparent .12cm .5cm)}
+.badge.t-modern{--bgi:none;--bg:#fff;--ink:#0f172a;--ink2:#475569;--lab:#64748b;--acc:#0f766e;--hd:linear-gradient(135deg,#0f766e,#0e7490);--hdt:#fff;--hdt2:#d5f0ee;--line:#14b8a6;--qrb:#0f766e;--ft:linear-gradient(135deg,#0f766e,#0e7490);--nf:'Inter',sans-serif;--ov:none}
+.badge.t-midnight{--bgi:none;--bg:linear-gradient(160deg,#0a1230,#122043);--ink:#f3f5fb;--ink2:#b3bcd6;--lab:#8390b3;--acc:#e8c983;--hd:linear-gradient(135deg,#050a1c,#0e1938);--hdt:#e8c983;--hdt2:#b3bcd6;--line:#e8c983;--qrb:#e8c983;--ft:linear-gradient(135deg,#8a5f1f,#c9974f);--ftt:#1d1305;--wmo:.14;--ov:radial-gradient(circle at 105% 98%,rgba(232,201,131,.18),transparent 45%)}
+.badge.t-crimson{--bgi:none;--bg:linear-gradient(165deg,#fffaf8,#f6e7e2);--ink:#3a0d1a;--ink2:#5b3a44;--lab:#8a6470;--acc:#8f1d3a;--hd:linear-gradient(135deg,#5e1226,#8f1d3a);--hdt:#f6d9a8;--hdt2:#f1d6dc;--line:#d9a441;--qrb:#5e1226;--ft:linear-gradient(135deg,#5e1226,#8f1d3a);--ov:repeating-linear-gradient(135deg,rgba(94,18,38,.03) 0 .12cm,transparent .12cm .5cm)}
+
+.badge{width:8.5cm;height:12cm;flex-shrink:0;position:relative;overflow:hidden;display:flex;flex-direction:column;color:var(--ink);font-family:'Inter',sans-serif;
+  background:var(--bgi) center/cover no-repeat,var(--bg);
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.badge::before{content:"";position:absolute;inset:0;pointer-events:none;background:var(--ov)}
+.badge>*{position:relative}
+.hole{height:.8cm;flex-shrink:0;background:var(--hd);display:flex;align-items:center;justify-content:center}
+.hole i{display:block;width:.5cm;height:.5cm;border-radius:50%;border:.03cm solid var(--hdt);box-sizing:border-box}
+.bh{height:2.6cm;flex-shrink:0;background:var(--hd);border-bottom:.08cm solid var(--line);padding:.05cm .4cm .12cm;display:flex;flex-direction:column;align-items:center;justify-content:space-between}
+.lgs{display:flex;gap:.15cm;justify-content:center;align-items:center;height:.85cm}
+.lg{width:1.1cm;height:.85cm;background:#fff;padding:.07cm;border-radius:.22cm;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lg img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.bt1{font-family:var(--nf);font-weight:600;font-size:.5cm;line-height:1.1;color:var(--hdt);letter-spacing:.02cm}
+.bt2{font-size:.19cm;line-height:1.25;color:var(--hdt2);text-align:center}
+.bb{flex:1;min-height:0;padding:.2cm .4cm;display:flex;flex-direction:column;gap:.18cm;align-items:center;justify-content:center}
+.row{display:flex;gap:.4cm;align-items:center;justify-content:center}
+.ph{width:2.2cm;height:2.6cm;flex-shrink:0;border:.07cm solid var(--line);background:#e4dfcf;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#a39b82;font-size:1.3cm;box-shadow:.04cm .06cm .15cm rgba(0,0,0,.25)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.mid{width:100%;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.06cm;text-align:center}
+.mid .k{line-height:1.2;font-size:.2cm;letter-spacing:.05cm;font-weight:600;color:var(--lab);text-transform:uppercase}
+.mid .code{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.62cm;line-height:1.2;color:var(--acc)}
+.nm{max-width:100%;font-family:var(--nf);font-weight:600;font-size:.52cm;line-height:1.25;color:var(--ink);white-space:nowrap}
+.ct{max-width:100%;font-size:.27cm;line-height:1.35;color:var(--ink2);white-space:nowrap}
+.ct i{font-size:.24cm;margin-right:.08cm;color:var(--acc)}
+.qr{width:2.6cm;height:2.6cm;flex-shrink:0;background:#fff;border:.05cm solid var(--qrb);padding:.1cm;display:flex;align-items:center;justify-content:center}
+.qr img{width:100%;height:100%;display:block;image-rendering:pixelated}
+.qr.none{font-size:.26cm;color:#8a93ad;text-align:center;line-height:1.2}
+.sg{width:3.4cm;flex-shrink:0;border-left:.02cm dashed rgba(18,32,67,.35);padding:.05cm .15cm .08cm;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.sgi{flex:1;min-height:0;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.sgi img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.sgl{width:100%;border-top:.025cm solid #122043;margin-top:.02cm}
+.sgc{font-size:.24cm;font-weight:600;line-height:1.3;color:#122043;white-space:nowrap}
+.bf{height:1.15cm;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.03cm;background:var(--ft);color:var(--ftt);border-top:.08cm solid var(--line);padding:0 .4cm}
+.bf .r{font-weight:700;font-size:.42cm;line-height:1.2;letter-spacing:.04cm;text-transform:uppercase;white-space:nowrap}
+.bf .v{max-width:100%;font-size:.27cm;line-height:1.3;font-weight:500;white-space:nowrap}
+
+
+/* header: full conference title on its own lines */
+.bh{height:3.2cm;padding:.05cm .35cm .12cm}
+.bt1{font-size:.5cm}
+.bt2{font-size:.215cm;line-height:1.3;font-weight:500;max-width:7.6cm}
+.bt3{font-size:.2cm;line-height:1.2;color:var(--hdt);letter-spacing:.02cm;font-weight:600;opacity:.95}
+/* body */
+.bb{padding:.12cm .4cm .18cm;gap:.12cm}
+.mid .nm{white-space:nowrap}
+.dg{max-width:100%;font-size:.3cm;line-height:1.3;font-weight:700;color:var(--acc);white-space:nowrap}
+.in{max-width:100%;font-size:.26cm;line-height:1.3;color:var(--ink2);text-align:center;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* sign strip (replaces the barcode strip) */
+.sb{height:1.45cm;flex-shrink:0;background:#fff;border-top:.03cm solid rgba(18,32,67,.25);display:flex;align-items:stretch}
+.sbl{flex:1;min-width:0;padding:0 .3cm;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.03cm;text-align:center}
+.sbl b{font-size:.24cm;letter-spacing:.035cm;font-weight:700;color:#122043;text-transform:uppercase}
+.sbl span{font-size:.23cm;color:#5b6684;line-height:1.25}
+.sb.nosign .sbl b{font-size:.28cm}
+/* footer band colours by participant type (classical) */
+.t-classical .bf.Oral{background:linear-gradient(135deg,#8a5f1f,#c9974f);color:#1d1305}
+.t-classical .bf.Poster{background:linear-gradient(135deg,#0f5e63,#1f8a8a)}
+.t-classical .bf.Participant{background:linear-gradient(135deg,#0a1230,#1b3a7a)}
+.bf .r{font-size:.4cm}
+
+/* ===================== PRINT ===================== */
+@media print{
+  body{background:#fff;padding:0}
+  .noprint{display:none!important}
+  .stage{background:none;padding:0;overflow:visible;border-radius:0}
+  .out{display:block;zoom:1!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.m-a4 .pg{display:grid;grid-template-columns:repeat(2,8.5cm);gap:.6cm;justify-content:center;align-content:center;height:29.6cm;break-after:page}
+  body.m-a4 .pg:last-child{break-after:auto}
+  body.m-a4 .badge{outline:.1mm dashed #8a8a8a}
+  body.m-one .pg{display:contents}
+  body.m-one .badge{break-after:page}
+  body.m-one .pg:last-child .badge:last-child{break-after:auto}
+}
+body.cap .out{display:block}
+</style>
+<style id="pageStyle">@media print{@page{size:A4 portrait;margin:0}}</style>
+</head>
+<body class="m-a4">
+
+<div class="noprint">
+  <h1>Participant badges</h1>
+  <p class="sub">8.5 cm × 12 cm portrait badge in the same design as the team ID card: punch-hole circle, logos, full conference title, photo, QR code, LVRMIC ID, name, designation, institution and participant type. No barcode. Convener sign can be loaded or left blank. Choose who to print, generate, then print or download the PDF.</p>
+
+  <div class="panel">
+    <div class="filters">
+      <div class="f"><label for="fQ">Search</label><input id="fQ" type="search" placeholder="Name, ID, institution" autocomplete="off"></div>
+      <div class="f"><label for="fType">Participant type</label><select id="fType"><option value="">All</option><option>Oral</option><option>Poster</option><option>Participant</option></select></div>
+      <div class="f"><label for="fCat">Category</label><select id="fCat"><option value="">All</option></select></div>
+      <div class="f"><label for="fMode">Attending</label><select id="fMode"><option value="Offline">Offline (on campus)</option><option value="Online">Online</option><option value="">All</option></select></div>
+      <div class="f"><label for="fSrc">Registered via</label><select id="fSrc"><option value="">All</option><option value="Spot">Spot registration</option><option value="Portal">Portal / pre-registered</option></select></div>
+      <div class="f"><label for="fPhoto">Photo</label><select id="fPhoto"><option value="">All</option><option value="with">Has photo</option><option value="without">No photo yet</option></select></div>
+      <div class="f"><label for="fSort">Sort by</label><select id="fSort"><option value="id">LVRMIC ID</option><option value="name">Name</option><option value="type">Type, then name</option></select></div>
+    </div>
+    <div class="bar">
+      <button class="btn" id="selAll" type="button"><i class="fa-regular fa-square-check"></i>Select all shown</button>
+      <button class="btn" id="selNone" type="button"><i class="fa-regular fa-square"></i>Clear</button>
+      <span class="msg" id="count">Loading participants</span>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th><input class="chk" type="checkbox" id="selHead" aria-label="Select all shown"></th><th>ID</th><th>Name</th><th>Type</th><th>Category</th><th>Attending</th><th>Photo</th></tr></thead>
+      <tbody id="rows"><tr><td colspan="7" class="empty">Loading</td></tr></tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <div class="bar" style="margin-top:0">
+      <button class="btn pri" id="gen" type="button" disabled><i class="fa-solid fa-id-badge"></i><span id="genTxt">Generate badges</span></button>
+      <button class="btn" id="print" type="button" disabled><i class="fa-solid fa-print"></i>Print</button>
+      <button class="btn" id="pdf" type="button" disabled><i class="fa-solid fa-file-pdf"></i>Download PDF</button>
+      <div class="f" style="min-width:230px"><select id="fMain" aria-label="Paper layout">
+        <option value="a4">A4 paper, 4 badges per page</option>
+        <option value="one">Exact size, 1 badge per page (8.5 × 12 cm)</option></select></div>
+      <div class="f" style="min-width:150px"><select id="fTheme" aria-label="Badge theme">
+        <option value="classical">Classical</option><option value="modern">Modern</option>
+        <option value="midnight">Midnight</option><option value="crimson">Crimson</option></select></div>
+      <div class="f" style="min-width:110px"><select id="fZoom" aria-label="Preview size">
+        <option value="1">Preview 100%</option><option value=".75">Preview 75%</option><option value=".5">Preview 50%</option></select></div>
+      <div class="f" style="min-width:210px"><select id="fSign" aria-label="Convener sign">
+        <option value="with">Convener sign: load with sign</option>
+        <option value="blank">Convener sign: blank space to sign</option>
+        <option value="none">Convener sign: no sign block</option></select></div>
+      <div class="f" style="min-width:170px"><input id="fSignTxt" type="text" value="Convener" maxlength="40" aria-label="Designation under the sign" placeholder="Designation under sign"></div>
+      <span class="grow"></span>
+      <span class="msg" id="status"></span>
+    </div>
+    <div class="prog" id="prog"><i></i></div>
+    <p class="msg" style="margin-top:10px">In the print window set margins to <b>None</b> and turn on <b>Background graphics</b>. Or press <b>Download PDF</b> for a ready file.</p>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="out" id="out"><div class="empty noprint">Badges appear here after you press Generate badges.</div></div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const $ = id => document.getElementById(id), esc = VR.esc;
+if (!VR.token()) location.replace(VR.LOGIN_URL);
+
+let ALL = [], QR = {}, PHOTO = {}, CONF = {}, view = [], sel = new Set(), qrWarn = '';
+const TYPE_LABEL = { Oral: 'Oral Presenter', Poster: 'Poster Presenter', Participant: 'Delegate' };
+const TYPE_ORDER = { Oral: 0, Poster: 1, Participant: 2 };
+const S = v => String(v == null ? '' : v).trim();
+const typeOf = r => TYPE_LABEL[r.ParticipantType] ? r.ParticipantType : 'Participant';
+const catOf = r => S(r.Category) || S(r.Role);
+const desigOf = r => { const d = S(r.Designation); return d.toLowerCase() === 'other' ? (S(r.DesignationOther) || d) : d; };
+const setMsg = (t, c) => { const s = $('status'); s.textContent = t || ''; s.className = 'msg ' + (c || ''); };
+
+/* ---------- load ---------- */
+async function init() {
+  VR.settings().then(s => { CONF = s || {}; }).catch(() => {});
+  const [pr, qr] = await Promise.all([ VR.api('adminListParticipants', {}), VR.api('adminQrList', { kind: 'participant' }) ]);
+  if (!pr || !pr.ok) { $('count').textContent = (pr && pr.error) || 'Could not load participants.'; $('count').className = 'msg err'; $('rows').innerHTML = '<tr><td colspan="7" class="empty">No data</td></tr>'; return; }
+  ALL = (pr.participants || []).filter(r => S(r.ID) && S(r.RegistrationStatus) !== 'Cancelled');
+  if (qr && qr.ok) (qr.people || []).forEach(p => { QR[S(p.id)] = p.qr; });
+  else qrWarn = (qr && qr.error) || 'QR codes could not be loaded.';
+  const cats = Array.from(new Set(ALL.map(catOf).filter(Boolean))).sort();
+  $('fCat').innerHTML = '<option value="">All</option>' + cats.map(c => `<option>${esc(c)}</option>`).join('') + '<option value="__none">(no category yet)</option>';
+  applyFilters();
+  if (qrWarn) setMsg('QR codes unavailable: ' + qrWarn + ' Badges will show the ID only.', 'err');
+}
+
+/* ---------- filter + list ---------- */
+function applyFilters() {
+  const q = S($('fQ').value).toLowerCase(), t = $('fType').value, c = $('fCat').value, m = $('fMode').value, src = $('fSrc').value, ph = $('fPhoto').value, so = $('fSort').value;
+  view = ALL.filter(r => {
+    if (t && typeOf(r) !== t) return false;
+    if (c === '__none' ? catOf(r) : (c && catOf(r) !== c)) return false;
+    if (m && (S(r.Mode) || 'Offline') !== m) return false;
+    if (src === 'Spot' && S(r.Source) !== 'Spot') return false;
+    if (src === 'Portal' && S(r.Source) === 'Spot') return false;
+    if (ph === 'with' && !S(r.PhotoURL)) return false;
+    if (ph === 'without' && S(r.PhotoURL)) return false;
+    if (q && ![r.ID, r.Name, r.Institution, r.Email].some(x => S(x).toLowerCase().includes(q))) return false;
+    return true;
+  });
+  view.sort((a, b) => so === 'name' ? S(a.Name).localeCompare(S(b.Name))
+    : so === 'type' ? (TYPE_ORDER[typeOf(a)] - TYPE_ORDER[typeOf(b)]) || S(a.Name).localeCompare(S(b.Name))
+    : S(a.ID).localeCompare(S(b.ID), undefined, { numeric: true }));
+  sel = new Set(view.map(r => S(r.ID)));     // a new filter selects everyone shown
+  renderList();
+}
+function renderList() {
+  $('rows').innerHTML = view.length ? view.map(r => `<tr>
+    <td><input class="chk row-chk" type="checkbox" data-id="${esc(S(r.ID))}" ${sel.has(S(r.ID)) ? 'checked' : ''} aria-label="Select ${esc(S(r.Name))}"></td>
+    <td>${esc(S(r.ID))}</td><td class="w">${esc(S(r.Name))}</td><td>${esc(TYPE_LABEL[typeOf(r)])}</td><td>${esc(catOf(r) || '-')}</td>
+    <td>${esc(S(r.Mode) || 'Offline')}</td><td>${S(r.PhotoURL) ? '<span class="yes"><i class="fa-solid fa-check"></i></span>' : '<span class="no">none</span>'}</td></tr>`).join('')
+    : '<tr><td colspan="7" class="empty">No participants match these filters.</td></tr>';
+  updateCount();
+}
+function updateCount() {
+  const n = view.filter(r => sel.has(S(r.ID))).length;
+  $('count').textContent = `${n} selected of ${view.length} shown (${ALL.length} registered)`;
+  $('count').className = 'msg';
+  $('genTxt').textContent = n ? `Generate ${n} badge${n > 1 ? 's' : ''}` : 'Generate badges';
+  $('gen').disabled = !n;
+  $('selHead').checked = n > 0 && n === view.length;
+}
+['fQ','fType','fCat','fMode','fSrc','fPhoto','fSort'].forEach(id => $(id).addEventListener(id === 'fQ' ? 'input' : 'change', applyFilters));
+$('rows').addEventListener('change', e => { const c = e.target.closest('.row-chk'); if (!c) return; c.checked ? sel.add(c.dataset.id) : sel.delete(c.dataset.id); updateCount(); });
+$('selAll').onclick = () => { view.forEach(r => sel.add(S(r.ID))); renderList(); };
+$('selNone').onclick = () => { sel.clear(); renderList(); };
+$('selHead').onchange = e => { e.target.checked ? $('selAll').click() : $('selNone').click(); };
+
+/* ---------- photos (loaded from Drive through the portal, 4 at a time) ---------- */
+async function fetchPhotos(list, tick) {
+  let i = 0, done = 0;
+  async function worker() {
+    while (i < list.length) {
+      const r = list[i++], id = S(r.ID);
+      try { const x = await VR.api('adminGetParticipantPhoto', { id: id }); PHOTO[id] = x && x.ok ? x.photo : ''; } catch (e) { PHOTO[id] = ''; }
+      tick(++done, list.length);
+    }
+  }
+  await Promise.all([worker(), worker(), worker(), worker()]);
+}
+
+/* ---------- QR as image ---------- */
+const qrCache = {};
+function qrImg(text) {
+  if (!text || typeof QRCode === 'undefined') return '';
+  if (qrCache[text]) return qrCache[text];
+  const d = document.createElement('div');
+  new QRCode(d, { text: text, width: 320, height: 320, colorDark: '#0a1230', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  const c = d.querySelector('canvas'), im = d.querySelector('img');
+  return qrCache[text] = c ? c.toDataURL('image/png') : (im ? im.src : '');
+}
+
+/* ---------- convener sign ---------- */
+const SIGN_URLS = ['../assets/convener-sign.png', 'https://vrmic26.vercel.app/assets/convener-sign.png'];
+let SIGN = '';
+const signTxt = () => S($('fSignTxt').value) || 'Convener';
+const hasSlot = () => $('fSign').value !== 'none';
+const signHtml = () => ($('fSign').value === 'with' && SIGN) ? `<img src="${SIGN}" alt="Convener sign">` : '';
+function loadImg(u) { return new Promise((ok, no) => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => ok(i); i.onerror = no; i.src = u; }); }
+async function loadSign() {                      // scaled copy (800 px wide) keeps the page light and the PDF clean
+  if (SIGN) return true;
+  for (const u of SIGN_URLS) {
+    try {
+      const im = await loadImg(u), w = 800, h = Math.round(w * im.naturalHeight / im.naturalWidth);
+      const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(im, 0, 0, w, h);
+      SIGN = await new Promise((ok, no) => c.toBlob(b => b ? ok(URL.createObjectURL(b)) : no(), 'image/png'));
+      return true;
+    } catch (e) {}
+  }
+  return false;
+}
+$('fSign').onchange = async () => {
+  if ($('fSign').value === 'with') {
+    setMsg('Loading sign');
+    const ok = await loadSign();
+    setMsg(ok ? 'Sign loaded' : 'Could not load the sign image from the assets folder or vrmic26.vercel.app. Badges keep a blank space.', ok ? 'ok' : 'err');
+    if (!ok) $('fSign').value = 'blank';
+  }
+  $('fSignTxt').disabled = $('fSign').value === 'none';
+  if ($('out').querySelector('.badge')) generate(true);    // sign block shape changes, so rebuild in place
+};
+$('fSignTxt').oninput = () => { $('out').querySelectorAll('.sgc').forEach(e => { e.textContent = signTxt(); }); refit(); };
+
+/* ---------- the badge ---------- */
+function fmtRange(a, b) {
+  try {
+    if (!a || !b) throw 0;
+    const A = new Date(a + 'T00:00:00'), B = new Date(b + 'T00:00:00'), m = d => d.toLocaleString('en-GB', { month: 'long' });
+    if (isNaN(A) || isNaN(B)) throw 0;
+    return A.getMonth() === B.getMonth() ? `${A.getDate()} – ${B.getDate()} ${m(B)} ${B.getFullYear()}` : `${A.getDate()} ${m(A)} – ${B.getDate()} ${m(B)} ${B.getFullYear()}`;
+  } catch (e) { return '26 – 28 November 2026'; }
+}
+const LOGO = (f, alt) => `<div class="lg"><img src="../assets/${f}" alt="${alt}" onerror="this.parentNode.style.display='none'"></div>`;
+function badgeHtml(r, head, theme) {
+  const id = S(r.ID), t = typeOf(r), name = S(r.Name), cat = catOf(r), dg = desigOf(r), inst = S(r.Institution), photo = PHOTO[id], qr = qrImg(QR[id]);
+  const online = (S(r.Mode) || 'Offline') === 'Online', slot = hasSlot();
+  const sub = [cat, online ? 'Online' : ''].filter(Boolean).join(' · ');
+  return `<div class="badge t-${esc(theme)}">
+    <div class="hole"><i></i></div>
+    <div class="bh">
+      <div class="lgs">${LOGO('loyola-crest.png','Loyola College')}${LOGO('cimser-logo.png','CIMSER')}${LOGO('iaes-logo.png','IAES')}${LOGO('ahcf-logo.png','AHCF')}${LOGO('centenary-logo.png','Centenary')}</div>
+      <div class="bt1">${esc(head.short)}</div>
+      <div class="bt2">${esc(head.name)}</div>
+      <div class="bt3">${esc(head.line)}</div>
+    </div>
+    <div class="bb">
+      <div class="row">
+        <div class="ph">${photo ? `<img src="${photo}" alt="">` : '<i class="fa-solid fa-user"></i>'}</div>
+        ${qr ? `<div class="qr"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="qr none">QR not available</div>'}
+      </div>
+      <div class="mid">
+        <div class="k">LVRMIC ID</div><div class="code">${esc(id)}</div>
+        <div class="nm fit">${esc(name)}</div>
+        ${dg ? `<div class="dg fit">${esc(dg)}</div>` : ''}
+        ${inst ? `<div class="in">${esc(inst)}</div>` : ''}
+      </div>
+    </div>
+    <div class="sb${slot ? '' : ' nosign'}"><div class="sbl"><b>Scan QR at every session</b>${slot ? '' : '<span>Valid for all conference days</span>'}</div>
+      ${slot ? `<div class="sg"><div class="sgi">${signHtml()}</div><div class="sgl"></div><div class="sgc fit">${esc(signTxt())}</div></div>` : ''}</div>
+    <div class="bf ${t}"><div class="r fit">${esc(TYPE_LABEL[t])}</div>${sub ? `<div class="v fit">${esc(sub)}</div>` : ''}</div>
+  </div>`;
+}
+
+/* shrink any single-line text that is wider than its box so every letter stays visible */
+function fitAll(root) {
+  root.querySelectorAll('.fit').forEach(el => {
+    el.style.fontSize = '';
+    const p = el.parentNode, cs = getComputedStyle(p), max = p.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
+    let f = parseFloat(getComputedStyle(el).fontSize), min = f * 0.5;
+    el.style.display = 'inline-block'; el.style.maxWidth = 'none';
+    while (el.scrollWidth > max && f > min) { f -= 0.5; el.style.fontSize = f + 'px'; }
+    el.style.display = ''; el.style.maxWidth = '';
+  });
+}
+function refit() { const out = $('out'), z = out.style.zoom; out.style.zoom = 1; fitAll(out); out.style.zoom = z; }   // measure at real size
+
+/* ---------- generate ---------- */
+async function generate(keepScroll) {
+  const rows = view.filter(r => sel.has(S(r.ID)));
+  if (!rows.length) return;
+  const btn = $('gen'); btn.disabled = true; $('print').disabled = true; $('pdf').disabled = true;
+  if ($('fSign').value === 'with' && !SIGN && !(await loadSign())) { $('fSign').value = 'blank'; setMsg('Sign image could not be loaded, badges keep a blank space.', 'err'); }
+  const need = rows.filter(r => S(r.PhotoURL) && PHOTO[S(r.ID)] === undefined);
+  const prog = $('prog'), bar = prog.firstElementChild;
+  if (need.length) {
+    prog.style.display = 'block'; bar.style.width = '0';
+    await fetchPhotos(need, (d, n) => { bar.style.width = (d * 100 / n) + '%'; setMsg(`Loading photos ${d} of ${n}`); });
+    prog.style.display = 'none';
+  }
+  const s = CONF || {};
+  const head = {
+    short: s['conf.shortName'] || 'VRMIC 2026',
+    name: s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment',
+    line: fmtRange(s['conf.startDate'], s['conf.endDate']) + ' · Loyola College (Autonomous), Chennai'
+  };
+  const theme = $('fTheme').value, pages = [];
+  for (let i = 0; i < rows.length; i += 4) pages.push('<div class="pg">' + rows.slice(i, i + 4).map(r => badgeHtml(r, head, theme)).join('') + '</div>');
+  $('out').innerHTML = pages.join('');
+  try { await document.fonts.ready; } catch (e) {}
+  refit();
+  const noPhoto = rows.filter(r => !PHOTO[S(r.ID)]).length, noQr = rows.filter(r => !QR[S(r.ID)]).length;
+  const bits = [`${rows.length} badge${rows.length > 1 ? 's' : ''} ready`];
+  if (noPhoto) bits.push(`${noPhoto} without photo`);
+  if (noQr) bits.push(`${noQr} without QR`);
+  setMsg(bits.join(' · '), noQr ? 'err' : 'ok');
+  btn.disabled = false; $('print').disabled = false; $('pdf').disabled = false;
+  if (keepScroll !== true) $('out').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$('gen').onclick = () => generate();
+
+/* ---------- PDF ---------- */
+async function downloadPdf() {
+  const JS = window.jspdf && window.jspdf.jsPDF;
+  if (!JS || typeof html2canvas === 'undefined') { setMsg('PDF tools did not load. Use Print and choose Save as PDF.', 'err'); return; }
+  const out = $('out'), zoom = out.style.zoom, one = $('fMain').value === 'one';
+  const pages = [...out.querySelectorAll('.pg')];
+  if (!pages.length) return;
+  let doc = null, n = 0;
+  const bar = $('prog').firstElementChild;
+  $('pdf').disabled = $('print').disabled = $('gen').disabled = true;
+  $('prog').style.display = 'block'; bar.style.width = '0';
+  out.style.zoom = 1; document.body.classList.add('cap'); window.scrollTo(0, 0);
+  const newPage = (w, h) => { if (!doc) doc = new JS({ unit: 'mm', format: [w, h], orientation: 'portrait', compress: true }); else doc.addPage([w, h], 'portrait'); };
+  const shot = async el => (await html2canvas(el, { scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false })).toDataURL('image/jpeg', 0.95);
+  try {
+    const total = one ? out.querySelectorAll('.badge').length : pages.length;
+    const tick = () => { n++; bar.style.width = (n * 100 / total) + '%'; setMsg(`Building PDF: page ${n} of ${total}`); };
+    for (const pg of pages) {
+      const cards = [...pg.querySelectorAll('.badge')];
+      if (one) { for (const c of cards) { newPage(85, 120); doc.addImage(await shot(c), 'JPEG', 0, 0, 85, 120); tick(); } continue; }
+      newPage(210, 296);
+      doc.setDrawColor(138); doc.setLineWidth(0.1); doc.setLineDashPattern([1, 1], 0);
+      for (let i = 0; i < cards.length; i++) {
+        const x = 17 + (i % 2) * 91, y = 25 + (i >> 1) * 126;
+        doc.addImage(await shot(cards[i]), 'JPEG', x, y, 85, 120); doc.rect(x, y, 85, 120);
+      }
+      doc.setLineDashPattern([], 0); tick();
+    }
+    doc.save(`Participant-badges-${new Date().toISOString().slice(0, 10)}.pdf`);
+    setMsg('PDF downloaded', 'ok');
+  } catch (e) { setMsg('Could not build the PDF: ' + (e && e.message || e), 'err'); }
+  document.body.classList.remove('cap'); out.style.zoom = zoom; $('prog').style.display = 'none';
+  $('pdf').disabled = $('print').disabled = $('gen').disabled = false;
+}
+$('pdf').onclick = downloadPdf;
+
+/* ---------- theme, layout, zoom, print ---------- */
+$('fTheme').onchange = e => {                       // restyle badges already on screen, no need to regenerate
+  $('out').querySelectorAll('.badge').forEach(b => { b.className = 'badge t-' + e.target.value; });
+  refit();
+};
+function setLayout() {
+  const one = $('fMain').value === 'one';
+  document.body.classList.toggle('m-one', one); document.body.classList.toggle('m-a4', !one);
+  $('pageStyle').textContent = one ? '@media print{@page{size:8.5cm 12cm;margin:0}}' : '@media print{@page{size:A4 portrait;margin:0}}';
+}
+$('fMain').onchange = setLayout; setLayout();
+$('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
+$('print').onclick = () => window.print();
+
+init();
+</script>
+</body>
+</html>
