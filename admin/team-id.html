@@ -84,10 +84,10 @@ td.w{white-space:normal}
 .qr{width:2.9cm;height:2.9cm;flex-shrink:0;background:#fff;border:.05cm solid var(--qrb);padding:.1cm;display:flex;align-items:center;justify-content:center}
 .qr img{width:100%;height:100%;display:block;image-rendering:pixelated}
 .qr.none{font-size:.26cm;color:#8a93ad;text-align:center;line-height:1.2}
-.qr.blank{border-style:dashed}
+.mid.bl{gap:.3cm}
 .hw{display:flex;align-items:flex-end;gap:.15cm;width:100%;font-size:.24cm;font-weight:600;letter-spacing:.04cm;color:var(--lab);text-transform:uppercase}
 .hw i{flex:1;border-bottom:.03cm solid var(--lab);height:.6cm}
-.bc.nosign .bcl span.hint,.bc .bcl span.hint{font-family:'Inter',sans-serif;font-weight:500;letter-spacing:0;font-size:.2cm;color:#8a93ad}
+
 .bc{height:1.5cm;flex-shrink:0;background:#fff;border-top:.03cm solid rgba(18,32,67,.25);display:flex;align-items:stretch}
 .bcl{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.02cm}
 .bcl{padding:0 .3cm}
@@ -119,28 +119,29 @@ td.w{white-space:normal}
 .pch{flex-shrink:0;background:var(--hd);border-bottom:.08cm solid var(--line);padding:.2cm .4cm .18cm;display:flex;flex-direction:column;align-items:center;gap:.06cm}
 .pch .lgs{margin-bottom:.03cm}
 .pt1{font-family:var(--nf);font-weight:600;font-size:.58cm;line-height:1.15;letter-spacing:.05cm;color:var(--hdt);white-space:nowrap}
-.pt2{max-width:100%;font-size:.23cm;font-weight:600;line-height:1.3;letter-spacing:.03cm;color:var(--hdt2);text-align:center;text-transform:uppercase}
+.pt2{max-width:100%;font-size:.22cm;font-weight:600;line-height:1.3;letter-spacing:.01cm;color:var(--hdt2);text-align:center}
 .pt3{font-size:.2cm;color:var(--hdt2);opacity:.85;white-space:nowrap}
 .pid{flex-shrink:0;margin:.25cm .45cm 0;padding:.18cm .3cm;border:.03cm solid var(--line);border-radius:.25cm;background:rgba(128,128,128,.08);display:flex;align-items:center;gap:.3cm}
 .pidl{flex:1;min-width:0;display:flex;flex-direction:column;gap:.07cm}
 .pk{font-size:.19cm;font-weight:700;letter-spacing:.07cm;color:var(--lab);text-transform:uppercase}
-.pnm{font-family:var(--nmf,var(--nf));font-weight:600;font-size:.76cm;line-height:1.2;color:var(--ink);white-space:nowrap}
-.pdg{font-size:.26cm;line-height:1.3;color:var(--ink2);white-space:nowrap}
-.pidp{align-self:flex-start;display:inline-flex;align-items:center;margin-top:.04cm;border:.03cm solid var(--acc);border-radius:.4cm;overflow:hidden}
+.pnm{font-family:var(--nmf,var(--nf));font-weight:600;font-size:.76cm;line-height:1.2;color:var(--ink);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.pdg{font-size:.26cm;line-height:1.3;color:var(--ink2);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.pidp{align-self:flex-start;display:inline-flex;align-items:center;margin-top:.04cm;max-width:100%;border:.03cm solid var(--acc);border-radius:.4cm;overflow:hidden}
 .pidp span{padding:.04cm .16cm;line-height:1.3;white-space:nowrap}
 .pidp .pl{font-size:.2cm;font-weight:700;letter-spacing:.05cm;text-transform:uppercase;background:var(--acc);color:var(--ftt)}
 .pidp .pcode{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.42cm;color:var(--acc)}
 .pidp .pcode.blank{display:inline-block;min-width:3.4cm;height:.6cm}
-.pid .ph{width:2.2cm;height:2.5cm;font-size:1.1cm}
-#out[data-shape=circle] .pid .ph{width:2.5cm}
+.pid .hw i{height:.45cm}
+.pid .ph{width:2.05cm;height:2.3cm;font-size:1cm}
+#out[data-shape=circle] .pid .ph{width:2.3cm}
 .pbody{flex:1;min-height:0;padding:.2cm 0 .15cm;display:flex}
 .pside{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
 .prow{flex:1 1 0;max-height:1cm;min-height:0;display:flex;align-items:center;gap:.22cm;padding-left:.67cm}
 .prow.first:not(:first-child){border-top:.02cm dotted var(--lab)}
 .pside.r .prow{flex-direction:row-reverse;padding-left:0;padding-right:.67cm;text-align:right}
 .pc{width:.72cm;height:.72cm;flex-shrink:0;border-radius:50%;border:.035cm solid var(--acc);background:rgba(128,128,128,.07)}
-.prt{display:flex;flex-direction:column;line-height:1.2;min-width:0}
-.prt b{font-size:.26cm;font-weight:700;letter-spacing:.03cm;color:var(--ink);text-transform:uppercase;white-space:nowrap}
+.prt{display:flex;flex-direction:column;line-height:1.2;flex:1;min-width:0}
+.prt b{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:.26cm;font-weight:700;letter-spacing:.03cm;color:var(--ink);text-transform:uppercase;white-space:nowrap}
 .prt span{font-size:.2cm;color:var(--lab);white-space:nowrap}
 .pft{height:1cm;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.02cm;background:var(--ft);color:var(--ftt);border-top:.08cm solid var(--line);padding:0 .4cm}
 .pft .r{font-weight:700;font-size:.3cm;letter-spacing:.04cm;text-transform:uppercase;white-space:nowrap}
@@ -232,7 +233,7 @@ body.cap .mpg{box-shadow:none}
       <div class="f" style="min-width:110px"><select id="fZoom" aria-label="Preview size">
         <option value="1">Preview 100%</option><option value=".75">Preview 75%</option><option value=".5">Preview 50%</option></select></div>
       <div class="f" style="min-width:190px"><select id="fSign" aria-label="Convener sign">
-        <option value="blank">Blank space for sign</option><option value="with">Load with sign</option></select></div>
+        <option value="with">Sign image loaded</option><option value="blank">Blank space for sign</option></select></div>
       <div class="f" style="min-width:170px"><input id="fSignTxt" type="text" value="Convener" maxlength="40" aria-label="Designation under the sign" placeholder="Designation under sign"></div>
       <span class="grow"></span>
       <span class="msg" id="status"></span>
@@ -490,16 +491,16 @@ function cardHtml(m, head, qrMode, theme) {
       <div class="bt2">${esc(head.name)}</div>
     </div>
     <div class="bb">
-      <div class="row">
-        <div class="ph">${photo ? `<img src="${photo}" alt="">` : (m.blank ? '' : '<i class="fa-solid fa-user"></i>')}</div>
-        ${qr ? `<div class="qr"><img src="${qr}" alt="QR ${esc(id)}"></div>` : (m.blank ? '<div class="qr blank"></div>' : '<div class="qr none">QR not available</div>')}
-      </div>
-      <div class="mid">
+      ${m.blank ? '' : `<div class="row">
+        <div class="ph">${photo ? `<img src="${photo}" alt="">` : '<i class="fa-solid fa-user"></i>'}</div>
+        ${qr ? `<div class="qr"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="qr none">QR not available</div>'}
+      </div>`}
+      <div class="mid${m.blank ? ' bl' : ''}">
         <div class="k">${esc(CFG.idLabel)}</div>${m.blank ? '<div class="hw"><i></i></div>' : `<div class="code">${esc(id)}</div>`}
-        ${m.blank ? '<div class="hw"><span>Name</span><i></i></div>' : `<div class="nm fit">${esc(S(m.name))}</div>`}
+        ${m.blank ? '<div class="hw"><span>Name</span><i></i></div><div class="hw"><span>Designation</span><i></i></div>' : `<div class="nm fit">${esc(S(m.name))}</div>`}
       </div>
     </div>
-    <div class="bc${slot ? '' : ' nosign'}"><div class="bcl">${bc ? `<img src="${bc}" alt="Barcode ${esc(id)}">` : ''}${m.blank ? '<span class="hint">Paste barcode / ID sticker</span>' : `<span>${esc(id)}</span>`}</div>
+    <div class="bc${slot ? '' : ' nosign'}"><div class="bcl">${bc ? `<img src="${bc}" alt="Barcode ${esc(id)}">` : ''}${m.blank ? '' : `<span>${esc(id)}</span>`}</div>
       ${slot ? `<div class="sg"><div class="sgi">${signHtml()}</div><div class="sgl"></div><div class="sgc fit">${esc(signTxt())}</div></div>` : ''}</div>
     <div class="bf ${esc(rc)}"><div class="r fit">${esc(desigOf(m))}</div>${venue ? `<div class="v fit">Venue: ${esc(venue)}</div>` : ''}</div>
   </div>`;
@@ -508,11 +509,13 @@ function cardHtml(m, head, qrMode, theme) {
 /* shrink any single-line text that is wider than its box so every letter stays visible */
 function fitAll(root) {
   root.querySelectorAll('.fit').forEach(el => {
-    el.style.fontSize = '';
+    el.style.fontSize = ''; el.style.whiteSpace = ''; el.style.lineHeight = ''; el.style.overflow = '';
     const p = el.parentNode, cs = getComputedStyle(p), max = p.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
     let f = parseFloat(getComputedStyle(el).fontSize), min = f * 0.5;
     el.style.display = 'inline-block'; el.style.maxWidth = 'none';
+    const f0 = f;
     while (el.scrollWidth > max && f > min) { f -= 0.5; el.style.fontSize = f + 'px'; }
+    if (el.classList.contains('wrap2') && el.scrollWidth > max) { el.style.whiteSpace = 'normal'; el.style.fontSize = (f0 * 0.5) + 'px'; el.style.lineHeight = '1.15'; el.style.overflow = 'visible'; }   // very long name: wrap onto two lines
     el.style.display = ''; el.style.maxWidth = '';
   });
 }
@@ -611,7 +614,7 @@ function punchHtml(m, head, theme) {
   const id = S(m.id), rc = roleClass(m), photo = PHOTO[id], bl = !!m.blank;
   const meals = MEALS.filter(me => DAYS.some(d => CP.has(d + '-' + me.c)));     // only ticked meals appear
   const rowsOf = g => meals.filter(me => me.g === g).map(me => DAYS.filter(d => CP.has(d + '-' + me.c)).map((d, i) => ({ me: me, d: d, first: i === 0 }))).flat();
-  const row = r => `<div class="prow${r.first ? ' first' : ''}"><i class="pc"></i><div class="prt"><b>${esc(r.me.n)}</b><span>Day ${r.d} · ${esc(dayShort(r.d))}</span></div></div>`;
+  const row = r => `<div class="prow${r.first ? ' first' : ''}"><i class="pc"></i><div class="prt"><b class="fit">${esc(r.me.n)}</b><span>Day ${r.d} · ${esc(dayShort(r.d))}</span></div></div>`;
   const side = (g, cls) => `<div class="pside ${cls}">${rowsOf(g).map(row).join('')}</div>`;   // meals on the left edge, snacks on the right edge
   return `<div class="pcard t-${esc(theme)}">
     <div class="pch">
@@ -621,9 +624,9 @@ function punchHtml(m, head, theme) {
       <div class="pt3 fit">${esc(head.short)}${head.range ? ' · ' + esc(head.range) : ''}</div>
     </div>
     <div class="pid">
-      <div class="pidl"><div class="pk">Name</div>${bl ? '<div class="hw"><i></i></div>' : `<div class="pnm fit">${esc(S(m.name))}</div>`}<div class="pdg fit">${esc(desigOf(m))}</div>
+      <div class="pidl"><div class="pk">Name</div>${bl ? '<div class="hw"><i></i></div><div class="pk">Designation</div><div class="hw"><i></i></div>' : `<div class="pnm fit wrap2">${esc(S(m.name))}</div><div class="pdg fit">${esc(desigOf(m))}</div>`}
         <div class="pidp"><span class="pl">${esc(CFG.idLabel)}</span>${bl ? '<span class="pcode blank"></span>' : `<span class="pcode">${esc(id)}</span>`}</div></div>
-      <div class="ph">${photo ? `<img src="${photo}" alt="">` : (bl ? '' : '<i class="fa-solid fa-user"></i>')}</div>
+      ${bl ? '' : `<div class="ph">${photo ? `<img src="${photo}" alt="">` : '<i class="fa-solid fa-user"></i>'}</div>`}
     </div>
     <div class="pbody">${side('meal', 'l')}${side('snack', 'r')}</div>
     <div class="pft ${esc(rc)}"><div class="r fit">${esc(CFG.pfoot1)}</div>${S(CFG.pfoot2) ? `<div class="v fit">${esc(CFG.pfoot2)}</div>` : ''}</div>
@@ -758,7 +761,7 @@ async function genBlank(keepScroll) {
   if (type === 'meal' && !CP.size) { setMsg('Tick at least one meal and day for the blank punch cards.', 'err'); return; }
   LAST = 'blank';
   $('print').disabled = true; $('pdf').disabled = true;
-  if ($('fSign').value === 'with' && !SIGN) await loadSign();
+  if ($('fSign').value === 'with' && !SIGN && !(await loadSign())) { $('fSign').value = 'blank'; setMsg('Sign image could not be loaded, cards keep a blank space.', 'err'); }
   const head = makeHead(), theme = $('fTheme').value;
   const m = { id: '', name: '', position: S($('bDes').value) || cat, role: cat === 'Convener' ? 'Admin' : cat, isConvener: cat === 'Convener', venues: [], blank: true };
   const rows = Array.from({ length: n }, () => m);
