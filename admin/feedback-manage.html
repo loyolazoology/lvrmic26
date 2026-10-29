@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback Questions | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.btn-success{background:rgba(79,169,128,.14);border-color:rgba(79,169,128,.4);color:var(--teal-light);}
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
+.sec{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+.sec i{color:var(--gold-light);} .sec h2{font-size:1.05rem;margin:0;}
+.sec .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.a-Info{background:rgba(120,160,230,.14);color:#a9c3f0;}
+.note{text-align:center;padding:38px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
+.note i{font-size:24px;color:var(--gold-light);display:block;margin-bottom:8px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px;}
+.tab{background:var(--navy-900);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab b{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-left:6px;color:var(--text-3);}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);} .tab.on b{color:var(--gold-light);}
+.qi{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;cursor:pointer;}
+.qi-name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--text-1);}
+.qi-meta{font-size:12.5px;color:var(--text-3);}
+.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
+.qi-theme{font-size:12.5px;color:var(--teal-light);}
+.qi-body{display:none;margin-top:10px;} .qi.open .qi-body{display:block;}
+.rv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:10px 0;white-space:pre-wrap;}
+.remark b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px;margin:8px 0;}
+.facts div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.facts div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;} .chk input{width:auto;}
+textarea{width:100%;min-height:96px;resize:vertical;}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;white-space:pre-wrap;}
+.x-body .wide{grid-column:1/-1;}
+table.list td.ti{white-space:normal;min-width:220px;max-width:380px;}
+table.list td.rm{white-space:normal;min-width:200px;max-width:340px;font-size:12.5px;color:var(--text-2);}
+.over{color:#e8988c;font-weight:600;} .ok{}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+.bars div{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px;color:var(--text-2);}
+.bars .l{flex:0 0 46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .bars .b{flex:1;height:8px;background:var(--navy-950);border-radius:6px;overflow:hidden;} .bars .b i{display:block;height:100%;background:var(--gold);} .bars .c{flex:0 0 32px;text-align:right;font-family:'IBM Plex Mono',monospace;}
+.qc{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.qc.off{opacity:.6;} .qc.drag{outline:2px dashed var(--gold);}
+.qc .gr{cursor:grab;color:var(--text-3);padding:4px 6px;font-size:15px;} .qc .no{font-family:'IBM Plex Mono',monospace;color:var(--text-3);font-size:12px;padding-top:6px;min-width:22px;}
+.qc .bd{flex:1;min-width:0;} .qc .tx{font-size:14.5px;color:var(--text-1);font-weight:600;} .qc .hp{font-size:12.5px;color:var(--text-3);margin-top:2px;}
+.qc .tg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center;}
+.pv{background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;padding:12px 14px;margin-bottom:10px;} .pv b{color:var(--text-1);font-size:13.5px;} .pv .hp{font-size:12px;color:var(--text-3);margin:2px 0 8px;}
+.pv .st{display:flex;gap:6px;flex-wrap:wrap;} .pv .st span{border:1px solid var(--navy-border);border-radius:8px;padding:5px 12px;font-size:13px;color:var(--text-2);}
+.pv input[type=text],.pv textarea{width:100%;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-clipboard-question" style="color:var(--gold-light);"></i> Feedback questions</h1><div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-sm" id="pv"><i class="fa-solid fa-eye"></i> Participant preview</button><button class="btn btn-sm btn-gold" id="add"><i class="fa-solid fa-plus"></i> Add question</button><a class="btn btn-sm" href="feedback-report.html"><i class="fa-solid fa-chart-column"></i> Feedback report</a></div></div>
+<div class="wrap" style="max-width:980px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <p class="hint" id="win" style="margin-bottom:14px;"></p>
+  <div id="list"><div class="empty">Loading questions…</div></div>
+  <p class="tiny" style="margin-top:10px;">Drag the handle (or use the arrows) to reorder. A question with answers keeps its type; deactivate it to hide it from participants while keeping the answers. The feedback window is set in Settings.</p>
+</div>
+
+<div class="modal" id="dm"><div class="box wide">
+  <h3 id="dm-t" style="margin-bottom:10px;"></h3>
+  <div class="alert alert-error" id="dm-err"></div>
+  <div class="grid">
+    <div class="full"><label>Question *</label><input id="q-text" maxlength="300"></div>
+    <div class="full"><label>Help line (optional)</label><input id="q-help" maxlength="200" placeholder="Small grey text under the question"></div>
+    <div><label>Type *</label><select id="q-type"><option value="rating">Rating 1–5</option><option value="short">Short text</option><option value="long">Long text</option><option value="single">Single choice</option><option value="multi">Multiple choice</option><option value="yesno">Yes / No</option></select><div class="hint" id="q-lock" style="display:none;">Locked: this question already has answers.</div></div>
+    <div><label>Shown to</label><select id="q-scope"><option value="conference">Whole conference (everyone)</option><option value="day">One day (people who attended)</option><option value="venue">One venue (presenters there)</option></select></div>
+    <div class="full" id="w-sv" style="display:none;"><label id="l-sv">Day</label><select id="q-sv"></select></div>
+    <div class="full" id="w-opts" style="display:none;"><label>Options — one per line (2 to 20)</label><textarea id="q-opts" style="min-height:110px;"></textarea><div class="hint" id="q-optlock" style="display:none;">This question has answers: existing options can't be removed or renamed, only new ones added.</div></div>
+  </div>
+  <label class="chk"><input type="checkbox" id="q-req"> Required</label>
+  <label class="chk"><input type="checkbox" id="q-act" checked> Active (visible to participants)</label>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="dm-x">Cancel</button><button class="btn btn-gold" id="dm-ok">Save question</button></div>
+</div></div>
+<div class="modal" id="pm"><div class="box wide"><h3 style="margin-bottom:10px;"><i class="fa-solid fa-eye" style="color:var(--gold-light);"></i> What participants see</h3><p class="hint" style="margin-bottom:12px;">Active questions in order. Day and venue questions only appear for the people they apply to.</p><div id="pv-body"></div><div style="text-align:right;margin-top:12px;"><button class="btn" id="pm-x">Close</button></div></div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('feedback', 'transaction')) { VR.denied('You do not have permission to edit feedback questions.'); return; }
+let qs = [], days = [], venues = [], editing = null, dragId = null;
+const TYPES = { rating: 'Rating 1–5', short: 'Short text', long: 'Long text', single: 'Single choice', multi: 'Multiple choice', yesno: 'Yes / No' };
+const scopeLabel = q => q.scopeType === 'day' ? 'Day: ' + fmtD(q.scopeValue) : q.scopeType === 'venue' ? 'Venue: ' + q.scopeValue : 'Whole conference';
+const dt = v => { const d = new Date(v); return isNaN(d) ? '—' : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) + ' IST'; };
+
+function render() {
+  $('list').innerHTML = qs.length ? qs.map((q, i) => '<div class="qc' + (q.active ? '' : ' off') + '" draggable="true" data-id="' + esc(q.id) + '"><span class="gr" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i></span><span class="no">' + (i + 1) + '</span>'
+    + '<div class="bd"><div class="tx">' + esc(q.text) + (q.required ? ' <span style="color:var(--danger);">*</span>' : '') + '</div>' + (q.help ? '<div class="hp">' + esc(q.help) + '</div>' : '')
+    + (q.options.length ? '<div class="hp">Options: ' + q.options.map(esc).join(' · ') + '</div>' : '')
+    + '<div class="tg"><span class="badge a-Info">' + TYPES[q.type] + '</span><span class="badge a-Not">' + esc(scopeLabel(q)) + '</span><span class="badge ' + (q.active ? 'a-Accepted' : 'a-Rejected') + '">' + (q.active ? 'Active' : 'Inactive') + '</span><span class="tiny" style="display:inline;">' + q.answers + ' answer(s)</span></div></div>'
+    + '<div class="row-actions" style="flex-direction:column;align-items:flex-end;"><div><button class="btn btn-sm" data-a="up" title="Move up"><i class="fa-solid fa-arrow-up"></i></button> <button class="btn btn-sm" data-a="down" title="Move down"><i class="fa-solid fa-arrow-down"></i></button></div>'
+    + '<div><button class="btn btn-sm" data-a="edit"><i class="fa-solid fa-pen"></i> Edit</button> <button class="btn btn-sm" data-a="tog">' + (q.active ? 'Deactivate' : 'Activate') + '</button> <button class="btn btn-sm btn-danger" data-a="del"><i class="fa-solid fa-trash"></i></button></div></div></div>').join('')
+    : '<div class="note"><i class="fa-solid fa-clipboard-question"></i>No questions yet. Click "Add question" to create the first one.</div>';
+}
+function payload(q, over) { return Object.assign({ id: q.id, text: q.text, help: q.help, type: q.type, options: q.options, required: q.required, scopeType: q.scopeType, scopeValue: q.scopeValue, active: q.active }, over || {}); }
+async function call(action, data, okMsg) {
+  hideAlerts();
+  try { const r = await VR.api(action, data); if (!r.ok) { showErr(r.error || 'Could not save.'); return r; } if (okMsg) showOk(okMsg); return r; }
+  catch (e) { showErr('Could not reach the server. Check your connection and try again.'); return { ok: false }; }
+}
+async function move(i, d) { const j = i + d; if (j < 0 || j >= qs.length) return; [qs[i], qs[j]] = [qs[j], qs[i]]; render(); const r = await call('adminReorderFeedbackQuestions', { ids: qs.map(q => q.id) }); if (!r.ok) load(); }
+$('list').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-a]'); if (!b) return; const c = b.closest('.qc'), i = qs.findIndex(q => q.id === c.dataset.id), q = qs[i];
+  if (b.dataset.a === 'up') return move(i, -1); if (b.dataset.a === 'down') return move(i, 1);
+  if (b.dataset.a === 'edit') return openEdit(q);
+  if (b.dataset.a === 'tog') { const r = await call('adminSaveFeedbackQuestion', payload(q, { active: !q.active }), q.active ? 'Question hidden from participants.' : 'Question is now active.'); if (r.ok) load(); return; }
+  if (b.dataset.a === 'del') { if (!confirm('Delete this question?' + (q.answers ? '' : ''))) return; const r = await call('adminDeleteFeedbackQuestion', { id: q.id }, 'Question deleted.'); if (r.ok || r.error) load(); }
+});
+$('list').addEventListener('dragstart', e => { const c = e.target.closest('.qc'); if (!c) return; dragId = c.dataset.id; c.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragId); } catch (x) {} });
+$('list').addEventListener('dragover', e => { if (dragId) e.preventDefault(); });
+$('list').addEventListener('drop', async e => {
+  e.preventDefault(); const c = e.target.closest('.qc'); if (!c || !dragId || c.dataset.id === dragId) { dragId = null; return render(); }
+  const from = qs.findIndex(q => q.id === dragId), to = qs.findIndex(q => q.id === c.dataset.id); const [m] = qs.splice(from, 1); qs.splice(to, 0, m); dragId = null; render();
+  const r = await call('adminReorderFeedbackQuestions', { ids: qs.map(q => q.id) }); if (!r.ok) load();
+});
+$('list').addEventListener('dragend', () => { dragId = null; render(); });
+
+function fillScope(type, val) {
+  $('w-sv').style.display = type === 'conference' ? 'none' : 'block'; if (type === 'conference') return;
+  $('l-sv').textContent = type === 'day' ? 'Day' : 'Venue';
+  let opts = type === 'day' ? days.slice() : venues.slice(); if (val && opts.indexOf(val) === -1) opts.push(val);
+  $('q-sv').innerHTML = '<option value="">Select…</option>' + opts.map(o => '<option value="' + esc(o) + '">' + esc(type === 'day' ? fmtD(o) : o) + '</option>').join(''); $('q-sv').value = val || '';
+}
+const showOpts = () => { $('w-opts').style.display = ['single', 'multi'].indexOf($('q-type').value) > -1 ? 'block' : 'none'; };
+$('q-type').onchange = showOpts; $('q-scope').onchange = () => fillScope($('q-scope').value, '');
+function openEdit(q) {
+  editing = q || null; $('dm-err').classList.remove('show'); $('dm-t').textContent = q ? 'Edit question' : 'New question';
+  $('q-text').value = q ? q.text : ''; $('q-help').value = q ? q.help : ''; $('q-type').value = q ? q.type : 'rating'; $('q-opts').value = q ? q.options.join('\n') : '';
+  $('q-req').checked = q ? q.required : false; $('q-act').checked = q ? q.active : true; $('q-scope').value = q ? q.scopeType : 'conference'; fillScope($('q-scope').value, q ? q.scopeValue : '');
+  const lock = !!(q && q.answers > 0); $('q-type').disabled = lock; $('q-lock').style.display = lock ? 'block' : 'none'; $('q-optlock').style.display = lock ? 'block' : 'none'; showOpts();
+  $('dm').classList.add('show'); $('q-text').focus();
+}
+$('add').onclick = () => openEdit(null); $('dm-x').onclick = () => $('dm').classList.remove('show');
+$('dm-ok').onclick = async function () {
+  const sc = $('q-scope').value, data = { id: editing ? editing.id : '', text: $('q-text').value.trim(), help: $('q-help').value.trim(), type: $('q-type').value, options: $('q-opts').value.split('\n').map(s => s.trim()).filter(Boolean),
+    required: $('q-req').checked, scopeType: sc, scopeValue: sc === 'conference' ? '' : $('q-sv').value, active: $('q-act').checked };
+  const bad = m => { $('dm-err').textContent = m; $('dm-err').classList.add('show'); };
+  if (!data.text) return bad('Enter the question.'); if (sc !== 'conference' && !data.scopeValue) return bad('Choose the ' + sc + '.');
+  if (['single', 'multi'].indexOf(data.type) > -1 && data.options.length < 2) return bad('Add at least two options, one per line.');
+  await VR.busy(this, 'Saving…', async () => {
+    try { const r = await VR.api('adminSaveFeedbackQuestion', data); if (!r.ok) return bad(r.error || 'Could not save.'); $('dm').classList.remove('show'); showOk(editing ? 'Question updated.' : 'Question added.'); load(); }
+    catch (e) { bad('Could not reach the server.'); }
+  });
+};
+function pvHtml(q) {
+  let f = '';
+  if (q.type === 'rating') f = '<div class="st">' + [1, 2, 3, 4, 5].map(n => '<span>' + n + '</span>').join('') + '</div>';
+  else if (q.type === 'yesno') f = '<div class="st"><span>Yes</span><span>No</span></div>';
+  else if (q.type === 'single' || q.type === 'multi') f = '<div class="st" style="flex-direction:column;align-items:flex-start;">' + q.options.map(o => '<span>' + (q.type === 'single' ? '◯ ' : '☐ ') + esc(o) + '</span>').join('') + '</div>';
+  else if (q.type === 'short') f = '<input type="text" disabled placeholder="Short answer">'; else f = '<textarea disabled placeholder="Your answer"></textarea>';
+  return '<div class="pv"><b>' + esc(q.text) + (q.required ? ' <span style="color:var(--danger);">*</span>' : '') + '</b>' + (q.scopeType !== 'conference' ? ' <span class="badge a-Not">' + esc(scopeLabel(q)) + '</span>' : '') + (q.help ? '<div class="hp">' + esc(q.help) + '</div>' : '<div style="height:8px"></div>') + f + '</div>';
+}
+$('pv').onclick = () => { const a = qs.filter(q => q.active); $('pv-body').innerHTML = a.length ? a.map(pvHtml).join('') : '<div class="note">No active questions.</div>'; $('pm').classList.add('show'); }; $('pm-x').onclick = () => $('pm').classList.remove('show');
+async function load() {
+  try {
+    const r = await VR.api('adminFeedbackQuestions', {});
+    if (!r.ok) { $('list').innerHTML = ''; return showErr(r.error || 'Could not load questions.'); }
+    qs = r.questions || []; days = r.days || []; venues = r.venues || [];
+    $('win').innerHTML = '<i class="fa-solid fa-clock"></i> Feedback window: opens <b>' + esc(dt(r.opensAt)) + '</b>, closes <b>' + esc(dt(r.closesAt)) + '</b>. Participants can edit their answers until it closes.'; render();
+  } catch (e) { $('list').innerHTML = ''; showErr('Could not reach the server. Check your connection and try again.'); }
+}
+load();
+})();
+</script>
+</body>
+</html>

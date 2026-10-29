@@ -6,367 +6,156 @@
 <title>Feedback Report | VRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
 <style>
-:root{
-  --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
-  --navy-border:rgba(226,187,120,.24);
-  --gold:#c9974f; --gold-light:#e8c983;
-  --teal:#279c85; --teal-light:#6fc9b6;
-  --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
-  --danger:#d8695a; --warn:#dba43c; --success:#4fa980;
-  --sidebar-w:250px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;background:var(--navy-950);display:flex;flex-direction:column;min-height:100vh;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 4px;}
-a{color:var(--gold-light);text-decoration:none;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-
-.masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);flex-shrink:0;}
-.masthead-inner{padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.masthead-logos img{height:52px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:40px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-light);font-weight:700;margin-bottom:2px;}
-.masthead-text h1{font-size:clamp(.92rem,1.7vw,1.15rem);line-height:1.25;margin:0;color:var(--text-1);}
-.masthead-text .m-sub{font-size:11px;color:var(--text-3);margin:0;}
-
-.body-row{flex:1;display:flex;min-height:0;}
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);display:flex;flex-direction:column;overflow-y:auto;}
-.sidebar-brand{padding:22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--navy-border);}
-.sidebar-brand img{height:36px;width:auto;}
-.sidebar-brand div{font-family:'Fraunces',serif;font-size:14px;line-height:1.3;}
-.sidebar-brand small{display:block;color:var(--text-3);font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px;}
-.sidebar-nav{flex:1;padding:14px 12px;}
-.nav-section{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);padding:14px 12px 6px;}
-.nav-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;margin-bottom:2px;cursor:pointer;transition:.15s;}
-.nav-link i{width:16px;text-align:center;color:var(--text-3);font-size:13px;}
-.nav-link:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
-.nav-link.active{background:rgba(232,201,131,.1);color:var(--gold-light);}
-.nav-link.active i{color:var(--gold-light);}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--navy-border);}
-.sidebar-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:14px;flex-shrink:0;}
-.sidebar-user div{min-width:0;}
-.sidebar-user b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-user span{font-size:11px;color:var(--text-3);}
-.logout-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:8px;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);font-size:12.5px;cursor:pointer;}
-.logout-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-.sidebar-toggle{display:none;position:fixed;top:70px;left:16px;z-index:60;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;}
-@media(max-width:960px){
-  .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:70;transform:translateX(-100%);width:min(280px,85vw);transition:transform .3s ease;}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-toggle{display:block;}
-}
-.main{flex:1;min-width:0;overflow-y:auto;}
-.topbar{background:rgba(6,11,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--navy-border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
-.topbar h1{font-size:1.3rem;}
-.topbar .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-3);letter-spacing:.4px;}
-.wrap{padding:28px;max-width:1400px;}
-
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
-.toolbar input[type=text]{flex:1;min-width:200px;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:14px;}
-.toolbar select{background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-2);border-radius:8px;padding:10px 12px;font-size:13.5px;}
-.toolbar input:focus,.toolbar select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:13px;padding:10px 16px;border-radius:8px;cursor:pointer;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);transition:.2s;}
-.btn:hover{color:var(--gold-light);border-color:var(--gold);}
-.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
-.btn-gold:hover{color:#241a06;}
-
-.stat-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
-.stat-pill{background:var(--navy-850);border:1px solid var(--navy-border);border-radius:999px;padding:7px 15px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-2);}
-.stat-pill b{color:var(--gold-light);}
-
-.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
-.scroll-x{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead th{text-align:left;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;}
-tbody td{padding:11px 14px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;white-space:nowrap;}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover{background:rgba(232,201,131,.03);}
-.id-cell{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;}
-.name-cell{color:var(--text-1);font-weight:600;}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;}
-.badge-oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
-.badge-poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
-.badge-participant{background:rgba(179,188,214,.1);color:var(--text-2);}
-.badge-success{background:rgba(79,169,128,.14);color:var(--teal-light);}
-.badge-pending{background:rgba(219,164,60,.14);color:var(--warn);}
-.badge-danger{background:rgba(216,105,90,.14);color:#e8988c;}
-.badge-neutral{background:rgba(179,188,214,.1);color:var(--text-2);}
-.loading-state,.empty-state{padding:60px 20px;text-align:center;color:var(--text-3);}
-.resp-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
-.resp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:12px;}
-.resp-name{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--text-1);}
-.resp-meta{font-size:12px;color:var(--text-3);margin-top:2px;}
-.resp-meta .mono{color:var(--gold-light);}
-.resp-stars{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px;}
-.resp-stars-item{font-size:11.5px;color:var(--text-3);}
-.resp-stars-item b{color:var(--gold-light);}
-.resp-mcq{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-.resp-mcq span{font-size:11px;padding:3px 10px;border-radius:999px;background:rgba(31,122,104,.12);color:var(--teal-light);}
-.resp-comment{font-size:13px;color:var(--text-2);background:var(--navy-950);border:1px solid var(--navy-border);border-radius:10px;padding:12px 14px;font-style:italic;}
-.summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
-@media(max-width:900px){.summary-grid{grid-template-columns:repeat(2,1fr);}}
-.summary-item{text-align:center;}
-.summary-item .label{font-size:11px;color:var(--text-3);margin-bottom:6px;}
-.summary-item .val{font-family:'Fraunces',serif;font-size:1.6rem;color:var(--gold-light);}
-.summary-item .stars{color:var(--gold-light);font-size:12px;margin-top:4px;}
-.loading-state i,.empty-state i{font-size:26px;color:var(--gold-light);margin-bottom:12px;display:block;}
-.spinner-lg{width:24px;height:24px;border:3px solid rgba(232,201,131,.25);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
-@keyframes spin{to{transform:rotate(360deg);}}
+.btn-success{background:rgba(79,169,128,.14);border-color:rgba(79,169,128,.4);color:var(--teal-light);}
+.btn-warn{background:rgba(219,164,60,.12);border-color:rgba(219,164,60,.45);color:var(--warn);}
+.sec{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+.sec i{color:var(--gold-light);} .sec h2{font-size:1.05rem;margin:0;}
+.sec .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);}
+.t-Oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
+.t-Poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Submitted,.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Rejected{background:rgba(216,105,90,.14);color:#e8988c;}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.a-Info{background:rgba(120,160,230,.14);color:#a9c3f0;}
+.note{text-align:center;padding:38px 20px;color:var(--text-3);border:1px dashed var(--navy-border);border-radius:14px;}
+.note i{font-size:24px;color:var(--gold-light);display:block;margin-bottom:8px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px;}
+.tab{background:var(--navy-900);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab b{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-left:6px;color:var(--text-3);}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);} .tab.on b{color:var(--gold-light);}
+.qi{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.qi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;cursor:pointer;}
+.qi-name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--text-1);}
+.qi-meta{font-size:12.5px;color:var(--text-3);}
+.qi-title{font-size:14px;color:var(--text-1);margin:10px 0 4px;font-weight:600;}
+.qi-theme{font-size:12.5px;color:var(--teal-light);}
+.qi-body{display:none;margin-top:10px;} .qi.open .qi-body{display:block;}
+.rv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);margin-left:8px;}
+.remark{background:var(--navy-950);border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;font-size:12.5px;color:var(--text-2);margin:10px 0;white-space:pre-wrap;}
+.remark b{color:var(--gold-light);display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px;margin:8px 0;}
+.facts div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.facts div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text-2);margin-top:12px;} .chk input{width:auto;}
+textarea{width:100%;min-height:96px;resize:vertical;}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;white-space:pre-wrap;}
+.x-body .wide{grid-column:1/-1;}
+table.list td.ti{white-space:normal;min-width:220px;max-width:380px;}
+table.list td.rm{white-space:normal;min-width:200px;max-width:340px;font-size:12.5px;color:var(--text-2);}
+.over{color:#e8988c;font-weight:600;} .ok{}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+.bars div{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px;color:var(--text-2);}
+.bars .l{flex:0 0 46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .bars .b{flex:1;height:8px;background:var(--navy-950);border-radius:6px;overflow:hidden;} .bars .b i{display:block;height:100%;background:var(--gold);} .bars .c{flex:0 0 32px;text-align:right;font-family:'IBM Plex Mono',monospace;}
+.qs{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:16px 20px;margin-bottom:14px;}
+.qs h4{margin:0 0 4px;font-size:14.5px;color:var(--text-1);} .qs .m{font-size:12px;color:var(--text-3);margin-bottom:10px;}
+.big{font-family:'Fraunces',serif;font-size:1.7rem;color:var(--gold-light);margin-right:10px;}
+.txs{max-height:260px;overflow:auto;border:1px solid var(--navy-border);border-radius:10px;}
+.txs div{padding:8px 12px;border-bottom:1px solid var(--navy-border);font-size:13px;color:var(--text-2);white-space:pre-wrap;} .txs div:last-child{border:0;} .txs small{display:block;color:var(--text-3);font-size:11px;margin-top:2px;}
+.bars .l{flex:0 0 38%;}
+details.lg{margin-top:22px;} details.lg summary{cursor:pointer;color:var(--gold-light);font-size:14px;margin-bottom:10px;}
 </style>
 </head>
 <body>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
-    </div>
+<div class="topbar"><h1><i class="fa-solid fa-chart-column" style="color:var(--gold-light);"></i> Feedback report</h1><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><span id="xp"></span><a class="btn btn-sm" id="mg" href="feedback-manage.html"><i class="fa-solid fa-clipboard-question"></i> Question builder</a></div></div>
+<div class="wrap" style="max-width:1200px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar noprint">
+    <select id="fd"><option value="">All days</option></select><select id="fv"><option value="">All venues</option></select><select id="fc"><option value="">All categories</option></select><select id="ft"><option value="">All participant types</option><option>Oral</option><option>Poster</option><option>Participant</option></select>
+    <label class="tiny" style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="sn" checked style="width:auto;"> Show names beside text answers</label>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
   </div>
+  <div id="sum"><div class="empty">Loading feedback…</div></div>
+
+  <div class="sec" style="margin-top:26px;"><i class="fa-solid fa-user-check"></i><h2>Who answered</h2><span class="n" id="n1"></span></div>
+  <div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>VRMIC ID</th><th>Name</th><th>E-mail</th><th>Type</th><th>Category</th><th>Venue</th><th>Submitted</th><th>Last edited</th></tr></thead><tbody id="tb"></tbody></table></div></div>
+  <p class="tiny" style="margin-top:8px;">Participants never see these results. Names are visible to admins only.</p>
+  <div id="lg"></div>
 </div>
-
-<button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
-
-<div class="body-row">
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div>VRMIC 2026<small>ADMIN CONTROL PANEL</small></div></div>
-  <nav class="sidebar-nav" id="sidebar-nav"></nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="admin-name">—</b><span id="admin-position">—</span></div></div>
-    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div><div class="breadcrumb">ADMIN / FEEDBACK</div><h1>Feedback Report</h1></div>
-  </div>
-
-  <div class="wrap">
-    <div class="stat-strip" id="stat-strip"></div>
-
-    <div class="stat-strip" id="stat-strip"></div>
-
-    <div class="section-title" style="display:flex;align-items:center;gap:10px;margin:8px 0 16px;">
-      <i class="fa-solid fa-chart-simple" style="color:var(--gold-light);"></i><h2 style="font-size:1.05rem;margin:0;">Average ratings</h2>
-    </div>
-    <div class="card" id="summary-card" style="background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;padding:22px;margin-bottom:26px;"></div>
-
-    <div class="toolbar">
-      <input type="text" id="search-input" placeholder="Search by name or VRMIC ID...">
-      <button class="btn" id="refresh-btn"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
-      <button class="btn" id="export-btn"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
-    </div>
-
-    <div id="response-list"></div>
-    <div class="loading-state" id="loading-state"><div class="spinner-lg"></div>Loading feedback responses...</div>
-    <div class="empty-state" id="empty-state" style="display:none;"><i class="fa-regular fa-folder-open"></i>No feedback responses match your search.</div>
-  </div>
-</div>
-</div>
-
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
-const token = localStorage.getItem('vrmic_admin_token');
-if (!token) window.location.href = '../admin-login.html';
-let permissions = {};
-try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
-function can(k, a){ return !!(permissions[k] && permissions[k][a]); }
-function logout(){ localStorage.removeItem('vrmic_admin_token'); localStorage.removeItem('vrmic_admin_name'); localStorage.removeItem('vrmic_admin_position'); localStorage.removeItem('vrmic_admin_permissions'); window.location.href = '../admin-login.html'; }
-document.getElementById('sidebar-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
-
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, token }, payload)) });
-  return res.json();
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('feedback', 'report') && !VR.can('feedback', 'transaction')) { VR.denied('You do not have permission to view the feedback report.'); return; }
+if (!VR.can('feedback', 'transaction')) $('mg').style.display = 'none';
+let D = null, E = {}, view = [], rows = [];
+const dtm = v => { const d = new Date(v); return !v || isNaN(d) ? '—' : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const scopeLabel = q => q.scopeType === 'day' ? 'Day: ' + fmtD(q.scopeValue) : q.scopeType === 'venue' ? 'Venue: ' + q.scopeValue : 'Whole conference';
+const TY = { rating: 'Rating', short: 'Short text', long: 'Long text', single: 'Single choice', multi: 'Multiple choice', yesno: 'Yes / No' };
+function pass(x, days) {
+  const d = $('fd').value, v = $('fv').value, c = $('fc').value, t = $('ft').value;
+  return (!d || (days || []).indexOf(d) > -1) && (!v || x.venue === v) && (!c || x.category === c) && (!t || x.type === t);
 }
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-const NAV_ITEMS = [
-  { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'home.html', always: true },
-  { section: 'Participants' },
-  { key: 'participants', sub: 'transaction', label: 'Manage Participants', icon: 'fa-user-plus', href: 'participants-manage.html' },
-  { key: 'participants', sub: 'report', label: 'Participant Report', icon: 'fa-table-list', href: 'participants-report.html' },
-  { section: 'Abstract Review' },
-  { key: 'abstract', sub: 'transaction', label: 'Review Abstracts', icon: 'fa-file-circle-check', href: 'abstracts-review.html' },
-  { key: 'abstract', sub: 'report', label: 'Abstract Report', icon: 'fa-table-list', href: 'abstracts-report.html' },
-  { section: 'Slot Allotment' },
-  { key: 'slot', sub: 'transaction', label: 'Allot Slots', icon: 'fa-location-crosshairs', href: 'slots-manage.html' },
-  { key: 'slot', sub: 'report', label: 'Slot Report', icon: 'fa-table-list', href: 'slots-report.html' },
-  { section: 'Attendance' },
-  { key: 'attendance', sub: 'transaction', label: 'Mark Attendance', icon: 'fa-calendar-check', href: 'attendance-mark.html' },
-  { key: 'attendance', sub: 'report', label: 'Attendance Report', icon: 'fa-table-list', href: 'attendance-report.html' },
-  { section: 'Presentation Access' },
-  { key: 'presentationAccess', sub: 'report', label: 'Venue Presentation List', icon: 'fa-display', href: 'presentation-access.html' },
-  { section: 'Certificates' },
-  { key: 'certificates', sub: 'transaction', label: 'Generate Certificate', icon: 'fa-certificate', href: 'certificates-manage.html' },
-  { key: 'certificates', sub: 'report', label: 'Certificate Report', icon: 'fa-table-list', href: 'certificates-report.html' },
-  { section: 'Receipts' },
-  { key: 'receipts', sub: 'transaction', label: 'Fulfill Receipt', icon: 'fa-receipt', href: 'receipts-manage.html' },
-  { key: 'receipts', sub: 'report', label: 'Receipt Report', icon: 'fa-table-list', href: 'receipts-report.html' },
-  { section: 'Feedback' },
-  { key: 'feedback', sub: 'report', label: 'Feedback Report', icon: 'fa-comment-dots', href: 'feedback-report.html' },
-  { section: 'Schedule' },
-  { key: 'schedule', sub: 'transaction', label: 'Edit Schedule', icon: 'fa-calendar-days', href: 'schedule-manage.html' },
-  { key: 'schedule', sub: 'report', label: 'Schedule Report', icon: 'fa-table-list', href: 'schedule-report.html' },
-  { section: 'Announcements' },
-  { key: 'announcements', sub: 'transaction', label: 'Post Announcement', icon: 'fa-bullhorn', href: 'announcements-manage.html' },
-  { key: 'announcements', sub: 'report', label: 'Announcement Report', icon: 'fa-table-list', href: 'announcements-report.html' },
-  { section: 'Mail' },
-  { key: 'mail', sub: 'transaction', label: 'Send Invite', icon: 'fa-paper-plane', href: 'mail-send.html' },
-  { key: 'mail', sub: 'report', label: 'Mail Report', icon: 'fa-table-list', href: 'mail-report.html' },
-  { section: 'Volunteer Management' },
-  { key: 'volunteers', sub: 'transaction', label: 'Assign Volunteers', icon: 'fa-user-group', href: 'volunteers-manage.html' },
-  { key: 'volunteers', sub: 'report', label: 'Volunteer Report', icon: 'fa-table-list', href: 'volunteers-report.html' },
-  { section: 'Settings' },
-  { key: 'settings', sub: 'transaction', label: 'Edit Settings', icon: 'fa-sliders', href: 'settings-manage.html' },
-  { key: 'settings', sub: 'report', label: 'Current Settings', icon: 'fa-table-list', href: 'settings-report.html' },
-  { section: 'Admin Users' },
-  { key: 'adminUsers', sub: 'transaction', label: 'Manage Admin Users', icon: 'fa-user-shield', href: 'admin-users-manage.html' },
-  { key: 'adminUsers', sub: 'report', label: 'Admin User Report', icon: 'fa-table-list', href: 'admin-users-report.html' }
-];
-function renderSidebar(){
-  const nav = document.getElementById('sidebar-nav');
-  let html = '', pendingSection = null;
-  NAV_ITEMS.forEach(item => {
-    if (item.section) { pendingSection = item.section; return; }
-    if (!item.always && !can(item.key, item.sub)) return;
-    if (pendingSection) { html += `<div class="nav-section">${pendingSection}</div>`; pendingSection = null; }
-    const activeClass = item.href === 'feedback-report.html' ? 'active' : '';
-    html += `<a class="nav-link ${activeClass}" href="${item.href}"><i class="fa-solid ${item.icon}"></i> ${item.label}</a>`;
-  });
-  nav.innerHTML = html || `<p style="padding:14px 12px;font-size:12.5px;color:var(--text-3);">No modules assigned yet.</p>`;
+function bars(pairs, total, avgLine) {
+  const mx = Math.max(1, ...pairs.map(p => p[1]));
+  return pairs.map(p => '<div><span class="l" title="' + esc(p[0]) + '">' + esc(p[0]) + '</span><span class="b"><i style="width:' + Math.round(p[1] * 100 / mx) + '%"></i></span><span class="c" style="flex-basis:80px;">' + p[1] + (total ? ' · ' + Math.round(p[1] * 100 / total) + '%' : '') + '</span></div>').join('');
 }
-renderSidebar();
-document.getElementById('admin-name').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-document.getElementById('admin-position').textContent = localStorage.getItem('vrmic_admin_position') || '';
-
-if (!can('feedback', 'report')) {
-  document.querySelector('.wrap').innerHTML = `<div style="color:var(--danger);padding:20px;">You do not have permission to view this report. Contact the administrator.</div>`;
-} else {
-
-const STAR_FIELDS = [
-  { key: 'organization', label: 'Organisation' },
-  { key: 'registration', label: 'Registration/Portal' },
-  { key: 'sessions', label: 'Technical Sessions' },
-  { key: 'speakers', label: 'Speakers' },
-  { key: 'venue', label: 'Venue/Hospitality' }
-];
-const MCQ_FIELDS = [
-  { key: 'source', label: 'Heard via' },
-  { key: 'recommend', label: 'Would recommend' },
-  { key: 'future', label: 'Would attend again' }
-];
-
-let allRows = [];
-
-function parseRatings(str){
-  try { return JSON.parse(str || '{}'); } catch(e) { return {}; }
+function render() {
+  const el = D.eligible.filter(e => pass(e, e.days)), resp = D.responses.filter(r => pass(r, (E[r.pid] || {}).days));
+  const pids = new Set(resp.map(r => r.pid)); view = resp;
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-users', 'Registered', el.length, 'in this selection') + c('fa-comments', 'Responded', resp.length, 'submitted feedback') + c('fa-percent', 'Response rate', el.length ? Math.round(resp.length * 100 / el.length) + '%' : '—', 'responded ÷ registered') + c('fa-list-check', 'Questions', D.questions.length, D.questions.filter(q => !q.active).length + ' inactive');
+  const byQ = {}; D.answers.forEach(a => { if (pids.has(a.pid)) (byQ[a.qid] = byQ[a.qid] || []).push(a); });
+  const nameOf = {}; resp.forEach(r => nameOf[r.pid] = r.name);
+  rows = [];
+  $('sum').innerHTML = D.questions.length ? D.questions.map((q, i) => {
+    const a = byQ[q.id] || [], n = a.length; let body = '';
+    if (q.type === 'rating') {
+      const vals = a.map(x => Number(x.a)), avg = n ? vals.reduce((s, v) => s + v, 0) / n : 0;
+      body = '<div style="margin-bottom:8px;"><span class="big">' + (n ? avg.toFixed(2) : '—') + '</span><span class="tiny" style="display:inline;">average out of 5</span></div><div class="bars">' + bars([5, 4, 3, 2, 1].map(k => [k + ' ★', vals.filter(v => v === k).length]), n) + '</div>';
+      rows.push([q.text, 'Rating', n, avg ? avg.toFixed(2) : '', [1, 2, 3, 4, 5].map(k => k + ':' + vals.filter(v => v === k).length).join('  ')]);
+    } else if (q.type === 'yesno' || q.type === 'single') {
+      const opts = q.type === 'yesno' ? ['Yes', 'No'] : q.options.slice(); a.forEach(x => { if (opts.indexOf(x.a) === -1) opts.push(x.a); });
+      const pairs = opts.map(o => [o, a.filter(x => x.a === o).length]); body = '<div class="bars">' + bars(pairs, n) + '</div>'; rows.push([q.text, TY[q.type], n, '', pairs.map(p => p[0] + ':' + p[1]).join('  ')]);
+    } else if (q.type === 'multi') {
+      const cnt = {}; q.options.forEach(o => cnt[o] = 0); a.forEach(x => { let arr = []; try { arr = JSON.parse(x.a); } catch (e) {} arr.forEach(o => cnt[o] = (cnt[o] || 0) + 1); });
+      const pairs = Object.entries(cnt); body = '<div class="bars">' + bars(pairs, n) + '</div><div class="tiny">Percentages are of the ' + n + ' people who answered.</div>'; rows.push([q.text, TY[q.type], n, '', pairs.map(p => p[0] + ':' + p[1]).join('  ')]);
+    } else {
+      const sn = $('sn').checked;
+      body = n ? '<div class="txs">' + a.map(x => '<div>' + esc(x.a) + (sn ? '<small>' + esc(nameOf[x.pid] || x.pid) + ' · ' + esc(x.pid) + '</small>' : '') + '</div>').join('') + '</div>' : '';
+      rows.push([q.text, TY[q.type], n, '', a.map(x => x.a).join(' | ')]);
+    }
+    return '<div class="qs"><h4>' + (i + 1) + '. ' + esc(q.text) + (q.active ? '' : ' <span class="badge a-Rejected">Inactive</span>') + '</h4><div class="m">' + TY[q.type] + ' · ' + esc(scopeLabel(q)) + ' · ' + n + ' answer(s)' + (resp.length ? ' · ' + Math.round(n * 100 / resp.length) + '% of respondents' : '') + '</div>' + (n ? body : '<span class="hint">No answers in this selection.</span>') + '</div>';
+  }).join('') : '<div class="note"><i class="fa-solid fa-clipboard-question"></i>No questions have been created yet.</div>';
+  $('n1').textContent = '(' + resp.length + ')';
+  $('tb').innerHTML = resp.length ? resp.slice().sort((x, y) => new Date(y.submittedAt) - new Date(x.submittedAt)).map(r => '<tr><td class="id">' + esc(r.pid) + '</td><td class="nm">' + esc(r.name) + '</td><td>' + esc(r.email) + '</td><td>' + esc(r.type) + '</td><td>' + esc(r.category || '—') + '</td><td>' + esc(r.venue || '—') + '</td><td>' + dtm(r.submittedAt) + '</td><td>' + (r.updatedAt !== r.submittedAt ? dtm(r.updatedAt) : '—') + '</td></tr>').join('') : '<tr><td class="empty" colspan="8">No responses in this selection.</td></tr>';
 }
-function starDisplay(n){
-  n = Number(n) || 0;
-  return '★★★★★☆☆☆☆☆'.slice(5 - n, 10 - n);
+function legacy() {
+  const L = D.legacy || []; if (!L.length) { $('lg').innerHTML = ''; return; }
+  const keys = {}; L.forEach(l => Object.keys(l.ratings || {}).forEach(k => { (keys[k] = keys[k] || []).push(Number(l.ratings[k])); }));
+  $('lg').innerHTML = '<details class="lg"><summary><i class="fa-solid fa-box-archive"></i> Earlier feedback (legacy) — ' + L.length + ' entries</summary>'
+    + '<div class="table-card"><table class="list"><thead><tr><th>Question</th><th>Answers</th><th>Average</th></tr></thead><tbody>' + Object.entries(keys).map(([k, v]) => { const n = v.filter(x => !isNaN(x)); return '<tr><td>' + esc(k) + '</td><td>' + n.length + '</td><td>' + (n.length ? (n.reduce((s, x) => s + x, 0) / n.length).toFixed(2) : '—') + '</td></tr>'; }).join('') + '</tbody></table></div>'
+    + '<div class="table-card" style="margin-top:12px;"><table class="list"><thead><tr><th>Name</th><th>Comments</th><th>Date</th></tr></thead><tbody>' + L.filter(l => String(l.comments || '').trim()).map(l => '<tr><td class="nm">' + esc(l.name) + '</td><td style="white-space:normal;">' + esc(l.comments) + '</td><td>' + dtm(l.createdAt) + '</td></tr>').join('') + '</tbody></table></div></details>';
 }
-
-function applyFilters(){
-  const q = document.getElementById('search-input').value.trim().toLowerCase();
-  return allRows.filter(r => {
-    if (q && !((r.name||'').toLowerCase().includes(q) || (r.participantId||'').toLowerCase().includes(q))) return false;
-    return true;
-  });
-}
-
-function renderSummary(rows){
-  const card = document.getElementById('summary-card');
-  if (!rows.length) { card.innerHTML = `<p style="color:var(--text-3);font-size:13px;margin:0;">No responses yet to summarise.</p>`; return; }
-  const html = STAR_FIELDS.map(f => {
-    const values = rows.map(r => Number(parseRatings(r.ratings)[f.key]) || 0).filter(v => v > 0);
-    const avg = values.length ? (values.reduce((a,b) => a+b, 0) / values.length) : 0;
-    return `<div class="summary-item"><div class="label">${f.label}</div><div class="val">${avg.toFixed(1)}</div><div class="stars">${starDisplay(Math.round(avg))}</div></div>`;
-  }).join('');
-  card.innerHTML = `<div class="summary-grid">${html}</div>`;
-}
-
-function renderList(){
-  const rows = applyFilters();
-  const area = document.getElementById('response-list');
-  const empty = document.getElementById('empty-state');
-  document.getElementById('stat-strip').innerHTML = `<div class="stat-pill">Total responses: <b>${rows.length}</b></div>`;
-  renderSummary(rows);
-  if (!rows.length) { area.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  area.innerHTML = rows.map(r => {
-    const ratings = parseRatings(r.ratings);
-    const starsHtml = STAR_FIELDS.filter(f => ratings[f.key]).map(f =>
-      `<div class="resp-stars-item">${f.label}: <b>${starDisplay(ratings[f.key])}</b></div>`).join('');
-    const mcqHtml = MCQ_FIELDS.filter(f => ratings[f.key]).map(f =>
-      `<span>${f.label}: ${escapeHtml(ratings[f.key])}</span>`).join('');
-    return `
-    <div class="resp-card">
-      <div class="resp-top">
-        <div>
-          <div class="resp-name">${escapeHtml(r.name)}</div>
-          <div class="resp-meta"><span class="mono">${escapeHtml(r.participantId)}</span> &middot; ${escapeHtml(r.email)} &middot; ${r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : ''}</div>
-        </div>
-      </div>
-      ${starsHtml ? `<div class="resp-stars">${starsHtml}</div>` : ''}
-      ${mcqHtml ? `<div class="resp-mcq">${mcqHtml}</div>` : ''}
-      ${r.comments ? `<div class="resp-comment">"${escapeHtml(r.comments)}"</div>` : ''}
-    </div>`;
-  }).join('');
-}
-
-async function loadData(){
-  document.getElementById('loading-state').style.display = 'block';
+async function load() {
   try {
-    const res = await callApi('adminListFeedback', {});
-    if (!res.ok) { if (/session/i.test(res.error||'')) { logout(); return; } alert(res.error || 'Could not load feedback.'); return; }
-    allRows = res.feedback;
-    renderList();
-  } catch (err) {
-    alert('Could not reach the server. Check your connection and try again.');
-  } finally {
-    document.getElementById('loading-state').style.display = 'none';
-  }
+    const r = await VR.api('adminFeedbackReport', {});
+    if (!r.ok) { $('sum').innerHTML = ''; return showErr(r.error || 'Could not load the report.'); }
+    D = r; E = {}; D.eligible.forEach(e => E[e.id] = e);
+    const k = ['fd', 'fv', 'fc'].map(i => $(i).value);
+    $('fd').innerHTML = '<option value="">All days</option>' + D.days.map(d => '<option value="' + esc(d) + '">' + esc(fmtD(d)) + '</option>').join('');
+    $('fv').innerHTML = '<option value="">All venues</option>' + [...new Set(D.eligible.map(e => e.venue).filter(Boolean))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+    $('fc').innerHTML = '<option value="">All categories</option>' + [...new Set(D.eligible.map(e => e.category).filter(Boolean))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+    ['fd', 'fv', 'fc'].forEach((i, j) => $(i).value = k[j]); render(); legacy();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
 }
-
-document.getElementById('search-input').addEventListener('input', renderList);
-document.getElementById('refresh-btn').addEventListener('click', loadData);
-
-document.getElementById('export-btn').addEventListener('click', function(){
-  const rows = applyFilters();
-  const headers = ['VRMIC ID','Name','Email', ...STAR_FIELDS.map(f=>f.label), ...MCQ_FIELDS.map(f=>f.label), 'Comments','Date'];
-  const csvRows = [headers.join(',')];
-  rows.forEach(r => {
-    const ratings = parseRatings(r.ratings);
-    const line = [
-      r.participantId, r.name, r.email,
-      ...STAR_FIELDS.map(f => ratings[f.key] || ''),
-      ...MCQ_FIELDS.map(f => ratings[f.key] || ''),
-      r.comments, r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-GB') : ''
-    ].map(v => '"' + String(v||'').replace(/"/g,'""') + '"');
-    csvRows.push(line.join(','));
-  });
-  const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'VRMIC2026_Feedback_' + new Date().toISOString().slice(0,10) + '.csv';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-
-loadData();
-}
+['fd', 'fv', 'fc', 'ft', 'sn'].forEach(i => $(i).addEventListener('change', () => D && render())); $('refresh').onclick = load;
+VR.exportBar($('xp'), { name: 'VRMIC2026_Feedback', title: 'VRMIC 2026 — Feedback responses', imageEl: () => $('sum'), pdfOpts: { orientation: 'landscape' },
+  getData: () => {
+    const qs = D.questions, byP = {}; D.answers.forEach(a => { (byP[a.pid] = byP[a.pid] || {})[a.qid] = a.a; });
+    const fmt = (q, v) => { if (v == null) return ''; if (q.type === 'multi') { try { return JSON.parse(v).join('; '); } catch (e) { return v; } } return v; };
+    return { headers: ['VRMIC ID', 'Name', 'E-mail', 'Type', 'Category', 'Venue', 'Submitted'].concat(qs.map(q => q.text)),
+      rows: view.map(r => [r.pid, r.name, r.email, r.type, r.category, r.venue, dtm(r.submittedAt)].concat(qs.map(q => fmt(q, (byP[r.pid] || {})[q.id])))) };
+  } });
+load();
+})();
 </script>
 </body>
 </html>
