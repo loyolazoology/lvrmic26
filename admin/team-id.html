@@ -79,11 +79,15 @@ td.w{white-space:normal}
 .mid .k{display:flex;align-items:center;gap:.15cm;line-height:1.2;font-size:.22cm;letter-spacing:.06cm;font-weight:700;color:var(--lab);text-transform:uppercase}
 .mid .k::before,.mid .k::after{content:"";width:.8cm;height:.025cm;background:linear-gradient(90deg,transparent,var(--line))}
 .mid .k::after{transform:scaleX(-1)}
-.mid .code{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.62cm;line-height:1.2;color:var(--acc)}
-.nm{max-width:100%;font-family:var(--nmf,var(--nf));font-weight:600;font-size:.6cm;line-height:1.25;color:var(--ink);white-space:nowrap}
+.mid .code{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.7cm;line-height:1.2;color:var(--acc)}
+.nm{max-width:100%;font-family:var(--nmf,var(--nf));font-weight:600;font-size:.64cm;line-height:1.25;color:var(--ink);white-space:nowrap}
 .qr{width:2.9cm;height:2.9cm;flex-shrink:0;background:#fff;border:.05cm solid var(--qrb);padding:.1cm;display:flex;align-items:center;justify-content:center}
 .qr img{width:100%;height:100%;display:block;image-rendering:pixelated}
 .qr.none{font-size:.26cm;color:#8a93ad;text-align:center;line-height:1.2}
+.qr.blank{border-style:dashed}
+.hw{display:flex;align-items:flex-end;gap:.15cm;width:100%;font-size:.24cm;font-weight:600;letter-spacing:.04cm;color:var(--lab);text-transform:uppercase}
+.hw i{flex:1;border-bottom:.03cm solid var(--lab);height:.6cm}
+.bc.nosign .bcl span.hint,.bc .bcl span.hint{font-family:'Inter',sans-serif;font-weight:500;letter-spacing:0;font-size:.2cm;color:#8a93ad}
 .bc{height:1.5cm;flex-shrink:0;background:#fff;border-top:.03cm solid rgba(18,32,67,.25);display:flex;align-items:stretch}
 .bcl{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.02cm}
 .bcl{padding:0 .3cm}
@@ -107,41 +111,37 @@ td.w{white-space:normal}
 .t-classical .bf.Volunteer{background:linear-gradient(135deg,#1c6b45,#2da36a)}
 .t-classical .bf.Official{background:linear-gradient(135deg,#6e1d36,#a8304f)}
 
-/* ===================== MEAL PUNCH CARD: 10 cm x 14 cm, 4 per A4 sheet ===================== */
-.mpg{width:21cm;height:29.6cm;flex-shrink:0;background:#fff;display:grid;grid-template-columns:repeat(2,10cm);grid-auto-rows:14cm;gap:.5cm;justify-content:center;align-content:center;box-shadow:0 2px 12px rgba(0,0,0,.35)}
-.pcard{width:10cm;height:14cm;position:relative;overflow:hidden;display:flex;flex-direction:column;color:var(--ink);font-family:'Inter',sans-serif;background:var(--bgi) center/cover no-repeat,var(--bg);border:.04cm solid var(--line);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+/* ===================== MEAL PUNCH CARD: 10 cm x 14.5 cm, 4 per A4 sheet; circles sit on the left and right edges for a standard 6 mm punch ===================== */
+.mpg{width:21cm;height:29.6cm;flex-shrink:0;background:#fff;display:grid;grid-template-columns:repeat(2,10cm);grid-auto-rows:14.5cm;gap:.3cm .5cm;justify-content:center;align-content:center;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.pcard{width:10cm;height:14.5cm;position:relative;overflow:hidden;display:flex;flex-direction:column;color:var(--ink);font-family:'Inter',sans-serif;background:var(--bgi) center/cover no-repeat,var(--bg);border:.04cm solid var(--line);-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .pcard::before{content:"";position:absolute;inset:0;pointer-events:none;background:var(--ov)}
 .pcard>*{position:relative}
-.pch{flex-shrink:0;background:var(--hd);border-bottom:.08cm solid var(--line);padding:.22cm .4cm .2cm;display:flex;flex-direction:column;align-items:center;gap:.07cm}
-.pch .lgs{margin-bottom:.04cm}
-.pt1{font-family:var(--nf);font-weight:600;font-size:.62cm;line-height:1.15;letter-spacing:.05cm;color:var(--hdt);white-space:nowrap}
-.pt2{font-size:.25cm;font-weight:600;letter-spacing:.07cm;color:var(--hdt2);white-space:nowrap}
+.pch{flex-shrink:0;background:var(--hd);border-bottom:.08cm solid var(--line);padding:.2cm .4cm .18cm;display:flex;flex-direction:column;align-items:center;gap:.06cm}
+.pch .lgs{margin-bottom:.03cm}
+.pt1{font-family:var(--nf);font-weight:600;font-size:.58cm;line-height:1.15;letter-spacing:.05cm;color:var(--hdt);white-space:nowrap}
+.pt2{max-width:100%;font-size:.23cm;font-weight:600;line-height:1.3;letter-spacing:.03cm;color:var(--hdt2);text-align:center;text-transform:uppercase}
 .pt3{font-size:.2cm;color:var(--hdt2);opacity:.85;white-space:nowrap}
-.pid{flex-shrink:0;margin:.32cm .45cm 0;padding:.22cm .3cm;border:.03cm solid var(--line);border-radius:.25cm;background:rgba(128,128,128,.08);display:flex;align-items:center;gap:.3cm}
+.pid{flex-shrink:0;margin:.25cm .45cm 0;padding:.18cm .3cm;border:.03cm solid var(--line);border-radius:.25cm;background:rgba(128,128,128,.08);display:flex;align-items:center;gap:.3cm}
 .pidl{flex:1;min-width:0;display:flex;flex-direction:column;gap:.07cm}
 .pk{font-size:.19cm;font-weight:700;letter-spacing:.07cm;color:var(--lab);text-transform:uppercase}
-.pnm{font-family:var(--nmf,var(--nf));font-weight:600;font-size:.64cm;line-height:1.2;color:var(--ink);white-space:nowrap}
-.pdg{font-size:.27cm;line-height:1.3;color:var(--ink2);white-space:nowrap}
+.pnm{font-family:var(--nmf,var(--nf));font-weight:600;font-size:.76cm;line-height:1.2;color:var(--ink);white-space:nowrap}
+.pdg{font-size:.26cm;line-height:1.3;color:var(--ink2);white-space:nowrap}
 .pidp{align-self:flex-start;display:inline-flex;align-items:center;margin-top:.04cm;border:.03cm solid var(--acc);border-radius:.4cm;overflow:hidden}
 .pidp span{padding:.04cm .16cm;line-height:1.3;white-space:nowrap}
 .pidp .pl{font-size:.2cm;font-weight:700;letter-spacing:.05cm;text-transform:uppercase;background:var(--acc);color:var(--ftt)}
-.pidp .pcode{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.3cm;color:var(--acc)}
-.pqr{width:2.3cm;height:2.3cm;flex-shrink:0;background:#fff;border:.05cm solid var(--qrb);padding:.08cm;display:flex;align-items:center;justify-content:center}
-.pqr img{width:100%;height:100%;display:block;image-rendering:pixelated}
-.pbody{flex:1;min-height:0;padding:.3cm .45cm .05cm;display:flex;gap:.5cm;align-items:stretch}
-.pgrp{flex:1;min-width:0;display:flex;flex-direction:column;gap:.18cm}
-.pgh{display:flex;align-items:center;gap:.12cm;font-size:.26cm;font-weight:700;letter-spacing:.08cm;color:var(--acc);text-transform:uppercase;padding-bottom:.07cm;border-bottom:.03cm solid var(--line);white-space:nowrap}
-.pgh i{font-size:.28cm}
-.pblk{display:flex;flex-direction:column;gap:.07cm}
-.pbt{font-size:.29cm;font-weight:700;letter-spacing:.04cm;color:var(--ink);text-transform:uppercase;white-space:nowrap}
-.pbt i{font-size:.26cm;margin-right:.1cm;color:var(--acc)}
-.pdays{display:flex;gap:.2cm}
-.pday{width:1.3cm;display:flex;flex-direction:column;align-items:center;gap:.02cm}
-.pc{width:.74cm;height:.74cm;border-radius:50%;border:.04cm solid var(--acc);background:rgba(128,128,128,.07);position:relative;margin-bottom:.03cm}
-.pc::after{content:"";position:absolute;inset:.1cm;border-radius:50%;border:.02cm dashed var(--lab)}
-.pday b{font-size:.22cm;line-height:1.2;letter-spacing:.04cm;color:var(--ink)}
-.pday span{font-size:.19cm;line-height:1.2;color:var(--lab)}
-.pnote{flex-shrink:0;text-align:center;font-size:.2cm;font-style:italic;color:var(--lab);padding:.06cm 0 .12cm}
+.pidp .pcode{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.42cm;color:var(--acc)}
+.pidp .pcode.blank{display:inline-block;min-width:3.4cm;height:.6cm}
+.pid .ph{width:2.2cm;height:2.5cm;font-size:1.1cm}
+#out[data-shape=circle] .pid .ph{width:2.5cm}
+.pbody{flex:1;min-height:0;padding:.2cm 0 .15cm;display:flex}
+.pside{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.prow{flex:1 1 0;max-height:1cm;min-height:0;display:flex;align-items:center;gap:.22cm;padding-left:.67cm}
+.prow.first:not(:first-child){border-top:.02cm dotted var(--lab)}
+.pside.r .prow{flex-direction:row-reverse;padding-left:0;padding-right:.67cm;text-align:right}
+.pc{width:.72cm;height:.72cm;flex-shrink:0;border-radius:50%;border:.035cm solid var(--acc);background:rgba(128,128,128,.07)}
+.prt{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.prt b{font-size:.26cm;font-weight:700;letter-spacing:.03cm;color:var(--ink);text-transform:uppercase;white-space:nowrap}
+.prt span{font-size:.2cm;color:var(--lab);white-space:nowrap}
 .pft{height:1cm;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.02cm;background:var(--ft);color:var(--ftt);border-top:.08cm solid var(--line);padding:0 .4cm}
 .pft .r{font-weight:700;font-size:.3cm;letter-spacing:.04cm;text-transform:uppercase;white-space:nowrap}
 .pft .v{font-size:.24cm;white-space:nowrap}
@@ -193,7 +193,7 @@ body.cap .mpg{box-shadow:none}
 
 <div class="noprint">
   <h1 id="h1">Team ID cards</h1>
-  <p class="sub">8.5 cm × 12 cm portrait card with punch-hole circle, logos, photo, QR (scan for name, designation, phone and email), LVRMIC ID and barcode, optional convener sign space, designation and venue. Optional meal punch cards (10 × 14 cm). Choose who to print, generate, then print or download the PDF.</p>
+  <p class="sub">8.5 cm × 12 cm portrait card with punch-hole circle, logos, photo, QR (scan for name, designation, phone and email), LVRMIC ID and barcode, optional convener sign space, designation and venue. Optional meal punch cards (10 × 14.5 cm) and blank cards for handwriting. Choose who to print, generate, then print or download the PDF.</p>
 
   <div class="panel">
     <div class="filters">
@@ -250,7 +250,21 @@ body.cap .mpg{box-shadow:none}
       <p class="msg">Tap a day or a meal name to tick its whole row or column. Only the ticked meals and days appear on each card, one punch circle per day.</p>
     </div>
     <div class="prog" id="prog"><i></i></div>
-    <p class="msg" style="margin-top:10px">In the print window set margins to <b>None</b> and turn on <b>Background graphics</b>. Or press <b>Download PDF</b> for a ready file. Punch cards print on A4 sheets, 4 per page (10 × 14 cm each).</p>
+    <p class="msg" style="margin-top:10px">In the print window set margins to <b>None</b> and turn on <b>Background graphics</b>. Or press <b>Download PDF</b> for a ready file. Punch cards print on A4 sheets, 4 per page (10 × 14.5 cm each), with the punch circles on the left and right edges for a standard 6 mm hole punch.</p>
+  </div>
+
+  <div class="panel">
+    <div class="bar" style="margin-top:0"><b>Blank cards for handwriting</b></div>
+    <div class="bar">
+      <div class="f" style="min-width:180px"><label for="bType">Card</label><select id="bType"><option value="id">ID card</option><option value="meal">Meal punch card</option></select></div>
+      <div class="f" style="min-width:160px"><label for="bCat">Category</label><select id="bCat">
+        <option value="Volunteer">Volunteer</option><option value="Staff">Staff</option><option value="Official">Official</option><option value="Admin">Admin</option><option value="Convener">Convener</option></select></div>
+      <div class="f" style="min-width:200px"><label for="bDes">Designation printed (optional)</label><input id="bDes" type="text" maxlength="40" placeholder="Same as category"></div>
+      <div class="f" style="min-width:100px"><label for="bN">How many</label><input id="bN" type="number" min="1" max="400" value="4"></div>
+      <button class="btn pri" id="bGen" type="button"><i class="fa-solid fa-pen-to-square"></i>Generate blank cards</button>
+      <span class="msg" id="bInfo"></span>
+    </div>
+    <p class="msg" style="margin-top:8px">Name, ID and photo are left empty to fill by hand. Four cards fit on one A4 sheet. For blank meal punch cards, tick the meals and days in the list above. The sign slot follows the category setting in Card settings.</p>
   </div>
 </div>
 
@@ -288,9 +302,7 @@ body.cap .mpg{box-shadow:none}
     <h3>Meal punch card text</h3>
     <div class="g2">
       <div class="f"><label for="cTitle">Title</label><input id="cTitle" type="text" maxlength="40"></div>
-      <div class="f"><label for="cSub">Subtitle</label><input id="cSub" type="text" maxlength="60"></div>
-      <div class="f"><label for="cGM">Heading for meals</label><input id="cGM" type="text" maxlength="20"></div>
-      <div class="f"><label for="cGS">Heading for snacks</label><input id="cGS" type="text" maxlength="20"></div>
+      <div class="f"><label for="cSub">Subtitle (blank = full conference name)</label><input id="cSub" type="text" maxlength="160"></div>
       <div class="f"><label for="cF1">Footer line 1</label><input id="cF1" type="text" maxlength="60"></div>
       <div class="f"><label for="cF2">Footer line 2</label><input id="cF2" type="text" maxlength="60"></div>
     </div>
@@ -330,7 +342,7 @@ const setMsg = (t, c) => { const s = $('status'); s.textContent = t || ''; s.cla
 const DEF = {
   idLabel: 'LVRMIC ID', nameFont: 'pro', shape: 'square', bstyle: 'std', bcol: '',
   sign: { Convener: false, Admin: true, Staff: true, Official: true, Volunteer: true },
-  ptitle: 'MEAL COUPON CARD', psub: 'THREE-DAY INTERNATIONAL CONFERENCE', gMeals: 'MEALS', gSnacks: 'SNACKS',
+  ptitle: 'MEAL COUPON CARD', psub: '',
   pfoot1: 'Valid for registered participants only', pfoot2: 'Non-transferable',
   names: { BF: 'Breakfast', B1: 'Morning Snacks', LN: 'Lunch', TB: 'Afternoon Snacks', DN: 'Dinner' }
 };
@@ -341,6 +353,7 @@ function loadCfg() {
     const s = JSON.parse(localStorage.getItem('vrmic.idcfg') || 'null');
     if (s) Object.keys(DEF).forEach(k => { if (s[k] !== undefined) c[k] = (typeof DEF[k] === 'object') ? Object.assign({}, DEF[k], s[k]) : s[k]; });
   } catch (e) {}
+  if (c.psub === 'THREE-DAY INTERNATIONAL CONFERENCE') c.psub = '';     // old default: now the full conference name is used
   return c;
 }
 let CFG = loadCfg();
@@ -468,7 +481,7 @@ function barcodeFor(code) {
 /* ---------- the card ---------- */
 const LOGO = (f, alt) => `<div class="lg"><img src="../assets/${f}" alt="${alt}" onerror="this.parentNode.style.display='none'"></div>`;
 function cardHtml(m, head, qrMode, theme) {
-  const id = S(m.id), photo = PHOTO[id], qr = qrFor(m, qrMode), bc = barcodeFor(id), rc = roleClass(m), venue = venueOf(m), slot = hasSlot(m);
+  const id = S(m.id), photo = PHOTO[id], qr = m.blank ? '' : qrFor(m, qrMode), bc = m.blank ? '' : barcodeFor(id), rc = roleClass(m), venue = venueOf(m), slot = hasSlot(m);
   return `<div class="badge t-${esc(theme)}">
     <div class="hole"><i></i></div>
     <div class="bh">
@@ -478,15 +491,15 @@ function cardHtml(m, head, qrMode, theme) {
     </div>
     <div class="bb">
       <div class="row">
-        <div class="ph">${photo ? `<img src="${photo}" alt="">` : '<i class="fa-solid fa-user"></i>'}</div>
-        ${qr ? `<div class="qr"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="qr none">QR not available</div>'}
+        <div class="ph">${photo ? `<img src="${photo}" alt="">` : (m.blank ? '' : '<i class="fa-solid fa-user"></i>')}</div>
+        ${qr ? `<div class="qr"><img src="${qr}" alt="QR ${esc(id)}"></div>` : (m.blank ? '<div class="qr blank"></div>' : '<div class="qr none">QR not available</div>')}
       </div>
       <div class="mid">
-        <div class="k">${esc(CFG.idLabel)}</div><div class="code">${esc(id)}</div>
-        <div class="nm fit">${esc(S(m.name))}</div>
+        <div class="k">${esc(CFG.idLabel)}</div>${m.blank ? '<div class="hw"><i></i></div>' : `<div class="code">${esc(id)}</div>`}
+        ${m.blank ? '<div class="hw"><span>Name</span><i></i></div>' : `<div class="nm fit">${esc(S(m.name))}</div>`}
       </div>
     </div>
-    <div class="bc${slot ? '' : ' nosign'}"><div class="bcl">${bc ? `<img src="${bc}" alt="Barcode ${esc(id)}">` : ''}<span>${esc(id)}</span></div>
+    <div class="bc${slot ? '' : ' nosign'}"><div class="bcl">${bc ? `<img src="${bc}" alt="Barcode ${esc(id)}">` : ''}${m.blank ? '<span class="hint">Paste barcode / ID sticker</span>' : `<span>${esc(id)}</span>`}</div>
       ${slot ? `<div class="sg"><div class="sgi">${signHtml()}</div><div class="sgl"></div><div class="sgc fit">${esc(signTxt())}</div></div>` : ''}</div>
     <div class="bf ${esc(rc)}"><div class="r fit">${esc(desigOf(m))}</div>${venue ? `<div class="v fit">Venue: ${esc(venue)}</div>` : ''}</div>
   </div>`;
@@ -513,6 +526,11 @@ function fmtRange(a, b) {
   } catch (e) { return '26–28 Nov 2026'; }
 }
 
+
+function makeHead() {
+  const s = CONF || {}, full = s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment', range = fmtRange(s['conf.startDate'], s['conf.endDate']);
+  return { short: s['conf.shortName'] || 'VRMIC 2026', full: full, range: range, name: full + ' · ' + range };
+}
 
 /* ---------- convener sign ---------- */
 const SIGN_URLS = ['../assets/convener-sign.png', 'https://vrmic26.vercel.app/assets/convener-sign.png'];
@@ -575,7 +593,7 @@ function cpPeople() {
 }
 function updateCp() {
   const on = $('fCp').checked, n = cpPeople().length, k = CP.size, sh = Math.ceil(n / 4);
-  $('cpBox').style.display = on ? '' : 'none';
+  $('cpBox').style.display = (on || $('bType').value === 'meal') ? '' : 'none';
   $('cpInfo').textContent = on ? (k ? `${n} card${n === 1 ? '' : 's'} (${sh} A4 sheet${sh === 1 ? '' : 's'}) · ${k} punch circle${k === 1 ? '' : 's'} on each card` : 'Tick at least one day and meal') : '';
 }
 function setKeys(keys, on) { keys.forEach(k => on ? CP.add(k) : CP.delete(k)); renderCp(); }
@@ -588,28 +606,26 @@ $('cpTable').addEventListener('click', e => {
   const keys = b.dataset.row ? MEALS.map(m => b.dataset.row + '-' + m.c) : DAYS.map(d => d + '-' + b.dataset.col);
   setKeys(keys, !keys.every(k => CP.has(k)));
 });
-const pqrCache = {};
 const logoRow = () => LOGO('loyola-crest.png', 'Loyola College') + LOGO('cimser-logo.png', 'CIMSER') + LOGO('iaes-logo.png', 'IAES') + LOGO('ahcf-logo.png', 'AHCF') + LOGO('centenary-logo.png', 'Centenary');
 function punchHtml(m, head, theme) {
-  const id = S(m.id), rc = roleClass(m);
-  const qr = (typeof QRCode === 'undefined') ? '' : (pqrCache[id] = pqrCache[id] || makeQr(id, 240));
+  const id = S(m.id), rc = roleClass(m), photo = PHOTO[id], bl = !!m.blank;
   const meals = MEALS.filter(me => DAYS.some(d => CP.has(d + '-' + me.c)));     // only ticked meals appear
-  const blk = me => `<div class="pblk"><div class="pbt fit"><i class="fa-solid ${me.ic}"></i>${esc(me.n)}</div><div class="pdays">${DAYS.filter(d => CP.has(d + '-' + me.c)).map(d => `<div class="pday"><i class="pc"></i><b>DAY ${d}</b><span>${esc(dayShort(d))}</span></div>`).join('')}</div></div>`;
-  const grp = (g, title, ic) => { const l = meals.filter(me => me.g === g); return l.length ? `<div class="pgrp"><div class="pgh"><i class="fa-solid ${ic}"></i>${esc(title)}</div>${l.map(blk).join('')}</div>` : ''; };
+  const rowsOf = g => meals.filter(me => me.g === g).map(me => DAYS.filter(d => CP.has(d + '-' + me.c)).map((d, i) => ({ me: me, d: d, first: i === 0 }))).flat();
+  const row = r => `<div class="prow${r.first ? ' first' : ''}"><i class="pc"></i><div class="prt"><b>${esc(r.me.n)}</b><span>Day ${r.d} · ${esc(dayShort(r.d))}</span></div></div>`;
+  const side = (g, cls) => `<div class="pside ${cls}">${rowsOf(g).map(row).join('')}</div>`;   // meals on the left edge, snacks on the right edge
   return `<div class="pcard t-${esc(theme)}">
     <div class="pch">
       <div class="lgs">${logoRow()}</div>
       <div class="pt1 fit">${esc(CFG.ptitle)}</div>
-      <div class="pt2 fit">${esc(CFG.psub)}</div>
+      <div class="pt2">${esc(S(CFG.psub) || head.full)}</div>
       <div class="pt3 fit">${esc(head.short)}${head.range ? ' · ' + esc(head.range) : ''}</div>
     </div>
     <div class="pid">
-      <div class="pidl"><div class="pk">Name</div><div class="pnm fit">${esc(S(m.name))}</div><div class="pdg fit">${esc(desigOf(m))}</div>
-        <div class="pidp"><span class="pl">${esc(CFG.idLabel)}</span><span class="pcode">${esc(id)}</span></div></div>
-      ${qr ? `<div class="pqr"><img src="${qr}" alt="QR ${esc(id)}"></div>` : ''}
+      <div class="pidl"><div class="pk">Name</div>${bl ? '<div class="hw"><i></i></div>' : `<div class="pnm fit">${esc(S(m.name))}</div>`}<div class="pdg fit">${esc(desigOf(m))}</div>
+        <div class="pidp"><span class="pl">${esc(CFG.idLabel)}</span>${bl ? '<span class="pcode blank"></span>' : `<span class="pcode">${esc(id)}</span>`}</div></div>
+      <div class="ph">${photo ? `<img src="${photo}" alt="">` : (bl ? '' : '<i class="fa-solid fa-user"></i>')}</div>
     </div>
-    <div class="pbody">${grp('meal', CFG.gMeals, 'fa-utensils')}${grp('snack', CFG.gSnacks, 'fa-mug-hot')}</div>
-    <div class="pnote">Punch one circle at each serving</div>
+    <div class="pbody">${side('meal', 'l')}${side('snack', 'r')}</div>
     <div class="pft ${esc(rc)}"><div class="r fit">${esc(CFG.pfoot1)}</div>${S(CFG.pfoot2) ? `<div class="v fit">${esc(CFG.pfoot2)}</div>` : ''}</div>
   </div>`;
 }
@@ -657,7 +673,7 @@ async function downloadPdf() {
 $('pdf').onclick = downloadPdf;
 
 /* ---------- generate ---------- */
-let GEN_BUSY = false, GEN_AGAIN = false;
+let GEN_BUSY = false, GEN_AGAIN = false, LAST = 'team';
 async function generate(keepScroll) {                 // one run at a time; a change made meanwhile triggers one more run
   if (GEN_BUSY) { GEN_AGAIN = true; return; }
   GEN_BUSY = true;
@@ -669,6 +685,7 @@ async function genRun(keepScroll) {
   const useCp = $('fCp').checked, cpRows = useCp ? cpPeople() : [];
   if (useCp && !CP.size) { setMsg('Tick at least one meal and day, or switch meal punch cards off.', 'err'); return; }
   if (useCp && !cpRows.length) { setMsg('No volunteers in the selection, so no punch cards to create.', 'err'); return; }
+  LAST = 'team';
   const btn = $('gen'); btn.disabled = true; $('print').disabled = true; $('pdf').disabled = true;
   if ($('fSign').value === 'with' && !SIGN && !(await loadSign())) { $('fSign').value = 'blank'; setMsg('Sign image could not be loaded, cards keep a blank space.', 'err'); }
   const need = rows.filter(m => m.hasPhoto && PHOTO[S(m.id)] === undefined);
@@ -678,12 +695,7 @@ async function genRun(keepScroll) {
     await fetchPhotos(need, (d, n) => { bar.style.width = (d * 100 / n) + '%'; setMsg(`Loading photos ${d} of ${n}`); });
     prog.style.display = 'none';
   }
-  const s = CONF || {};
-  const head = {
-    short: s['conf.shortName'] || 'VRMIC 2026',
-    name: (s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment') + ' · ' + fmtRange(s['conf.startDate'], s['conf.endDate'])
-  };
-  head.range = fmtRange(s['conf.startDate'], s['conf.endDate']);
+  const head = makeHead();
   const mode = $('fQr').value, theme = $('fTheme').value, pages = [];
   for (let i = 0; i < rows.length; i += 4) pages.push('<div class="pg">' + rows.slice(i, i + 4).map(m => cardHtml(m, head, mode, theme)).join('') + '</div>');
   const cp = useCp ? punchPages(cpRows, head, theme) : { pages: [], count: 0 };
@@ -717,26 +729,53 @@ $('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
 $('print').onclick = () => window.print();
 
 /* ---------- card settings dialog ---------- */
-const FIELDS = { idLabel: 'cIdLabel', nameFont: 'cFont', shape: 'cShape', bstyle: 'cBs', bcol: 'cBcol', ptitle: 'cTitle', psub: 'cSub', gMeals: 'cGM', gSnacks: 'cGS', pfoot1: 'cF1', pfoot2: 'cF2' };
+const FIELDS = { idLabel: 'cIdLabel', nameFont: 'cFont', shape: 'cShape', bstyle: 'cBs', bcol: 'cBcol', ptitle: 'cTitle', psub: 'cSub', pfoot1: 'cF1', pfoot2: 'cF2' };
 function fillCfg() {
   Object.keys(FIELDS).forEach(k => { $(FIELDS[k]).value = CFG[k]; });
   document.querySelectorAll('[data-role]').forEach(c => { c.checked = !!CFG.sign[c.dataset.role]; });
   document.querySelectorAll('[data-meal]').forEach(i => { i.value = CFG.names[i.dataset.meal]; });
 }
 function readCfg() {
-  Object.keys(FIELDS).forEach(k => { const v = $(FIELDS[k]).value; CFG[k] = (k === 'bcol' || k === 'pfoot2') ? v.trim() : (S(v) || DEF[k]); });
+  Object.keys(FIELDS).forEach(k => { const v = $(FIELDS[k]).value; CFG[k] = (k === 'bcol' || k === 'pfoot2' || k === 'psub') ? v.trim() : (S(v) || DEF[k]); });
   document.querySelectorAll('[data-role]').forEach(c => { CFG.sign[c.dataset.role] = c.checked; });
   document.querySelectorAll('[data-meal]').forEach(i => { CFG.names[i.dataset.meal] = S(i.value) || DEF.names[i.dataset.meal]; });
 }
 async function afterCfg() {
   saveCfg(); applyNames(); renderCp(); await applyStyle();
-  if ($('out').querySelector('.badge, .pcard')) generate(true);
+  if ($('out').querySelector('.badge, .pcard')) (LAST === 'blank' ? genBlank(true) : generate(true));
 }
 $('cfgDlg').addEventListener('change', () => { readCfg(); fillCfg(); afterCfg(); });
 $('cfgBtn').onclick = () => { fillCfg(); $('cfgDlg').showModal(); };
 $('cfgClose').onclick = () => $('cfgDlg').close();
 $('cfgReset').onclick = () => { CFG = clone(DEF); fillCfg(); afterCfg(); };
 applyStyle();
+
+/* ---------- blank cards (fill in by hand) ---------- */
+const blankN = () => Math.max(1, Math.min(400, parseInt($('bN').value, 10) || 1));
+function updateBlankInfo() { const n = blankN(), sh = Math.ceil(n / 4); $('bInfo').textContent = `${n} card${n === 1 ? '' : 's'} = ${sh} A4 sheet${sh === 1 ? '' : 's'}`; }
+async function genBlank(keepScroll) {
+  const n = blankN(), cat = $('bCat').value, type = $('bType').value;
+  if (type === 'meal' && !CP.size) { setMsg('Tick at least one meal and day for the blank punch cards.', 'err'); return; }
+  LAST = 'blank';
+  $('print').disabled = true; $('pdf').disabled = true;
+  if ($('fSign').value === 'with' && !SIGN) await loadSign();
+  const head = makeHead(), theme = $('fTheme').value;
+  const m = { id: '', name: '', position: S($('bDes').value) || cat, role: cat === 'Convener' ? 'Admin' : cat, isConvener: cat === 'Convener', venues: [], blank: true };
+  const rows = Array.from({ length: n }, () => m);
+  let html = '';
+  if (type === 'meal') html = punchPages(rows, head, theme).pages.join('');
+  else for (let i = 0; i < rows.length; i += 4) html += '<div class="pg">' + rows.slice(i, i + 4).map(x => cardHtml(x, head, 'vcard', theme)).join('') + '</div>';
+  $('out').innerHTML = html;
+  try { await document.fonts.ready; } catch (e) {}
+  await applyStyle();
+  refit();
+  setMsg(`${n} blank ${type === 'meal' ? 'meal punch card' : 'ID card'}${n === 1 ? '' : 's'} ready · ${Math.ceil(n / 4)} A4 sheet${Math.ceil(n / 4) === 1 ? '' : 's'}`, 'ok');
+  $('print').disabled = false; $('pdf').disabled = false;
+  if (keepScroll !== true) $('out').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$('bGen').onclick = () => genBlank();
+$('bN').oninput = updateBlankInfo; $('bType').onchange = updateCp;
+updateBlankInfo();
 
 init();
 </script>
