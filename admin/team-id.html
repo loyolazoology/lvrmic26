@@ -644,7 +644,7 @@ async function downloadPdf() {
   if (!JS || typeof html2canvas === 'undefined') { setMsg('The PDF library could not load. Check the connection, or use Print and choose Save as PDF.', 'err'); return; }
   const out = $('out'), zoom = out.style.zoom, one = $('fMain').value === 'one';
   const pages = [...out.querySelectorAll('.pg, .mpg')];
-  if (LAST === 'team' && !(await BADGELOG.record('team', (window.LASTROWS || []).map(m => S(m.id)), 'Team ID page (PDF)'))) return;
+  if (!(await logOk())) { setMsg('Print log failed, so the PDF was not created.', 'err'); return; }
   let doc = null, n = 0;
   const bar = $('prog').firstElementChild;
   $('pdf').disabled = $('print').disabled = $('gen').disabled = true;
@@ -686,6 +686,7 @@ async function generate(keepScroll) {                 // one run at a time; a ch
 async function genRun(keepScroll) {
   const rows = view.filter(m => sel.has(S(m.id)));
   if (!rows.length) return;
+  window.LASTROWS = rows;
   const useCp = $('fCp').checked, cpRows = useCp ? cpPeople() : [];
   if (useCp && !CP.size) { setMsg('Tick at least one meal and day, or switch meal punch cards off.', 'err'); return; }
   if (useCp && !cpRows.length) { setMsg('No volunteers in the selection, so no punch cards to create.', 'err'); return; }
@@ -730,7 +731,7 @@ function setLayout() {
 }
 $('fMain').onchange = setLayout; setLayout();
 $('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
-$('print').onclick = async () => { if (LAST !== 'team' || await BADGELOG.record('team', (window.LASTROWS || []).map(m => S(m.id)), 'Team ID page')) window.print(); };
+async function logOk() {   if (LAST !== 'team') return true;   if (typeof BADGELOG === 'undefined') return true;   // logger missing: don't block printing   try {     return await BADGELOG.record('team', (window.LASTROWS || []).map(m => S(m.id)), 'Team ID page');   } catch (e) {     setMsg('Could not record the print log: ' + (e && e.message || e), 'err');     return false;   } }  $('print').onclick = async () => { if (await logOk()) window.print(); };
 
 /* ---------- card settings dialog ---------- */
 const FIELDS = { idLabel: 'cIdLabel', nameFont: 'cFont', shape: 'cShape', bstyle: 'cBs', bcol: 'cBcol', ptitle: 'cTitle', psub: 'cSub', pfoot1: 'cF1', pfoot2: 'cF2' };
