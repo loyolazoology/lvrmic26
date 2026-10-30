@@ -3,143 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Presentation Access | VRMIC 2026 Admin</title>
+<title>Venue Presentation List | VRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
 <link rel="stylesheet" href="admin-common.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-.t-Oral{background:rgba(232,201,131,.14);color:var(--gold-light);}
-.t-Poster{background:rgba(120,160,230,.14);color:#9db8ee;}
-.chips{display:flex;gap:8px;flex-wrap:wrap;}
-.achip{background:rgba(232,201,131,.08);border:1px solid var(--navy-border);border-radius:999px;padding:5px 12px;font-size:12.5px;color:var(--text-1);}
-.gh{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;background:rgba(232,201,131,.06);border-bottom:1px solid var(--navy-border);cursor:pointer;}
-.gh h4{margin:0;font-size:14px;color:var(--gold-light);display:flex;gap:9px;align-items:center;flex-wrap:wrap;}
-.gh h4 small{color:var(--text-3);font-size:12px;font-weight:400;}
-.gh .chev{font-size:11px;color:var(--text-3);}
-.gcard.closed .gb{display:none;}
-.fn{font-size:11.5px;color:var(--text-3);display:block;margin-top:4px;word-break:break-all;}
-.dl-ok{font-size:11.5px;color:var(--teal-light);display:block;margin-top:4px;}
-table.list td.ti{white-space:normal;min-width:220px;max-width:380px;}
+table.list td{white-space:nowrap;vertical-align:middle;}
+table.list td.wrapc{white-space:normal;min-width:170px;max-width:280px;overflow-wrap:anywhere;line-height:1.4;}
+table.list td.chk,table.list th.chk{width:30px;padding-right:0;}
+table.list td.chk input,table.list th.chk input{width:auto;}
+.toolbar input[type=search],.toolbar #q{min-width:220px;}
+.bulk{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+.vsel{width:auto;min-width:0;padding:6px 8px;font-size:12px;}
+.mbox h3{font-size:1.1rem;margin-bottom:10px;}
+.mbox p{font-size:13.5px;color:var(--text-2);margin-bottom:10px;}
+.mbox .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;}
+.flist{max-height:300px;overflow-y:auto;border:1px solid var(--navy-border);border-radius:10px;background:var(--navy-950);}
+.flist div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid rgba(226,187,120,.08);font-size:13px;}
+.flist div:last-child{border:0;}
 </style>
 </head>
 <body>
 
-<div class="topbar"><h1><i class="fa-solid fa-display" style="color:var(--gold-light);"></i> Presentation access</h1><div id="xp"></div></div>
-<div class="wrap" style="max-width:1250px;">
+<div class="topbar"><h1><i class="fa-solid fa-display" style="color:var(--gold-light);"></i> Venue presentation list</h1><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+<div class="wrap" style="max-width:1500px;">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
-  <div class="card" id="banner" style="display:none;"></div>
+  <div id="vol"></div>
+  <div class="stats" id="stats"></div>
 
   <div class="toolbar noprint">
-    <input id="q" placeholder="Search by name, VRMIC ID or title" autocomplete="off">
+    <input id="q" placeholder="Search name, ID, title or file" autocomplete="off">
     <select id="fv"><option value="">All venues</option></select>
-    <select id="fp"><option value="">All presenters</option><option value="up">PPT uploaded</option><option value="no">PPT missing</option></select>
-    <button class="btn btn-sm" id="toggle"><i class="fa-solid fa-angles-down"></i> Collapse all</button>
-    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <select id="fd"><option value="">All dates</option></select>
+    <select id="fp"><option value="">PPT: any status</option><option value="missing">PPT missing</option><option value="done">PPT uploaded</option><option value="notdl">Uploaded, not downloaded by me</option></select>
+    <div id="xp" style="margin-left:auto;"></div>
   </div>
-  <div id="groups"><div class="empty">Loading presentations…</div></div>
+
+  <div class="bulk noprint">
+    <button class="btn btn-sm btn-gold" id="zip" disabled><i class="fa-solid fa-file-zipper"></i> Download ZIP <span id="zn"></span></button>
+    <button class="btn btn-sm" id="remind" style="display:none;" disabled><i class="fa-solid fa-envelope"></i> Send reminder <span id="rn"></span></button>
+    <span class="tiny" id="selinfo" style="margin:0;"></span>
+  </div>
+
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list"><thead><tr><th class="chk noprint"><input type="checkbox" id="all" title="Select all shown"></th><th>Venue</th><th>Room</th><th>Date</th><th>Time</th><th>Token</th><th>Presenter</th><th>Title</th><th>PPT</th><th>File</th><th>Ver.</th><th>Uploaded</th><th class="noprint"></th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="13">Loading…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny noprint" style="margin-top:10px;">Downloads go through the portal (there is no direct Drive link) and every download is logged with who, which file, when and from which IP. A ZIP is built only when the selected files add up to about 25 MB or less; bigger sets are offered as individual downloads.</p>
 </div>
+
+<div class="modal" id="md"><div class="box mbox wide" id="mbox"></div></div>
 
 <script src="admin-common.js"></script>
 <script src="admin-page.js"></script>
 <script>
 if (VR.guard() && VR.frameOnly()) (function () {
-if (!VR.can('presentationAccess', 'report')) { VR.denied('You do not have permission to view this page.'); return; }
+if (!VR.can('presentationAccess', 'report') && !VR.can('presentationAccess', 'transaction')) { VR.denied('You do not have permission to view presentations.'); return; }
 
-let rows = [], info = {}, busy = false, closed = new Set(), allClosed = false;
-const nz = v => String(v == null ? '' : v).replace(/\s+/g, ' ').trim().toLowerCase();
-const gkey = r => [r.venue, r.room, r.date, r.time].join('|');
-const day = d => /^\d{4}-\d{2}-\d{2}/.test(String(d)) ? fmtD(String(d).slice(0, 10)) : String(d || '');
-const slotText = x => [x.venue, x.room ? 'Room ' + x.room : '', day(x.date), x.time].filter(Boolean).join(' · ');
-const when = v => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true }); };
-const safe = s => String(s || '').replace(/[\\/:*?"<>|]+/g, '_').trim();
-const b64ToBlob = (b64, mime) => { const bin = atob(b64), a = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new Blob([a], { type: mime || 'application/octet-stream' }); };
-const saveBlob = (blob, name) => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); };
-async function fetchFile(id) { const r = await VR.api('getPresentationFile', { id }); if (!r.ok) throw new Error(r.error || 'Download failed'); return r; }
+const S = v => String(v == null ? '' : v);
+let info = null, all = [], view = [], picked = new Set();
 
-const filtered = () => { const q = nz($('q').value), v = $('fv').value, p = $('fp').value;
-  return rows.filter(r => (!q || nz(r.name).includes(q) || nz(r.id).includes(q) || nz(r.abstractTitle).includes(q)) && (!v || r.venue === v) && (!p || (p === 'up' ? r.hasPPT : !r.hasPPT && r.participantType !== 'Poster'))); };
-const pptStatus = r => r.hasPPT ? 'Uploaded' : (r.participantType === 'Poster' ? 'Printed poster' : 'Not uploaded');
+const fdt = s => { const d = new Date(S(s)); return isNaN(d) ? '—' : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const fsz = n => !n ? '' : n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+function saveBlob(name, mime, b64) {
+  const bin = atob(b64), bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([bytes], { type: mime || 'application/octet-stream' })); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+function openModal(h) { $('mbox').innerHTML = h; $('md').classList.add('show'); }
+function closeModal() { $('md').classList.remove('show'); $('mbox').innerHTML = ''; }
+$('md').addEventListener('mousedown', e => { if (e.target === $('md')) closeModal(); });
 
-function pptCell(r) {
-  if (r.hasPPT) return '<button class="btn btn-sm btn-gold" data-dl="' + esc(r.id) + '"><i class="fa-solid fa-download"></i> Download</button>'
-    + (r.fileName ? '<span class="fn">' + esc(r.fileName) + '</span>' : '') + (r.uploadedAt ? '<span class="fn">Uploaded ' + esc(when(r.uploadedAt)) + '</span>' : '')
-    + (r.downloadedAt ? '<span class="dl-ok"><i class="fa-solid fa-check"></i> Downloaded ' + esc(when(r.downloadedAt)) + '</span>' : '');
-  return r.participantType === 'Poster' ? '<span class="badge s-Out">Printed poster</span>' : '<span class="badge s-Late">Not uploaded</span>';
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), v = $('fv').value, d = $('fd').value, f = $('fp').value;
+  return all.filter(r => {
+    if (q && ![r.name, r.id, r.abstractTitle, r.fileName, r.institution].some(x => S(x).toLowerCase().indexOf(q) > -1)) return false;
+    if (v && r.venue !== v) return false;
+    if (d && r.date !== d) return false;
+    if (f === 'missing' && r.hasPPT) return false;
+    if (f === 'done' && !r.hasPPT) return false;
+    if (f === 'notdl' && (!r.hasPPT || r.downloadedAt)) return false;
+    return true;
+  });
+}
+function fillFilters() {
+  const uniq = k => [...new Set(all.map(r => r[k]).filter(Boolean))];
+  const keep = [$('fv').value, $('fd').value];
+  $('fv').innerHTML = '<option value="">All venues</option>' + uniq('venue').map(x => '<option>' + esc(x) + '</option>').join('');
+  $('fd').innerHTML = '<option value="">All dates</option>' + uniq('date').map(x => '<option>' + esc(x) + '</option>').join('');
+  $('fv').value = keep[0]; $('fd').value = keep[1];
+}
+function stats() {
+  const n = view.length, up = view.filter(r => r.hasPPT).length;
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-user-tie', 'Oral presenters', n, 'of ' + all.length + ' in your list')
+    + c('fa-file-circle-check', 'PPT uploaded', up, Math.round(n ? up * 100 / n : 0) + '% of shown')
+    + c('fa-file-circle-exclamation', 'PPT missing', n - up, 'still to upload')
+    + c('fa-download', 'Downloaded by you', view.filter(r => r.downloadedAt).length, 'of ' + up + ' available');
+}
+function updBulk() {
+  const ids = [...picked].filter(id => view.some(r => r.id === id)), withPPT = ids.filter(id => (view.find(r => r.id === id) || {}).hasPPT), missing = ids.filter(id => !(view.find(r => r.id === id) || {}).hasPPT);
+  $('zip').disabled = !withPPT.length; $('zn').textContent = withPPT.length ? '(' + withPPT.length + ')' : '';
+  $('remind').disabled = !(view.some(r => !r.hasPPT)); $('rn').textContent = missing.length ? '(' + missing.length + ' selected)' : '(all missing shown)';
+  $('selinfo').textContent = ids.length ? ids.length + ' selected' : 'Tick presenters to download a ZIP';
+  $('all').checked = view.length > 0 && view.every(r => picked.has(r.id));
 }
 
 function render() {
-  const list = filtered(), host = $('groups');
-  if (!list.length) { host.innerHTML = '<div class="empty">' + (info.isVolunteer && !(info.assignments || []).length ? "You don't have any assignments yet. Contact the organisers." : 'No presenters match.') + '</div>'; return; }
-  const order = [], map = {};
-  list.forEach(r => { const k = gkey(r); if (!map[k]) { map[k] = []; order.push(k); } map[k].push(r); });
-  host.innerHTML = order.map(k => {
-    const g = map[k], h = g[0], up = g.filter(x => x.hasPPT).length, shut = closed.has(k);
-    return '<div class="table-card gcard' + (shut ? ' closed' : '') + '" data-k="' + esc(k) + '" style="margin-bottom:18px;">'
-      + '<div class="gh" data-head="1"><h4><i class="fa-solid fa-chevron-' + (shut ? 'right' : 'down') + ' chev"></i>' + esc(slotText(h) || 'No slot allotted') + '<small>' + g.length + ' presenter' + (g.length > 1 ? 's' : '') + ' · ' + up + ' PPT' + (up === 1 ? '' : 's') + ' uploaded</small></h4>'
-      + (up ? '<button class="btn btn-sm noprint" data-zip="' + esc(k) + '"><i class="fa-solid fa-file-zipper"></i> Download all (' + up + ') as ZIP</button>' : '') + '</div>'
-      + '<div class="gb scroll-x"><table class="list"><thead><tr><th>Token</th><th>VRMIC ID</th><th>Name</th><th>Type</th><th>Title</th><th>Institution</th><th>Presentation</th></tr></thead><tbody>'
-      + g.map(r => '<tr><td class="id">' + esc(r.token || '—') + '</td><td class="id">' + esc(r.id) + '</td><td class="nm">' + esc(r.name) + '</td><td><span class="badge t-' + esc(r.participantType) + '">' + esc(r.participantType) + '</span></td><td class="ti">' + esc(r.abstractTitle || '—') + '</td><td>' + esc(r.institution || '—') + '</td><td>' + pptCell(r) + '</td></tr>').join('')
-      + '</tbody></table></div></div>';
-  }).join('');
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map((r, i) => {
+    const vers = r.versions.length > 1 ? '<select class="vsel" data-v="' + i + '" title="Download an older version">' + r.versions.slice().reverse().map(v => '<option value="' + v.version + '">v' + v.version + (v.version === r.version ? ' (latest)' : '') + '</option>').join('') + '</select> ' : '';
+    return '<tr><td class="chk noprint"><input type="checkbox" data-c="' + esc(r.id) + '"' + (picked.has(r.id) ? ' checked' : '') + '></td>'
+      + '<td>' + esc(r.venue || '—') + '</td><td>' + esc(r.room || '—') + '</td><td>' + esc(r.date || '—') + '</td><td>' + esc(r.time || '—') + '</td><td>' + esc(r.token || '—') + '</td>'
+      + '<td class="wrapc"><span class="nm">' + esc(r.name) + '</span><span class="tiny">' + esc(r.id) + '</span></td>'
+      + '<td class="wrapc">' + esc(r.abstractTitle || '—') + '</td>'
+      + '<td>' + (r.hasPPT ? '<span class="badge b-ok">Uploaded</span>' : '<span class="badge b-warn">Missing</span>') + '</td>'
+      + '<td class="wrapc">' + (r.hasPPT ? esc(r.fileName) + '<span class="tiny">' + fsz(r.size) + (r.uploadedBy ? ' · ' + esc(r.uploadedBy) : '') + '</span>' : '—') + '</td>'
+      + '<td>' + (r.hasPPT ? 'v' + r.version : '—') + '</td>'
+      + '<td>' + (r.hasPPT ? esc(fdt(r.uploadedAt)) + (r.downloadedAt ? '<span class="tiny">you downloaded ' + esc(fdt(r.downloadedAt)) + '</span>' : '') : '—') + '</td>'
+      + '<td class="noprint">' + (r.hasPPT ? vers + '<button class="btn btn-sm" data-d="' + i + '"><i class="fa-solid fa-download"></i> Download</button>' : '') + '</td></tr>';
+  }).join('') : '<tr><td class="empty" colspan="13">' + (all.length ? 'No presenters match these filters.' : (info.isVolunteer ? 'No presenters are assigned to you yet.' : 'No Oral presenters yet.')) + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length;
+  stats(); updBulk();
 }
-
-$('groups').addEventListener('click', async e => {
-  const one = e.target.closest('[data-dl]'), zip = e.target.closest('[data-zip]');
-  if (!one && !zip) {   // click a slot header to collapse / expand it
-    const h = e.target.closest('[data-head]'); if (!h) return;
-    const k = h.parentElement.dataset.k; closed.has(k) ? closed.delete(k) : closed.add(k); render(); return;
-  }
-  if (busy) return; hideAlerts(); busy = true;
-  try {
-    if (one) {
-      const btn = one, old = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
-      try {
-        const f = await fetchFile(btn.dataset.dl), r = rows.find(x => x.id === btn.dataset.dl);
-        saveBlob(b64ToBlob(f.data, f.mimeType), safe((r && r.token ? r.token + '_' : '') + (r ? r.id + '_' : '') + f.fileName));
-        if (r) r.downloadedAt = new Date().toISOString();
-        busy = false; render();
-      } finally { btn.disabled = false; btn.innerHTML = old; }
-    } else {
-      if (typeof JSZip === 'undefined') return showErr('The ZIP tool could not load. Check your internet connection and refresh.');
-      const key = zip.dataset.zip, g = rows.filter(r => gkey(r) === key && r.hasPPT), btn = zip, old = btn.innerHTML, z = new JSZip(), failed = [];
-      btn.disabled = true;
-      for (let i = 0; i < g.length; i++) {
-        btn.innerHTML = '<span class="spinner"></span> ' + (i + 1) + ' / ' + g.length;
-        try { const f = await fetchFile(g[i].id); z.file(safe((g[i].token ? g[i].token + '_' : '') + g[i].id + '_' + g[i].name + '_' + f.fileName), f.data, { base64: true }); g[i].downloadedAt = new Date().toISOString(); }
-        catch (er) { failed.push(g[i].name + ' (' + er.message + ')'); }
-      }
-      if (g.length > failed.length) { btn.innerHTML = 'Building ZIP…'; saveBlob(await z.generateAsync({ type: 'blob' }), safe(g[0].venue + '_' + g[0].date + '_' + g[0].time) + '.zip'); }
-      btn.disabled = false; btn.innerHTML = old; busy = false; render();
-      if (failed.length) showErr(failed.length + ' file(s) could not be added: ' + failed.join('; ')); else showOk('ZIP ready — ' + g.length + ' presentation' + (g.length > 1 ? 's' : '') + '.');
-    }
-  } catch (er) { showErr(er.message || 'Download failed.'); }
-  finally { busy = false; }
-});
-['q'].forEach(i => $(i).addEventListener('input', render)); ['fv', 'fp'].forEach(i => $(i).addEventListener('change', render));
-$('toggle').onclick = () => { allClosed = !allClosed; closed = new Set(allClosed ? rows.map(gkey) : []); $('toggle').innerHTML = allClosed ? '<i class="fa-solid fa-angles-up"></i> Expand all' : '<i class="fa-solid fa-angles-down"></i> Collapse all'; render(); };
 
 async function load() {
-  $('groups').innerHTML = '<div class="empty">Loading presentations…</div>';
+  hideAlerts();
+  $('tb').innerHTML = '<tr><td class="empty" colspan="13">Loading…</td></tr>';
   try {
     const r = await VR.api('getPresentationAccess', {});
-    if (!r.ok) { $('groups').innerHTML = ''; return showErr(r.error || 'Could not load.'); }
-    info = r; rows = r.participants || [];
-    const b = $('banner'); b.style.display = '';
-    b.innerHTML = r.isVolunteer
-      ? '<h3 style="margin:0 0 10px;"><i class="fa-solid fa-location-dot"></i> Your assignments</h3>' + ((r.assignments || []).length ? '<div class="chips">' + r.assignments.map(a => '<span class="achip">' + esc(a) + '</span>').join('') + '</div>' : '<p class="hint" style="margin:0;">Nothing is assigned to you yet.</p>')
-      : '<h3 style="margin:0;"><i class="fa-solid fa-display"></i> All presenters</h3><p class="hint" style="margin:6px 0 0;">Organiser view — volunteers only see the presenters assigned to them.</p>';
-    const vs = [...new Set(rows.map(x => x.venue).filter(Boolean))];
-    $('fv').innerHTML = '<option value="">All venues</option>' + vs.map(x => '<option value="' + esc(x) + '">' + esc(x) + '</option>').join('');
-    render();
-  } catch (e) { $('groups').innerHTML = ''; showErr('Could not reach the server. Check your connection and try again.'); }
+    if (!r.ok) { showErr(r.error || 'Could not load the list.'); $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; return; }
+    info = r; all = r.participants || [];
+    $('vol').innerHTML = r.isVolunteer ? '<div class="banner"><i class="fa-solid fa-hands-helping"></i><div><b>You see only the presenters assigned to you:</b> ' + (r.assignments.length ? r.assignments.map(esc).join(' · ') : 'nothing assigned yet. Ask the organisers.') + '</div></div>' : '';
+    $('remind').style.display = r.canRemind ? '' : 'none';
+    picked = new Set([...picked].filter(id => all.some(x => x.id === id)));
+    fillFilters(); render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; }
 }
+
+/* ---------- downloads ---------- */
+$('tb').onclick = e => {
+  const c = e.target.closest('[data-c]');
+  if (c) { c.checked ? picked.add(c.dataset.c) : picked.delete(c.dataset.c); updBulk(); return; }
+  const b = e.target.closest('[data-d]'); if (!b) return;
+  const r = view[Number(b.dataset.d)], sel = b.parentElement.querySelector('.vsel'), ver = sel ? Number(sel.value) : r.version;
+  VR.busy(b, 'Preparing…', async () => {
+    hideAlerts();
+    try {
+      const x = await VR.api('getPresentationFile', { id: r.id, version: ver });
+      if (!x.ok) { showErr(x.error || 'Could not download.'); return; }
+      saveBlob(x.fileName, x.mimeType, x.data); r.downloadedAt = new Date().toISOString(); render();
+    } catch (er) { showErr('Could not reach the server. Check your connection and try again.'); }
+  });
+};
+$('all').onchange = () => { view.forEach(r => $('all').checked ? picked.add(r.id) : picked.delete(r.id)); render(); };
+
+function oneByOne(files, why) {
+  openModal('<h3>Download one by one</h3><p>' + esc(why) + '</p><div class="flist">' + files.map(f => '<div><span>' + esc(f.name) + ' <span class="tiny" style="display:inline;">' + esc(f.id) + ' · ' + f.sizeMb + ' MB</span></span><button class="btn btn-sm" data-f="' + esc(f.id) + '"><i class="fa-solid fa-download"></i></button></div>').join('') + '</div><div class="acts"><button class="btn" id="mc">Close</button></div>');
+  $('mc').onclick = closeModal;
+  $('mbox').onclick = e => {
+    const b = e.target.closest('[data-f]'); if (!b) return;
+    VR.busy(b, '', async () => { try { const x = await VR.api('getPresentationFile', { id: b.dataset.f }); if (!x.ok) { showErr(x.error); return; } saveBlob(x.fileName, x.mimeType, x.data); b.innerHTML = '<i class="fa-solid fa-check"></i>'; } catch (er) { showErr('Could not reach the server.'); } });
+  };
+}
+$('zip').onclick = () => {
+  const ids = [...picked].filter(id => (view.find(r => r.id === id) || {}).hasPPT);
+  const est = view.filter(r => ids.indexOf(r.id) > -1).reduce((s, r) => s + (r.size || 0), 0);
+  if (est > info.zipMaxMb * 1048576) {
+    oneByOne(view.filter(r => ids.indexOf(r.id) > -1).map(r => ({ id: r.id, name: r.name, sizeMb: Math.round(r.size / 104857.6) / 10 })), 'These files add up to about ' + (Math.round(est / 104857.6) / 10) + ' MB, over the ' + info.zipMaxMb + ' MB ZIP limit. Download them one by one, or select fewer presenters.'); return;
+  }
+  VR.busy($('zip'), 'Building ZIP…', async () => {
+    hideAlerts();
+    try {
+      const x = await VR.api('getPresentationZip', { ids: ids });
+      if (!x.ok) { if (x.tooLarge) oneByOne(x.files, x.error); else showErr(x.error || 'Could not build the ZIP.'); return; }
+      saveBlob(x.fileName, x.mimeType, x.data);
+      showOk('ZIP downloaded with ' + x.count + ' file' + (x.count === 1 ? '' : 's') + (x.skipped.length ? '. Skipped (no file): ' + x.skipped.join(', ') : '') + '.');
+      view.forEach(r => { if (ids.indexOf(r.id) > -1) r.downloadedAt = new Date().toISOString(); }); render();
+    } catch (er) { showErr('Could not reach the server. A large ZIP may time out: try fewer presenters.'); }
+  });
+};
+
+/* ---------- reminders ---------- */
+$('remind').onclick = () => {
+  const missing = view.filter(r => !r.hasPPT), chosen = missing.filter(r => picked.has(r.id)), targets = chosen.length ? chosen : missing;
+  if (!targets.length) return;
+  openModal('<h3>Send reminder email?</h3><p>An email asking them to upload their presentation will go to <b>' + targets.length + '</b> Oral presenter' + (targets.length === 1 ? '' : 's') + ' whose PPT is missing' + (chosen.length ? ' (the ones you ticked)' : ' (everyone missing in the current view)') + '. Anyone reminded in the last 24 hours is skipped.</p>'
+    + '<div class="flist">' + targets.slice(0, 40).map(r => '<div><span>' + esc(r.name) + ' <span class="tiny" style="display:inline;">' + esc(r.id) + '</span></span></div>').join('') + (targets.length > 40 ? '<div><span>…and ' + (targets.length - 40) + ' more</span></div>' : '') + '</div>'
+    + '<div class="acts"><button class="btn" id="mc">Cancel</button><button class="btn btn-gold" id="mo"><i class="fa-solid fa-paper-plane"></i> Send</button></div>');
+  $('mc').onclick = closeModal;
+  $('mo').onclick = () => VR.busy($('mo'), 'Sending…', async () => {
+    try {
+      const x = await VR.api('adminRemindPPT', { ids: targets.map(r => r.id) });
+      closeModal();
+      if (!x.ok) { showErr(x.error || 'Could not send.'); return; }
+      showOk('Reminder sent to ' + x.sent + (x.sent === 1 ? ' presenter' : ' presenters') + (x.skipped.length ? '. Skipped ' + x.skipped.length + ' (' + [...new Set(x.skipped.map(s => s.reason))].join('; ') + ')' : '') + (x.failed.length ? '. ' + x.failed.length + ' failed.' : '.'));
+    } catch (er) { closeModal(); showErr('Could not reach the server. Some emails may have been sent: check the Audit log before resending.'); }
+  });
+};
+
+['fv', 'fd', 'fp'].forEach(i => $(i).addEventListener('change', render));
+$('q').addEventListener('input', render);
 $('refresh').onclick = load;
 
-VR.exportBar($('xp'), { name: 'VRMIC2026_Presentation_List', title: 'VRMIC 2026 — Presentation list', imageEl: () => $('groups'), pdfOpts: { orientation: 'landscape' },
-  getData: () => ({ headers: ['Venue', 'Room', 'Date', 'Time', 'Token', 'VRMIC ID', 'Name', 'Type', 'Title', 'Institution', 'PPT'],
-    rows: filtered().map(r => [r.venue || '', r.room || '', day(r.date), r.time || '', r.token || '', r.id, r.name, r.participantType, r.abstractTitle || '', r.institution || '', pptStatus(r)]) }) });
+VR.exportBar($('xp'), { name: 'VRMIC2026_Presentations', title: 'VRMIC 2026 — Venue presentation list', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape', fontSize: 7 },
+  getData: () => ({ headers: ['Venue', 'Room', 'Date', 'Time', 'Token', 'VRMIC ID', 'Presenter', 'Title', 'PPT', 'File', 'Version', 'Uploaded'],
+    rows: view.map(r => [r.venue, r.room, r.date, r.time, r.token, r.id, r.name, r.abstractTitle, r.hasPPT ? 'Uploaded' : 'Missing', r.fileName, r.hasPPT ? 'v' + r.version : '', r.hasPPT ? fdt(r.uploadedAt) : '']) }) });
 
 load();
 })();

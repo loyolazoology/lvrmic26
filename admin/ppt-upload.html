@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual PPT Upload | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.pick{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:18px;align-items:start;}
+@media(max-width:950px){.pick{grid-template-columns:1fr;}}
+.plist{max-height:560px;overflow-y:auto;border:1px solid var(--navy-border);border-radius:10px;background:var(--navy-950);margin-top:10px;}
+.plist .it{padding:11px 14px;border-bottom:1px solid rgba(226,187,120,.08);cursor:pointer;display:flex;gap:10px;justify-content:space-between;align-items:center;}
+.plist .it:hover,.plist .it.on{background:rgba(232,201,131,.08);}
+.plist .it b{display:block;color:var(--text-1);font-size:13.5px;}
+.plist .it span{font-size:11.5px;color:var(--text-3);}
+.drop{border:2px dashed var(--navy-border);border-radius:12px;padding:20px;text-align:center;color:var(--text-3);font-size:13px;cursor:pointer;background:var(--navy-950);}
+.drop:hover,.drop.over{border-color:var(--gold);color:var(--text-2);}
+.drop b{color:var(--text-1);}
+.kvs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px 18px;margin:12px 0;}
+.kvs > div span{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-3);}
+.kvs > div b{font-weight:500;font-size:13.5px;overflow-wrap:anywhere;}
+table.list td{vertical-align:middle;}
+table.list td.wrapc{white-space:normal;max-width:240px;overflow-wrap:anywhere;}
+.prog{height:6px;border-radius:999px;background:var(--navy-950);overflow:hidden;margin-top:10px;display:none;}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width .2s;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-file-powerpoint" style="color:var(--gold-light);"></i> Manual PPT upload</h1><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="banner"><i class="fa-solid fa-circle-info"></i><div>Upload a presentation on behalf of an <b>Oral presenter whose abstract is Accepted</b>. Every upload is kept as a numbered version; replacing a file needs a reason, and the record shows it was uploaded by an admin. Admin uploads are allowed after the participant deadline.</div></div>
+
+  <div class="pick">
+    <div class="card">
+      <h3><i class="fa-solid fa-magnifying-glass"></i> Find an Oral presenter</h3>
+      <input id="q" placeholder="Search by name, VRMIC ID, email or institution" autocomplete="off">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+        <select id="fs" style="flex:1;min-width:140px;"><option value="">All presenters</option><option value="missing">PPT missing</option><option value="done">PPT uploaded</option><option value="blocked">Cannot upload yet</option></select>
+      </div>
+      <div class="tiny" id="cnt" style="margin-top:8px;"></div>
+      <div class="plist" id="plist"><div class="empty">Loading…</div></div>
+    </div>
+
+    <div class="card" id="panel"><div class="empty" style="padding:60px 10px;"><i class="fa-regular fa-hand-pointer" style="font-size:22px;display:block;margin-bottom:10px;"></i>Pick a presenter on the left.</div></div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('presentationAccess', 'transaction')) { VR.denied('You do not have permission to upload presentations.'); return; }
+
+const S = v => String(v == null ? '' : v);
+let data = null, sel = null, file = null;
+
+const fdt = s => { const d = new Date(S(s)); return isNaN(d) ? '—' : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const fsz = n => !n ? '—' : n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+const last = p => p.versions.length ? p.versions[p.versions.length - 1] : null;
+
+function saveBlob(name, mime, b64) {
+  const bin = atob(b64), bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([bytes], { type: mime || 'application/octet-stream' })); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), f = $('fs').value;
+  return data.presenters.filter(p => {
+    if (q && ![p.name, p.id, p.email, p.institution].some(v => S(v).toLowerCase().indexOf(q) > -1)) return false;
+    if (f === 'missing' && !(p.eligible && !p.versions.length)) return false;
+    if (f === 'done' && !p.versions.length) return false;
+    if (f === 'blocked' && p.eligible) return false;
+    return true;
+  });
+}
+function badge(p) {
+  if (p.versions.length) return '<span class="badge b-ok">v' + last(p).version + ' uploaded</span>';
+  return p.eligible ? '<span class="badge b-warn">PPT missing</span>' : '<span class="badge b-neu">Not eligible</span>';
+}
+function renderList() {
+  const v = filtered();
+  $('cnt').textContent = v.length + ' of ' + data.presenters.length + ' Oral presenters';
+  $('plist').innerHTML = v.length ? v.map(p => '<div class="it' + (sel === p.id ? ' on' : '') + '" data-id="' + esc(p.id) + '"><div><b>' + esc(p.name) + '</b><span>' + esc(p.id) + ' · ' + esc(p.institution) + '</span></div>' + badge(p) + '</div>').join('') : '<div class="empty">No presenters match.</div>';
+}
+
+function renderPanel() {
+  const p = data.presenters.find(x => x.id === sel); file = null;
+  if (!p) { $('panel').innerHTML = '<div class="empty">Pick a presenter on the left.</div>'; return; }
+  const l = last(p), rules = data.rules;
+  let h = '<h3><i class="fa-solid fa-user"></i> ' + esc(p.name) + ' <span class="mono tiny" style="display:inline;">' + esc(p.id) + '</span></h3>'
+    + '<div class="kvs"><div><span>Institution</span><b>' + esc(p.institution || '—') + '</b></div><div><span>Abstract</span><b>' + esc(p.abstractStatus) + '</b></div>'
+    + '<div><span>Slot</span><b>' + esc([p.venue, p.date, p.time].filter(Boolean).join(' · ') || 'Not allotted') + '</b></div>'
+    + '<div><span>PPT status</span><b>' + (l ? 'Version ' + l.version + ' · ' + esc(l.fileName) : (p.eligible ? 'Not uploaded' : '—')) + '</b></div></div>';
+  if (p.abstractTitle) h += '<p class="hint" style="margin:-4px 0 12px;">' + esc(p.abstractTitle) + '</p>';
+
+  if (!p.eligible) {
+    h += '<div class="banner warn"><i class="fa-solid fa-triangle-exclamation"></i><div>' + esc(p.notEligibleReason) + '</div></div>';
+  } else {
+    h += '<div class="drop" id="drop"><i class="fa-solid fa-cloud-arrow-up" style="font-size:22px;display:block;margin-bottom:8px;"></i><span id="dtxt"><b>Click to choose a file</b> or drop it here<br>Allowed: ' + rules.types.map(t => '.' + esc(t)).join(', ') + ' · up to ' + rules.maxMb + ' MB</span></div>'
+      + '<input type="file" id="fi" accept="' + rules.types.map(t => '.' + t).join(',') + '" style="display:none;">'
+      + '<div style="margin-top:12px;"><label for="rs">Reason' + (l ? ' <span style="color:#e8988c;">(required: this replaces version ' + l.version + ')</span>' : ' (optional)') + '</label><input id="rs" maxlength="300" autocomplete="off" placeholder="' + (l ? 'For example: participant sent a corrected file by email' : 'For example: received by email') + '"></div>'
+      + '<div class="prog" id="prog"><i id="progb"></i></div>'
+      + '<div style="margin-top:14px;"><button class="btn btn-gold" id="up" disabled><i class="fa-solid fa-upload"></i> ' + (l ? 'Upload as version ' + (l.version + 1) : 'Upload presentation') + '</button></div>'
+      + (data.deadlinePassed ? '<p class="hint">The participant deadline has passed; as an admin you can still upload.</p>' : '');
+  }
+
+  if (p.versions.length) {
+    h += '<h3 style="margin:22px 0 8px;"><i class="fa-solid fa-clock-rotate-left"></i> Version history</h3><div class="scroll-x"><table class="list"><thead><tr><th>Ver.</th><th>File</th><th>Uploaded</th><th>By</th><th>Reason</th><th></th></tr></thead><tbody>'
+      + p.versions.slice().reverse().map(v => '<tr><td><b>v' + v.version + '</b></td><td class="wrapc">' + esc(v.fileName) + '<span class="tiny">' + fsz(v.size) + '</span></td><td>' + esc(fdt(v.uploadedAt)) + '</td><td class="wrapc">' + esc(v.uploadedBy) + '</td><td class="wrapc">' + esc(v.reason || '—') + '</td>'
+        + '<td><button class="btn btn-sm" data-dl="' + v.version + '"><i class="fa-solid fa-download"></i></button></td></tr>').join('') + '</tbody></table></div>';
+  }
+  $('panel').innerHTML = h;
+  wireUpload(p);
+}
+
+function setFile(f, p) {
+  const rules = data.rules, ext = (S(f && f.name).toLowerCase().match(/\.([a-z0-9]+)$/) || [])[1] || '';
+  file = null; $('up').disabled = true;
+  if (!f) return;
+  if (rules.types.indexOf(ext) === -1) { showErr('That file type is not allowed. Use: ' + rules.types.map(t => '.' + t).join(', ') + '.'); $('dtxt').innerHTML = '<b>Click to choose a file</b>'; return; }
+  if (f.size > rules.maxMb * 1048576) { showErr('The file is ' + fsz(f.size) + '. The maximum is ' + rules.maxMb + ' MB.'); $('dtxt').innerHTML = '<b>Click to choose a file</b>'; return; }
+  hideAlerts(); file = f; $('dtxt').innerHTML = '<b>' + esc(f.name) + '</b><br>' + fsz(f.size); $('up').disabled = false;
+}
+function wireUpload(p) {
+  const drop = $('drop'); if (!drop) return;
+  drop.onclick = () => $('fi').click();
+  $('fi').onchange = e => setFile(e.target.files[0], p);
+  ['dragover', 'dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => setFile(e.dataTransfer.files[0], p));
+  $('up').onclick = () => {
+    const l = last(p), reason = $('rs').value.trim();
+    if (l && !reason) { showErr('Enter a reason for replacing the existing presentation.'); $('rs').focus(); return; }
+    if (!confirm((l ? 'Replace version ' + l.version + ' with this file as version ' + (l.version + 1) + '?' : 'Upload this file for ' + p.name + '?') + '\n\n' + file.name)) return;
+    VR.busy($('up'), 'Uploading…', async () => {
+      hideAlerts(); $('prog').style.display = 'block'; $('progb').style.width = '30%';
+      try {
+        const b64 = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1]); fr.onerror = () => rej(new Error('Could not read the file.')); fr.readAsDataURL(file); });
+        $('progb').style.width = '65%';
+        const r = await VR.api('adminUploadPPT', { id: p.id, fileName: file.name, fileData: b64, reason: reason });
+        $('progb').style.width = '100%';
+        if (!r.ok) { showErr(r.error || 'Upload failed.'); return; }
+        showOk('Uploaded as version ' + r.version + ' for ' + p.name + '.'); await load(p.id);
+      } catch (e) { showErr(e.message || 'Could not reach the server. Check your connection and try again.'); }
+      finally { const pr = $('prog'); if (pr) pr.style.display = 'none'; }
+    });
+  };
+}
+
+$('plist').onclick = e => { const it = e.target.closest('[data-id]'); if (!it) return; sel = it.dataset.id; hideAlerts(); renderList(); renderPanel(); };
+$('panel').onclick = e => {
+  const b = e.target.closest('[data-dl]'); if (!b) return;
+  VR.busy(b, '', async () => {
+    try { const r = await VR.api('getPresentationFile', { id: sel, version: Number(b.dataset.dl) }); if (!r.ok) { showErr(r.error || 'Could not download.'); return; } saveBlob(r.fileName, r.mimeType, r.data); }
+    catch (er) { showErr('Could not reach the server.'); }
+  });
+};
+$('q').addEventListener('input', renderList);
+$('fs').addEventListener('change', renderList);
+$('refresh').onclick = () => load(sel);
+
+async function load(keep) {
+  try {
+    const r = await VR.api('adminListPPTPresenters', {});
+    if (!r.ok) { showErr(r.error || 'Could not load presenters.'); $('plist').innerHTML = '<div class="empty">Could not load.</div>'; return; }
+    data = r; if (keep) sel = keep; renderList(); renderPanel();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); $('plist').innerHTML = '<div class="empty">Could not load.</div>'; }
+}
+load();
+})();
+</script>
+</body>
+</html>
