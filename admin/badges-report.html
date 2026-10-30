@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Badge Register | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.a-Accepted{background:rgba(79,169,128,.14);color:var(--teal-light);}
+.a-Revision{background:rgba(219,164,60,.14);color:var(--warn);}
+.a-Not{background:rgba(179,188,214,.1);color:var(--text-2);}
+.x-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 22px;padding:6px 4px;}
+.x-body div span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);}
+.x-body div b{font-weight:500;color:var(--text-1);word-break:break-word;}
+.x-body .wide{grid-column:1/-1;}
+.over{color:#e8988c;font-weight:600;}
+.bulk{display:none;gap:10px;flex-wrap:wrap;align-items:center;padding:10px 14px;margin-bottom:12px;border:1px solid var(--gold);border-radius:10px;background:rgba(232,201,131,.07);font-size:13px;}
+.bulk.show{display:flex;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><h1><i class="fa-solid fa-id-badge" style="color:var(--gold-light);"></i> Badge register</h1><span id="xp"></span></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+
+  <div class="card noprint" id="rxCard" style="display:none;">
+    <h3><i class="fa-solid fa-hand-holding"></i> Badge received entry</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;"><input id="rx" placeholder="Scan the QR code or type the VRMIC ID, then press Enter" autocomplete="off" style="flex:1;min-width:260px;"><button class="btn btn-gold" id="rxgo"><i class="fa-solid fa-check"></i> Mark received</button></div>
+    <div class="hint" id="rxmsg">Works for participants, students and team members whose badge has been printed.</div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by name, ID or organisation" autocomplete="off">
+    <select id="fg"><option value="">All groups</option><option value="participant">Participants</option><option value="student">Students</option><option value="team">Volunteers / staff</option></select>
+    <select id="fc"><option value="">All categories</option></select>
+    <select id="fs"><option value="">All print statuses</option><option>Not printed</option><option>Printed</option><option>Reprinted</option></select>
+    <select id="fk"><option value="">Received: any</option><option value="y">Received</option><option value="n">Printed, not received</option></select>
+    <label class="tiny" style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="fp" style="width:auto;"> Missing photo only</label>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+  </div>
+
+  <div class="bulk noprint" id="bulk"><b id="bn"></b>
+    <button class="btn btn-sm" data-b="recv"><i class="fa-solid fa-hand-holding"></i> Mark received</button>
+    <button class="btn btn-sm" data-b="unrecv"><i class="fa-solid fa-rotate-left"></i> Undo received</button>
+    <button class="btn btn-sm" data-b="print"><i class="fa-solid fa-print"></i> Mark printed (manual)</button>
+    <button class="btn btn-sm" data-b="clear">Clear ticks</button></div>
+
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list"><thead><tr><th class="noprint" style="width:30px;"><input type="checkbox" id="sall" style="width:auto;" title="Tick everyone shown"></th><th style="width:22px;"></th><th>ID</th><th>Name</th><th>Group</th><th>Category</th><th>Status</th><th>Prints</th><th>First printed</th><th>Last printed</th><th>Printed by</th><th>Photo</th><th>Badge received</th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="13">Loading badge register…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny noprint" style="margin-top:10px;">Click a row to see every print, each reprint reason and who received the badge. A badge is "Reprinted" from its second print, and a reprint resets "received". Prints are recorded when the badge is printed or its PDF is created from the print pages. On-spot participants (handwritten cards) count as printed once the card is marked written; they and students have no photo, so they never appear under "Missing photo".</p>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script src="badge-log.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('badges', 'report') && !VR.can('badges', 'transaction')) { VR.denied('You do not have permission to view the badge register.'); return; }
+const canPrint = VR.can('badges', 'transaction'), canTick = canPrint || VR.can('spotRegistration', 'transaction');
+if (canTick) $('rxCard').style.display = '';
+if (!canTick) $('sall').style.display = 'none';
+
+const dtm = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const GN = { participant: 'Participant', student: 'Student', team: 'Volunteer / staff' };
+const status = p => p.printCount === 0 ? 'Not printed' : p.printCount === 1 ? 'Printed' : 'Reprinted';
+const sCls = s => s === 'Not printed' ? 'a-Not' : s === 'Printed' ? 'a-Accepted' : 'a-Revision';
+const key = p => p.group + ':' + p.id;
+const reasons = p => p.prints.filter(x => x.kind === 'Reprint').map(x => dtm(x.time) + ': ' + x.reason).join(' | ');
+let all = [], view = [], open = new Set(), picked = new Set();
+
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), g = $('fg').value, c = $('fc').value, s = $('fs').value, k = $('fk').value, mp = $('fp').checked;
+  return all.filter(p => (!q || [p.name, p.id, p.org].some(v => String(v || '').toLowerCase().indexOf(q) > -1)) && (!g || p.group === g) && (!c || p.category === c) && (!s || status(p) === s)
+    && (!k || (k === 'y' ? p.collected : (p.printCount > 0 && !p.collected))) && (!mp || p.hasPhoto === false));
+}
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map(p => {
+    const o = open.has(key(p)), s = status(p), k = key(p);
+    let h = '<tr data-k="' + esc(k) + '" style="cursor:pointer;"><td class="noprint">' + (canTick ? '<input type="checkbox" class="sel" style="width:auto;"' + (picked.has(k) ? ' checked' : '') + '>' : '') + '</td>'
+      + '<td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td>'
+      + '<td class="id">' + esc(p.id) + '</td><td class="nm">' + esc(p.name) + '<div class="tiny">' + esc(p.org) + '</div></td><td>' + esc(GN[p.group]) + '</td><td>' + esc(p.category) + '</td>'
+      + '<td><span class="badge ' + sCls(s) + '">' + s + '</span></td><td>' + p.printCount + '</td><td>' + (p.firstPrint ? dtm(p.firstPrint) : '—') + '</td><td>' + (p.lastPrint ? dtm(p.lastPrint) : '—') + '</td><td>' + esc(p.lastBy || '—') + '</td>'
+      + '<td>' + (p.hasPhoto === null ? '<span class="hint">n/a</span>' : p.hasPhoto ? 'OK' : '<span class="over">Missing</span>') + '</td>'
+      + '<td>' + (p.printCount ? (canTick ? '<input type="checkbox" class="ck" style="width:auto;"' + (p.collected ? ' checked' : '') + '>' : (p.collected ? 'Yes' : '—')) + (p.collected ? '<span class="tiny">' + esc(dtm(p.collectedAt)) + '</span>' : '') : '<span class="hint">—</span>') + '</td></tr>';
+    if (o) h += '<tr><td></td><td></td><td colspan="11" style="background:rgba(232,201,131,.04);"><div class="x-body"><div><span>Organisation</span><b>' + esc(p.org || '—') + '</b></div>'
+      + '<div><span>Badge received</span><b>' + (p.collected ? esc(dtm(p.collectedAt) + ' · ' + p.collectedBy) : 'No') + '</b></div>'
+      + '<div class="wide"><span>Print history</span><b style="white-space:normal;">' + (p.prints.length ? p.prints.map(x => esc(dtm(x.time)) + ' · ' + esc(x.by || '') + ' · <i>' + esc(x.kind) + '</i>' + (x.reason ? ' — ' + esc(x.reason) : '') + (x.source ? ' <span class="tiny" style="display:inline;">(' + esc(x.source) + ')</span>' : '')).join('<br>') : 'Never printed') + '</b></div></div></td></tr>';
+    return h;
+  }).join('') : '<tr><td class="empty" colspan="13">' + (all.length ? 'Nobody matches these filters.' : 'No people found.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length + ' people';
+  $('sall').checked = view.length > 0 && view.every(p => picked.has(key(p)));
+  $('bulk').classList.toggle('show', picked.size > 0); $('bn').textContent = picked.size + ' ticked';
+  const n = f => view.filter(f).length, c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  const printed = n(p => p.printCount > 0), got = n(p => p.collected);
+  $('stats').innerHTML = c('fa-users', 'People', view.length, 'in this selection') + c('fa-print', 'Not printed', n(p => p.printCount === 0), 'still to print')
+    + c('fa-circle-check', 'Printed', printed, view.length ? Math.round(printed * 100 / view.length) + '% done' : '—') + c('fa-rotate', 'Reprinted', n(p => p.printCount > 1), 'two or more prints')
+    + c('fa-hand-holding', 'Badge received', got, printed - got + ' printed, not received') + c('fa-camera', 'Missing photo', n(p => p.hasPhoto === false), 'participants and team');
+}
+function cats() {
+  const g = $('fg').value, cur = $('fc').value;
+  $('fc').innerHTML = '<option value="">All categories</option>' + [...new Set(all.filter(p => !g || p.group === g).map(p => p.category))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+  $('fc').value = [...$('fc').options].some(o => o.value === cur) ? cur : '';
+}
+async function load(silent) {
+  if (!silent) $('tb').innerHTML = '<tr><td class="empty" colspan="13">Loading badge register…</td></tr>';
+  try {
+    const r = await VR.api('adminBadgeRegister', {});
+    if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; return showErr(r.error || 'Could not load the badge register.'); }
+    all = r.people || []; cats(); render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+
+// ---- badge received entry (scan or type) ----
+async function receive() {
+  const v = $('rx').value.trim(); if (!v) return;
+  const m = $('rxmsg'); m.textContent = 'Checking…';
+  try {
+    const r = await VR.api('adminMarkBadgeCollected', { entry: v, collected: true });
+    m.innerHTML = r.ok ? '<span style="color:var(--teal-light);"><i class="fa-solid fa-circle-check"></i> Received: ' + esc(r.person ? r.person.name + ' (' + r.person.id + ')' : v) + '</span>' : '<span style="color:#e8988c;">' + esc(r.error || 'Could not save.') + '</span>';
+    $('rx').value = ''; $('rx').focus(); if (r.ok) load(true);
+  } catch (e) { m.textContent = 'Could not reach the server.'; }
+}
+$('rxgo').onclick = receive; $('rx').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); receive(); } });
+
+$('fg').addEventListener('change', () => { cats(); render(); });
+['fc', 'fs', 'fk', 'fp'].forEach(i => $(i).addEventListener('change', render)); $('q').addEventListener('input', render); $('refresh').onclick = () => load();
+$('sall').onchange = e => { view.forEach(p => e.target.checked ? picked.add(key(p)) : picked.delete(key(p))); render(); };
+
+$('bulk').onclick = async e => {
+  const b = e.target.closest('[data-b]'); if (!b) return; const kind = b.dataset.b; hideAlerts();
+  if (kind === 'clear') { picked.clear(); return render(); }
+  const list = all.filter(p => picked.has(key(p)));
+  if (kind === 'print' && !canPrint) return showErr('You need Badges edit permission to mark prints.');
+  await VR.busy(b, 'Saving…', async () => {
+    try {
+      if (kind === 'print') {
+        for (const g of ['participant', 'student', 'team']) { const ids = list.filter(p => p.group === g).map(p => p.id); if (ids.length && !(await BADGELOG.record(g, ids, 'Register (manual)', { manual: true }))) return; }
+        showOk(list.length + ' badge(s) marked as printed.');
+      } else {
+        for (let i = 0; i < list.length; i += 200) {
+          const r = await VR.api('adminMarkBadgeCollected', { items: list.slice(i, i + 200).map(p => ({ group: p.group, id: p.id })), collected: kind === 'recv' });
+          if (!r.ok) return showErr(r.error || 'Could not save.');
+          showOk(r.done + ' updated' + (r.skipped.length ? ', ' + r.skipped.length + ' skipped (e.g. ' + (r.skipped[0].name || r.skipped[0].id) + ': ' + r.skipped[0].reason + ')' : '') + '.');
+        }
+      }
+      picked.clear(); await load(true);
+    } catch (er) { showErr('Could not reach the server.'); }
+  });
+};
+
+$('tb').onclick = async e => {
+  const tr = e.target.closest('tr[data-k]'); if (!tr) return; const k = tr.dataset.k, p = all.find(x => key(x) === k);
+  if (e.target.classList.contains('sel')) { e.target.checked ? picked.add(k) : picked.delete(k); $('bulk').classList.toggle('show', picked.size > 0); $('bn').textContent = picked.size + ' ticked'; return; }
+  if (e.target.classList.contains('ck')) {
+    hideAlerts(); const want = e.target.checked;
+    try {
+      const r = await VR.api('adminMarkBadgeCollected', { group: p.group, id: p.id, collected: want });
+      if (!r.ok) { showErr(r.error || 'Could not save.'); e.target.checked = !want; return; }
+      load(true);
+    } catch (er) { showErr('Could not reach the server.'); e.target.checked = !want; }
+    return;
+  }
+  if (e.target.closest('a,button,input')) return;
+  open.has(k) ? open.delete(k) : open.add(k); render();
+};
+VR.exportBar($('xp'), { name: 'VRMIC2026_Badge_Register', title: 'VRMIC 2026 — Badge register', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['ID', 'Name', 'Group', 'Category', 'Organisation', 'Status', 'Prints', 'First printed', 'Last printed', 'Last printed by', 'Reprint reasons', 'Badge received', 'Received at', 'Received by', 'Photo'],
+    rows: view.map(p => [p.id, p.name, GN[p.group], p.category, p.org, status(p), p.printCount, p.firstPrint ? dtm(p.firstPrint) : '', p.lastPrint ? dtm(p.lastPrint) : '', p.lastBy || '', reasons(p), p.collected ? 'Yes' : 'No', p.collected ? dtm(p.collectedAt) : '', p.collectedBy || '', p.hasPhoto === null ? 'n/a' : p.hasPhoto ? 'OK' : 'Missing']) }) });
+load();
+})();
+</script>
+</body>
+</html>
