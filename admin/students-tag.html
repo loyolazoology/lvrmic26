@@ -346,7 +346,7 @@ function setLayout() {
 }
 $('fMain').onchange = setLayout; setLayout();
 $('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
-$('print').onclick = () => window.print();
+$('print').onclick = async () => { if (lastMode !== 'set' || await BADGELOG.record('student', (lastRows || []).map(p => S(p.id)), 'Student tag page')) window.print(); };
 
 init();
 </script>
