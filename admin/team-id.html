@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Team ID cards | VRMIC 2026</title>
+<title>Team ID cards | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -382,7 +382,7 @@ async function init() {
   ALL = (r.team || []).filter(m => S(m.id));
   applyFilters();
 }
-function setTitle() { const t = ROLE_TITLE[$('fRole').value] || ROLE_TITLE.all; $('h1').textContent = t; document.title = t + ' | VRMIC 2026'; }
+function setTitle() { const t = ROLE_TITLE[$('fRole').value] || ROLE_TITLE.all; $('h1').textContent = t; document.title = t + ' | LVRMIC 2026'; }
 
 /* ---------- filter + list ---------- */
 function roleMatch(m, r) {
@@ -445,7 +445,7 @@ async function fetchPhotos(list, tick) {
   await Promise.all([worker(), worker(), worker(), worker()]);
 }
 
-/* ---------- QR (name + designation) and barcode (VRMIC ID) ---------- */
+/* ---------- QR (name + designation) and barcode (LVRMIC ID) ---------- */
 const qrCache = {};
 function makeQr(text, px) {
   const d = document.createElement('div');
@@ -454,7 +454,7 @@ function makeQr(text, px) {
   return c ? c.toDataURL('image/png') : (im ? im.src : '');
 }
 function qrTextFor(m, mode) {
-  const short = (CONF && CONF['conf.shortName']) || 'VRMIC 2026';
+  const short = (CONF && CONF['conf.shortName']) || 'LVRMIC 2026';
   if (mode === 'vcard') {
     return ['BEGIN:VCARD', 'VERSION:3.0', 'FN:' + S(m.name), 'TITLE:' + desigOf(m), 'ORG:' + short, 'NOTE:' + CFG.idLabel + ' ' + S(m.id), S(m.contactNo) ? 'TEL:' + S(m.contactNo) : '', S(m.email) ? 'EMAIL:' + S(m.email) : '', 'END:VCARD'].filter(Boolean).join('\n');
   }
@@ -532,11 +532,11 @@ function fmtRange(a, b) {
 
 function makeHead() {
   const s = CONF || {}, full = s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment', range = fmtRange(s['conf.startDate'], s['conf.endDate']);
-  return { short: s['conf.shortName'] || 'VRMIC 2026', full: full, range: range, name: full + ' · ' + range };
+  return { short: s['conf.shortName'] || 'LVRMIC 2026', full: full, range: range, name: full + ' · ' + range };
 }
 
 /* ---------- convener sign ---------- */
-const SIGN_URLS = ['../assets/convener-sign.png', 'https://vrmic26.vercel.app/assets/convener-sign.png'];
+const SIGN_URLS = ['../assets/convener-sign.png', 'https://lvrmic26.vercel.app/assets/convener-sign.png'];
 let SIGN = '';
 const signTxt = () => S($('fSignTxt').value) || 'Convener';
 /* sign slot per category, set in Card settings */
@@ -560,7 +560,7 @@ $('fSign').onchange = async () => {
   if ($('fSign').value === 'with') {
     setMsg('Loading sign');
     const ok = await loadSign();
-    setMsg(ok ? 'Sign loaded' : 'Could not load the sign image from the assets folder or vrmic26.vercel.app. Cards keep a blank space.', ok ? 'ok' : 'err');
+    setMsg(ok ? 'Sign loaded' : 'Could not load the sign image from the assets folder or lvrmic26.vercel.app. Cards keep a blank space.', ok ? 'ok' : 'err');
     if (!ok) $('fSign').value = 'blank';
   }
   applySign();
@@ -731,8 +731,18 @@ function setLayout() {
 }
 $('fMain').onchange = setLayout; setLayout();
 $('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
-async function logOk() {   if (LAST !== 'team') return true;   if (typeof BADGELOG === 'undefined') return true;   // logger missing: don't block printing   try {     return await BADGELOG.record('team', (window.LASTROWS || []).map(m => S(m.id)), 'Team ID page');   } catch (e) {     setMsg('Could not record the print log: ' + (e && e.message || e), 'err');     return false;   } }  $('print').onclick = async () => { if (await logOk()) window.print(); };
+async function logOk() {
+  if (LAST !== 'team') return true;
+  if (typeof BADGELOG === 'undefined') return true;   // logger missing: don't block printing
+  try {
+    return await BADGELOG.record('team', (window.LASTROWS || []).map(m => S(m.id)), 'Team ID page');
+  } catch (e) {
+    setMsg('Could not record the print log: ' + (e && e.message || e), 'err');
+    return false;
+  }
+}
 
+$('print').onclick = async () => { if (await logOk()) window.print(); };
 /* ---------- card settings dialog ---------- */
 const FIELDS = { idLabel: 'cIdLabel', nameFont: 'cFont', shape: 'cShape', bstyle: 'cBs', bcol: 'cBcol', ptitle: 'cTitle', psub: 'cSub', pfoot1: 'cF1', pfoot2: 'cF2' };
 function fillCfg() {
