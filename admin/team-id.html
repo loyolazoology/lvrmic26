@@ -644,6 +644,7 @@ async function downloadPdf() {
   if (!JS || typeof html2canvas === 'undefined') { setMsg('The PDF library could not load. Check the connection, or use Print and choose Save as PDF.', 'err'); return; }
   const out = $('out'), zoom = out.style.zoom, one = $('fMain').value === 'one';
   const pages = [...out.querySelectorAll('.pg, .mpg')];
+  if (LAST === 'team' && !(await BADGELOG.record('team', (window.LASTROWS || []).map(m => S(m.id)), 'Team ID page (PDF)'))) return;
   let doc = null, n = 0;
   const bar = $('prog').firstElementChild;
   $('pdf').disabled = $('print').disabled = $('gen').disabled = true;
@@ -729,7 +730,7 @@ function setLayout() {
 }
 $('fMain').onchange = setLayout; setLayout();
 $('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
-$('print').onclick = () => window.print();
+$('print').onclick = async () => { if (LAST !== 'team' || await BADGELOG.record('team', (window.LASTROWS || []).map(m => S(m.id)), 'Team ID page')) window.print(); };
 
 /* ---------- card settings dialog ---------- */
 const FIELDS = { idLabel: 'cIdLabel', nameFont: 'cFont', shape: 'cShape', bstyle: 'cBs', bcol: 'cBcol', ptitle: 'cTitle', psub: 'cSub', pfoot1: 'cF1', pfoot2: 'cF2' };
