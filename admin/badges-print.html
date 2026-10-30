@@ -367,6 +367,7 @@ function refit() { const out = $('out'), z = out.style.zoom; out.style.zoom = 1;
 /* ---------- generate ---------- */
 async function generate(keepScroll) {
   const rows = view.filter(r => sel.has(S(r.ID)));
+  window.LASTROWS = rows;
   if (!rows.length) return;
   const btn = $('gen'); btn.disabled = true; $('print').disabled = true; $('pdf').disabled = true;
   if ($('fSign').value === 'with' && !SIGN && !(await loadSign())) { $('fSign').value = 'blank'; setMsg('Sign image could not be loaded, badges keep a blank space.', 'err'); }
@@ -405,6 +406,7 @@ async function downloadPdf() {
   const out = $('out'), zoom = out.style.zoom, one = $('fMain').value === 'one';
   const pages = [...out.querySelectorAll('.pg')];
   if (!pages.length) return;
+  if (!(await BADGELOG.record('participant', (window.LASTROWS || []).map(r => S(r.ID)), 'Badge print page (PDF)'))) return;
   let doc = null, n = 0;
   const bar = $('prog').firstElementChild;
   $('pdf').disabled = $('print').disabled = $('gen').disabled = true;
@@ -446,7 +448,7 @@ function setLayout() {
 }
 $('fMain').onchange = setLayout; setLayout();
 $('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
-$('print').onclick = () => window.print();
+$('print').onclick = async () => { if (await BADGELOG.record('participant', (window.LASTROWS || []).map(r => S(r.ID)), 'Badge print page')) window.print(); };
 
 init();
 </script>
