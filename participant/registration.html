@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registration | LVRMIC 2026 · CIMSER, Loyola College</title>
+<title>Registration | LVRMIC 2026, Loyola College</title>
 <link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -166,19 +166,21 @@ footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;}footer em{co
       <div class="reg-item"><div class="label">Payment status</div><div class="value"><span class="badge" id="r-fee-badge">—</span></div></div>
     </div>
     <div class="row" style="margin-top:18px;">
-      <span class="note" style="margin:0;">Keep a copy of your registration details for the registration desk.</span>
+      <span class="note" style="margin:0;">This summary is for your reference only. You do not need to carry it to the venue.</span>
       <button class="btn btn-outline" id="pdf-btn" type="button"><i class="fa-solid fa-file-pdf"></i> Download registration details (PDF)</button>
     </div>
   </div>
 
-  <!-- Payment details (read-only) -->
-  <div class="card">
+  <!-- Payment details: shown only once a spot / desk payment is recorded -->
+  <div class="card" id="pay-card" style="display:none;">
     <h3><i class="fa-solid fa-money-check-dollar"></i> Payment details</h3>
     <div class="reg-grid">
       <div class="reg-item"><div class="label">Payment date</div><div class="value" id="pay-date">—</div></div>
+      <div class="reg-item"><div class="label">Mode</div><div class="value" id="pay-mode">—</div></div>
       <div class="reg-item"><div class="label">Reference / transaction ID</div><div class="value mono" id="pay-ref" style="font-size:1rem;">—</div></div>
+      <div class="reg-item"><div class="label">Bill number</div><div class="value mono" id="pay-bill" style="font-size:1rem;">—</div></div>
     </div>
-    <p class="note" id="pay-note"></p>
+    <p class="note">Recorded by the organising team at the registration desk.</p>
   </div>
 
   <!-- Meal -->
@@ -300,32 +302,41 @@ document.getElementById('mm-send').addEventListener('click', () => {
   closeMeal();
 });
 
-/* ---------- payment details (read-only, recorded by the organising team) ---------- */
+/* ---------- payment details (only after a spot / desk payment is recorded) ---------- */
 function renderPayment(){
-  document.getElementById('pay-date').textContent = fmtDate(REG.paymentDate) || '—';
-  document.getElementById('pay-ref').textContent = REG.paymentRef || '—';
-  const spot = REG.spot || /spot/i.test(REG.registrationType || '');
-  document.getElementById('pay-note').textContent = !REG.feePaid && spot
-    ? 'Payment pending — please pay at the registration desk. Your payment details will appear here once the organising team records them.'
-    : 'Payment details are recorded by the organising team and cannot be edited here.';
+  const pay = REG.payment; if (!pay) return;
+  document.getElementById('pay-date').textContent = fmtDate(pay.date) || '—';
+  document.getElementById('pay-mode').textContent = pay.mode || '—';
+  document.getElementById('pay-ref').textContent = pay.ref || '—';
+  document.getElementById('pay-bill').textContent = pay.billNo || '—';
+  document.getElementById('pay-card').style.display = '';
 }
+const isSpot = () => !!REG.spot;
 
 /* ---------- receipt (no mail trigger from the participant side) ---------- */
 const RC_TEXT = 'Your request has been received. You will receive your receipt by email from the organising team.';
 function renderReceipt(){
-  if (!REG.receiptRequested) return;
-  document.getElementById('rc-title').textContent = 'Request received';
-  document.getElementById('rc-badge').innerHTML = badge('Requested', 'pending');
-  document.getElementById('rc-text').textContent = RC_TEXT;
-  document.getElementById('rc-icon').className = 'fa-solid fa-hourglass-half';
-  const b = document.getElementById('receipt-btn'); b.disabled = true; b.innerHTML = '<i class="fa-solid fa-check"></i> Requested';
+  const st = REG.receiptStatus, b = document.getElementById('receipt-btn');
+  if (st === 'Pending') {
+    document.getElementById('rc-title').textContent = 'Request received';
+    document.getElementById('rc-badge').innerHTML = badge('Requested', 'pending');
+    document.getElementById('rc-text').textContent = RC_TEXT;
+    document.getElementById('rc-icon').className = 'fa-solid fa-hourglass-half';
+    b.disabled = true; b.innerHTML = '<i class="fa-solid fa-check"></i> Requested';
+  } else if (st === 'Issued') {
+    document.getElementById('rc-title').textContent = 'Receipt issued';
+    document.getElementById('rc-badge').innerHTML = badge('Issued', 'success');
+    document.getElementById('rc-text').textContent = 'Your receipt has been emailed to you by the organising team. Please check your inbox and spam folder.';
+    document.getElementById('rc-icon').className = 'fa-solid fa-circle-check';
+    b.style.display = 'none';
+  }
 }
 document.getElementById('receipt-btn').addEventListener('click', async function(){
   const b = this; b.disabled = true; b.innerHTML = '<span class="spinner"></span> Sending request...';
   try {
     const res = await api('requestReceipt', {});
     if (!res.ok) { showPopup(res.error || 'Could not send the request.', 'Request not sent'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request receipt'; return; }
-    REG.receiptRequested = true; renderReceipt();
+    REG.receiptStatus = 'Pending'; renderReceipt();
     showPopup(RC_TEXT, 'Request received', true);
   } catch (err) { showPopup(err.message, 'Connection problem'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request receipt'; }
 });
@@ -383,22 +394,25 @@ document.getElementById('pdf-btn').addEventListener('click', async function(){
   doc.text('Loyola College (Autonomous), Chennai  |  26-28 November 2026', W / 2, 26, { align: 'center' });
   doc.setDrawColor(169, 118, 47); doc.setLineWidth(1); doc.line(0, 35, W, 35);
   const meal = normMeal(REG.foodPreference) || 'Not recorded';
+  const pay = REG.payment;
   const rows = [
     ['Name', PT.name], ['LVRMIC ID', REG.id], ['Participant type', PT.participantType], ['Category', REG.category],
-    ['Institution', PT.institution], ['Mode', PT.mode], ['Registration status', REG.status + (REG.spot || /spot/i.test(REG.registrationType || '') ? ' (Spot registration)' : '')],
-    ['Registration date', fmtDate(REG.registrationDate)], ['Amount paid', REG.amountPaid ? 'Rs. ' + REG.amountPaid : 'Not recorded'],
-    ['Payment status', REG.feePaid ? 'Paid' : 'Pending'], ['Payment date', fmtDate(REG.paymentDate)], ['Payment reference', REG.paymentRef], ['Meal preference', meal]
+    ['Institution', PT.institution], ['Mode', PT.mode], ['Registration status', (REG.status || 'Registered') + (isSpot() ? ' (Spot registration)' : '')],
+    ['Registration date', fmtDate(REG.registrationDate)], ['Amount paid', pay && pay.mode === 'Waived' ? 'Waived' : (REG.amountPaid ? 'Rs. ' + REG.amountPaid : 'Not recorded')],
+    ['Payment status', REG.feePaid ? 'Paid' : 'Pending']
   ];
-  let y = 50;
+  if (pay) rows.push(['Payment date', fmtDate(pay.date)], ['Payment mode', pay.mode], ['Payment reference', pay.ref], ['Bill number', pay.billNo]);
+  rows.push(['Meal preference', meal]);
+  let y = 50; const STEP = rows.length > 11 ? 9 : 10;
   rows.forEach((r, i) => {
     if (i % 2 === 0) { doc.setFillColor(250, 246, 236); doc.rect(M - 3, y - 6, W - 2 * M + 6, 10, 'F'); }
     doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(83, 95, 122); doc.text(r[0], M, y);
     doc.setFont('helvetica', 'normal'); doc.setTextColor(27, 36, 54);
     doc.text(doc.splitTextToSize(String(r[1] || '-'), 105)[0], M + 58, y);
-    y += 10;
+    y += STEP;
   });
   doc.setFontSize(8.5); doc.setTextColor(135, 145, 166);
-  doc.text('Please carry this document (or your LVRMIC ID) to the registration desk.', M, y + 8);
+  doc.text('This document is for your reference only. You do not need to carry it to the venue.', M, y + 8);
   doc.setDrawColor(231, 221, 196); doc.setLineWidth(.3); doc.line(M, 280, W - M, 280);
   doc.setFontSize(8); doc.text('Downloaded on: ' + when + '   |   IP address: ' + ip, M, 286);
   doc.save('LVRMIC26-Registration-' + REG.id + '.pdf');
@@ -426,11 +440,11 @@ document.getElementById('pdf-btn').addEventListener('click', async function(){
     document.getElementById('r-status').innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + esc(REG.status || 'Registered');
     document.getElementById('r-category').textContent = REG.category || '—';
     document.getElementById('r-date').textContent = fmtDate(REG.registrationDate) || '—';
-    document.getElementById('r-amount').textContent = REG.amountPaid ? '₹ ' + REG.amountPaid : 'Not recorded';
+    document.getElementById('r-amount').textContent = (REG.payment && REG.payment.mode === 'Waived') ? 'Waived' : (REG.amountPaid ? '₹ ' + REG.amountPaid : 'Not recorded');
     const fb = document.getElementById('r-fee-badge');
     if (REG.feePaid) { fb.className = 'badge badge-success'; fb.innerHTML = '<i class="fa-solid fa-circle-check"></i> Paid'; }
     else { fb.className = 'badge badge-pending'; fb.innerHTML = '<i class="fa-solid fa-clock"></i> Pending'; }
-    if (REG.spot || /spot/i.test(REG.registrationType || '')) document.getElementById('r-spot').style.display = '';
+    if (isSpot()) document.getElementById('r-spot').style.display = '';
     renderMeal(); renderPayment(); renderReceipt(); renderCertificate();
     document.getElementById('loader').style.display = 'none';
     document.getElementById('content').style.display = 'block';
