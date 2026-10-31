@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Participant badges | VRMIC 2026</title>
+<title>Participant badges | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -42,13 +42,13 @@ td.w{white-space:normal}
 /* ===================== PARTICIPANT BADGE: 8.5 cm x 12 cm (portrait), same design as the team ID card ===================== */
 .pg{display:contents}
 /* theme colours live in variables; .t-classical is the original look */
-.badge{--bgi:url('../assets/badge-bg.png');--bg:linear-gradient(165deg,#fcfaf3 0%,#f2ebd9 100%);--ink:#0a1230;--ink2:#3b4560;--lab:#5b6684;--acc:#8a5f1f;
+.badge,.pcard{--bgi:url('../assets/badge-bg.png');--bg:linear-gradient(165deg,#fcfaf3 0%,#f2ebd9 100%);--ink:#0a1230;--ink2:#3b4560;--lab:#5b6684;--acc:#8a5f1f;
   --hd:linear-gradient(135deg,#0a1230,#152750);--hdt:#e8c983;--hdt2:#d3daee;--line:#c9974f;--qrb:#122043;--ft:linear-gradient(135deg,#0a1230,#1b3a7a);--ftt:#fff;
   --nf:'Fraunces',serif;--wmo:.09;
   --ov:radial-gradient(circle at 105% 98%,rgba(201,151,79,.28),transparent 42%),radial-gradient(circle at -8% 55%,rgba(18,32,67,.10),transparent 38%),repeating-linear-gradient(135deg,rgba(18,32,67,.028) 0 .12cm,transparent .12cm .5cm)}
-.badge.t-modern{--bgi:none;--bg:#fff;--ink:#0f172a;--ink2:#475569;--lab:#64748b;--acc:#0f766e;--hd:linear-gradient(135deg,#0f766e,#0e7490);--hdt:#fff;--hdt2:#d5f0ee;--line:#14b8a6;--qrb:#0f766e;--ft:linear-gradient(135deg,#0f766e,#0e7490);--nf:'Inter',sans-serif;--ov:none}
-.badge.t-midnight{--bgi:none;--bg:linear-gradient(160deg,#0a1230,#122043);--ink:#f3f5fb;--ink2:#b3bcd6;--lab:#8390b3;--acc:#e8c983;--hd:linear-gradient(135deg,#050a1c,#0e1938);--hdt:#e8c983;--hdt2:#b3bcd6;--line:#e8c983;--qrb:#e8c983;--ft:linear-gradient(135deg,#8a5f1f,#c9974f);--ftt:#1d1305;--wmo:.14;--ov:radial-gradient(circle at 105% 98%,rgba(232,201,131,.18),transparent 45%)}
-.badge.t-crimson{--bgi:none;--bg:linear-gradient(165deg,#fffaf8,#f6e7e2);--ink:#3a0d1a;--ink2:#5b3a44;--lab:#8a6470;--acc:#8f1d3a;--hd:linear-gradient(135deg,#5e1226,#8f1d3a);--hdt:#f6d9a8;--hdt2:#f1d6dc;--line:#d9a441;--qrb:#5e1226;--ft:linear-gradient(135deg,#5e1226,#8f1d3a);--ov:repeating-linear-gradient(135deg,rgba(94,18,38,.03) 0 .12cm,transparent .12cm .5cm)}
+.badge.t-modern,.pcard.t-modern{--bgi:none;--bg:#fff;--ink:#0f172a;--ink2:#475569;--lab:#64748b;--acc:#0f766e;--hd:linear-gradient(135deg,#0f766e,#0e7490);--hdt:#fff;--hdt2:#d5f0ee;--line:#14b8a6;--qrb:#0f766e;--ft:linear-gradient(135deg,#0f766e,#0e7490);--nf:'Inter',sans-serif;--ov:none}
+.badge.t-midnight,.pcard.t-midnight{--bgi:none;--bg:linear-gradient(160deg,#0a1230,#122043);--ink:#f3f5fb;--ink2:#b3bcd6;--lab:#8390b3;--acc:#e8c983;--hd:linear-gradient(135deg,#050a1c,#0e1938);--hdt:#e8c983;--hdt2:#b3bcd6;--line:#e8c983;--qrb:#e8c983;--ft:linear-gradient(135deg,#8a5f1f,#c9974f);--ftt:#1d1305;--wmo:.14;--ov:radial-gradient(circle at 105% 98%,rgba(232,201,131,.18),transparent 45%)}
+.badge.t-crimson,.pcard.t-crimson{--bgi:none;--bg:linear-gradient(165deg,#fffaf8,#f6e7e2);--ink:#3a0d1a;--ink2:#5b3a44;--lab:#8a6470;--acc:#8f1d3a;--hd:linear-gradient(135deg,#5e1226,#8f1d3a);--hdt:#f6d9a8;--hdt2:#f1d6dc;--line:#d9a441;--qrb:#5e1226;--ft:linear-gradient(135deg,#5e1226,#8f1d3a);--ov:repeating-linear-gradient(135deg,rgba(94,18,38,.03) 0 .12cm,transparent .12cm .5cm)}
 
 .badge{width:8.5cm;height:12cm;flex-shrink:0;position:relative;overflow:hidden;display:flex;flex-direction:column;color:var(--ink);font-family:'Inter',sans-serif;
   background:var(--bgi) center/cover no-repeat,var(--bg);
@@ -108,6 +108,90 @@ td.w{white-space:normal}
 .t-classical .bf.Participant{background:linear-gradient(135deg,#0a1230,#1b3a7a)}
 .bf .r{font-size:.4cm}
 
+/* ===================== alignment pass: fixed zones (body area = 6 cm), nothing overlaps ===================== */
+.hole{height:.7cm}
+.bh{height:3cm;padding:.06cm .35cm .1cm}
+.bb{padding:.14cm .35cm .12cm;gap:.1cm;justify-content:space-evenly}
+.row{gap:.5cm}
+.ph{width:2.3cm;height:2.5cm}
+.ph img{object-position:center 22%}
+.qr{width:2.5cm;height:2.5cm}
+.mid{gap:.04cm}
+.mid .k{font-size:.2cm}
+.mid .code{font-size:.6cm;line-height:1.1}
+.nm{font-size:.5cm;line-height:1.2}
+.dg{line-height:1.2}
+.in{font-size:.26cm;line-height:1.25;max-width:7.5cm}
+.sb{height:1.3cm}
+.bf{height:1cm}
+.bf .r{font-size:.42cm}
+/* blank badge */
+.bb.bk{justify-content:center;gap:.22cm;padding:.2cm .5cm}
+.idb{display:flex;align-items:center;justify-content:center;gap:.1cm}
+.idb em{font-style:normal;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.5cm;color:var(--acc)}
+.idb i{width:.9cm;height:.95cm;border:.04cm solid var(--acc);background:rgba(255,255,255,.75);display:flex;align-items:center;justify-content:center;font:700 .6cm 'IBM Plex Mono',monospace;color:rgba(91,102,132,.4)}
+.t-midnight .idb i{background:rgba(255,255,255,.08);color:rgba(179,188,214,.5)}
+.wf{width:100%;display:flex;flex-direction:column;gap:.03cm}
+.wf b{font-size:.21cm;letter-spacing:.05cm;font-weight:700;color:var(--lab);text-transform:uppercase}
+.wf u{display:block;border-bottom:.03cm solid var(--lab);height:.72cm;text-decoration:none}
+.wf.w2 u{height:.62cm}
+.sb.rem .sbl{align-items:flex-start;justify-content:flex-start;padding:.12cm .3cm;text-align:left}
+.sb.rem .sbl b{font-size:.24cm}
+/* meal coupon: 10 x 14.5 cm, 4 per A4, punch circles on the left and right edges */
+.mpg{width:21cm;height:29.6cm;flex-shrink:0;background:#fff;display:grid;grid-template-columns:repeat(2,10cm);grid-auto-rows:14.5cm;gap:.3cm .5cm;justify-content:center;align-content:center;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.pcard{width:10cm;height:14.5cm;position:relative;overflow:hidden;display:flex;flex-direction:column;color:var(--ink);font-family:'Inter',sans-serif;background:var(--bgi) center/cover no-repeat,var(--bg);border:.04cm solid var(--line);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pcard::before{content:"";position:absolute;inset:0;pointer-events:none;background:var(--ov)}
+.pcard>*{position:relative}
+.pch{flex-shrink:0;background:var(--hd);border-bottom:.08cm solid var(--line);padding:.2cm .4cm .18cm;display:flex;flex-direction:column;align-items:center;gap:.06cm}
+.pt1{font-family:var(--nf);font-weight:600;font-size:.58cm;line-height:1.15;letter-spacing:.05cm;color:var(--hdt);white-space:nowrap}
+.pt2{max-width:100%;font-size:.22cm;font-weight:600;line-height:1.3;color:var(--hdt2);text-align:center}
+.pt3{font-size:.2cm;color:var(--hdt2);opacity:.85;white-space:nowrap}
+.pid{flex-shrink:0;margin:.25cm .45cm 0;padding:.18cm .3cm;border:.03cm solid var(--line);border-radius:.25cm;background:rgba(128,128,128,.08);display:flex;align-items:center;gap:.3cm}
+.pidl{flex:1;min-width:0;display:flex;flex-direction:column;gap:.07cm}
+.pk{font-size:.19cm;font-weight:700;letter-spacing:.07cm;color:var(--lab);text-transform:uppercase}
+.pnm{font-family:var(--nf);font-weight:600;font-size:.76cm;line-height:1.2;color:var(--ink);white-space:nowrap;max-width:100%}
+.pdg{font-size:.26cm;line-height:1.3;color:var(--ink2);white-space:nowrap;max-width:100%}
+.pidp{align-self:flex-start;display:inline-flex;align-items:center;margin-top:.04cm;max-width:100%;border:.03cm solid var(--acc);border-radius:.4cm;overflow:hidden}
+.pidp span{padding:.04cm .16cm;line-height:1.3;white-space:nowrap}
+.pidp .pl{font-size:.2cm;font-weight:700;letter-spacing:.05cm;text-transform:uppercase;background:var(--acc);color:var(--ftt)}
+.pidp .pcode{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.42cm;color:var(--acc)}
+.pid .idb{justify-content:flex-start;gap:.07cm}
+.pid .idb em{font-size:.34cm}
+.pid .idb i{width:.52cm;height:.6cm;font-size:.38cm}
+.hw{display:flex;align-items:flex-end;width:100%}
+.hw i{flex:1;border-bottom:.03cm solid var(--lab);height:.45cm}
+.fd{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:.14cm}
+.fv{width:2cm;display:flex;flex-direction:column;align-items:center;gap:.08cm;font-size:.26cm;font-weight:700;letter-spacing:.04cm;color:var(--ink)}
+.fs{--c:#1c8f4a;width:.95cm;height:.95cm;border:.06cm solid var(--c);border-radius:.1cm;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fs.n{--c:#c62828}
+.fs i{display:block;width:.48cm;height:.48cm;border-radius:50%;background:var(--c)}
+.ft{display:flex;align-items:center;gap:.12cm;font-size:.23cm;font-weight:700;letter-spacing:.03cm;color:var(--ink);white-space:nowrap}
+.ft s{display:inline-block;width:.5cm;height:.5cm;border:.04cm solid var(--ink);background:#fff;text-decoration:none}
+.ft .fs{width:.55cm;height:.55cm;border-width:.04cm}
+.ft .fs i{width:.26cm;height:.26cm}
+.pbody{flex:1;min-height:0;padding:.2cm 0 .15cm;display:flex}
+.pside{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.prow{flex:1 1 0;max-height:1cm;min-height:0;display:flex;align-items:center;gap:.22cm;padding-left:.67cm}
+.prow.first:not(:first-child){border-top:.02cm dotted var(--lab)}
+.pside.r .prow{flex-direction:row-reverse;padding-left:0;padding-right:.67cm;text-align:right}
+.pc{width:.72cm;height:.72cm;flex-shrink:0;border-radius:50%;border:.035cm solid var(--acc);background:rgba(128,128,128,.07)}
+.prt{display:flex;flex-direction:column;line-height:1.2;flex:1;min-width:0}
+.prt b{display:block;max-width:100%;font-size:.26cm;font-weight:700;letter-spacing:.03cm;color:var(--ink);text-transform:uppercase;white-space:nowrap}
+.prt span{font-size:.2cm;color:var(--lab);white-space:nowrap}
+.pft{height:1cm;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.02cm;background:var(--ft);color:var(--ftt);border-top:.08cm solid var(--line);padding:0 .4cm}
+.pft .r{font-weight:700;font-size:.34cm;letter-spacing:.04cm;text-transform:uppercase;white-space:nowrap}
+.pft .v{font-size:.22cm;white-space:nowrap}
+.t-classical .pft.Oral{background:linear-gradient(135deg,#8a5f1f,#c9974f);color:#1d1305}
+.t-classical .pft.Poster{background:linear-gradient(135deg,#0f5e63,#1f8a8a)}
+.t-classical .pft.Participant{background:linear-gradient(135deg,#0a1230,#1b3a7a)}
+.cpt{border-collapse:collapse;margin-top:10px}
+.cpt th,.cpt td{position:static;text-align:center;padding:6px 10px;background:none}
+.cpt th:first-child{text-align:left}
+.lnk{background:none;border:0;color:var(--gl);font-size:12.5px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+@page punch{size:A4 portrait;margin:0}
+body.cap .mpg{box-shadow:none}
+@media print{.mpg{box-shadow:none;break-after:page;page:punch}.mpg:last-child{break-after:auto}}
+
 /* ===================== PRINT ===================== */
 @media print{
   body{background:#fff;padding:0}
@@ -130,7 +214,7 @@ body.cap .out{display:block}
 
 <div class="noprint">
   <h1>Participant badges</h1>
-  <p class="sub">8.5 cm × 12 cm portrait badge in the same design as the team ID card: punch-hole circle, logos, full conference title, photo, QR code, LVRMIC ID, name, designation, institution and participant type. No barcode. Convener sign can be loaded or left blank. Choose who to print, generate, then print or download the PDF.</p>
+  <p class="sub">8.5 cm × 12 cm portrait badge in the same design as the team ID card: punch-hole circle, logos, full conference title, photo, QR code, LVRMIC ID, name, designation, institution and participant type. No barcode. Blank badges, meal coupons and blank coupons are below. Choose who to print, generate, then print or download the PDF.</p>
 
   <div class="panel">
     <div class="filters">
@@ -177,6 +261,27 @@ body.cap .out{display:block}
     <div class="prog" id="prog"><i></i></div>
     <p class="msg" style="margin-top:10px">In the print window set margins to <b>None</b> and turn on <b>Background graphics</b>. Or press <b>Download PDF</b> for a ready file.</p>
   </div>
+  <div class="panel">
+    <div class="bar" style="margin-top:0"><b>Meal coupons</b><span class="msg" id="cpInfo"></span></div>
+    <div style="overflow:auto"><table class="cpt" id="cpTable"></table></div>
+    <div class="bar">
+      <button class="btn pri" id="cGen" type="button"><i class="fa-solid fa-ticket"></i>Generate coupons for selected</button>
+      <button class="btn" id="cpAll" type="button">All meals and days</button><button class="btn" id="cpNone" type="button">Clear</button>
+    </div>
+    <p class="msg" style="margin-top:8px">Tick days and meals first (tap a day or meal name to tick its row or column). Only ticked meals print, one punch circle per day. Each coupon shows name, LVRMIC ID and VEG / NON-VEG from the sheet. A4 sheet, 4 coupons per page (10 × 14.5 cm).</p>
+  </div>
+
+  <div class="panel">
+    <div class="bar" style="margin-top:0"><b>Blank badges and coupons for handwriting</b></div>
+    <div class="bar">
+      <div class="f" style="min-width:200px"><label for="bType">Participant type</label><select id="bType"><option value="Oral">Oral Presenter</option><option value="Poster">Poster Presenter</option><option value="Participant">Delegate</option></select></div>
+      <div class="f" style="min-width:100px"><label for="bN">How many</label><input id="bN" type="number" min="1" max="400" value="4"></div>
+      <button class="btn pri" id="bGen" type="button"><i class="fa-solid fa-pen-to-square"></i>Generate blank badges</button>
+      <button class="btn" id="bGenC" type="button"><i class="fa-solid fa-ticket"></i>Generate blank coupons</button>
+    </div>
+    <p class="msg" style="margin-top:8px">No photo or QR. Blank badges have LVRMIC26- with four ID boxes (the faint 1 is the spot-registration hint, write over it if needed), lines for name, designation and institution, a Remarks space and the convener sign. Blank coupons use the ticked meals above and have Veg / Non-Veg tick boxes. The theme and sign settings above apply.</p>
+  </div>
+
 </div>
 
 <div class="stage">
@@ -197,7 +302,7 @@ const TYPE_ORDER = { Oral: 0, Poster: 1, Participant: 2 };
 const S = v => String(v == null ? '' : v).trim();
 const typeOf = r => TYPE_LABEL[r.ParticipantType] ? r.ParticipantType : 'Participant';
 const catOf = r => S(r.Category) || S(r.Role);
-const desigOf = r => { const d = S(r.Designation); return d.toLowerCase() === 'other' ? (S(r.DesignationOther) || d) : d; };
+const desigOf = r => { const d = S(r.Designation); return d.toLowerCase() === 'other' ? (S(r.DesignationOther) || d) : (d || S(r.Role)); };
 const setMsg = (t, c) => { const s = $('status'); s.textContent = t || ''; s.className = 'msg ' + (c || ''); };
 
 /* ---------- load ---------- */
@@ -307,7 +412,7 @@ $('fSign').onchange = async () => {
     if (!ok) $('fSign').value = 'blank';
   }
   $('fSignTxt').disabled = $('fSign').value === 'none';
-  if ($('out').querySelector('.badge')) generate(true);    // sign block shape changes, so rebuild in place
+  if ($('out').querySelector('.badge')) rebuild();    // sign block shape changes, so rebuild in place
 };
 $('fSignTxt').oninput = () => { $('out').querySelectorAll('.sgc').forEach(e => { e.textContent = signTxt(); }); refit(); };
 
@@ -327,12 +432,7 @@ function badgeHtml(r, head, theme) {
   const sub = [cat, online ? 'Online' : ''].filter(Boolean).join(' · ');
   return `<div class="badge t-${esc(theme)}">
     <div class="hole"><i></i></div>
-    <div class="bh">
-      <div class="lgs">${LOGO('loyola-crest.png','Loyola College')}${LOGO('cimser-logo.png','CIMSER')}${LOGO('iaes-logo.png','IAES')}${LOGO('ahcf-logo.png','AHCF')}${LOGO('centenary-logo.png','Centenary')}</div>
-      <div class="bt1">${esc(head.short)}</div>
-      <div class="bt2">${esc(head.name)}</div>
-      <div class="bt3">${esc(head.line)}</div>
-    </div>
+    ${headHtml(head)}
     <div class="bb">
       <div class="row">
         <div class="ph">${photo ? `<img src="${photo}" alt="">` : '<i class="fa-solid fa-user"></i>'}</div>
@@ -347,7 +447,7 @@ function badgeHtml(r, head, theme) {
     </div>
     <div class="sb${slot ? '' : ' nosign'}"><div class="sbl"><b>Scan QR at every session</b>${slot ? '' : '<span>Valid for all conference days</span>'}</div>
       ${slot ? `<div class="sg"><div class="sgi">${signHtml()}</div><div class="sgl"></div><div class="sgc fit">${esc(signTxt())}</div></div>` : ''}</div>
-    <div class="bf ${t}"><div class="r fit">${esc(TYPE_LABEL[t])}</div>${sub ? `<div class="v fit">${esc(sub)}</div>` : ''}</div>
+    <div class="bf ${t}"><div class="r fit">${esc(TYPE_LABEL[t])}</div></div>
   </div>`;
 }
 
@@ -367,7 +467,7 @@ function refit() { const out = $('out'), z = out.style.zoom; out.style.zoom = 1;
 /* ---------- generate ---------- */
 async function generate(keepScroll) {
   const rows = view.filter(r => sel.has(S(r.ID)));
-  window.LASTROWS = rows;
+  window.LASTROWS = rows; MODE = 'badge';
   if (!rows.length) return;
   const btn = $('gen'); btn.disabled = true; $('print').disabled = true; $('pdf').disabled = true;
   if ($('fSign').value === 'with' && !SIGN && !(await loadSign())) { $('fSign').value = 'blank'; setMsg('Sign image could not be loaded, badges keep a blank space.', 'err'); }
@@ -378,12 +478,7 @@ async function generate(keepScroll) {
     await fetchPhotos(need, (d, n) => { bar.style.width = (d * 100 / n) + '%'; setMsg(`Loading photos ${d} of ${n}`); });
     prog.style.display = 'none';
   }
-  const s = CONF || {};
-  const head = {
-    short: s['conf.shortName'] || 'LVRMIC 2026',
-    name: s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment',
-    line: fmtRange(s['conf.startDate'], s['conf.endDate']) + ' · Loyola College (Autonomous), Chennai'
-  };
+  const head = headInfo();
   const theme = $('fTheme').value, pages = [];
   for (let i = 0; i < rows.length; i += 4) pages.push('<div class="pg">' + rows.slice(i, i + 4).map(r => badgeHtml(r, head, theme)).join('') + '</div>');
   $('out').innerHTML = pages.join('');
@@ -404,9 +499,9 @@ async function downloadPdf() {
   const JS = window.jspdf && window.jspdf.jsPDF;
   if (!JS || typeof html2canvas === 'undefined') { setMsg('PDF tools did not load. Use Print and choose Save as PDF.', 'err'); return; }
   const out = $('out'), zoom = out.style.zoom, one = $('fMain').value === 'one';
-  const pages = [...out.querySelectorAll('.pg')];
+  const pages = [...out.querySelectorAll('.pg, .mpg')];
   if (!pages.length) return;
-  if (!(await BADGELOG.record('participant', (window.LASTROWS || []).map(r => S(r.ID)), 'Badge print page (PDF)'))) return;
+  if (!(await logOk('Badge print page (PDF)'))) return;
   let doc = null, n = 0;
   const bar = $('prog').firstElementChild;
   $('pdf').disabled = $('print').disabled = $('gen').disabled = true;
@@ -415,9 +510,10 @@ async function downloadPdf() {
   const newPage = (w, h) => { if (!doc) doc = new JS({ unit: 'mm', format: [w, h], orientation: 'portrait', compress: true }); else doc.addPage([w, h], 'portrait'); };
   const shot = async el => (await html2canvas(el, { scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false })).toDataURL('image/jpeg', 0.95);
   try {
-    const total = one ? out.querySelectorAll('.badge').length : pages.length;
+    const total = one ? out.querySelectorAll('.badge').length + out.querySelectorAll('.mpg').length : pages.length;
     const tick = () => { n++; bar.style.width = (n * 100 / total) + '%'; setMsg(`Building PDF: page ${n} of ${total}`); };
     for (const pg of pages) {
+      if (pg.classList.contains('mpg')) { newPage(210, 296); doc.addImage(await shot(pg), 'JPEG', 0, 0, 210, 296); tick(); continue; }
       const cards = [...pg.querySelectorAll('.badge')];
       if (one) { for (const c of cards) { newPage(85, 120); doc.addImage(await shot(c), 'JPEG', 0, 0, 85, 120); tick(); } continue; }
       newPage(210, 296);
@@ -438,7 +534,7 @@ $('pdf').onclick = downloadPdf;
 
 /* ---------- theme, layout, zoom, print ---------- */
 $('fTheme').onchange = e => {                       // restyle badges already on screen, no need to regenerate
-  $('out').querySelectorAll('.badge').forEach(b => { b.className = 'badge t-' + e.target.value; });
+  $('out').querySelectorAll('.badge, .pcard').forEach(b => { b.className = (b.classList.contains('pcard') ? 'pcard' : 'badge') + ' t-' + e.target.value; });
   refit();
 };
 function setLayout() {
@@ -448,7 +544,100 @@ function setLayout() {
 }
 $('fMain').onchange = setLayout; setLayout();
 $('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
-$('print').onclick = async () => { if (await BADGELOG.record('participant', (window.LASTROWS || []).map(r => S(r.ID)), 'Badge print page')) window.print(); };
+$('print').onclick = async () => { if (await logOk('Badge print page')) window.print(); };
+
+/* ---------- shared header, blank badges, meal coupons ---------- */
+let MODE = 'badge';
+const logOk = async note => !(window.LASTROWS || []).length || typeof BADGELOG === 'undefined' || BADGELOG.record('participant', window.LASTROWS.map(r => S(r.ID)), note);
+const headInfo = () => { const s = CONF || {}; return {
+  short: s['conf.shortName'] || 'LVRMIC 2026',
+  name: s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment',
+  line: fmtRange(s['conf.startDate'], s['conf.endDate']) + ' · Loyola College (Autonomous), Chennai',
+  range: fmtRange(s['conf.startDate'], s['conf.endDate']) }; };
+const logoRow = () => LOGO('loyola-crest.png', 'Loyola College') + LOGO('cimser-logo.png', 'CIMSER') + LOGO('iaes-logo.png', 'IAES') + LOGO('ahcf-logo.png', 'AHCF') + LOGO('centenary-logo.png', 'Centenary');
+const headHtml = h => `<div class="bh"><div class="lgs">${logoRow()}</div><div class="bt1">${esc(h.short)}</div><div class="bt2">${esc(h.name)}</div><div class="bt3">${esc(h.line)}</div></div>`;
+const idBoxes = '<div class="idb"><em>LVRMIC26-</em><i>1</i><i></i><i></i><i></i></div>';
+async function ensureSign() { if ($('fSign').value === 'with' && !SIGN && !(await loadSign())) { $('fSign').value = 'blank'; setMsg('Sign image could not be loaded, badges keep a blank space.', 'err'); } }
+async function showOut(pages, msg) {
+  $('out').innerHTML = pages.join('');
+  try { await document.fonts.ready; } catch (e) {}
+  refit(); setMsg(msg, 'ok'); $('print').disabled = $('pdf').disabled = false;
+  $('out').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+const blankN = () => Math.max(1, Math.min(400, parseInt($('bN').value) || 4));
+function blankBadge(t, head, theme) {
+  const slot = hasSlot();
+  return `<div class="badge t-${esc(theme)}"><div class="hole"><i></i></div>${headHtml(head)}
+    <div class="bb bk"><div class="mid"><div class="k">LVRMIC ID</div>${idBoxes}</div>
+      <div class="wf"><b>Name</b><u></u></div><div class="wf"><b>Designation</b><u></u></div><div class="wf w2"><b>Institution / Organization</b><u></u><u></u></div></div>
+    <div class="sb rem${slot ? '' : ' nosign'}"><div class="sbl"><b>Remarks</b></div>${slot ? `<div class="sg"><div class="sgi">${signHtml()}</div><div class="sgl"></div><div class="sgc fit">${esc(signTxt())}</div></div>` : ''}</div>
+    <div class="bf ${t}"><div class="r fit">${esc(TYPE_LABEL[t])}</div></div></div>`;
+}
+async function genBlank() {
+  MODE = 'blank'; window.LASTROWS = [];
+  const n = blankN(), t = $('bType').value, head = headInfo(), theme = $('fTheme').value, pages = [];
+  await ensureSign();
+  for (let i = 0; i < n; i += 4) pages.push('<div class="pg">' + Array.from({ length: Math.min(4, n - i) }, () => blankBadge(t, head, theme)).join('') + '</div>');
+  await showOut(pages, `${n} blank ${TYPE_LABEL[t]} badge${n > 1 ? 's' : ''} ready`);
+}
+function rebuild() { if (MODE === 'blank') genBlank(); else generate(true); }
+$('bGen').onclick = genBlank;
+
+const MEALS = [
+  { c: 'BF', n: 'Breakfast', g: 'meal', ic: 'fa-egg' }, { c: 'B1', n: 'Morning Snacks', g: 'snack', ic: 'fa-cookie-bite' },
+  { c: 'LN', n: 'Lunch', g: 'meal', ic: 'fa-utensils' }, { c: 'TB', n: 'Afternoon Snacks', g: 'snack', ic: 'fa-mug-hot' },
+  { c: 'DN', n: 'Dinner', g: 'meal', ic: 'fa-bowl-food' }
+], DAYS = [1, 2, 3], CP = new Set();
+function dayDate(d) {
+  const A = new Date(((CONF && CONF['conf.startDate']) || '2026-11-26') + 'T00:00:00');
+  if (isNaN(A)) return '';
+  A.setDate(A.getDate() + d - 1);
+  return A.getDate() + ' ' + A.toLocaleString('en-GB', { month: 'short' }) + ' ' + A.getFullYear();
+}
+const dayShort = d => dayDate(d).replace(/\s\d{4}$/, '');
+function renderCp() {
+  $('cpTable').innerHTML = '<tr><th></th>' + MEALS.map(m => `<th><button type="button" class="lnk" data-col="${m.c}"><i class="fa-solid ${m.ic}"></i> ${m.n}</button></th>`).join('') + '</tr>'
+    + DAYS.map(d => `<tr><th><button type="button" class="lnk" data-row="${d}">Day ${d} · ${esc(dayDate(d))}</button></th>`
+      + MEALS.map(m => `<td><input class="chk cp-chk" type="checkbox" data-k="${d}-${m.c}" ${CP.has(d + '-' + m.c) ? 'checked' : ''} aria-label="Day ${d} ${m.n}"></td>`).join('') + '</tr>').join('');
+  $('cpInfo').textContent = CP.size ? `${CP.size} punch circle${CP.size === 1 ? '' : 's'} on each coupon` : 'Tick at least one day and meal';
+}
+function setKeys(keys, on) { keys.forEach(k => on ? CP.add(k) : CP.delete(k)); renderCp(); }
+$('cpAll').onclick = () => setKeys(DAYS.flatMap(d => MEALS.map(m => d + '-' + m.c)), true);
+$('cpNone').onclick = () => { CP.clear(); renderCp(); };
+$('cpTable').addEventListener('change', e => { const c = e.target.closest('.cp-chk'); if (!c) return; c.checked ? CP.add(c.dataset.k) : CP.delete(c.dataset.k); renderCp(); });
+$('cpTable').addEventListener('click', e => {
+  const b = e.target.closest('.lnk'); if (!b) return;
+  const keys = b.dataset.row ? MEALS.map(m => b.dataset.row + '-' + m.c) : DAYS.map(d => d + '-' + b.dataset.col);
+  setKeys(keys, !keys.every(k => CP.has(k)));
+});
+const foodOf = r => { const f = S(r.FoodPreference); return /non/i.test(f) ? 'n' : /veg/i.test(f) ? 'v' : ''; };
+const FOOD_BLANK = '<div class="fd"><div class="ft"><s></s><span class="fs"><i></i></span>VEG</div><div class="ft"><s></s><span class="fs n"><i></i></span>NON-VEG</div></div>';
+function punchHtml(r, head, theme) {            // r = null makes a blank coupon
+  const bl = !r, t = bl ? $('bType').value : typeOf(r);
+  const meals = MEALS.filter(me => DAYS.some(d => CP.has(d + '-' + me.c)));
+  const rowsOf = g => meals.filter(me => me.g === g).flatMap(me => DAYS.filter(d => CP.has(d + '-' + me.c)).map((d, i) => ({ me: me, d: d, first: i === 0 })));
+  const row = x => `<div class="prow${x.first ? ' first' : ''}"><i class="pc"></i><div class="prt"><b class="fit">${esc(x.me.n)}</b><span>Day ${x.d} · ${esc(dayShort(x.d))}</span></div></div>`;
+  const side = (g, c) => `<div class="pside ${c}">${rowsOf(g).map(row).join('')}</div>`;
+  const f = bl ? FOOD_BLANK : (foodOf(r) ? `<div class="fv"><span class="fs ${foodOf(r)}"><i></i></span>${foodOf(r) === 'n' ? 'NON-VEG' : 'VEG'}</div>` : '');
+  return `<div class="pcard t-${esc(theme)}">
+    <div class="pch"><div class="lgs">${logoRow()}</div><div class="pt1 fit">MEAL COUPON</div><div class="pt2">${esc(head.name)}</div><div class="pt3 fit">${esc(head.short)}${head.range ? ' · ' + esc(head.range) : ''}</div></div>
+    <div class="pid"><div class="pidl"><div class="pk">Name</div>${bl ? `<div class="hw"><i></i></div><div class="pk">Designation</div><div class="hw"><i></i></div><div class="pk">LVRMIC ID</div>${idBoxes}`
+      : `<div class="pnm fit">${esc(S(r.Name))}</div><div class="pdg fit">${esc(desigOf(r))}</div><div class="pidp"><span class="pl">LVRMIC ID</span><span class="pcode">${esc(S(r.ID))}</span></div>`}</div>${f}</div>
+    <div class="pbody">${side('meal', 'l')}${side('snack', 'r')}</div>
+    <div class="pft ${t}"><div class="r fit">${esc(TYPE_LABEL[t])}</div><div class="v">Non-transferable</div></div></div>`;
+}
+async function genCoupons(blank) {
+  if (!CP.size) { setMsg('Tick at least one day and meal for the coupons.', 'err'); return; }
+  const rows = blank ? Array.from({ length: blankN() }, () => null) : view.filter(r => sel.has(S(r.ID)));
+  if (!rows.length) { setMsg('Select participants first.', 'err'); return; }
+  MODE = 'coupon'; window.LASTROWS = [];
+  const head = headInfo(), theme = $('fTheme').value, pages = [];
+  for (let i = 0; i < rows.length; i += 4) pages.push('<div class="mpg">' + rows.slice(i, i + 4).map(r => punchHtml(r, head, theme)).join('') + '</div>');
+  await showOut(pages, `${rows.length} ${blank ? 'blank ' : ''}coupon${rows.length > 1 ? 's' : ''} ready · ${pages.length} A4 sheet${pages.length > 1 ? 's' : ''}`);
+}
+$('cGen').onclick = () => genCoupons(false);
+$('bGenC').onclick = () => genCoupons(true);
+renderCp();
 
 init();
 </script>
