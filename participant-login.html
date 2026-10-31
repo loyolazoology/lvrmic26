@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Participant Login | LVRMIC 2026 · CIMSER, Loyola College</title>
-<link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
-<meta name="description" content="Participant login for abstract and poster submission — 4th International Conference on Life Sciences and Vector Risk Management, Loyola College (Autonomous), Chennai.">
+<link rel="icon" type="image/png" href="assets/cimser-logo.png">
+<link rel="shortcut icon" href="assets/cimser-logo.png">
+<meta name="description" content="Participant login for abstract and poster submission — 4th International Conference on Life Sciences and Vector Risk Management (LVRMIC 2026), Loyola College (Autonomous), Chennai.">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap');
 
@@ -21,8 +22,9 @@
   --ink-1:#151c33;--ink-2:#4b5573;--ink-3:#7c869f;
 }
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
 html,body{overflow-x:hidden;max-width:100%;}
+img,svg,video{max-width:100%;}
 body{
   margin:0;
   background:
@@ -44,8 +46,8 @@ a:hover{text-decoration:underline;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
 .section{padding:72px 0;}
 .section-tight{padding:40px 0;}
-@media (max-width:600px){.wrap{padding:0 18px;}.section{padding:48px 0;}.section-tight{padding:30px 0;}}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);border:1px solid var(--navy-border);background:rgba(205,163,85,.08);padding:6px 14px;border-radius:999px;margin-bottom:18px;}
+@media (max-width:600px){.wrap{padding:0 16px;}.section{padding:44px 0;}.section-tight{padding:30px 0;}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);border:1px solid var(--navy-border);background:rgba(205,163,85,.08);padding:6px 14px;border-radius:999px;margin-bottom:18px;max-width:100%;}
 
 /* Clock bar */
 .utcbar{background:#070c22;border-bottom:1px solid var(--navy-border);}
@@ -53,6 +55,7 @@ a:hover{text-decoration:underline;}
 .utcbar i{color:var(--gold-light);font-size:11px;}
 .utcbar b{color:var(--text-2);font-weight:500;}
 @media (min-width:701px){.utcbar-inner{justify-content:flex-end;}}
+@media (max-width:480px){.utcbar-inner{font-size:10.5px;padding:6px 12px;}}
 
 /* Logo strip */
 .topbar{background:var(--navy-950);border-bottom:1px solid var(--navy-border);}
@@ -63,7 +66,7 @@ a:hover{text-decoration:underline;}
 .logo-slot:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.18);}
 .logo-slot img{width:auto;height:100%;max-width:90px;object-fit:contain;border-radius:0;display:block;}
 .logo-slot.empty{border-style:dashed;background:rgba(255,255,255,.03);color:var(--text-3);}
-@media (max-width:800px){.logo-slot{height:40px;min-width:40px;}}
+@media (max-width:800px){.logo-slot{height:40px;min-width:40px;}.logo-slots{gap:10px;}.topbar-inner{padding:10px 16px;}}
 .topbar-text{font-size:12px;color:var(--text-1);font-family:'IBM Plex Mono',monospace;letter-spacing:.3px;text-align:center;max-width:560px;line-height:1.6;}
 @media (max-width:900px){.topbar-text{display:none;}}
 
@@ -76,7 +79,7 @@ a:hover{text-decoration:underline;}
 .brand-title{font-family:'Fraunces',serif;font-weight:700;font-size:23px;letter-spacing:.4px;color:var(--text-1);white-space:nowrap;}
 @media(max-width:1080px){.brand-logo-img{height:44px;}.brand-title{font-size:20px;}}
 @media(max-width:992px){.brand-logo-img{height:40px;}}
-@media(max-width:700px){.brand-logo-img{height:34px;}.brand-title{font-size:18px;}}
+@media(max-width:700px){.brand-logo-img{height:34px;}.brand-title{font-size:18px;}.nav-inner{padding:10px 16px;}}
 @media(max-width:480px){.brand-title{font-size:16px;}.brand-logo-img{height:30px;}.nav-brand{gap:8px;}}
 .nav-links{display:flex;align-items:center;gap:2px;list-style:none;padding:0;margin:0;flex-shrink:0;}
 .nav-links>li{position:relative;}
@@ -93,7 +96,7 @@ a:hover{text-decoration:underline;}
 @media(max-width:1200px){.nav-links a{font-size:12.5px;padding:9px 9px;}}
 @media(max-width:800px){
   .nav-toggle{display:block;position:relative;z-index:101;}
-  .nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;margin-left:0;}
+  .nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;height:100dvh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;margin-left:0;}
   .nav-links.open{transform:translateX(0);visibility:visible;}
   .nav-links>li{width:100%;}
   .nav-links>li>a{width:100%;justify-content:space-between;font-size:14.5px;padding:12px 12px;}
@@ -102,7 +105,7 @@ a:hover{text-decoration:underline;}
 }
 
 /* Buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;padding:13px 24px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:all .2s ease;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;padding:13px 24px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:all .2s ease;text-align:center;}
 .btn:hover:not(:disabled){text-decoration:none;transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.2);}
 .btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;}
 .btn-outline{background:transparent;border-color:var(--navy-border);color:var(--text-1);}
@@ -115,10 +118,11 @@ a:hover{text-decoration:underline;}
 
 /* Forms */
 label{display:block;font-size:13px;font-weight:600;color:var(--text-2);margin:0 0 6px;}
-input[type="text"],input[type="email"],input[type="password"]{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14.5px;}
+input[type="text"],input[type="email"],input[type="password"]{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:16px;}
+@media (min-width:801px){input[type="text"],input[type="email"],input[type="password"]{font-size:14.5px;}}
 input[type="text"]:focus,input[type="email"]:focus,input[type="password"]:focus{outline:2px solid var(--gold);outline-offset:1px;}
 .field{margin-bottom:18px;}
-.alert{border-radius:8px;padding:14px 16px;font-size:14px;margin-bottom:18px;border:1px solid transparent;display:none;}
+.alert{border-radius:8px;padding:14px 16px;font-size:14px;margin-bottom:18px;border:1px solid transparent;display:none;overflow-wrap:anywhere;}
 .alert.show{display:block;}
 .alert-success{background:rgba(79,169,128,.1);border-color:rgba(79,169,128,.35);color:var(--teal-light);}
 .alert-error{background:rgba(216,105,90,.1);border-color:rgba(216,105,90,.35);color:#e8988c;}
@@ -140,7 +144,7 @@ footer p{font-size:13px;color:var(--text-3);}
 @media (max-width:520px){.footer-grid{grid-template-columns:1fr;}}
 .footer-grid h4{color:var(--text-1);font-family:'Fraunces',serif;font-weight:500;font-size:14.5px;margin:0 0 14px;}
 .footer-grid ul{list-style:none;margin:0;padding:0;}
-.footer-grid li{margin-bottom:9px;}
+.footer-grid li{margin-bottom:9px;overflow-wrap:anywhere;}
 .footer-grid a{color:var(--text-3);font-size:13.5px;}
 .footer-grid a:hover{color:var(--gold-light);}
 .footer-bottom{border-top:1px solid var(--navy-border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--text-3);text-align:center;}
@@ -151,7 +155,9 @@ footer p{font-size:13px;color:var(--text-3);}
 /* Light section + auth card */
 .section-light{background:var(--paper);color:var(--ink-2);}
 .auth-wrap{min-height:calc(100vh - 260px);display:flex;align-items:center;justify-content:center;padding:60px 20px;}
+@media (max-width:600px){.auth-wrap{padding:32px 0;min-height:0;}}
 .auth-card{width:100%;max-width:420px;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:38px 32px;box-shadow:0 30px 70px rgba(0,0,0,.35);scroll-margin-top:90px;}
+@media (max-width:480px){.auth-card{padding:28px 20px;border-radius:14px;}}
 .section-light .auth-card h2{color:var(--text-1);}
 .section-light .auth-card label{color:var(--text-2);}
 .section-light .auth-card .eyebrow{background:rgba(205,163,85,.12);border-color:var(--navy-border);color:var(--gold-light);}
@@ -169,16 +175,22 @@ footer p{font-size:13px;color:var(--text-3);}
 .auth-link-row a{cursor:pointer;}
 .auth-link-row a:hover{text-decoration:underline;}
 .captcha-container{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.captcha-box{flex:1;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;letter-spacing:6px;padding:10px 14px;border-radius:8px;user-select:none;text-align:center;text-transform:uppercase;box-shadow:inset 0 2px 4px rgba(0,0,0,0.4);}
+.captcha-box{flex:1;min-width:0;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;letter-spacing:6px;padding:10px 14px;border-radius:8px;user-select:none;text-align:center;text-transform:uppercase;box-shadow:inset 0 2px 4px rgba(0,0,0,0.4);}
+@media (max-width:380px){.captcha-box{font-size:18px;letter-spacing:4px;padding:10px 8px;}}
 .captcha-refresh{width:46px;height:46px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--navy-border);color:var(--text-2);border-radius:8px;cursor:pointer;transition:.2s;flex-shrink:0;}
 .captcha-refresh:hover{color:var(--gold-light);border-color:var(--gold);background:rgba(232,201,131,.08);}
 .register-btn-wrap{display:flex;flex-direction:column;align-items:stretch;gap:8px;}
 .register-deadline-hint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:var(--text-3);font-family:'IBM Plex Mono',monospace;text-align:center;}
 .register-deadline-hint i{font-size:10px;color:var(--gold-light);}
+.register-deadline-hint[hidden]{display:none;}
+.not-registered-box{display:none;border:1px solid var(--navy-border);background:rgba(232,201,131,.06);border-radius:10px;padding:16px;margin-top:18px;text-align:center;}
+.not-registered-box.show{display:block;}
+.not-registered-box p{font-size:13.5px;margin:0 0 12px;color:var(--text-2);}
 
 /* Page header (centered, same as other pages) */
 .page-header{padding:52px 0 48px;position:relative;overflow:hidden;}
 .page-header .wrap{position:relative;z-index:1;max-width:900px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+@media (max-width:600px){.page-header{padding:36px 0 32px;}}
 .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);letter-spacing:.4px;margin-bottom:14px;}
 .breadcrumb a{color:var(--text-3);}
 .breadcrumb a:hover{color:var(--gold-light);}
@@ -197,10 +209,11 @@ footer p{font-size:13px;color:var(--text-3);}
 .fab-top.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
 @media (max-width:600px){.float-actions{right:16px;bottom:16px;gap:10px;}.fab{width:46px;height:46px;font-size:19px;}}
 
-/* Error pop-up */
-.popup-back{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,8,22,.72);backdrop-filter:blur(3px);}
+/* Pop-up (errors, captcha problems, lock message) — scrolls itself on short screens */
+.popup-back{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(4,8,22,.72);backdrop-filter:blur(3px);overflow-y:auto;}
 .popup-back.show{display:flex;}
-.popup{width:100%;max-width:400px;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid rgba(216,105,90,.45);border-radius:16px;padding:28px 26px 22px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.55);animation:popin .18s ease-out;}
+.popup{width:100%;max-width:400px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;margin:auto;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid rgba(216,105,90,.45);border-radius:16px;padding:28px 26px 22px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.55);animation:popin .18s ease-out;}
+@media (max-width:480px){.popup{padding:22px 18px 18px;border-radius:14px;}}
 @keyframes popin{from{opacity:0;transform:translateY(8px) scale(.97);}to{opacity:1;transform:none;}}
 .popup-icon{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(216,105,90,.14);color:#e8988c;border:1px solid rgba(216,105,90,.4);}
 .popup h3{margin:0 0 8px;font-size:1.25rem;}
@@ -208,7 +221,6 @@ footer p{font-size:13px;color:var(--text-3);}
 
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none !important;animation:none !important;}}
 </style>
-<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/lvrmic26/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
@@ -251,6 +263,14 @@ footer p{font-size:13px;color:var(--text-3);}
     <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Home</a></li>
+      <li class="has-dropdown">
+        <a href="#" class="dropdown-toggle">About <i class="fa-solid fa-chevron-down caret"></i></a>
+        <ul class="dropdown">
+          <li><a href="about/conference.html">About the Conference</a></li>
+          <li><a href="about/college.html">About the College</a></li>
+          <li><a href="about/department.html">About the Department</a></li>
+        </ul>
+      </li>
       <li><a href="committee.html">Committee</a></li>
       <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
       <li><a href="themes.html">Themes</a></li>
@@ -258,7 +278,7 @@ footer p{font-size:13px;color:var(--text-3);}
       <li class="has-dropdown">
         <a href="#" class="dropdown-toggle">Register / Login <i class="fa-solid fa-chevron-down caret"></i></a>
         <ul class="dropdown">
-          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference"><i class="fa-solid fa-user-plus"></i>&nbsp; Participant Registration</a></li>
+          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference" class="register-link"><i class="fa-solid fa-user-plus"></i>&nbsp; Participant Registration</a></li>
           <li><a href="participant-login.html"><i class="fa-solid fa-user"></i>&nbsp; Participant Login</a></li>
           <li><a href="admin-login.html"><i class="fa-solid fa-user-shield"></i>&nbsp; Admin Login</a></li>
         </ul>
@@ -275,7 +295,7 @@ footer p{font-size:13px;color:var(--text-3);}
     <span class="eyebrow"><i class="fa-solid fa-user"></i>&nbsp; Abstract &amp; poster submission</span>
     <h1 style="font-size:clamp(1.7rem,3vw,2.4rem);">Participant login</h1>
     <div class="helix-rule helix-rule-center"></div>
-    <p style="max-width:560px;">Sign in to submit your abstract or poster, track its review status, and manage your registration for the 4th International Conference on Life Sciences &amp; Vector Risk Management.</p>
+    <p style="max-width:560px;">Sign in to submit your abstract or poster, track its review status, and manage your registration for the 4th International Conference on Life Sciences &amp; Vector Risk Management (LVRMIC 2026).</p>
   </div>
 </header>
 
@@ -306,9 +326,9 @@ footer p{font-size:13px;color:var(--text-3);}
             <label for="login-captcha">Security CAPTCHA</label>
             <div class="captcha-container">
               <div class="captcha-box" id="captcha-display"></div>
-              <button type="button" class="captcha-refresh" id="captcha-refresh-btn" title="Refresh CAPTCHA"><i class="fa-solid fa-rotate-right"></i></button>
+              <button type="button" class="captcha-refresh" id="captcha-refresh-btn" title="Refresh CAPTCHA" aria-label="Refresh CAPTCHA"><i class="fa-solid fa-rotate-right"></i></button>
             </div>
-            <input type="text" id="login-captcha" required placeholder="Enter 5-character code" maxlength="5" style="text-transform:uppercase;">
+            <input type="text" id="login-captcha" required placeholder="Enter 5-character code" maxlength="5" autocapitalize="characters" style="text-transform:uppercase;">
           </div>
           <div class="auth-check">
             <input type="checkbox" id="remember-me">
@@ -320,8 +340,8 @@ footer p{font-size:13px;color:var(--text-3);}
 
         <div class="auth-divider">New here</div>
         <div class="register-btn-wrap">
-          <a href="https://erp.loyolacollege.edu/loyolaonline/conference" class="btn btn-outline btn-block register-cta" id="register-btn-participant"><i class="fa-solid fa-user-plus"></i> Register as a participant</a>
-          <span class="register-deadline-hint"><i class="fa-regular fa-clock"></i> Last date for registration: 23-11-2026</span>
+          <a href="https://erp.loyolacollege.edu/loyolaonline/conference" class="btn btn-outline btn-block register-cta register-link" id="register-btn-participant"><i class="fa-solid fa-user-plus"></i> Register as a participant</a>
+          <span class="register-deadline-hint" id="register-deadline-hint" hidden><i class="fa-regular fa-clock"></i> <span id="register-deadline-text"></span></span>
         </div>
       </div>
 
@@ -339,6 +359,13 @@ footer p{font-size:13px;color:var(--text-3);}
           </div>
           <button class="btn btn-gold btn-block" type="submit" id="forgot-btn"><i class="fa-solid fa-paper-plane"></i> Send temporary password</button>
         </form>
+
+        <!-- Shown only when the server says this email is not registered -->
+        <div class="not-registered-box" id="forgot-not-registered">
+          <p><i class="fa-solid fa-circle-info"></i>&nbsp; This email is not registered yet. Please register first to create your participant account.</p>
+          <a href="https://erp.loyolacollege.edu/loyolaonline/conference" class="btn btn-outline btn-block register-cta register-link"><i class="fa-solid fa-user-plus"></i> Register as a participant</a>
+        </div>
+
         <div class="auth-link-row"><a onclick="showAuthView('login')">Back to login</a></div>
       </div>
 
@@ -377,7 +404,7 @@ footer p{font-size:13px;color:var(--text-3);}
     <div class="footer-grid">
       <div>
         <h4>CIMSER</h4>
-        <p style="font-size:13px;">4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment. 26–28 November 2026, Loyola College (Autonomous), Chennai. Organised by CIMSER (Centre for Insect Molecular Studies and Environmental Research), PG &amp; Research Department of Advanced Zoology and Biotechnology.</p>
+        <p style="font-size:13px;">4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment (LVRMIC 2026). 26–28 November 2026, Loyola College (Autonomous), Chennai. Organised by CIMSER (Centre for Insect Molecular Studies and Environmental Research), PG &amp; Research Department of Advanced Zoology and Biotechnology.</p>
         <div class="social-row">
           <a href="https://www.instagram.com/loyola_zoo/" target="_blank" rel="noopener" aria-label="Loyola Zoology on Instagram"><i class="fa-brands fa-instagram"></i></a>
           <a href="https://www.youtube.com/results?search_query=Loyola+College+Chennai" target="_blank" rel="noopener" aria-label="Loyola College on YouTube"><i class="fa-brands fa-youtube"></i></a>
@@ -397,7 +424,7 @@ footer p{font-size:13px;color:var(--text-3);}
       <div>
         <h4>Register / Login</h4>
         <ul>
-          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference">Participant Registration</a></li>
+          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference" class="register-link">Participant Registration</a></li>
           <li><a href="participant-login.html">Participant Login</a></li>
           <li><a href="admin-login.html">Admin Login</a></li>
           <li><a href="about/college.html">About the College</a></li>
@@ -427,7 +454,7 @@ footer p{font-size:13px;color:var(--text-3);}
   <a href="mailto:conferencecimser@gmail.com" class="fab fab-email" id="email-float-btn" title="Email the conference secretariat" aria-label="Email the conference secretariat"><i class="fa-solid fa-envelope"></i></a>
 </div>
 
-<!-- Error pop-up -->
+<!-- Pop-up (all errors + messages) -->
 <div class="popup-back" id="popup-back">
   <div class="popup" role="alertdialog" aria-modal="true" aria-labelledby="popup-title" aria-describedby="popup-msg">
     <div class="popup-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
@@ -437,55 +464,15 @@ footer p{font-size:13px;color:var(--text-3);}
   </div>
 </div>
 
+<script src="participant-common.js"></script>
 <script>
-function updateClock(){
-  const now = new Date();
-  const opts = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', timeZone: 'Asia/Kolkata', timeZoneName: 'short' };
-  const dateTimeStr = now.toLocaleDateString('en-GB', opts);
-  const timeStr = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-  document.getElementById('utc-clock').innerHTML = `<b>${dateTimeStr} &nbsp;·&nbsp; ${timeStr}</b>`;
-}
-updateClock();
-setInterval(updateClock, 1000);
+const L = window.LVRMIC;
+const KEYS = L.CFG.KEYS;
 
-const navToggle = document.getElementById('nav-toggle');
-const navLinks = document.getElementById('nav-links');
-const navToggleIcon = navToggle.querySelector('i');
-function closeAllDropdowns(){ document.querySelectorAll('.has-dropdown.open').forEach(li => li.classList.remove('open')); }
-function closeMobileMenu(){ navLinks.classList.remove('open'); document.body.classList.remove('no-scroll'); navToggleIcon.className = 'fa-solid fa-bars'; closeAllDropdowns(); }
-function openMobileMenu(){ navLinks.classList.add('open'); document.body.classList.add('no-scroll'); navToggleIcon.className = 'fa-solid fa-xmark'; }
-navToggle.addEventListener('click', () => { navLinks.classList.contains('open') ? closeMobileMenu() : openMobileMenu(); });
-document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-  toggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    const parentLi = toggle.closest('.has-dropdown');
-    const alreadyOpen = parentLi.classList.contains('open');
-    closeAllDropdowns();
-    if (!alreadyOpen) parentLi.classList.add('open');
-  });
-});
-navLinks.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => { link.addEventListener('click', () => { if (window.innerWidth <= 800) closeMobileMenu(); }); });
-window.addEventListener('resize', () => { if (window.innerWidth > 800) closeMobileMenu(); });
+L.startClock('utc-clock');
+L.initMenu();
 
-const backToTopBtn = document.getElementById('back-to-top-btn');
-function toggleBackToTop(){ if (window.scrollY > 420) backToTopBtn.classList.add('show'); else backToTopBtn.classList.remove('show'); }
-toggleBackToTop();
-window.addEventListener('scroll', toggleBackToTop, { passive: true });
-backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-(function(){
-  const cutoff = new Date('2026-11-23T00:00:00+05:30').getTime();
-  if (Date.now() >= cutoff) {
-    document.querySelectorAll('.register-cta').forEach(function(btn){
-      btn.classList.add('is-disabled');
-      btn.setAttribute('aria-disabled', 'true');
-      btn.removeAttribute('href');
-      btn.addEventListener('click', function(e){ e.preventDefault(); });
-    });
-  }
-})();
-
-// ---- Error pop-up ----
+// ---- Pop-up ----
 const popupBack = document.getElementById('popup-back');
 let popupReturnFocus = null;
 function showPopup(message, title) {
@@ -504,6 +491,37 @@ document.getElementById('popup-ok').addEventListener('click', closePopup);
 popupBack.addEventListener('click', function(e){ if (e.target === popupBack) closePopup(); });
 document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closePopup(); });
 
+// ---- Registration button: driven by public Settings (dl.registration + sw.registrationOpen) ----
+(function applyRegistrationSettings(){
+  L.loadPublicSettings().then(function(s){
+    const dl = (s && s.dl) || {};
+    const sw = (s && s.sw) || {};
+    if (!dl.registration && sw.registrationOpen === undefined) return; // Settings not available: leave button as is
+
+    const closed = (sw.registrationOpen === false) || (dl.registration && L.isPast(dl.registration));
+    const hint = document.getElementById('register-deadline-hint');
+    const hintText = document.getElementById('register-deadline-text');
+
+    if (s.registrationUrl) document.querySelectorAll('.register-link').forEach(function(a){ a.setAttribute('href', s.registrationUrl); });
+
+    if (dl.registration) {
+      hintText.textContent = (closed ? 'Registration closed on: ' : 'Last date for registration: ') + L.formatDate(dl.registration);
+      hint.hidden = false;
+    } else if (closed) {
+      hintText.textContent = 'Registration is currently closed';
+      hint.hidden = false;
+    }
+    if (closed) {
+      document.querySelectorAll('.register-cta').forEach(function(btn){
+        btn.classList.add('is-disabled');
+        btn.setAttribute('aria-disabled', 'true');
+        btn.removeAttribute('href');
+        btn.addEventListener('click', function(e){ e.preventDefault(); });
+      });
+    }
+  });
+})();
+
 // ---- Show / hide password toggles ----
 function setPasswordVisible(btn, visible){
   const input = document.getElementById(btn.dataset.target);
@@ -515,38 +533,44 @@ function setPasswordVisible(btn, visible){
   btn.querySelector('i').className = visible ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
 }
 document.querySelectorAll('.pw-toggle').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    setPasswordVisible(btn, btn.getAttribute('aria-pressed') !== 'true');
-  });
+  btn.addEventListener('click', function(){ setPasswordVisible(btn, btn.getAttribute('aria-pressed') !== 'true'); });
 });
-function hideAllPasswords(){
-  document.querySelectorAll('.pw-toggle').forEach(function(btn){ setPasswordVisible(btn, false); });
-}
+function hideAllPasswords(){ document.querySelectorAll('.pw-toggle').forEach(function(btn){ setPasswordVisible(btn, false); }); }
 
+// ---- CAPTCHA (wrong code now shows in a pop-up too) ----
 let generatedCaptcha = '';
+let captchaWarned = false;
 const captchaInput = document.getElementById('login-captcha');
 const loginBtn = document.getElementById('login-btn');
+function setLoginIdle(){ loginBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Log in'; }
 function generateCaptcha() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let result = '';
   for (let i = 0; i < 5; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
   generatedCaptcha = result;
+  captchaWarned = false;
   document.getElementById('captcha-display').textContent = result;
   captchaInput.value = '';
-  validateCaptcha();
+  loginBtn.disabled = true;
+  setLoginIdle();
 }
 function validateCaptcha() {
-  const userVal = captchaInput.value.trim().toUpperCase();
-  if (userVal.length === 5 && userVal === generatedCaptcha) {
+  const v = captchaInput.value.trim().toUpperCase();
+  if (v.length === 5 && v === generatedCaptcha) {
     loginBtn.disabled = false;
     loginBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Log in';
-    hideAlerts('login');
+    captchaWarned = false;
   } else {
     loginBtn.disabled = true;
-    loginBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Log in';
-    // typing feedback stays inline: a pop-up on every keystroke would be annoying
-    if (userVal.length === 5 && userVal !== generatedCaptcha) showAlert('login-error', 'Incorrect CAPTCHA code. Please try again.');
-    else hideAlerts('login');
+    setLoginIdle();
+    // Pop-up once per complete wrong attempt (not on every keystroke)
+    if (v.length === 5 && !captchaWarned) {
+      captchaWarned = true;
+      showPopup('The code you entered does not match. Please try again.', 'Incorrect CAPTCHA');
+      captchaInput.select();
+    } else if (v.length < 5) {
+      captchaWarned = false;
+    }
   }
 }
 captchaInput.addEventListener('input', validateCaptcha);
@@ -554,106 +578,83 @@ document.getElementById('captcha-refresh-btn').addEventListener('click', generat
 generateCaptcha();
 
 window.addEventListener('DOMContentLoaded', () => {
-  const savedEmail = localStorage.getItem('vrmic_saved_email');
+  const savedEmail = localStorage.getItem(KEYS.email);
   if (savedEmail) {
     document.getElementById('login-email').value = savedEmail;
     document.getElementById('remember-me').checked = true;
   }
 });
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
-
-// Always resolves to the server's JSON, or throws an Error with a message that is safe to show the person.
-async function callApi(action, payload) {
-  const ctl = new AbortController(), timer = setTimeout(function(){ ctl.abort(); }, 30000);
-  let res;
-  try {
-    res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(Object.assign({ action: action }, payload)),
-      signal: ctl.signal
-    });
-  } catch (err) {
-    throw new Error(err && err.name === 'AbortError'
-      ? 'The server took too long to respond. Please try again in a moment.'
-      : 'Could not reach the server. Check your internet connection and try again.');
-  } finally { clearTimeout(timer); }
-  if (!res.ok) throw new Error('The server returned an error (' + res.status + '). Please try again shortly.');
-  try { return await res.json(); }
-  catch (err) { throw new Error('The server sent an unexpected reply. Please try again, or contact the organisers if it keeps happening.'); }
-}
-
 function showAuthView(name) {
   document.querySelectorAll('.auth-view').forEach(function(v){ v.classList.remove('active'); });
   document.getElementById('view-' + name).classList.add('active');
   hideAllPasswords();
 }
-function showAlert(id, msg) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = msg;
-  el.classList.add('show');
-}
+function showAlert(id, msg) { const el = document.getElementById(id); if (el) { el.textContent = msg; el.classList.add('show'); } }
 function hideAlerts(prefix) {
-  document.querySelectorAll('[id^="' + prefix + '-"]').forEach(function(el){
-    if (el.classList.contains('alert')) el.classList.remove('show');
-  });
+  document.querySelectorAll('[id^="' + prefix + '-"]').forEach(function(el){ if (el.classList.contains('alert')) el.classList.remove('show'); });
 }
 
-// After a successful login/reset, decide where the participant should land:
-// details.html (profile not yet completed) or participant/home.html (dashboard).
+// After login / password reset: details.html if profile incomplete, otherwise the dashboard.
 async function routeAfterAuth() {
   try {
-    const res = await callApi('getProfile', { token: localStorage.getItem('vrmic_token') });
-    if (res.ok && !res.profileCompleted) {
-      window.location.href = 'participant/details.html';
-    } else {
-      window.location.href = 'participant/home.html';
-    }
+    const res = await L.callApi('getProfile', { token: L.session.token() });
+    window.location.href = (res.ok && !res.profileCompleted) ? 'participant/details.html' : 'participant/home.html';
   } catch (err) {
-    // If the profile check fails for any reason, details.html itself
-    // re-checks and redirects — so it's always the safe default.
-    window.location.href = 'participant/details.html';
+    window.location.href = 'participant/details.html'; // details.html re-checks and redirects
   }
 }
 
+// ---- LOGIN (sends visitor IP; shows the server's lock message) ----
 document.getElementById('login-form').addEventListener('submit', async function(e) {
   e.preventDefault();
   hideAlerts('login');
-  const emailVal = document.getElementById('login-email').value;
-  const rememberMe = document.getElementById('remember-me').checked;
-  if (rememberMe) localStorage.setItem('vrmic_saved_email', emailVal);
-  else localStorage.removeItem('vrmic_saved_email');
+  const emailVal = document.getElementById('login-email').value.trim();
+  if (document.getElementById('remember-me').checked) localStorage.setItem(KEYS.email, emailVal);
+  else localStorage.removeItem(KEYS.email);
 
   loginBtn.disabled = true;
   loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
 
   try {
-    const res = await callApi('login', { email: emailVal, password: document.getElementById('login-password').value });
-    if (!res.ok) { showPopup(res.error || 'Login failed.', 'Login failed'); generateCaptcha(); return; }
-    localStorage.setItem('vrmic_token', res.token);
-    localStorage.setItem('vrmic_name', res.name);
-    if (res.forceReset) {
-      showAuthView('reset');
-    } else {
-      await routeAfterAuth();
+    const ip = await L.getClientIp();
+    const res = await L.callApi('login', { email: emailVal, password: document.getElementById('login-password').value, ip: ip });
+    if (!res.ok) {
+      // Server's own wording is shown as-is, e.g. "Too many attempts, try again in 15 minutes."
+      const locked = res.locked || /too many|try again in|locked/i.test(res.error || '');
+      showPopup(res.error || 'Login failed.', locked ? 'Too many attempts' : 'Login failed');
+      generateCaptcha();
+      return;
     }
+    L.session.save(res.token, res.name);
+    if (res.forceReset) showAuthView('reset');
+    else await routeAfterAuth();
   } catch (err) {
     showPopup(err.message, 'Connection problem');
     generateCaptcha();
   }
 });
 
+// ---- FORGOT PASSWORD (unregistered email -> Register button) ----
 document.getElementById('forgot-form').addEventListener('submit', async function(e) {
   e.preventDefault();
   hideAlerts('forgot');
+  const notReg = document.getElementById('forgot-not-registered');
+  notReg.classList.remove('show');
   const btn = document.getElementById('forgot-btn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Sending...';
   try {
-    const res = await callApi('forgotPassword', { email: document.getElementById('forgot-email').value });
-    if (!res.ok) { showPopup(res.error || 'Something went wrong.', 'Could not send password'); return; }
-    showAlert('forgot-success', 'If that email is registered, a temporary password has been sent to it.');
+    const res = await L.callApi('forgotPassword', { email: document.getElementById('forgot-email').value.trim() });
+    if (!res.ok) {
+      if (res.notRegistered || /not registered|no account|not found|does not exist/i.test(res.error || '')) {
+        notReg.classList.add('show');
+        showPopup('This email address is not registered. Please register first.', 'Email not registered');
+      } else {
+        showPopup(res.error || 'Something went wrong.', 'Could not send password');
+      }
+      return;
+    }
+    showAlert('forgot-success', 'A temporary password has been sent to your registered email.');
   } catch (err) {
     showPopup(err.message, 'Connection problem');
   } finally {
@@ -661,6 +662,7 @@ document.getElementById('forgot-form').addEventListener('submit', async function
   }
 });
 
+// ---- SET NEW PASSWORD ----
 document.getElementById('reset-form').addEventListener('submit', async function(e) {
   e.preventDefault();
   const p1 = document.getElementById('reset-password').value;
@@ -669,7 +671,7 @@ document.getElementById('reset-form').addEventListener('submit', async function(
   const btn = document.getElementById('reset-btn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving...';
   try {
-    const res = await callApi('setNewPassword', { token: localStorage.getItem('vrmic_token'), newPassword: p1 });
+    const res = await L.callApi('setNewPassword', { token: L.session.token(), newPassword: p1 });
     if (!res.ok) { showPopup(res.error || 'Could not set new password.', 'Could not save password'); return; }
     await routeAfterAuth();
   } catch (err) {
@@ -679,7 +681,7 @@ document.getElementById('reset-form').addEventListener('submit', async function(
   }
 });
 
-// ---- Opened directly: land on the login card, not the top of the page ----
+// ---- Opened directly: land on the login card ----
 (function landOnLogin(){
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   function go(){
