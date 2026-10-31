@@ -3,145 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Complete Your Profile | CIMSER, Loyola College</title>
-<meta name="description" content="Complete your participant profile — 4th International Conference on Life Sciences and Vector Risk Management, Loyola College (Autonomous), Chennai.">
-<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
+<title>Complete Your Profile | LVRMIC 2026 · CIMSER, Loyola College</title>
+<meta name="description" content="Complete your participant profile — 4th International Conference on Life Sciences and Vector Risk Management (LVRMIC 2026), Loyola College (Autonomous), Chennai.">
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
+<link rel="shortcut icon" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
 
 :root{
-  --paper:#faf6ec;
-  --paper-alt:#f2ecdc;
-  --card:#ffffff;
-  --card-border:#e7ddc4;
-  --navy:#12224a;
-  --ink-1:#1b2436;
-  --ink-2:#535f7a;
-  --ink-3:#8791a6;
-  --gold:#a9762f;
-  --gold-deep:#8a5f24;
-  --gold-light:#c9974f;
-  --teal:#1f7a68;
-  --teal-light:#2e9c85;
-  --danger:#c0392b;
-  --success:#1f7a49;
+  --paper:#faf6ec;--paper-alt:#f2ecdc;--card:#ffffff;--card-border:#e7ddc4;
+  --navy:#12224a;--ink-1:#1b2436;--ink-2:#535f7a;--ink-3:#8791a6;
+  --gold:#a9762f;--gold-deep:#8a5f24;--gold-light:#c9974f;
+  --teal:#1f7a68;--teal-light:#2e9c85;--danger:#c0392b;--success:#1f7a49;
   --maxw:900px;
 }
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
 html,body{overflow-x:hidden;max-width:100%;}
-body{
-  margin:0;
-  background:var(--paper);
-  color:var(--ink-1);
-  font-family:'Inter',sans-serif;
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-}
+body.no-scroll{overflow:hidden;}
+img{max-width:100%;}
+body{margin:0;background:var(--paper);color:var(--ink-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .4em;color:var(--navy);}
 p{color:var(--ink-2);margin:0 0 1em;}
 a{color:var(--gold-deep);}
-.mono{font-family:'IBM Plex Mono',monospace;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
+@media(max-width:600px){.wrap{padding:0 14px;}}
 
 .masthead{background:linear-gradient(180deg,#ffffff,var(--paper));border-bottom:3px solid var(--gold);}
 .masthead-inner{max-width:1180px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
 .masthead-logos{display:flex;align-items:center;gap:18px;flex-shrink:0;}
 .masthead-logos img{height:74px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:56px;}}
+@media(max-width:700px){.masthead-logos img{height:52px;}.masthead-inner{padding:14px 16px;gap:12px;}}
 .masthead-text{flex:1;min-width:220px;}
 .masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:4px;}
-.masthead-text h1{font-size:clamp(1.1rem,2.1vw,1.5rem);line-height:1.25;margin:0 0 4px;color:var(--navy);}
+.masthead-text h1{font-size:clamp(1rem,2.1vw,1.5rem);line-height:1.25;margin:0 0 4px;color:var(--navy);}
 .masthead-text .m-sub{font-size:12.5px;color:var(--ink-3);margin:0;}
 
-.utcbar{background:var(--navy);border-bottom:1px solid var(--card-border);}
-.utcbar-inner{max-width:1180px;margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;}
+.utcbar{background:var(--navy);}
+.utcbar-inner{max-width:1180px;margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;flex-wrap:wrap;}
 .utcbar i{color:var(--gold-light);font-size:11px;}
 .utcbar b{color:#e8ecf5;font-weight:500;}
+@media(max-width:700px){.utcbar-inner{justify-content:center;padding:6px 12px;font-size:10.5px;}}
 
 .topnav{background:#ffffff;border-bottom:1px solid var(--card-border);}
-.topnav-inner{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap;}
-.logout-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-3);cursor:pointer;font-weight:600;}
+.topnav-inner{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:flex-end;gap:14px;}
+.logout-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-3);cursor:pointer;font-weight:600;background:none;border:0;font-family:inherit;}
 .logout-link:hover{color:var(--gold-deep);}
 
 .page-head{padding:34px 0 8px;}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-deep);border:1px solid var(--card-border);background:var(--paper-alt);padding:6px 14px;border-radius:999px;margin-bottom:16px;}
 .helix-rule{height:3px;width:56px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:0 0 18px;}
-
 .steps{display:flex;gap:6px;margin:20px 0 6px;}
 .step-dot{flex:1;height:4px;border-radius:4px;background:var(--card-border);}
 .step-dot.done{background:linear-gradient(90deg,var(--gold-light),var(--gold));}
 
 .section{padding:24px 0 72px;}
-.card{
-  background:var(--card);border:1px solid var(--card-border);border-radius:16px;
-  padding:32px;box-shadow:0 4px 20px rgba(20,30,60,.05);margin-bottom:22px;
-}
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(20,30,60,.05);margin-bottom:22px;}
+@media(max-width:600px){.card{padding:20px 16px;border-radius:14px;}}
 .card h3{font-size:1.05rem;display:flex;align-items:center;gap:10px;margin-bottom:18px;color:var(--navy);}
 .card h3 i{color:var(--gold-deep);font-size:16px;}
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 @media(max-width:640px){.field-grid{grid-template-columns:1fr;}}
-.field{margin-bottom:0;}
+.field{margin-bottom:0;min-width:0;}
 .field.full{grid-column:1/-1;}
 label{display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin:0 0 6px;}
-label .req{color:var(--danger);}
+label .req,.req{color:var(--danger);}
 label .lock{color:var(--ink-3);font-weight:400;font-size:11.5px;margin-left:6px;}
 input[type="text"],input[type="email"],input[type="date"],input[type="url"],select,textarea{
-  width:100%;background:#fff;border:1px solid var(--card-border);
-  color:var(--ink-1);border-radius:8px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:14.5px;
-}
+  width:100%;background:#fff;border:1px solid var(--card-border);color:var(--ink-1);border-radius:8px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:16px;}
+@media(min-width:801px){input[type="text"],input[type="email"],input[type="date"],input[type="url"],select,textarea{font-size:14.5px;}}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:1px;}
 input[readonly],select:disabled{background:var(--paper-alt);color:var(--ink-3);cursor:not-allowed;}
 .hint{font-size:12px;color:var(--ink-3);margin-top:6px;margin-bottom:0;}
 
 .photo-row{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;}
-.photo-preview{
-  width:130px;height:170px;border-radius:10px;border:1.5px dashed var(--card-border);
-  background:var(--paper-alt);display:flex;align-items:center;justify-content:center;
-  overflow:hidden;flex-shrink:0;color:var(--ink-3);font-size:26px;
-}
+.photo-preview{width:130px;height:173px;border-radius:10px;border:1.5px dashed var(--card-border);background:var(--paper-alt);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;color:var(--ink-3);font-size:26px;}
 .photo-preview img{width:100%;height:100%;object-fit:cover;}
 .photo-controls{flex:1;min-width:220px;}
-.photo-controls input[type=file]{
-  width:100%;background:#fff;border:1px solid var(--card-border);border-radius:8px;
-  padding:10px;color:var(--ink-2);font-size:13.5px;
-}
+.photo-controls input[type=file]{width:100%;background:#fff;border:1px solid var(--card-border);border-radius:8px;padding:10px;color:var(--ink-2);font-size:13.5px;}
+.photo-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14.5px;
-  padding:13px 26px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14.5px;padding:13px 26px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;text-align:center;}
 .btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,30,60,.12);}
 .btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold-deep));color:#fff;}
+.btn-outline{background:#fff;border-color:var(--card-border);color:var(--navy);}
+.btn-sm{padding:9px 16px;font-size:13px;}
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
 .submit-row{display:flex;justify-content:flex-end;align-items:center;gap:14px;margin-top:6px;flex-wrap:wrap;}
-
-.alert{border-radius:8px;padding:14px 16px;font-size:14px;margin-bottom:18px;border:1px solid transparent;display:none;}
-.alert.show{display:block;}
-.alert-error{background:rgba(192,57,43,.08);border-color:rgba(192,57,43,.3);color:var(--danger);}
-.alert-success{background:rgba(31,122,73,.08);border-color:rgba(31,122,73,.3);color:var(--success);}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-.notice-box{
-  display:flex;gap:12px;background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.25);
-  border-radius:10px;padding:14px 16px;margin-bottom:22px;
-}
+.notice-box{display:flex;gap:12px;background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.25);border-radius:10px;padding:14px 16px;margin-bottom:22px;}
 .notice-box i{color:var(--danger);font-size:16px;margin-top:2px;}
 .notice-box p{margin:0;font-size:13.5px;color:var(--ink-2);}
+.info-box{display:flex;gap:12px;background:rgba(31,122,104,.07);border:1px solid rgba(31,122,104,.3);border-radius:10px;padding:14px 16px;margin:16px 0;text-align:left;}
+.info-box i{color:var(--teal);font-size:16px;margin-top:3px;}
+.info-box p{margin:0;font-size:13.5px;color:var(--ink-2);}
 
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(20,30,60,.5);backdrop-filter:blur(3px);
-  display:none;align-items:center;justify-content:center;z-index:200;padding:20px;
-}
+/* Modals */
+.modal-overlay{position:fixed;inset:0;background:rgba(20,30,60,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:16px;overflow-y:auto;}
 .modal-overlay.show{display:flex;}
-.modal-card{
-  background:#fff;border:1px solid var(--card-border);
-  border-radius:16px;padding:30px;max-width:440px;width:100%;box-shadow:0 30px 70px rgba(20,30,60,.25);
-}
+.modal-card{background:#fff;border:1px solid var(--card-border);border-radius:16px;padding:26px;max-width:440px;width:100%;margin:auto;box-shadow:0 30px 70px rgba(20,30,60,.25);}
+.modal-card.wide{max-width:680px;}
+@media(max-width:480px){.modal-card{padding:20px 16px;border-radius:14px;}}
 .modal-card h3{margin-bottom:10px;}
 .modal-card p{font-size:13.5px;}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
-.btn-outline{background:#fff;border-color:var(--card-border);color:var(--navy);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap;}
+@media(max-width:480px){.modal-actions .btn{flex:1 1 100%;}}
+
+/* Cropper */
+.crop-stage{width:100%;max-width:300px;aspect-ratio:3/4;margin:0 auto;position:relative;border-radius:10px;overflow:hidden;background:#222;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;}
+.crop-stage.drag{cursor:grabbing;}
+.crop-stage canvas{width:100%;height:100%;display:block;}
+.crop-grid{position:absolute;inset:0;pointer-events:none;border:2px solid rgba(255,255,255,.9);background:
+  linear-gradient(to right,transparent 33.2%,rgba(255,255,255,.35) 33.2%,rgba(255,255,255,.35) 33.6%,transparent 33.6%,transparent 66.4%,rgba(255,255,255,.35) 66.4%,rgba(255,255,255,.35) 66.8%,transparent 66.8%),
+  linear-gradient(to bottom,transparent 33.2%,rgba(255,255,255,.35) 33.2%,rgba(255,255,255,.35) 33.6%,transparent 33.6%,transparent 66.4%,rgba(255,255,255,.35) 66.4%,rgba(255,255,255,.35) 66.8%,transparent 66.8%);}
+.zoom-row{display:flex;align-items:center;gap:10px;max-width:300px;margin:16px auto 0;}
+.zoom-row button{width:36px;height:36px;border-radius:8px;border:1px solid var(--card-border);background:#fff;color:var(--navy);cursor:pointer;font-size:14px;flex-shrink:0;}
+.zoom-row input[type=range]{flex:1;accent-color:var(--gold);min-width:0;}
+
+/* Preview */
+.pv-photo{width:120px;height:160px;border-radius:10px;border:1px solid var(--card-border);overflow:hidden;flex-shrink:0;}
+.pv-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.pv-top{display:flex;gap:18px;align-items:flex-start;margin-bottom:14px;}
+.pv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;}
+@media(max-width:560px){.pv-grid{grid-template-columns:1fr;}.pv-top{flex-direction:column;align-items:center;}}
+.pv-item{border-bottom:1px solid var(--paper-alt);padding-bottom:6px;min-width:0;}
+.pv-item span{display:block;font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.6px;font-weight:600;}
+.pv-item b{display:block;font-size:14px;color:var(--ink-1);font-weight:600;overflow-wrap:anywhere;}
+.pv-item.full{grid-column:1/-1;}
+.pv-confirm{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13.5px;color:var(--ink-2);}
+.pv-confirm input{margin-top:4px;width:17px;height:17px;accent-color:var(--gold);flex-shrink:0;}
+.pv-confirm label{margin:0;font-weight:500;cursor:pointer;}
+
+/* Error pop-up */
+.popup-back{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(4,8,22,.6);backdrop-filter:blur(3px);overflow-y:auto;}
+.popup-back.show{display:flex;}
+.popup{width:100%;max-width:400px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;margin:auto;background:#fff;border:1px solid rgba(192,57,43,.4);border-radius:16px;padding:26px 24px 20px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.35);}
+.popup-icon{width:52px;height:52px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(192,57,43,.1);color:var(--danger);border:1px solid rgba(192,57,43,.35);}
+.popup h3{margin:0 0 8px;}
+.popup p{margin:0 0 18px;font-size:14px;overflow-wrap:anywhere;}
+
+#done-box{display:none;text-align:center;padding:50px 20px;max-width:620px;margin:0 auto;}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none!important;animation:none!important;}}
 </style>
 </head>
 <body>
@@ -156,24 +161,22 @@ input[readonly],select:disabled{background:var(--paper-alt);color:var(--ink-3);c
     </div>
     <div class="masthead-text">
       <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
+      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment (LVRMIC 2026)</h1>
       <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER, PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology</p>
     </div>
   </div>
 </div>
 
-<div class="topnav">
-  <div class="topnav-inner">
-    <span class="logout-link" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</span>
-  </div>
-</div>
+<div class="topnav"><div class="topnav-inner">
+  <button class="logout-link" type="button" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+</div></div>
 
 <header class="page-head">
   <div class="wrap">
     <span class="eyebrow"><i class="fa-solid fa-id-card"></i>&nbsp; One-time setup</span>
-    <h1 style="font-size:clamp(1.6rem,3vw,2.2rem);">Complete your participant profile</h1>
+    <h1 style="font-size:clamp(1.5rem,3vw,2.2rem);">Complete your participant profile</h1>
     <div class="helix-rule"></div>
-    <p style="max-width:600px;">This information is used for your VRMIC ID card, certificate, and all conference records. <b style="color:var(--text-1);">Please review carefully — once submitted, these details cannot be changed.</b> For corrections after submission, contact the organising committee.</p>
+    <p style="max-width:640px;">This information is used for your LVRMIC ID card, certificate, and all conference records. <b style="color:var(--ink-1);">Please review carefully before submitting.</b> You will see a full preview before the final submit.</p>
     <div class="steps"><div class="step-dot done"></div><div class="step-dot" id="step2"></div><div class="step-dot" id="step3"></div></div>
   </div>
 </header>
@@ -181,144 +184,134 @@ input[readonly],select:disabled{background:var(--paper-alt);color:var(--ink-3);c
 <section class="section">
   <div class="wrap">
 
-    <div class="alert alert-error" id="form-error"></div>
-
-    <div id="loading-state" style="text-align:center;padding:60px 0;color:var(--text-3);">
-      <div class="spinner" style="border-top-color:var(--gold-light);border-color:rgba(255,255,255,.15);width:26px;height:26px;"></div>
+    <div id="loading-state" style="text-align:center;padding:60px 0;color:var(--ink-3);">
+      <div class="spinner" style="border-top-color:var(--gold);border-color:rgba(0,0,0,.1);width:26px;height:26px;"></div>
       <p style="margin-top:14px;">Loading your details…</p>
     </div>
 
-    <form id="details-form" style="display:none;">
+    <form id="details-form" style="display:none;" novalidate>
 
       <div class="notice-box">
         <i class="fa-solid fa-triangle-exclamation"></i>
-        <p>Email, mobile number, and your passport photo are locked as soon as you submit this form — they cannot be edited afterwards. Double-check them before continuing.</p>
+        <p>Email, mobile number and your photo are locked as soon as you submit this form. Check everything carefully; you will get a full preview first.</p>
       </div>
 
-      <!-- Identity -->
       <div class="card">
         <h3><i class="fa-solid fa-user"></i> Identity</h3>
         <div class="field-grid">
           <div class="field full">
-            <label>Full name <span class="req">*</span></label>
+            <label for="f-name">Full name <span class="req">*</span></label>
             <input type="text" id="f-name" required placeholder="As it should appear on your certificate">
           </div>
           <div class="field">
-            <label>Email <span class="lock">(locked)</span></label>
+            <label for="f-email">Email <span class="lock">(locked)</span></label>
             <input type="email" id="f-email" readonly>
           </div>
           <div class="field">
-            <label>Mobile number <span class="lock">(locked)</span></label>
+            <label for="f-phone">Mobile number <span class="lock">(locked)</span></label>
             <input type="text" id="f-phone" readonly>
           </div>
           <div class="field">
-            <label>Gender <span class="req">*</span></label>
+            <label for="f-gender">Gender <span class="req">*</span></label>
             <select id="f-gender" required>
               <option value="">Select</option>
-              <option>Male</option><option>Female</option><option>Other</option>
-              <option>Prefer not to say</option>
+              <option>Male</option><option>Female</option><option>Other</option><option>Prefer not to say</option>
             </select>
           </div>
           <div class="field">
-            <label>Date of birth <span class="req">*</span></label>
+            <label for="f-dob">Date of birth <span class="req">*</span></label>
             <input type="date" id="f-dob" required>
+            <p class="hint">You must be at least 16 years old.</p>
           </div>
         </div>
       </div>
 
-      <!-- Location -->
       <div class="card">
         <h3><i class="fa-solid fa-location-dot"></i> Location</h3>
         <div class="field-grid">
           <div class="field">
-            <label>Country <span class="req">*</span></label>
+            <label for="f-country">Country <span class="req">*</span></label>
             <select id="f-country" required></select>
           </div>
           <div class="field" id="state-field">
-            <label>State <span class="req">*</span></label>
+            <label for="f-state-select">State <span class="req">*</span></label>
             <select id="f-state-select" required></select>
             <input type="text" id="f-state-text" placeholder="Enter state" style="display:none;margin-top:8px;">
           </div>
           <div class="field" id="city-field">
-            <label>City <span class="req">*</span></label>
+            <label for="f-city-select">City <span class="req">*</span></label>
             <select id="f-city-select" required></select>
             <input type="text" id="f-city-text" placeholder="Enter city" style="display:none;margin-top:8px;">
           </div>
         </div>
       </div>
 
-      <!-- Professional -->
       <div class="card">
         <h3><i class="fa-solid fa-briefcase"></i> Professional details</h3>
         <div class="field-grid">
           <div class="field">
-            <label>Category <span class="req">*</span></label>
+            <label for="f-category">Category <span class="req">*</span></label>
             <select id="f-category" required>
               <option value="">Select</option>
-              <option>Student</option>
-              <option>Research Scholar</option>
-              <option>Faculty</option>
-              <option>Scientist</option>
-              <option>Industry Professional</option>
-              <option>Other</option>
+              <option>Student</option><option>Research Scholar</option><option>Faculty</option>
+              <option>Scientist</option><option>Industry Professional</option><option>Other</option>
             </select>
           </div>
           <div class="field">
-            <label>Designation <span class="req">*</span></label>
-            <select id="f-designation" required disabled>
-              <option value="">Select category first</option>
-            </select>
+            <label for="f-designation">Designation <span class="req">*</span></label>
+            <select id="f-designation" required disabled><option value="">Select category first</option></select>
           </div>
           <div class="field full" id="designation-other-field" style="display:none;">
-            <label>Please specify designation</label>
+            <label for="f-designation-other">Please specify designation</label>
             <input type="text" id="f-designation-other" placeholder="Your designation">
           </div>
           <div class="field full">
-            <label>Institution <span class="req">*</span></label>
+            <label for="f-institution">Institution <span class="req">*</span></label>
             <input type="text" id="f-institution" required placeholder="Your college / university / organisation">
           </div>
           <div class="field full">
-            <label>Department <span class="hint" style="display:inline;">(if student / research scholar / faculty / scientist)</span></label>
+            <label for="f-department">Department <span class="hint" style="display:inline;">(if student / research scholar / faculty / scientist)</span></label>
             <input type="text" id="f-department" placeholder="e.g. Advanced Zoology & Biotechnology">
           </div>
         </div>
       </div>
 
-      <!-- Academic profiles -->
       <div class="card">
         <h3><i class="fa-solid fa-graduation-cap"></i> Academic profiles <span class="hint" style="display:inline;font-weight:400;">(optional)</span></h3>
         <div class="field-grid">
           <div class="field">
-            <label>ORCID iD</label>
-            <input type="text" id="f-orcid" placeholder="0000-0000-0000-0000">
+            <label for="f-orcid">ORCID iD</label>
+            <input type="text" id="f-orcid" placeholder="0000-0000-0000-0000" maxlength="19">
           </div>
           <div class="field">
-            <label>Google Scholar profile</label>
+            <label for="f-scholar">Google Scholar profile</label>
             <input type="url" id="f-scholar" placeholder="https://scholar.google.com/...">
           </div>
           <div class="field full">
-            <label>LinkedIn profile</label>
+            <label for="f-linkedin">LinkedIn profile</label>
             <input type="url" id="f-linkedin" placeholder="https://linkedin.com/in/...">
           </div>
         </div>
       </div>
 
-      <!-- Photo -->
       <div class="card">
         <h3><i class="fa-solid fa-camera"></i> Passport-size photo <span class="req">*</span></h3>
-        <p style="margin-bottom:16px;">Used for your VRMIC ID card. Plain background, front-facing, JPG or PNG only, under 2&nbsp;MB. <b style="color:var(--text-1);">This cannot be changed once uploaded.</b></p>
+        <p style="margin-bottom:16px;">Used for your LVRMIC ID card. Plain background, front-facing, JPG or PNG, under 5&nbsp;MB. After choosing a photo you can <b style="color:var(--ink-1);">crop, move and resize</b> it. <b style="color:var(--ink-1);">It cannot be changed after final submission.</b></p>
         <div class="photo-row">
           <div class="photo-preview" id="photo-preview"><i class="fa-solid fa-image"></i></div>
           <div class="photo-controls">
-            <input type="file" id="f-photo" accept="image/jpeg,image/png" required>
+            <input type="file" id="f-photo" accept="image/jpeg,image/png">
             <p class="hint" id="photo-hint">No file selected.</p>
+            <div class="photo-actions">
+              <button type="button" class="btn btn-outline btn-sm" id="photo-adjust" style="display:none;"><i class="fa-solid fa-crop-simple"></i> Crop / resize again</button>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="submit-row">
         <span class="hint" id="submit-hint">All fields marked * are required.</span>
-        <button type="submit" class="btn btn-gold" id="submit-btn"><i class="fa-solid fa-check"></i> Review &amp; submit</button>
+        <button type="submit" class="btn btn-gold" id="submit-btn"><i class="fa-solid fa-eye"></i> Preview details</button>
       </div>
     </form>
 
@@ -328,72 +321,138 @@ input[readonly],select:disabled{background:var(--paper-alt);color:var(--ink-3);c
       <p>Taking you to your dashboard…</p>
     </div>
 
+    <div id="done-box">
+      <i class="fa-solid fa-circle-check" style="font-size:44px;color:var(--success);"></i>
+      <h2 style="margin-top:14px;">Details submitted</h2>
+      <div class="info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>A <b>verification page</b> will be opened when announced. You will be requested to verify your details and submit them for final corrections. If you have any doubts, please email <a href="mailto:conferencecimser@gmail.com">conferencecimser@gmail.com</a> with valid proof for the correction.</p>
+      </div>
+      <a class="btn btn-gold" href="home.html"><i class="fa-solid fa-house"></i> Go to dashboard</a>
+      <p class="hint" style="margin-top:12px;">Redirecting automatically in a few seconds…</p>
+    </div>
+
   </div>
 </section>
 
-<!-- Confirm modal -->
-<div class="modal-overlay" id="confirm-modal">
+<!-- Crop / resize modal -->
+<div class="modal-overlay" id="crop-modal">
   <div class="modal-card">
-    <h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--gold-light);"></i> Confirm your details</h3>
-    <p>Once submitted, your name, gender, DOB, location, professional details, and photo <b style="color:var(--text-1);">cannot be edited</b>. Please make sure everything is correct before continuing.</p>
+    <h3><i class="fa-solid fa-crop-simple" style="color:var(--gold-deep);"></i> Crop your photo</h3>
+    <p>Drag the photo to move it, and use the slider (or scroll / pinch) to zoom. The frame is the passport-size area that will be saved.</p>
+    <div class="crop-stage" id="crop-stage">
+      <canvas id="crop-canvas" width="300" height="400"></canvas>
+      <div class="crop-grid"></div>
+    </div>
+    <div class="zoom-row">
+      <button type="button" id="zoom-out" aria-label="Zoom out"><i class="fa-solid fa-minus"></i></button>
+      <input type="range" id="zoom-range" min="1" max="4" step="0.01" value="1" aria-label="Zoom">
+      <button type="button" id="zoom-in" aria-label="Zoom in"><i class="fa-solid fa-plus"></i></button>
+    </div>
     <div class="modal-actions">
-      <button class="btn btn-outline" id="modal-cancel" type="button">Go back &amp; check</button>
-      <button class="btn btn-gold" id="modal-confirm" type="button"><i class="fa-solid fa-check"></i> Yes, submit</button>
+      <button class="btn btn-outline" id="crop-cancel" type="button">Cancel</button>
+      <button class="btn btn-gold" id="crop-ok" type="button"><i class="fa-solid fa-check"></i> Use this photo</button>
     </div>
   </div>
 </div>
 
+<!-- Preview modal -->
+<div class="modal-overlay" id="preview-modal">
+  <div class="modal-card wide">
+    <h3><i class="fa-solid fa-eye" style="color:var(--gold-deep);"></i> Preview your details</h3>
+    <p>Please check every detail below. After you submit, they are locked.</p>
+    <div class="pv-top">
+      <div class="pv-photo"><img id="pv-photo" alt="Your photo"></div>
+      <div class="pv-grid" id="pv-grid-a" style="flex:1;width:100%;"></div>
+    </div>
+    <div class="pv-grid" id="pv-grid-b"></div>
+    <div class="info-box">
+      <i class="fa-solid fa-circle-info"></i>
+      <p>A <b>verification page</b> will be opened when announced. You will be requested to verify your details and submit them for final corrections. For any doubts, email <a href="mailto:conferencecimser@gmail.com">conferencecimser@gmail.com</a> with valid proof for corrections.</p>
+    </div>
+    <div class="pv-confirm">
+      <input type="checkbox" id="pv-check">
+      <label for="pv-check">I have checked all the details above and they are correct.</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="pv-back" type="button"><i class="fa-solid fa-pen"></i> Go back &amp; edit</button>
+      <button class="btn btn-gold" id="pv-submit" type="button" disabled><i class="fa-solid fa-check"></i> Confirm &amp; submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Error pop-up -->
+<div class="popup-back" id="popup-back">
+  <div class="popup" role="alertdialog" aria-modal="true" aria-labelledby="popup-title" aria-describedby="popup-msg">
+    <div class="popup-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h3 id="popup-title">Please check</h3>
+    <p id="popup-msg"></p>
+    <button type="button" class="btn btn-gold" style="width:100%;" id="popup-ok">OK</button>
+  </div>
+</div>
+
 <script src="../assets/india-states-cities.js"></script>
+<script src="../participant-common.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
+const L = window.LVRMIC;
+L.startClock('utc-clock');
 
-function updateClock(){
-  const now = new Date();
-  const opts = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', timeZone: 'Asia/Kolkata', timeZoneName: 'short' };
-  const dateTimeStr = now.toLocaleDateString('en-GB', opts);
-  const timeStr = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-  document.getElementById('utc-clock').innerHTML = `<b>${dateTimeStr} &nbsp;·&nbsp; ${timeStr}</b>`;
-}
-updateClock(); setInterval(updateClock, 1000);
+const token = L.session.token();
+if (!token) { window.location.href = '../participant-login.html'; }
 
-const token = localStorage.getItem('vrmic_token');
-if (!token) { window.location.href = 'participant-login.html'; }
+function logout(){ L.session.clear(); window.location.href = '../participant-login.html'; }
 
-function logout(){
-  localStorage.removeItem('vrmic_token');
-  localStorage.removeItem('vrmic_name');
-  window.location.href = '../participant-login.html';
+async function api(action, payload) {
+  const res = await L.callApi(action, Object.assign({ token: token }, payload || {}));
+  if (!res.ok && /session expired/i.test(res.error || '')) { L.session.clear(); window.location.href = '../participant-login.html'; }
+  return res;
 }
 
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action, token }, payload))
-  });
-  return res.json();
+// ---------- Pop-up ----------
+const popupBack = document.getElementById('popup-back');
+function showPopup(msg, title){
+  document.getElementById('popup-title').textContent = title || 'Please check';
+  document.getElementById('popup-msg').textContent = msg || 'Please try again.';
+  popupBack.classList.add('show');
+  document.getElementById('popup-ok').focus();
 }
+function closePopup(){ popupBack.classList.remove('show'); }
+document.getElementById('popup-ok').addEventListener('click', closePopup);
+popupBack.addEventListener('click', e => { if (e.target === popupBack) closePopup(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (popupBack.classList.contains('show')) closePopup();
+  else if (cropModal.classList.contains('show')) closeCrop();
+  else if (previewModal.classList.contains('show')) closePreview();
+});
 
-function showError(msg){
-  const el = document.getElementById('form-error');
-  el.textContent = msg; el.classList.add('show');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+function lockScroll(){ document.body.classList.toggle('no-scroll', !!document.querySelector('.modal-overlay.show')); }
+
+// ---------- Date of birth: at least 16 years old ----------
+function istToday(){
+  const p = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  return p; // YYYY-MM-DD
 }
-function hideError(){ document.getElementById('form-error').classList.remove('show'); }
+function yearsAgo(n){
+  const [y, m, d] = istToday().split('-').map(Number);
+  const dt = new Date(Date.UTC(y - n, m - 1, d));
+  if (dt.getUTCMonth() !== m - 1) dt.setUTCDate(0);   // 29 Feb fix
+  return dt.toISOString().slice(0, 10);
+}
+const MAX_DOB = yearsAgo(16), MIN_DOB = yearsAgo(100);
+const dobInput = document.getElementById('f-dob');
+dobInput.max = MAX_DOB; dobInput.min = MIN_DOB;
+function fmtDate(iso){ const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? m[3] + '-' + m[2] + '-' + m[1] : iso; }
 
-// ---- Country / State / City ----
+// ---------- Country / State / City ----------
 const COUNTRIES = ["India","Afghanistan","Bangladesh","Bhutan","Nepal","Pakistan","Sri Lanka","United States","United Kingdom","Canada","Australia","Germany","France","Singapore","Malaysia","UAE","Saudi Arabia","China","Japan","South Korea","South Africa","Nigeria","Kenya","Other"];
 function populateCountries(){
-  const sel = document.getElementById('f-country');
-  sel.innerHTML = '<option value="">Select</option>' + COUNTRIES.map(c => `<option value="${c}">${c}</option>`).join('');
+  document.getElementById('f-country').innerHTML = '<option value="">Select</option>' + COUNTRIES.map(c => `<option value="${c}">${c}</option>`).join('');
 }
 function onCountryChange(prefState, prefCity){
   const country = document.getElementById('f-country').value;
-  const stateSelect = document.getElementById('f-state-select');
-  const stateText = document.getElementById('f-state-text');
-  const citySelect = document.getElementById('f-city-select');
-  const cityText = document.getElementById('f-city-text');
-
+  const stateSelect = document.getElementById('f-state-select'), stateText = document.getElementById('f-state-text');
+  const citySelect = document.getElementById('f-city-select'), cityText = document.getElementById('f-city-text');
   if (country === 'India' && typeof INDIA_STATES !== 'undefined') {
     stateSelect.style.display = ''; stateText.style.display = 'none'; stateText.required = false; stateSelect.required = true;
     stateSelect.innerHTML = '<option value="">Select state</option>' +
@@ -401,7 +460,10 @@ function onCountryChange(prefState, prefCity){
       '<option value="__other__">Other (not listed)</option>';
     if (prefState && INDIA_STATES[prefState]) stateSelect.value = prefState;
     onStateChange(prefCity);
-    stateSelect.onchange = () => onStateChange();
+    stateSelect.onchange = () => {
+      if (stateSelect.value === '__other__') { stateSelect.style.display = 'none'; stateSelect.required = false; stateText.style.display = ''; stateText.required = true; stateText.value = ''; }
+      onStateChange();
+    };
   } else {
     stateSelect.style.display = 'none'; stateSelect.required = false;
     stateText.style.display = ''; stateText.required = true;
@@ -413,8 +475,7 @@ function onCountryChange(prefState, prefCity){
 }
 function onStateChange(prefCity){
   const state = document.getElementById('f-state-select').value;
-  const citySelect = document.getElementById('f-city-select');
-  const cityText = document.getElementById('f-city-text');
+  const citySelect = document.getElementById('f-city-select'), cityText = document.getElementById('f-city-text');
   if (state === '__other__' || !state) {
     citySelect.style.display = 'none'; citySelect.required = false;
     cityText.style.display = ''; cityText.required = true;
@@ -423,24 +484,15 @@ function onStateChange(prefCity){
   const cities = (typeof INDIA_STATES !== 'undefined' && INDIA_STATES[state]) || [];
   citySelect.style.display = ''; citySelect.required = true;
   cityText.style.display = 'none'; cityText.required = false;
-  citySelect.innerHTML = '<option value="">Select city</option>' +
-    cities.map(c => `<option value="${c}">${c}</option>`).join('') +
-    '<option value="__other__">Other (not listed)</option>';
+  citySelect.innerHTML = '<option value="">Select city</option>' + cities.map(c => `<option value="${c}">${c}</option>`).join('') + '<option value="__other__">Other (not listed)</option>';
   if (prefCity && cities.indexOf(prefCity) > -1) citySelect.value = prefCity;
   citySelect.onchange = () => {
-    if (citySelect.value === '__other__') {
-      citySelect.style.display = 'none';
-      cityText.style.display = ''; cityText.required = true; cityText.value = '';
-    }
+    if (citySelect.value === '__other__') { citySelect.style.display = 'none'; citySelect.required = false; cityText.style.display = ''; cityText.required = true; cityText.value = ''; }
   };
 }
 document.getElementById('f-country').addEventListener('change', () => onCountryChange());
 
-document.getElementById('f-designation').addEventListener('change', function(){
-  document.getElementById('designation-other-field').style.display = this.value === 'Other' ? '' : 'none';
-});
-
-// ---- Designation options depend on the selected Category ----
+// ---------- Category -> designation ----------
 const DESIGNATION_OPTIONS = {
   'Student': ['UG Student', 'PG Student', 'Diploma Student', 'Integrated Student', 'Other'],
   'Research Scholar': ['Ph.D. Research Scholar', 'M.Phil. Research Scholar', 'Junior Research Fellow (JRF)', 'Senior Research Fellow (SRF)', 'Other'],
@@ -450,61 +502,124 @@ const DESIGNATION_OPTIONS = {
   'Other': ['Other']
 };
 function onCategoryChange(prefDesignation){
-  const category = document.getElementById('f-category').value;
-  const desigSelect = document.getElementById('f-designation');
+  const category = document.getElementById('f-category').value, sel = document.getElementById('f-designation');
   const options = DESIGNATION_OPTIONS[category];
-  if (!options) {
-    desigSelect.disabled = true;
-    desigSelect.innerHTML = '<option value="">Select category first</option>';
-    return;
-  }
-  desigSelect.disabled = false;
-  desigSelect.innerHTML = '<option value="">Select</option>' + options.map(o => `<option>${o}</option>`).join('');
-  if (prefDesignation && options.indexOf(prefDesignation) > -1) desigSelect.value = prefDesignation;
-  document.getElementById('designation-other-field').style.display = desigSelect.value === 'Other' ? '' : 'none';
+  if (!options) { sel.disabled = true; sel.innerHTML = '<option value="">Select category first</option>'; return; }
+  sel.disabled = false;
+  sel.innerHTML = '<option value="">Select</option>' + options.map(o => `<option>${o}</option>`).join('');
+  if (prefDesignation && options.indexOf(prefDesignation) > -1) sel.value = prefDesignation;
+  document.getElementById('designation-other-field').style.display = sel.value === 'Other' ? '' : 'none';
 }
 document.getElementById('f-category').addEventListener('change', () => onCategoryChange());
+document.getElementById('f-designation').addEventListener('change', function(){
+  document.getElementById('designation-other-field').style.display = this.value === 'Other' ? '' : 'none';
+});
 
-// ---- Photo handling: validate + downscale to a passport-ratio JPEG ----
-let photoBase64 = null, photoFileName = null;
-document.getElementById('f-photo').addEventListener('change', function(e){
-  const file = e.target.files[0];
+// ---------- Photo: choose -> crop / resize pop-up -> 600x800 JPEG ----------
+const MAX_PHOTO_MB = 5, OUT_W = 600, OUT_H = 800;
+let photoBase64 = null, photoDataUrl = '', srcImg = null;
+
+const cropModal = document.getElementById('crop-modal');
+const stage = document.getElementById('crop-stage');
+const canvas = document.getElementById('crop-canvas'), ctx = canvas.getContext('2d');
+const zoomRange = document.getElementById('zoom-range');
+const CW = canvas.width, CH = canvas.height;
+let base = 1, zoom = 1, ox = 0, oy = 0;
+
+function scaleNow(){ return base * zoom; }
+function clampPos(){
+  const s = scaleNow(), w = srcImg.width * s, h = srcImg.height * s;
+  ox = Math.min(0, Math.max(CW - w, ox));
+  oy = Math.min(0, Math.max(CH - h, oy));
+}
+function drawCrop(){
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, CW, CH);
+  const s = scaleNow();
+  ctx.drawImage(srcImg, ox, oy, srcImg.width * s, srcImg.height * s);
+}
+function setZoom(z, keepCenter){
+  z = Math.min(4, Math.max(1, z));
+  if (keepCenter !== false) {
+    const sOld = scaleNow(), cx = (CW / 2 - ox) / sOld, cy = (CH / 2 - oy) / sOld;
+    zoom = z;
+    const sNew = scaleNow(); ox = CW / 2 - cx * sNew; oy = CH / 2 - cy * sNew;
+  } else zoom = z;
+  zoomRange.value = zoom; clampPos(); drawCrop();
+}
+function openCrop(){
+  base = Math.max(CW / srcImg.width, CH / srcImg.height); zoom = 1; zoomRange.value = 1;
+  ox = (CW - srcImg.width * base) / 2; oy = (CH - srcImg.height * base) / 2;
+  drawCrop();
+  cropModal.classList.add('show'); lockScroll();
+}
+function closeCrop(){ cropModal.classList.remove('show'); lockScroll(); }
+
+zoomRange.addEventListener('input', () => setZoom(parseFloat(zoomRange.value)));
+document.getElementById('zoom-in').addEventListener('click', () => setZoom(zoom + 0.2));
+document.getElementById('zoom-out').addEventListener('click', () => setZoom(zoom - 0.2));
+stage.addEventListener('wheel', e => { e.preventDefault(); setZoom(zoom + (e.deltaY < 0 ? 0.1 : -0.1)); }, { passive: false });
+
+// drag (mouse + touch) and pinch
+const pointers = new Map(); let lastDist = 0;
+function canvasScale(){ return CW / stage.getBoundingClientRect().width; }
+stage.addEventListener('pointerdown', e => { stage.setPointerCapture(e.pointerId); pointers.set(e.pointerId, { x: e.clientX, y: e.clientY }); stage.classList.add('drag'); lastDist = 0; });
+stage.addEventListener('pointermove', e => {
+  if (!pointers.has(e.pointerId)) return;
+  const prev = pointers.get(e.pointerId), k = canvasScale();
+  if (pointers.size === 1) { ox += (e.clientX - prev.x) * k; oy += (e.clientY - prev.y) * k; clampPos(); drawCrop(); }
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()], d = Math.hypot(a.x - b.x, a.y - b.y);
+    if (lastDist) setZoom(zoom * d / lastDist);
+    lastDist = d;
+  }
+});
+function endPointer(e){ pointers.delete(e.pointerId); lastDist = 0; if (!pointers.size) stage.classList.remove('drag'); }
+stage.addEventListener('pointerup', endPointer); stage.addEventListener('pointercancel', endPointer);
+
+document.getElementById('crop-cancel').addEventListener('click', () => {
+  closeCrop();
+  if (!photoBase64) { document.getElementById('f-photo').value = ''; srcImg = null; }
+});
+document.getElementById('crop-ok').addEventListener('click', () => {
+  const out = document.createElement('canvas'); out.width = OUT_W; out.height = OUT_H;
+  const o = out.getContext('2d'), k = OUT_W / CW, s = scaleNow();
+  o.fillStyle = '#fff'; o.fillRect(0, 0, OUT_W, OUT_H);
+  o.drawImage(srcImg, ox * k, oy * k, srcImg.width * s * k, srcImg.height * s * k);
+  photoDataUrl = out.toDataURL('image/jpeg', 0.92);
+  photoBase64 = photoDataUrl.split(',')[1];
+  document.getElementById('photo-preview').innerHTML = `<img src="${photoDataUrl}" alt="Your photo">`;
   const hint = document.getElementById('photo-hint');
-  if (!file) return;
-  if (!/^image\/(jpeg|png)$/.test(file.type)) { hint.textContent = 'Only JPG or PNG files are allowed.'; hint.style.color = 'var(--danger)'; this.value = ''; return; }
-  if (file.size > 2 * 1024 * 1024) { hint.textContent = 'File must be under 2 MB.'; hint.style.color = 'var(--danger)'; this.value = ''; return; }
+  hint.textContent = 'Photo ready — cropped to passport size.'; hint.style.color = 'var(--teal-light)';
+  document.getElementById('photo-adjust').style.display = '';
+  closeCrop();
+});
+document.getElementById('photo-adjust').addEventListener('click', () => { if (srcImg) openCrop(); });
 
+document.getElementById('f-photo').addEventListener('change', function(){
+  const file = this.files[0], hint = document.getElementById('photo-hint');
+  if (!file) return;
+  if (!/^image\/(jpeg|png)$/.test(file.type)) { showPopup('Only JPG or PNG photos are allowed.', 'Wrong file type'); this.value = ''; return; }
+  if (file.size > MAX_PHOTO_MB * 1024 * 1024) { showPopup('The photo must be under ' + MAX_PHOTO_MB + ' MB.', 'File too large'); this.value = ''; return; }
   const reader = new FileReader();
-  reader.onload = function(ev){
+  reader.onload = ev => {
     const img = new Image();
-    img.onload = function(){
-      // Crop/scale to a 3:4 passport ratio, max 600x800
-      const targetW = 600, targetH = 800;
-      const canvas = document.createElement('canvas');
-      canvas.width = targetW; canvas.height = targetH;
-      const ctx = canvas.getContext('2d');
-      const srcRatio = img.width / img.height, targetRatio = targetW / targetH;
-      let sx, sy, sw, sh;
-      if (srcRatio > targetRatio) { sh = img.height; sw = sh * targetRatio; sx = (img.width - sw) / 2; sy = 0; }
-      else { sw = img.width; sh = sw / targetRatio; sx = 0; sy = (img.height - sh) / 2; }
-      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-      photoBase64 = dataUrl.split(',')[1];
-      photoFileName = 'photo.jpg';
-      document.getElementById('photo-preview').innerHTML = `<img src="${dataUrl}">`;
-      hint.textContent = 'Photo ready — cropped to passport size.'; hint.style.color = 'var(--teal-light)';
+    img.onload = () => {
+      if (img.width < 200 || img.height < 250) { showPopup('The photo is too small. Please use a clearer photo (at least 200 × 250 pixels).', 'Photo too small'); document.getElementById('f-photo').value = ''; return; }
+      srcImg = img; hint.style.color = ''; openCrop();
     };
+    img.onerror = () => showPopup('This image could not be read. Please try another photo.', 'Invalid image');
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 });
 
-// ---- Load existing profile ----
+// ---------- Load profile ----------
 (async function init(){
   populateCountries();
   try {
-    const res = await callApi('getProfile', {});
-    if (!res.ok) { showError(res.error || 'Could not load your profile.'); document.getElementById('loading-state').style.display = 'none'; return; }
+    const res = await api('getProfile', {});
+    if (!res.ok) { document.getElementById('loading-state').style.display = 'none'; showPopup(res.error || 'Could not load your profile.', 'Could not load'); return; }
     if (res.profileCompleted) {
       document.getElementById('loading-state').style.display = 'none';
       document.getElementById('already-done').style.display = 'block';
@@ -522,63 +637,93 @@ document.getElementById('f-photo').addEventListener('change', function(e){
     document.getElementById('details-form').style.display = 'block';
   } catch (err) {
     document.getElementById('loading-state').style.display = 'none';
-    showError('Could not reach the server. Check your connection and reload.');
+    showPopup(err.message, 'Connection problem');
   }
 })();
 
-// ---- Submit flow: validate -> confirm modal -> save ----
-const form = document.getElementById('details-form');
-const modal = document.getElementById('confirm-modal');
-form.addEventListener('submit', function(e){
-  e.preventDefault();
-  hideError();
-  if (!photoBase64) { showError('Please upload your passport-size photo before submitting.'); return; }
-  if (!form.checkValidity()) { form.reportValidity(); return; }
-  modal.classList.add('show');
-});
-document.getElementById('modal-cancel').addEventListener('click', () => modal.classList.remove('show'));
-document.getElementById('modal-confirm').addEventListener('click', async function(){
-  modal.classList.remove('show');
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Submitting...';
-
-  const country = document.getElementById('f-country').value;
-  const stateVal = document.getElementById('f-state-select').style.display !== 'none'
-    ? document.getElementById('f-state-select').value : document.getElementById('f-state-text').value;
-  const cityVal = document.getElementById('f-city-select').style.display !== 'none'
-    ? document.getElementById('f-city-select').value : document.getElementById('f-city-text').value;
-
-  const payload = {
-    name: document.getElementById('f-name').value.trim(),
-    gender: document.getElementById('f-gender').value,
-    dob: document.getElementById('f-dob').value,
-    country: country,
-    state: stateVal === '__other__' ? document.getElementById('f-state-text').value : stateVal,
-    city: cityVal === '__other__' ? document.getElementById('f-city-text').value : cityVal,
-    designation: document.getElementById('f-designation').value,
-    designationOther: document.getElementById('f-designation-other').value,
-    category: document.getElementById('f-category').value,
-    department: document.getElementById('f-department').value,
-    institution: document.getElementById('f-institution').value.trim(),
-    orcidId: document.getElementById('f-orcid').value,
-    googleScholar: document.getElementById('f-scholar').value,
-    linkedIn: document.getElementById('f-linkedin').value,
-    photoData: photoBase64,
-    photoFileName: photoFileName
+// ---------- Collect + validate ----------
+function visible(id){ return document.getElementById(id).style.display !== 'none'; }
+function collect(){
+  const stateVal = visible('f-state-select') ? document.getElementById('f-state-select').value : document.getElementById('f-state-text').value.trim();
+  const cityVal = visible('f-city-select') ? document.getElementById('f-city-select').value : document.getElementById('f-city-text').value.trim();
+  const v = id => document.getElementById(id).value.trim();
+  return {
+    name: v('f-name'), email: v('f-email'), phone: v('f-phone'), gender: v('f-gender'), dob: v('f-dob'),
+    country: v('f-country'), state: stateVal, city: cityVal,
+    category: v('f-category'), designation: v('f-designation'), designationOther: v('f-designation-other'),
+    institution: v('f-institution'), department: v('f-department'),
+    orcidId: v('f-orcid'), googleScholar: v('f-scholar'), linkedIn: v('f-linkedin')
   };
+}
+function validate(d){
+  const need = [['name','full name'],['gender','gender'],['dob','date of birth'],['country','country'],['state','state'],['city','city'],['category','category'],['designation','designation'],['institution','institution']];
+  for (const [k, label] of need) if (!d[k] || d[k] === '__other__') return 'Please fill in your ' + label + '.';
+  if (d.designation === 'Other' && !d.designationOther) return 'Please specify your designation.';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d.dob)) return 'Please enter a valid date of birth.';
+  if (d.dob > MAX_DOB) return 'You must be at least 16 years old to register (date of birth must be on or before ' + fmtDate(MAX_DOB) + ').';
+  if (d.dob < MIN_DOB) return 'Please check your date of birth.';
+  if (d.orcidId && !/^\d{4}-\d{4}-\d{4}-\d{3}[\dXx]$/.test(d.orcidId)) return 'ORCID iD must look like 0000-0000-0000-0000.';
+  if (d.googleScholar && !/^https?:\/\/\S+$/i.test(d.googleScholar)) return 'Google Scholar link must start with http:// or https://';
+  if (d.linkedIn && !/^https?:\/\/\S+$/i.test(d.linkedIn)) return 'LinkedIn link must start with http:// or https://';
+  if (!photoBase64) return 'Please upload your passport-size photo, then crop it.';
+  return '';
+}
 
+// ---------- Preview ----------
+const previewModal = document.getElementById('preview-modal');
+const pvCheck = document.getElementById('pv-check'), pvSubmit = document.getElementById('pv-submit');
+function pvItem(label, value, full){
+  const d = document.createElement('div'); d.className = 'pv-item' + (full ? ' full' : '');
+  const s = document.createElement('span'); s.textContent = label;
+  const b = document.createElement('b'); b.textContent = value || '—';
+  d.appendChild(s); d.appendChild(b); return d;
+}
+function closePreview(){ previewModal.classList.remove('show'); lockScroll(); }
+function openPreview(d){
+  document.getElementById('pv-photo').src = photoDataUrl;
+  const a = document.getElementById('pv-grid-a'), b = document.getElementById('pv-grid-b');
+  a.innerHTML = ''; b.innerHTML = '';
+  [['Full name', d.name, true], ['Email', d.email, true], ['Mobile number', d.phone], ['Gender', d.gender], ['Date of birth', fmtDate(d.dob)]]
+    .forEach(x => a.appendChild(pvItem(x[0], x[1], x[2])));
+  [['Country', d.country], ['State', d.state], ['City', d.city], ['Category', d.category],
+   ['Designation', d.designation === 'Other' ? 'Other — ' + d.designationOther : d.designation],
+   ['Institution', d.institution, true], ['Department', d.department], ['ORCID iD', d.orcidId],
+   ['Google Scholar', d.googleScholar, true], ['LinkedIn', d.linkedIn, true]]
+    .forEach(x => b.appendChild(pvItem(x[0], x[1], x[2])));
+  pvCheck.checked = false; pvSubmit.disabled = true;
+  previewModal.classList.add('show'); lockScroll();
+}
+pvCheck.addEventListener('change', () => { pvSubmit.disabled = !pvCheck.checked; });
+document.getElementById('pv-back').addEventListener('click', closePreview);
+
+document.getElementById('details-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const d = collect(), err = validate(d);
+  if (err) { showPopup(err, 'Please check'); return; }
+  openPreview(d);
+});
+
+// ---------- Final submit ----------
+pvSubmit.addEventListener('click', async function(){
+  const d = collect(), err = validate(d);
+  if (err) { closePreview(); showPopup(err, 'Please check'); return; }
+  pvSubmit.disabled = true; pvSubmit.innerHTML = '<span class="spinner"></span> Submitting...';
   try {
-    const res = await callApi('saveParticipantDetails', payload);
+    const res = await api('saveParticipantDetails', Object.assign({}, d, { photoData: photoBase64, photoFileName: 'photo.jpg' }));
     if (!res.ok) {
-      showError(res.error || 'Could not save your details.');
-      btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check"></i> Review & submit';
+      closePreview(); showPopup(res.error || 'Could not save your details.', 'Could not save');
+      pvSubmit.disabled = false; pvSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Confirm &amp; submit';
       return;
     }
-    btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved — redirecting…';
-    window.location.href = 'home.html';
-  } catch (err) {
-    showError('Could not reach the server. Check your connection and try again.');
-    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check"></i> Review & submit';
+    closePreview();
+    document.getElementById('details-form').style.display = 'none';
+    document.getElementById('done-box').style.display = 'block';
+    document.getElementById('step2').classList.add('done'); document.getElementById('step3').classList.add('done');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => { window.location.href = 'home.html'; }, 15000);
+  } catch (e2) {
+    closePreview(); showPopup(e2.message, 'Connection problem');
+    pvSubmit.disabled = false; pvSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Confirm &amp; submit';
   }
 });
 </script>
