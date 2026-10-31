@@ -3,306 +3,387 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Slot | CIMSER, Loyola College</title>
-<meta name="description" content="Your presentation slot — 4th International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment, Loyola College (Autonomous), Chennai.">
-<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
+<title>My Slot | LVRMIC 2026 · CIMSER, Loyola College</title>
+<meta name="description" content="Your presentation slot — 4th International Conference on Life Sciences and Vector Risk Management (LVRMIC 2026), Loyola College (Autonomous), Chennai.">
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
-
-:root{
-  --paper:#faf6ec;
-  --paper-alt:#f2ecdc;
-  --card:#ffffff;
-  --card-border:#e7ddc4;
-  --navy:#12224a;
-  --navy-soft:#2c3b63;
-  --ink-1:#1b2436;
-  --ink-2:#535f7a;
-  --ink-3:#8791a6;
-  --gold:#a9762f;
-  --gold-deep:#8a5f24;
-  --gold-light:#c9974f;
-  --teal:#1f7a68;
-  --teal-light:#2e9c85;
-  --danger:#c0392b;
-  --warn:#b5791f;
-  --success:#1f7a49;
-  --maxw:1180px;
-}
+:root{--paper:#faf6ec;--paper-alt:#f2ecdc;--card:#fff;--card-border:#e7ddc4;--navy:#12224a;--ink-1:#1b2436;--ink-2:#535f7a;--ink-3:#8791a6;--gold:#a9762f;--gold-deep:#8a5f24;--gold-light:#c9974f;--teal:#1f7a68;--danger:#c0392b;--warn:#b5791f;--success:#1f7a49;--maxw:1180px;}
 *{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
 html,body{overflow-x:hidden;max-width:100%;}
 body{margin:0;background:var(--paper);color:var(--ink-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;}
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .4em;color:var(--navy);}
 p{color:var(--ink-2);margin:0 0 1em;}
-a{color:var(--gold-deep);text-decoration:none;}
-a:hover{text-decoration:underline;}
-.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:var(--gold-deep);text-decoration:none;}a:hover{text-decoration:underline;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
-@media(max-width:600px){.wrap{padding:0 16px;}}
+@media(max-width:600px){.wrap{padding:0 14px;}}
 
-.masthead{background:linear-gradient(180deg,#ffffff,var(--paper));border-bottom:3px solid var(--gold);}
-.masthead-inner{max-width:var(--maxw);margin:0 auto;padding:20px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:18px;flex-shrink:0;}
-.masthead-logos img{height:74px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:56px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:4px;}
-.masthead-text h1{font-size:clamp(1.15rem,2.2vw,1.55rem);line-height:1.25;margin:0 0 4px;color:var(--navy);}
-.masthead-text .m-sub{font-size:12.5px;color:var(--ink-3);margin:0;}
+.utcbar{background:var(--navy);}
+.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;flex-wrap:wrap;}
+.utcbar i{color:var(--gold-light);font-size:11px;}.utcbar b{color:#e8ecf5;font-weight:500;}
+@media(max-width:700px){.utcbar-inner{justify-content:center;padding:6px 12px;font-size:10.5px;}}
+.masthead{background:linear-gradient(180deg,#fff,var(--paper));border-bottom:3px solid var(--gold);}
+.masthead-inner{max-width:var(--maxw);margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:20px;}
+.masthead-logos{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.masthead-logos img{height:64px;width:auto;object-fit:contain;}
+@media(max-width:700px){.masthead-logos img{height:46px;}.masthead-inner{padding:12px 14px;gap:12px;}}
+.m-super{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:2px;}
+.masthead-text h1{font-size:clamp(.95rem,2vw,1.4rem);line-height:1.25;margin:0;}
 
-.utcbar{background:var(--navy);border-bottom:1px solid var(--card-border);}
-.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;}
-.utcbar i{color:var(--gold-light);font-size:11px;}
-.utcbar b{color:#e8ecf5;font-weight:500;}
-
-.topnav{background:#ffffff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(20,30,60,.04);}
-.topnav-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-.pnav{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
-.pnav a{display:flex;align-items:center;gap:6px;padding:12px;border-radius:7px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;transition:.2s;border-bottom:2px solid transparent;}
+.topnav{background:#fff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(20,30,60,.04);}
+.topnav-inner{max-width:var(--maxw);margin:0 auto;padding:4px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+@media(max-width:600px){.topnav-inner{padding:4px 14px;}}
+.pnav{display:flex;align-items:center;list-style:none;margin:0;padding:0;}
+.pnav a{display:flex;align-items:center;gap:6px;padding:14px 11px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
 .pnav a:hover,.pnav a.active{color:var(--gold-deep);border-bottom-color:var(--gold);text-decoration:none;}
-.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;}
-.user-chip{display:flex;align-items:center;gap:10px;position:relative;}
-.user-chip img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);cursor:pointer;background:#fff;}
-.user-chip .avatar-fallback{width:38px;height:38px;border-radius:50%;background:var(--paper-alt);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-deep);cursor:pointer;font-size:14px;}
-.user-menu{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:10px;min-width:170px;box-shadow:0 18px 40px rgba(20,30,60,.15);opacity:0;visibility:hidden;transform:translateY(8px);transition:.2s;padding:6px;z-index:50;}
-.user-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
-.user-menu a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:6px;color:var(--ink-2);font-size:13px;}
-.user-menu a:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
+.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;line-height:1;}
+.pop-wrap{position:relative;}
+.pop{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:12px;box-shadow:0 20px 44px rgba(20,30,60,.18);opacity:0;visibility:hidden;transform:translateY(8px);transition:.2s;z-index:60;}
+.pop.open{opacity:1;visibility:visible;transform:none;}
+.user-menu{min-width:190px;padding:6px;}
+.user-menu a,.user-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border-radius:7px;color:var(--ink-2);font-size:13px;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left;}
+.user-menu a:hover,.user-menu button:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
+.user-chip-btn{background:none;border:0;padding:0;cursor:pointer;display:block;border-radius:50%;}
+.user-chip-btn img,.avatar-fallback{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#fff;display:block;}
+.avatar-fallback{display:flex;align-items:center;justify-content:center;background:var(--paper-alt);color:var(--gold-deep);font-size:14px;}
 @media(max-width:960px){
-  .pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;align-items:stretch;padding:90px 20px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
-  .pnav.open{transform:translateX(0);visibility:visible;}
-  .pnav a{width:100%;font-size:14.5px;padding:12px;}
-  .pnav-toggle{display:block;}
+  .pnav-toggle{display:block;position:relative;z-index:101;}
+  .pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;height:100dvh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;align-items:stretch;padding:90px 20px 24px;gap:2px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
+  .pnav.open{transform:none;visibility:visible;}
+  .pnav a{padding:12px;font-size:14.5px;border-bottom:0;border-radius:8px;}
+  .pnav a:hover,.pnav a.active{background:var(--paper-alt);}
 }
 
-.page-head{padding:32px 0 4px;}
-.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);letter-spacing:.4px;margin-bottom:14px;}
-.breadcrumb a{color:var(--ink-3);}
-.breadcrumb .sep{margin:0 6px;color:var(--card-border);}
-.breadcrumb .current{color:var(--gold-deep);}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-deep);border:1px solid var(--card-border);background:var(--paper-alt);padding:6px 14px;border-radius:999px;margin-bottom:16px;}
-.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:18px 0;}
+.page-head{padding:28px 0 4px;}
+.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);margin-bottom:12px;}
+.breadcrumb a{color:var(--ink-3);}.breadcrumb .sep{margin:0 6px;color:var(--card-border);}.breadcrumb .current{color:var(--gold-deep);}
+.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:16px 0;}
+.section{padding:4px 0 56px;}
+.sk{background:linear-gradient(90deg,#efe8d6 25%,#f8f3e5 37%,#efe8d6 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:14px;}
+@keyframes shimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
 
-.section{padding:8px 0 60px;}
-.loader{text-align:center;padding:80px 0;color:var(--ink-3);}
-.spinner-lg{width:30px;height:30px;border:3px solid rgba(169,118,47,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* Boarding-pass style slot card */
-.slot-pass{
-  display:grid;grid-template-columns:1fr 200px;
-  background:var(--card);
-  border:1px solid var(--card-border);border-radius:18px;overflow:hidden;
-  box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:24px;
-}
+/* slot pass */
+.slot-pass{display:grid;grid-template-columns:1fr 200px;background:var(--card);border:1px solid var(--card-border);border-radius:18px;overflow:hidden;box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:22px;}
 @media(max-width:640px){.slot-pass{grid-template-columns:1fr;}}
-.slot-main{padding:30px 32px;position:relative;}
-.slot-main::after{
-  content:'';position:absolute;right:0;top:0;bottom:0;width:1px;
-  background-image:repeating-linear-gradient(180deg,var(--card-border) 0 8px,transparent 8px 16px);
-}
-@media(max-width:640px){.slot-main::after{display:none;}}
-.slot-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-deep);margin-bottom:10px;}
-.slot-venue{font-size:1.5rem;margin-bottom:4px;}
+.slot-main{padding:28px 30px;position:relative;min-width:0;}
+.slot-main::after{content:'';position:absolute;right:0;top:0;bottom:0;width:1px;background-image:repeating-linear-gradient(180deg,var(--card-border) 0 8px,transparent 8px 16px);}
+@media(max-width:640px){.slot-main::after{display:none;}.slot-main{padding:22px 18px;}}
+.slot-eyebrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-deep);margin-bottom:10px;}
+.slot-venue{font-size:1.5rem;margin-bottom:4px;overflow-wrap:anywhere;}
 .slot-room{font-size:14px;color:var(--teal);margin-bottom:18px;}
-.slot-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-.slot-meta-item .l{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:4px;}
-.slot-meta-item .v{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--navy);}
-.slot-token{
-  background:var(--paper-alt);display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:24px;text-align:center;
-}
-.slot-token .l{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-3);margin-bottom:8px;}
-.slot-token .v{font-family:'IBM Plex Mono',monospace;font-size:2.1rem;font-weight:700;color:var(--gold-deep);line-height:1;}
+.slot-meta{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px;}
+.slot-meta .l{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:2px;}
+.slot-meta .v{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--navy);overflow-wrap:anywhere;}
+.slot-token{background:var(--paper-alt);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;gap:14px;}
+.slot-token .l{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-3);margin-bottom:6px;}
+.slot-token .v{font-family:'IBM Plex Mono',monospace;font-size:2rem;font-weight:700;color:var(--gold-deep);line-height:1;overflow-wrap:anywhere;}
+.slot-token .v.board{color:var(--teal);}
 
-.card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:26px;box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:22px;}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:0;text-transform:none;font-family:'Inter',sans-serif;}
+.badge i{font-size:6px;}
+.badge-success{background:rgba(31,122,73,.1);color:var(--success);}
+.badge-pending{background:rgba(181,121,31,.12);color:var(--warn);}
+.badge-danger{background:rgba(192,57,43,.1);color:var(--danger);}
+.badge-neutral{background:rgba(83,95,122,.1);color:var(--ink-2);}
+
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:22px;box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:20px;}
+@media(max-width:600px){.card{padding:16px;}}
+.card h3{font-size:1.05rem;display:flex;align-items:center;gap:8px;}
+.card h3 i{color:var(--gold-deep);}
+.notice{display:flex;gap:14px;align-items:flex-start;border-radius:14px;padding:16px 18px;margin-bottom:20px;border:1px solid var(--gold-light);background:linear-gradient(135deg,#fff7e3,#fdf0cf);}
+.notice>i{font-size:20px;color:var(--gold-deep);margin-top:2px;}
+.notice.bad{background:#fff3f1;border-color:rgba(192,57,43,.4);}.notice.bad>i{color:var(--danger);}
+.notice.good{background:#f0faf4;border-color:rgba(31,122,73,.35);}.notice.good>i{color:var(--success);}
+.notice.info{background:#f4f6fa;border-color:var(--card-border);}.notice.info>i{color:var(--navy);}
+.notice .nb{flex:1;min-width:0;}
+.notice b{display:block;color:var(--navy);margin-bottom:2px;}
+.notice p{margin:0 0 4px;font-size:13.5px;overflow-wrap:anywhere;}
+.notice ul{margin:6px 0 8px;padding-left:18px;font-size:13px;color:var(--ink-2);}
 .map-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--card-border);height:280px;}
-.map-wrap iframe{width:100%;height:100%;border:0;filter:grayscale(.15) contrast(1.05);}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;}
-.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,30,60,.12);}
+.map-wrap iframe{width:100%;height:100%;border:0;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;text-align:center;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,30,60,.12);text-decoration:none;}
 .btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold-deep));color:#fff;}
-.empty-note{text-align:center;padding:60px 20px;color:var(--ink-3);border:1px dashed var(--card-border);border-radius:14px;}
-.empty-note i{font-size:26px;color:var(--gold-deep);margin-bottom:10px;display:block;}
+.btn-outline{background:#fff;border-color:var(--card-border);color:var(--navy);}
+.btn-sm{padding:7px 13px;font-size:12.5px;}
+.cal-wrap{position:relative;display:inline-block;}
+.cal-menu{position:absolute;left:0;top:calc(100% + 6px);min-width:210px;background:#fff;border:1px solid var(--card-border);border-radius:10px;box-shadow:0 18px 40px rgba(20,30,60,.18);padding:6px;opacity:0;visibility:hidden;transform:translateY(6px);transition:.18s;z-index:40;}
+.cal-menu.open{opacity:1;visibility:visible;transform:none;}
+.cal-menu a,.cal-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:9px 12px;border-radius:6px;color:var(--ink-2);font-size:13px;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left;}
+.cal-menu a:hover,.cal-menu button:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
+.empty-note{text-align:center;padding:50px 20px;color:var(--ink-3);border:1px dashed var(--card-border);border-radius:14px;background:#fff;}
+.empty-note>i{font-size:26px;color:var(--gold-deep);margin-bottom:10px;display:block;}
+.empty-note p{max-width:520px;margin:0 auto;}
 
-footer{border-top:1px solid var(--card-border);padding:40px 0 24px;background:var(--navy);}
-footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;}
-footer em{color:var(--gold-light);}
+footer{padding:34px 0 24px;background:var(--navy);}
+footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0 0 6px;}footer em{color:var(--gold-light);}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
 </head>
 <body>
 
 <div class="utcbar"><div class="utcbar-inner"><i class="fa-regular fa-clock"></i><span id="utc-clock"><b>Loading time…</b></span></div></div>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology &middot; Participant Portal</p>
+<div class="masthead"><div class="masthead-inner">
+  <div class="masthead-logos">
+    <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
+    <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
+  </div>
+  <div class="masthead-text">
+    <div class="m-super">Loyola College (Autonomous), Chennai</div>
+    <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
+  </div>
+</div></div>
+
+<div class="topnav"><div class="topnav-inner">
+  <button class="pnav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  <ul class="pnav" id="nav-links">
+    <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
+    <li><a href="registration.html"><i class="fa-solid fa-id-card"></i> Registration</a></li>
+    <li><a href="abstract.html" id="nav-abstract-link"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
+    <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
+    <li><a href="schedule.html"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
+    <li><a href="slot.html" class="active"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
+    <li><a href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
+    <li id="nav-verify" style="display:none;"><a href="verification.html"><i class="fa-solid fa-user-check"></i> Verification</a></li>
+  </ul>
+  <div class="pop-wrap">
+    <button class="user-chip-btn" id="user-btn" type="button" aria-label="My account">
+      <img id="user-avatar" alt="" style="display:none;">
+      <div class="avatar-fallback" id="user-avatar-fallback"><i class="fa-solid fa-user"></i></div>
+    </button>
+    <div class="pop user-menu" id="user-menu">
+      <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+      <button type="button" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
     </div>
   </div>
-</div>
+</div></div>
 
-<div class="topnav">
-  <div class="topnav-inner">
-    <button class="pnav-toggle" id="pnav-toggle"><i class="fa-solid fa-bars"></i></button>
-    <ul class="pnav" id="pnav">
-      <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
-      <li><a href="registration.html"><i class="fa-solid fa-id-card"></i> Registration</a></li>
-      <li><a href="abstract.html"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
-      <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
-      <li><a href="schedule.html"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
-      <li><a href="slot.html" class="active"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
-      <li><a href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
-    </ul>
-    <div class="user-chip">
-      <img id="user-avatar" style="display:none;" onclick="toggleUserMenu()">
-      <div class="avatar-fallback" id="user-avatar-fallback" onclick="toggleUserMenu()"><i class="fa-solid fa-user"></i></div>
-      <div class="user-menu" id="user-menu">
-        <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
-      </div>
-    </div>
-  </div>
-</div>
+<header class="page-head"><div class="wrap">
+  <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">My Slot</span></div>
+  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);margin:0;">My presentation slot</h1>
+  <div class="helix-rule"></div>
+</div></header>
 
-<header class="page-head">
-  <div class="wrap">
-    <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">My Slot</span></div>
-    <span class="eyebrow"><i class="fa-solid fa-location-crosshairs"></i>&nbsp; Your allotment</span>
-    <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);">My presentation slot</h1>
-    <div class="helix-rule"></div>
-  </div>
-</header>
+<section class="section" id="loader"><div class="wrap">
+  <div class="sk" style="height:200px;"></div><div class="sk" style="height:140px;margin-top:20px;"></div>
+</div></section>
 
-<div id="loader" class="loader"><div class="spinner-lg"></div><p style="margin-top:14px;">Loading…</p></div>
+<section class="section" id="content" style="display:none;"><div class="wrap" id="slot-root"></div></section>
 
-<section class="section" id="content" style="display:none;">
-  <div class="wrap">
+<footer><div class="wrap">
+  <p><b style="color:#fff;" id="f-dates">26&ndash;28 November 2026</b> &middot; Participant Portal</p>
+  <p>Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology</p>
+  <p>© 2026, Loyola College (Autonomous), Chennai &mdash; <em>“Luceat Lux Vestra — Let Your Light Shine”</em></p>
+</div></footer>
 
-    <div id="slot-filled" style="display:none;">
-      <div class="slot-pass">
-        <div class="slot-main">
-          <div class="slot-eyebrow"><i class="fa-solid fa-location-dot"></i> Venue</div>
-          <h2 class="slot-venue" id="sl-venue">—</h2>
-          <div class="slot-room" id="sl-room"></div>
-          <div class="slot-meta">
-            <div class="slot-meta-item"><div class="l">Date</div><div class="v" id="sl-date">—</div></div>
-            <div class="slot-meta-item"><div class="l">Time</div><div class="v" id="sl-time">—</div></div>
-          </div>
-        </div>
-        <div class="slot-token">
-          <div class="l">Slot / Token No.</div>
-          <div class="v" id="sl-token">—</div>
-        </div>
-      </div>
-
-      <div class="card" id="map-card" style="display:none;">
-        <h3 style="font-size:1.05rem;"><i class="fa-solid fa-route" style="color:var(--gold-deep);"></i> Directions to the venue</h3>
-        <p style="margin-bottom:14px;">Tap below to open turn-by-turn directions in Google Maps, or use the embedded map to get your bearings.</p>
-        <div class="map-wrap"><iframe id="sl-map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
-        <div style="margin-top:16px;"><a class="btn btn-gold" id="sl-map-link" href="#" target="_blank"><i class="fa-solid fa-diamond-turn-right"></i> Open directions</a></div>
-      </div>
-    </div>
-
-    <div id="slot-empty" class="empty-note" style="display:none;">
-      <i class="fa-solid fa-location-crosshairs"></i>
-      <h3 style="margin-bottom:6px;">Your slot hasn't been allotted yet</h3>
-      <p>The organising desk will configure your venue, room, date, time, and token number closer to the conference. This page will update automatically once it's set.</p>
-    </div>
-
-  </div>
-</section>
-
-<footer><div class="wrap"><p>© 2026, Centre for Insect Molecular Studies and Environmental Research (CIMSER) — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai <em><br>"Luceat Lux Vestra — Let Your Light Shine"</em></p></div></footer>
-
+<script src="../participant-common.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
+const L = window.LVRMIC;
+L.startClock('utc-clock');
+L.initMenu();
 
-// Date/time format: "09 Sep 2026 · 3:45 PM IST" — day-month-year, 12-hour with AM/PM.
-function updateClock(){
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
-  const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true });
-  document.getElementById('utc-clock').innerHTML = `<b>${dateStr} &nbsp;·&nbsp; ${timeStr} IST</b>`;
-}
-updateClock(); setInterval(updateClock, 1000);
-
-document.getElementById('pnav-toggle').addEventListener('click', () => document.getElementById('pnav').classList.toggle('open'));
-function toggleUserMenu(){ document.getElementById('user-menu').classList.toggle('open'); }
-document.addEventListener('click', (e) => { if (!e.target.closest('.user-chip')) document.getElementById('user-menu').classList.remove('open'); });
-
-const token = localStorage.getItem('vrmic_token');
+const token = L.session.token();
 if (!token) window.location.href = '../participant-login.html';
-function logout(){ localStorage.removeItem('vrmic_token'); localStorage.removeItem('vrmic_name'); window.location.href = '../participant-login.html'; }
-
-// Turns a Google Drive "view" share link into a URL that actually renders in an <img> tag.
-function driveThumb(url, size){
-  if (!url) return '';
-  const m = String(url).match(/\/d\/([^/]+)/) || String(url).match(/[?&]id=([^&]+)/);
-  if (!m) return url;
-  return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${size || 300}`;
+function logout(){ L.session.clear(); window.location.href = '../participant-login.html'; }
+async function api(action, payload){
+  const res = await L.callApi(action, Object.assign({ token: token }, payload || {}));
+  if (!res.ok && /session expired|log in again/i.test(res.error || '')) { L.session.clear(); window.location.href = '../participant-login.html'; }
+  return res;
 }
 
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action, token }, payload))
-  });
-  return res.json();
+/* ---------- helpers ---------- */
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl = u => /^https?:\/\/\S+$/i.test(String(u || '')) ? String(u) : '';
+const badge = (t, k) => `<span class="badge badge-${k}"><i class="fa-solid fa-circle"></i> ${esc(t)}</span>`;
+const compactUtc = ms => new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+const addDaysKey = (key, n) => { const d = new Date(key + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+function toMin(t){ const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(String(t || '').trim()); if (!m) return null; let h = +m[1] % 12; if (/pm/i.test(m[3])) h += 12; return h * 60 + +m[2]; }
+
+/* ---------- popovers ---------- */
+const userMenu = document.getElementById('user-menu');
+function closePops(){ userMenu.classList.remove('open'); document.querySelectorAll('.cal-menu.open').forEach(m => m.classList.remove('open')); }
+document.getElementById('user-btn').addEventListener('click', e => { e.stopPropagation(); const o = !userMenu.classList.contains('open'); closePops(); userMenu.classList.toggle('open', o); });
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-cal-toggle]');
+  if (t) { e.stopPropagation(); const m = document.getElementById('cal-menu'), o = !m.classList.contains('open'); closePops(); m.classList.toggle('open', o); return; }
+  if (e.target.closest('[data-ics]')) { downloadIcs(); closePops(); return; }
+  if (!e.target.closest('.pop')) closePops();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePops(); });
+
+/* ---------- calendar ---------- */
+let calEv = null;
+function buildEvent(s, S){
+  const dm = /^(\d{1,2})\s+([A-Za-z]{3})\w*\s+(\d{4})$/.exec(String(s.date || '').trim());
+  if (!dm) return null;
+  const mi = MON.findIndex(m => m.toLowerCase() === dm[2].toLowerCase()); if (mi < 0) return null;
+  const key = dm[3] + '-' + String(mi + 1).padStart(2, '0') + '-' + String(+dm[1]).padStart(2, '0');
+  const online = s.mode === 'Online';
+  const loc = online ? (safeUrl(s.meetingLink) || 'Online') : [s.venue, s.room ? 'Room ' + s.room : ''].filter(Boolean).join(', ') + ', Loyola College, Chennai';
+  const details = [s.token ? 'Token: ' + s.token : '', s.board ? 'Poster board: ' + s.board : '', online && safeUrl(s.meetingLink) ? 'Join: ' + s.meetingLink : '', S['conf.website'] || ''].filter(Boolean).join('\n');
+  const title = (S['conf.shortName'] || 'LVRMIC 2026') + ' — Your presentation slot';
+  const sm = toMin(s.time);
+  if (sm === null) return { allDay: true, start: key.replace(/-/g, ''), end: addDaysKey(key, 1).replace(/-/g, ''), title, location: loc, details };
+  const em = toMin(s.endTime);
+  const at = m => Date.parse(key + 'T' + String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0') + ':00+05:30');
+  const start = at(sm), end = (em !== null && em > sm) ? at(em) : start + (+s.duration || 30) * 60000;
+  return { allDay: false, start: compactUtc(start), end: compactUtc(end), title, location: loc, details };
+}
+function googleUrl(ev){
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(ev.title) + '&dates=' + ev.start + '/' + ev.end +
+    '&details=' + encodeURIComponent(ev.details) + '&location=' + encodeURIComponent(ev.location) + '&ctz=Asia%2FKolkata';
+}
+const icsEsc = s => String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+function downloadIcs(){
+  const ev = calEv; if (!ev) return;
+  const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//LVRMIC 2026//Participant Portal//EN','CALSCALE:GREGORIAN','BEGIN:VEVENT',
+    'UID:slot-' + Date.now() + '@lvrmic26.vercel.app','DTSTAMP:' + compactUtc(Date.now()),
+    ev.allDay ? 'DTSTART;VALUE=DATE:' + ev.start : 'DTSTART:' + ev.start, ev.allDay ? 'DTEND;VALUE=DATE:' + ev.end : 'DTEND:' + ev.end,
+    'SUMMARY:' + icsEsc(ev.title),'LOCATION:' + icsEsc(ev.location),'DESCRIPTION:' + icsEsc(ev.details),
+    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:' + icsEsc(ev.title),'TRIGGER:' + (ev.allDay ? '-P1D' : '-PT30M'),'END:VALARM','END:VEVENT','END:VCALENDAR'];
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' }), a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'LVRMIC-2026-my-slot.ics'; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function calWidget(){
+  return `<div class="cal-wrap"><button type="button" class="btn btn-outline" data-cal-toggle="1"><i class="fa-regular fa-calendar-plus"></i> Add to calendar <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></button>
+    <div class="cal-menu" id="cal-menu"><a href="${esc(googleUrl(calEv))}" target="_blank" rel="noopener"><i class="fa-brands fa-google"></i> Google Calendar</a>
+    <button type="button" data-ics="1"><i class="fa-regular fa-calendar"></i> Apple / Outlook (.ics)</button></div></div>`;
 }
 
+/* ---------- “slot changed / moved up” detection ----------
+   The server does not send a change history, so the page remembers the slot you last
+   acknowledged on this device and compares it with the current one. */
+const sig = s => ({ venue: s.venue || '', room: s.room || '', date: s.date || '', time: s.time || '', token: s.token || '', board: s.board || '', status: s.status || '' });
+function storeKey(id){ return 'lvrmic_slot_seen_' + id; }
+function readSeen(id){ try { return JSON.parse(localStorage.getItem(storeKey(id)) || 'null'); } catch (e) { return null; } }
+function writeSeen(id, s){ try { localStorage.setItem(storeKey(id), JSON.stringify(sig(s))); } catch (e) {} }
+function diffSlot(prev, cur){
+  if (!prev || !prev.venue) return null;
+  const labels = { venue: 'Venue', room: 'Room', date: 'Date', time: 'Time', token: 'Token', board: 'Poster board' }, changes = [];
+  Object.keys(labels).forEach(k => { if ((prev[k] || '') !== (cur[k] || '')) changes.push({ label: labels[k], from: prev[k] || '—', to: cur[k] || '—' }); });
+  const pm = toMin(prev.time), cm = toMin(cur.time);
+  const movedUp = prev.venue === cur.venue && prev.date === cur.date && pm !== null && cm !== null && cm < pm;
+  return changes.length ? { changes, movedUp } : null;
+}
+
+/* ---------- render ---------- */
+function stateBox(icon, title, text, cls){
+  return `<div class="empty-note"><i class="fa-solid ${icon}"></i><h3>${esc(title)}</h3><p>${esc(text)}</p></div>`;
+}
+function render(res, pt, S){
+  const root = document.getElementById('slot-root'), s = res.slot || {};
+  const help = S['conf.convenerEmail'] || S['conf.contactEmail'] || '';
+  const helpLink = help ? ` <a href="mailto:${esc(help)}">${esc(help)}</a>` : '';
+
+  if (pt && pt.abstractApplicable === false) {
+    root.innerHTML = stateBox('fa-user', 'No presentation slot for you', 'Presentation slots are for Oral and Poster presenters. As a delegate you can attend any session — see the Schedule page for the programme.');
+    return;
+  }
+  if (res.published === false) {
+    root.innerHTML = stateBox('fa-eye-slash', 'Slots have not been published yet', 'The organising team has not released presentation slots to participants yet. Please check back soon — your slot will appear here as soon as it is published.');
+    return;
+  }
+  if (!s.venue) {
+    const accepted = pt && pt.abstractStatus === 'Accepted';
+    root.innerHTML = stateBox('fa-location-crosshairs', 'Your slot hasn’t been allotted yet',
+      accepted ? 'Your abstract is accepted. The organising team will allot your venue, date and time soon, and it will appear on this page.' : 'Slots are allotted after your abstract is accepted. Check your abstract status on the Dashboard.');
+    return;
+  }
+
+  const online = s.mode === 'Online', isPoster = s.type === 'Poster', st = s.status || 'Scheduled';
+  const stKind = st === 'Presented' ? 'success' : st === 'No-show' ? 'danger' : 'pending';
+  const timeTxt = s.time ? s.time + (s.endTime ? ' – ' + s.endTime : '') : (isPoster ? 'Poster session' : '—');
+  const link = safeUrl(s.meetingLink);
+  calEv = (st === 'No-show') ? null : buildEvent(s, S);
+
+  let html = '';
+
+  // 1) change notice
+  const pid = pt && pt.id, d = pid ? diffSlot(readSeen(pid), s) : null;
+  if (d) {
+    html += `<div class="notice" id="change-notice"><i class="fa-solid ${d.movedUp ? 'fa-angles-up' : 'fa-arrows-rotate'}"></i><div class="nb"><b>${d.movedUp ? 'Good news — your slot was moved up' : 'Your slot has been changed'}</b>
+      <p>${d.movedUp ? 'You are now scheduled earlier than before.' : 'The organisers updated your allotment since you last viewed it.'} Please note the new details below.</p>
+      <ul>${d.changes.map(c => `<li><b style="display:inline;">${esc(c.label)}:</b> ${esc(c.from)} → <b style="display:inline;">${esc(c.to)}</b></li>`).join('')}</ul>
+      <button class="btn btn-gold btn-sm" type="button" id="ack-btn"><i class="fa-solid fa-check"></i> Got it</button></div></div>`;
+  } else if (pid && !readSeen(pid)) writeSeen(pid, s);
+
+  // 2) status notice
+  if (st === 'Presented') html += `<div class="notice good"><i class="fa-solid fa-circle-check"></i><div class="nb"><b>Presentation completed</b><p>You are marked as presented. Thank you for your contribution!</p></div></div>`;
+  if (st === 'No-show') html += `<div class="notice bad"><i class="fa-solid fa-circle-xmark"></i><div class="nb"><b>Marked as no-show</b><p>You were marked absent for this slot, so it has been released. If this is a mistake, please contact the organisers.${helpLink}</p></div></div>`;
+
+  // 3) pass
+  html += `<div class="slot-pass"><div class="slot-main">
+      <div class="slot-eyebrow"><span><i class="fa-solid ${online ? 'fa-video' : 'fa-location-dot'}"></i> ${online ? 'Online presentation' : 'Venue'} · ${esc(s.type || 'Presentation')}</span>${badge(st, stKind)}</div>
+      <h2 class="slot-venue">${esc(s.venue)}</h2>
+      <div class="slot-room">${s.room ? 'Room ' + esc(s.room) : ''}</div>
+      <div class="slot-meta">
+        <div><div class="l">Date</div><div class="v">${esc(s.date || '—')}</div></div>
+        <div><div class="l">Time</div><div class="v">${esc(timeTxt)}</div></div>
+        ${s.duration ? `<div><div class="l">Duration</div><div class="v">${+s.duration} min</div></div>` : ''}
+        <div><div class="l">Mode</div><div class="v">${online ? 'Online' : 'In person'}</div></div>
+      </div></div>
+      <div class="slot-token">
+        ${s.token ? `<div><div class="l">Slot / Token No.</div><div class="v">${esc(s.token)}</div></div>` : ''}
+        ${s.board ? `<div><div class="l">Poster board</div><div class="v board">${esc(s.board)}</div></div>` : ''}
+        ${!s.token && !s.board ? `<div><div class="l">Token / Board</div><div class="v" style="font-size:1.2rem;">${isPoster ? 'Board to be assigned' : '—'}</div></div>` : ''}
+      </div></div>`;
+
+  // 4) actions: online link / calendar
+  if (online) {
+    html += `<div class="card"><h3><i class="fa-solid fa-video"></i> Join online</h3>
+      <p style="margin-bottom:0;">${link ? 'Use the meeting link below at your scheduled time. Please join a few minutes early and test your audio and screen sharing.' : 'Your meeting link has not been shared yet. It will appear here once the organisers add it.'}</p>
+      <div class="btn-row">${link ? `<a class="btn btn-gold" href="${esc(link)}" target="_blank" rel="noopener"><i class="fa-solid fa-video"></i> Join meeting</a>` : badge('Link coming soon', 'pending')}${calEv ? calWidget() : ''}</div></div>`;
+  } else {
+    const q = encodeURIComponent((s.venue || '') + ', Loyola College Chennai');
+    const dir = safeUrl(s.mapUrl) || ('https://www.google.com/maps/dir/?api=1&destination=' + q);
+    let embed = 'https://www.google.com/maps?q=' + q + '&output=embed';
+    if (/output=embed/.test(s.mapUrl || '') && safeUrl(s.mapUrl)) embed = s.mapUrl;
+    html += `<div class="card"><h3><i class="fa-solid fa-route"></i> Directions to the venue</h3>
+      <p style="margin-bottom:14px;">${s.location ? esc(s.location) + '. ' : ''}Open turn-by-turn directions in Google Maps, or use the map below to get your bearings.</p>
+      <div class="map-wrap"><iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Venue map" src="${esc(embed)}"></iframe></div>
+      <div class="btn-row"><a class="btn btn-gold" href="${esc(dir)}" target="_blank" rel="noopener"><i class="fa-solid fa-diamond-turn-right"></i> Open directions</a>${calEv ? calWidget() : ''}</div></div>`;
+  }
+  root.innerHTML = html;
+
+  const ack = document.getElementById('ack-btn');
+  if (ack) ack.addEventListener('click', () => { writeSeen(pid, s); document.getElementById('change-notice').remove(); });
+}
+
+/* ---------- init ---------- */
 (async function init(){
   try {
-    const dash = await callApi('getDashboard', {});
-    if (!dash.ok) { if (/session/i.test(dash.error||'')) { window.location.href='../participant-login.html'; return; } }
-    if (dash.ok && dash.participant.photoUrl) {
-      const thumb = driveThumb(dash.participant.photoUrl, 100);
-      const av = document.getElementById('user-avatar');
-      av.src = thumb; av.style.display = '';
-      av.onerror = () => { av.style.display = 'none'; };
-      document.getElementById('user-avatar-fallback').style.display = 'none';
+    const [dash, res, S] = await Promise.all([api('getDashboard', {}), api('getSlot', {}), L.loadPublicSettings()]);
+    const set = S || {};
+    const pt = dash.ok ? dash.participant : null;
+    if (pt) {
+      if (!pt.profileCompleted) { window.location.href = 'details.html'; return; }
+      if (pt.photoUrl) {
+        const av = document.getElementById('user-avatar');
+        av.onerror = () => { av.style.display = 'none'; document.getElementById('user-avatar-fallback').style.display = ''; };
+        av.src = L.photoUrl(pt.photoUrl, 100); av.style.display = '';
+        document.getElementById('user-avatar-fallback').style.display = 'none';
+      }
+      document.getElementById('nav-abstract-link').style.display = pt.abstractApplicable ? '' : 'none';
+      if (pt.pptRequired) document.getElementById('nav-ppt-link').style.display = '';
     }
-    if (dash.ok && dash.participant.pptRequired) document.getElementById('nav-ppt-link').style.display = '';
+    if (set['sw.verificationOpen'] === 'true') document.getElementById('nav-verify').style.display = '';
 
-    const res = await callApi('getSlot', {});
     document.getElementById('loader').style.display = 'none';
     document.getElementById('content').style.display = 'block';
-
-    if (!res.ok || !res.slot || !res.slot.venue) {
-      document.getElementById('slot-empty').style.display = 'block';
+    if (!res.ok) {
+      document.getElementById('slot-root').innerHTML = `<div class="notice bad"><i class="fa-solid fa-triangle-exclamation"></i><div class="nb"><b>Could not load your slot</b><p>${esc(res.error || 'Please try again.')}</p></div></div>`;
       return;
     }
-    const s = res.slot;
-    document.getElementById('slot-filled').style.display = 'block';
-    document.getElementById('sl-venue').textContent = s.venue;
-    document.getElementById('sl-room').textContent = s.room ? ('Room ' + s.room) : '';
-    document.getElementById('sl-date').textContent = s.date || '—';
-    document.getElementById('sl-time').textContent = s.time || '—';
-    document.getElementById('sl-token').textContent = s.token || '—';
-
-    if (s.mapUrl) {
-      document.getElementById('map-card').style.display = 'block';
-      document.getElementById('sl-map-link').href = s.mapUrl;
-      // Build an embeddable map: if a plain Maps link was given, wrap it for the iframe.
-      let embedSrc = s.mapUrl;
-      if (!/output=embed/.test(embedSrc)) {
-        embedSrc = 'https://www.google.com/maps?q=' + encodeURIComponent(s.venue + ' ' + (s.room||'')) + '&output=embed';
-      }
-      document.getElementById('sl-map-frame').src = embedSrc;
-    } else if (s.venue) {
-      document.getElementById('map-card').style.display = 'block';
-      const q = encodeURIComponent(s.venue + ', Loyola College Chennai');
-      document.getElementById('sl-map-link').href = 'https://www.google.com/maps/dir/?api=1&destination=' + q;
-      document.getElementById('sl-map-frame').src = 'https://www.google.com/maps?q=' + q + '&output=embed';
-    }
+    render(res, pt, set);
   } catch (err) {
-    document.getElementById('loader').innerHTML = '<p style="color:var(--danger);">Could not reach the server. Check your connection and reload.</p>';
+    document.getElementById('loader').innerHTML = `<div class="wrap"><div class="notice bad"><i class="fa-solid fa-triangle-exclamation"></i><div class="nb"><b>Could not reach the server</b><p>${esc(err.message || 'Check your connection and reload.')}</p></div></div></div>`;
   }
 })();
 </script>
