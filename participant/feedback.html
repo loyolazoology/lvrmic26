@@ -3,309 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conference Feedback | CIMSER, Loyola College</title>
-<meta name="description" content="Post-conference survey — 4th International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment, Loyola College (Autonomous), Chennai.">
-<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
+<title>Conference Feedback | LVRMIC 2026 · CIMSER, Loyola College</title>
+<meta name="description" content="Post-conference survey — 4th International Conference on Life Sciences and Vector Risk Management (LVRMIC 2026), Loyola College (Autonomous), Chennai.">
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
-
-:root{
-  --paper:#faf6ec;
-  --paper-alt:#f2ecdc;
-  --card:#ffffff;
-  --card-border:#e7ddc4;
-  --navy:#12224a;
-  --navy-soft:#2c3b63;
-  --ink-1:#1b2436;
-  --ink-2:#535f7a;
-  --ink-3:#8791a6;
-  --gold:#a9762f;
-  --gold-deep:#8a5f24;
-  --gold-light:#c9974f;
-  --teal:#1f7a68;
-  --teal-light:#2e9c85;
-  --danger:#c0392b;
-  --warn:#b5791f;
-  --success:#1f7a49;
-  --maxw:900px;
-}
+:root{--paper:#faf6ec;--paper-alt:#f2ecdc;--card:#fff;--card-border:#e7ddc4;--navy:#12224a;--ink-1:#1b2436;--ink-2:#535f7a;--ink-3:#8791a6;--gold:#a9762f;--gold-deep:#8a5f24;--gold-light:#c9974f;--teal:#1f7a68;--danger:#c0392b;--warn:#b5791f;--success:#1f7a49;--maxw:1180px;}
 *{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
 html,body{overflow-x:hidden;max-width:100%;}
 body{margin:0;background:var(--paper);color:var(--ink-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;}
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .4em;color:var(--navy);}
 p{color:var(--ink-2);margin:0 0 1em;}
-a{color:var(--gold-deep);text-decoration:none;}
-a:hover{text-decoration:underline;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
-.wrap-narrow{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
-@media(max-width:600px){.wrap,.wrap-narrow{padding:0 16px;}}
+a{color:var(--gold-deep);text-decoration:none;}a:hover{text-decoration:underline;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.wrap-narrow{max-width:900px;margin:0 auto;padding:0 24px;}
+@media(max-width:600px){.wrap,.wrap-narrow{padding:0 14px;}}
 
-.masthead{background:linear-gradient(180deg,#ffffff,var(--paper));border-bottom:3px solid var(--gold);}
-.masthead-inner{max-width:1180px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:18px;flex-shrink:0;}
-.masthead-logos img{height:74px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:56px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:4px;}
-.masthead-text h1{font-size:clamp(1.15rem,2.2vw,1.55rem);line-height:1.25;margin:0 0 4px;color:var(--navy);}
-.masthead-text .m-sub{font-size:12.5px;color:var(--ink-3);margin:0;}
-
-.utcbar{background:var(--navy);border-bottom:1px solid var(--card-border);}
-.utcbar-inner{max-width:1180px;margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;}
-.utcbar i{color:var(--gold-light);font-size:11px;}
-.utcbar b{color:#e8ecf5;font-weight:500;}
-
-.topnav{background:#ffffff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(20,30,60,.04);}
-.topnav-inner{max-width:1180px;margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-.pnav{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
-.pnav a{display:flex;align-items:center;gap:6px;padding:12px;border-radius:7px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;transition:.2s;border-bottom:2px solid transparent;}
+/* top bars (same as home) */
+.utcbar{background:var(--navy);}
+.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;flex-wrap:wrap;}
+.utcbar i{color:var(--gold-light);font-size:11px;}.utcbar b{color:#e8ecf5;font-weight:500;}
+@media(max-width:700px){.utcbar-inner{justify-content:center;padding:6px 12px;font-size:10.5px;}}
+.masthead{background:linear-gradient(180deg,#fff,var(--paper));border-bottom:3px solid var(--gold);}
+.masthead-inner{max-width:var(--maxw);margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:20px;}
+.masthead-logos{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.masthead-logos img{height:64px;width:auto;object-fit:contain;}
+@media(max-width:700px){.masthead-logos img{height:46px;}.masthead-inner{padding:12px 14px;gap:12px;}}
+.m-super{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:2px;}
+.masthead-text h1{font-size:clamp(.95rem,2vw,1.4rem);line-height:1.25;margin:0;}
+.topnav{background:#fff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(20,30,60,.04);}
+.topnav-inner{max-width:var(--maxw);margin:0 auto;padding:4px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+@media(max-width:600px){.topnav-inner{padding:4px 14px;}}
+.pnav{display:flex;align-items:center;list-style:none;margin:0;padding:0;}
+.pnav a{display:flex;align-items:center;gap:6px;padding:14px 11px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
 .pnav a:hover,.pnav a.active{color:var(--gold-deep);border-bottom-color:var(--gold);text-decoration:none;}
-.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;}
-.user-chip{display:flex;align-items:center;gap:10px;position:relative;}
-.user-chip img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);cursor:pointer;background:#fff;}
-.user-chip .avatar-fallback{width:38px;height:38px;border-radius:50%;background:var(--paper-alt);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-deep);cursor:pointer;font-size:14px;}
-.user-menu{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:10px;min-width:170px;box-shadow:0 18px 40px rgba(20,30,60,.15);opacity:0;visibility:hidden;transform:translateY(8px);transition:.2s;padding:6px;z-index:50;}
-.user-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
-.user-menu a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:6px;color:var(--ink-2);font-size:13px;}
-.user-menu a:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
+.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;line-height:1;}
+.pop-wrap{position:relative;}
+.pop{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:12px;box-shadow:0 20px 44px rgba(20,30,60,.18);opacity:0;visibility:hidden;transform:translateY(8px);transition:.2s;z-index:60;}
+.pop.open{opacity:1;visibility:visible;transform:none;}
+.user-menu{min-width:190px;padding:6px;}
+.user-menu a,.user-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border-radius:7px;color:var(--ink-2);font-size:13px;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left;}
+.user-menu a:hover,.user-menu button:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
+.user-chip-btn{background:none;border:0;padding:0;cursor:pointer;display:block;border-radius:50%;}
+.user-chip-btn img,.avatar-fallback{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#fff;display:block;}
+.avatar-fallback{display:flex;align-items:center;justify-content:center;background:var(--paper-alt);color:var(--gold-deep);font-size:14px;}
 @media(max-width:960px){
-  .pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;align-items:stretch;padding:90px 20px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
-  .pnav.open{transform:translateX(0);visibility:visible;}
-  .pnav a{width:100%;font-size:14.5px;padding:12px;}
-  .pnav-toggle{display:block;}
+  .pnav-toggle{display:block;position:relative;z-index:101;}
+  .pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;height:100dvh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;align-items:stretch;padding:90px 20px 24px;gap:2px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
+  .pnav.open{transform:none;visibility:visible;}
+  .pnav a{padding:12px;font-size:14.5px;border-bottom:0;border-radius:8px;}
+  .pnav a:hover,.pnav a.active{background:var(--paper-alt);}
 }
 
-.page-head{padding:32px 0 4px;}
-.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);letter-spacing:.4px;margin-bottom:14px;}
-.breadcrumb a{color:var(--ink-3);}
-.breadcrumb .sep{margin:0 6px;color:var(--card-border);}
-.breadcrumb .current{color:var(--gold-deep);}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-deep);border:1px solid var(--card-border);background:var(--paper-alt);padding:6px 14px;border-radius:999px;margin-bottom:16px;}
-.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:18px 0;}
-
-.section{padding:8px 0 60px;}
-.loader{text-align:center;padding:80px 0;color:var(--ink-3);}
-.spinner-lg{width:30px;height:30px;border:3px solid rgba(169,118,47,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
+/* page */
+.page-head{padding:28px 0 4px;}
+.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);margin-bottom:12px;}
+.breadcrumb a{color:var(--ink-3);}.breadcrumb .sep{margin:0 6px;color:var(--card-border);}.breadcrumb .current{color:var(--gold-deep);}
+.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:16px 0;}
+.section{padding:4px 0 56px;}
+.sk{background:linear-gradient(90deg,#efe8d6 25%,#f8f3e5 37%,#efe8d6 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:14px;}
+@keyframes shimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
 @keyframes spin{to{transform:rotate(360deg);}}
-
-.card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:26px;box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:22px;}
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:24px;box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:20px;}
+@media(max-width:600px){.card{padding:16px;}}
+.card h3{font-size:1.05rem;display:flex;align-items:center;gap:8px;}
+.card h3 i{color:var(--gold-deep);}
 .identity-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
 @media(max-width:760px){.identity-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:460px){.identity-grid{grid-template-columns:1fr;}}
+.identity-item{min-width:0;}
 .identity-item .l{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:4px;}
-.identity-item .v{font-size:14px;color:var(--navy);font-weight:500;}
+.identity-item .v{font-size:14px;color:var(--navy);font-weight:500;overflow-wrap:anywhere;}
 
-.rating-block{margin-bottom:26px;}
-.rating-block:last-child{margin-bottom:0;}
+.rating-block{margin-bottom:26px;}.rating-block:last-child{margin-bottom:0;}
 .rating-q{font-size:14.5px;font-weight:600;color:var(--navy);margin-bottom:10px;}
+.rating-help{font-size:12.5px;color:var(--ink-3);margin:-4px 0 10px;}
 .stars{display:flex;gap:6px;}
 .star{font-size:26px;color:var(--card-border);cursor:pointer;transition:.15s;}
 .star.filled{color:var(--gold-deep);}
-.stars:hover .star{color:var(--card-border);}
-
 .mcq-options{display:flex;flex-wrap:wrap;gap:10px;}
 .mcq-opt{padding:9px 16px;border-radius:999px;border:1px solid var(--card-border);background:var(--paper-alt);font-size:13.5px;color:var(--ink-2);cursor:pointer;transition:.2s;}
 .mcq-opt:hover{border-color:var(--gold);}
 .mcq-opt.selected{background:linear-gradient(180deg,var(--gold-light),var(--gold-deep));color:#fff;border-color:var(--gold);font-weight:600;}
-
-textarea{width:100%;background:#fff;border:1px solid var(--card-border);color:var(--ink-1);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14.5px;min-height:110px;resize:vertical;}
-textarea:focus{outline:2px solid var(--gold);outline-offset:1px;}
+textarea,input[type=text].txt{width:100%;background:#fff;border:1px solid var(--card-border);color:var(--ink-1);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14.5px;}
+textarea{min-height:110px;resize:vertical;}
+textarea:focus,input[type=text].txt:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.scope-tag{display:inline-block;font-size:11px;font-weight:600;background:var(--paper-alt);border:1px solid var(--card-border);color:var(--gold-deep);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:middle;}
+.req{color:var(--danger);}
+.q-err{color:var(--danger);font-size:12.5px;margin-top:8px;}
+.ro-ans{font-size:14.5px;color:var(--ink-1);background:var(--paper-alt);border-radius:8px;padding:10px 14px;white-space:pre-wrap;overflow-wrap:anywhere;}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13.5px;padding:13px 26px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;}
 .btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,30,60,.12);}
 .btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold-deep));color:#fff;}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
 .submit-row{display:flex;justify-content:flex-end;margin-top:6px;}
-.alert{border-radius:8px;padding:14px 16px;font-size:14px;margin-bottom:18px;border:1px solid transparent;display:none;}
-.alert.show{display:block;}
-.alert-success{background:rgba(31,122,73,.08);border-color:rgba(31,122,73,.3);color:var(--success);}
-.alert-error{background:rgba(192,57,43,.08);border-color:rgba(192,57,43,.3);color:var(--danger);}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+.alert{border-radius:10px;padding:14px 16px;font-size:14px;margin-bottom:18px;border:1px solid rgba(192,57,43,.3);background:rgba(192,57,43,.08);color:var(--danger);display:none;}
+.alert.show{display:block;}
+.state-card,.thankyou{text-align:center;padding:50px 24px;}
+.state-card>i,.thankyou>i{font-size:34px;color:var(--gold-deep);margin-bottom:14px;display:block;}
+.thankyou>i{color:var(--success);font-size:42px;}
+.state-card p,.thankyou p{max-width:520px;margin-left:auto;margin-right:auto;}
+.edit-note{font-size:13px;color:var(--ink-3);}
 
-.state-card{text-align:center;padding:60px 30px;}
-.state-card i{font-size:32px;color:var(--gold-deep);margin-bottom:14px;display:block;}
-
-.thankyou{text-align:center;padding:60px 30px;}
-.thankyou i{font-size:44px;color:var(--success);margin-bottom:16px;display:block;}
-
-footer{border-top:1px solid var(--card-border);padding:40px 0 24px;background:var(--navy);}
-footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;}
-footer em{color:var(--gold-light);}
-
-input[type=text].txt{width:100%;background:#fff;border:1px solid var(--card-border);color:var(--ink-1);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14.5px;}
-input[type=text].txt:focus{outline:2px solid var(--gold);outline-offset:1px;}
-.rating-help{font-size:12.5px;color:var(--ink-3);margin:-4px 0 10px;}
-.scope-tag{display:inline-block;font-size:11px;font-weight:600;background:var(--paper-alt);border:1px solid var(--card-border);color:var(--gold-deep);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:middle;}
-.req{color:var(--danger);}
-.q-err{color:var(--danger);font-size:12.5px;margin-top:8px;min-height:0;}
-.ro-ans{font-size:14.5px;color:var(--ink-1);background:var(--paper-alt);border-radius:8px;padding:10px 14px;white-space:pre-wrap;}
-.thankyou .edit-note{font-size:13px;color:var(--ink-3);margin-top:-4px;}
+footer{padding:34px 0 24px;background:var(--navy);}
+footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0 0 6px;}footer em{color:var(--gold-light);}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
 </head>
 <body>
 
 <div class="utcbar"><div class="utcbar-inner"><i class="fa-regular fa-clock"></i><span id="utc-clock"><b>Loading time…</b></span></div></div>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology &middot; Participant Portal</p>
+<div class="masthead"><div class="masthead-inner">
+  <div class="masthead-logos">
+    <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
+    <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
+  </div>
+  <div class="masthead-text">
+    <div class="m-super">Loyola College (Autonomous), Chennai</div>
+    <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
+  </div>
+</div></div>
+
+<div class="topnav"><div class="topnav-inner">
+  <button class="pnav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  <ul class="pnav" id="nav-links">
+    <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
+    <li><a href="registration.html"><i class="fa-solid fa-id-card"></i> Registration</a></li>
+    <li><a href="abstract.html" id="nav-abstract-link"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
+    <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
+    <li><a href="schedule.html"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
+    <li><a href="slot.html"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
+    <li><a href="feedback.html" class="active"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
+    <li id="nav-verify" style="display:none;"><a href="verification.html"><i class="fa-solid fa-user-check"></i> Verification</a></li>
+  </ul>
+  <div class="pop-wrap">
+    <button class="user-chip-btn" id="user-btn" type="button" aria-label="My account">
+      <img id="user-avatar" alt="" style="display:none;">
+      <div class="avatar-fallback" id="user-avatar-fallback"><i class="fa-solid fa-user"></i></div>
+    </button>
+    <div class="pop user-menu" id="user-menu">
+      <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+      <button type="button" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
     </div>
   </div>
-</div>
+</div></div>
 
-<div class="topnav">
-  <div class="topnav-inner">
-    <button class="pnav-toggle" id="pnav-toggle"><i class="fa-solid fa-bars"></i></button>
-    <ul class="pnav" id="pnav">
-      <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
-      <li><a href="registration.html"><i class="fa-solid fa-id-card"></i> Registration</a></li>
-      <li><a href="abstract.html"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
-      <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
-      <li><a href="schedule.html"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
-      <li><a href="slot.html"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
-      <li><a href="feedback.html" class="active"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
-    </ul>
-    <div class="user-chip">
-      <img id="user-avatar" style="display:none;" onclick="toggleUserMenu()">
-      <div class="avatar-fallback" id="user-avatar-fallback" onclick="toggleUserMenu()"><i class="fa-solid fa-user"></i></div>
-      <div class="user-menu" id="user-menu">
-        <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
-      </div>
-    </div>
+<header class="page-head"><div class="wrap-narrow">
+  <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Feedback</span></div>
+  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);margin:0;">Conference feedback</h1>
+  <div class="helix-rule"></div>
+  <p style="max-width:620px;" id="intro">Your responses help us improve future editions of the conference and will be included in our academic report. This form opens once the conference concludes.</p>
+</div></header>
+
+<section class="section" id="loader"><div class="wrap-narrow">
+  <div class="sk" style="height:110px;"></div><div class="sk" style="height:260px;margin-top:20px;"></div>
+</div></section>
+
+<section class="section" id="content" style="display:none;"><div class="wrap-narrow">
+
+  <div class="alert" id="err" role="alert"></div>
+
+  <div class="card state-card" id="not-open-view" style="display:none;">
+    <i class="fa-regular fa-clock"></i>
+    <h3 id="not-open-title" style="justify-content:center;">Feedback isn’t open yet</h3>
+    <p id="not-open-text">The feedback form will open once the conference concludes. Please check back then.</p>
   </div>
-</div>
 
-<header class="page-head">
-  <div class="wrap-narrow">
-    <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Feedback</span></div>
-    <span class="eyebrow"><i class="fa-regular fa-comment-dots"></i>&nbsp; Post-conference survey</span>
-    <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);">Conference feedback</h1>
-    <div class="helix-rule"></div>
-    <p style="max-width:600px;">Your responses help us improve future editions of VRMIC and will be included in our academic report. This form opens once the conference concludes.</p>
+  <div class="card state-card" id="closed-view" style="display:none;">
+    <i class="fa-solid fa-lock"></i>
+    <h3 style="justify-content:center;">Feedback window has closed</h3>
+    <p>Thank you to everyone who shared their thoughts. The feedback period has ended.</p>
   </div>
-</header>
 
-<div id="loader" class="loader"><div class="spinner-lg"></div><p style="margin-top:14px;">Loading…</p></div>
-
-<section class="section" id="content" style="display:none;">
-  <div class="wrap-narrow">
-
-    <div class="alert alert-error" id="err"></div>
-
-    <!-- Not yet open -->
-    <div class="card state-card" id="not-open-view" style="display:none;">
-      <i class="fa-regular fa-clock"></i>
-      <h3>Feedback isn't open yet</h3>
-      <p id="not-open-text">The feedback form will open once the conference concludes. Please check back then.</p>
-    </div>
-
-    <!-- Closed -->
-    <div class="card state-card" id="closed-view" style="display:none;">
-      <i class="fa-solid fa-lock"></i>
-      <h3>Feedback window has closed</h3>
-      <p>Thank you to everyone who shared their thoughts. The feedback period for VRMIC 2026 has ended.</p>
-    </div>
-
-    <!-- Already submitted -->
-    <div class="card thankyou" id="already-view" style="display:none;">
-      <i class="fa-solid fa-circle-check"></i>
-      <h3>Thank you for your feedback!</h3>
-      <p>You've already submitted your response for VRMIC 2026. We appreciate your time.</p>
-    </div>
-
-    <!-- Form -->
-    <form id="feedback-form" style="display:none;" novalidate>
-
-      <div class="card">
-        <h3 style="font-size:1.05rem;margin-bottom:14px;"><i class="fa-solid fa-user" style="color:var(--gold-deep);"></i> Respondent details</h3>
-        <div class="identity-grid">
-          <div class="identity-item"><div class="l">VRMIC ID</div><div class="v" id="i-id">—</div></div>
-          <div class="identity-item"><div class="l">Name</div><div class="v" id="i-name">—</div></div>
-          <div class="identity-item"><div class="l">Email</div><div class="v" id="i-email">—</div></div>
-          <div class="identity-item"><div class="l">Mobile</div><div class="v" id="i-phone">—</div></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 style="font-size:1.05rem;margin-bottom:6px;"><i class="fa-solid fa-star" style="color:var(--gold-deep);"></i> Your feedback</h3>
-        <p id="form-note" style="font-size:13px;margin-bottom:20px;"></p>
-        <div id="qs"></div>
-      </div>
-
-      <div class="submit-row" id="submit-row">
-        <button type="submit" class="btn btn-gold" id="submit-btn"><i class="fa-solid fa-paper-plane"></i> Submit feedback</button>
-      </div>
-    </form>
-
-    <!-- Thank-you message at the end (shown after submitting, and whenever feedback is on record) -->
-    <div class="card thankyou" id="thanks" style="display:none;margin-top:22px;">
-      <i class="fa-solid fa-circle-check"></i>
-      <h3 id="thanks-title">Thank you for your feedback!</h3>
-      <p id="thanks-text">Thank you for helping us improve VRMIC. Your response has been recorded.</p>
-      <p class="edit-note" id="thanks-edit"></p>
-    </div>
-
+  <div class="card thankyou" id="already-view" style="display:none;">
+    <i class="fa-solid fa-circle-check"></i>
+    <h3 style="justify-content:center;">Thank you for your feedback!</h3>
+    <p>You’ve already submitted your response. We appreciate your time.</p>
   </div>
-</section>
 
-<footer><div class="wrap"><p>© 2026, Centre for Insect Molecular Studies and Environmental Research (CIMSER) — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai <em><br>"Luceat Lux Vestra — Let Your Light Shine"</em></p></div></footer>
+  <form id="feedback-form" style="display:none;" novalidate>
+    <div class="card">
+      <h3 style="margin-bottom:14px;"><i class="fa-solid fa-user"></i> Respondent details</h3>
+      <div class="identity-grid">
+        <div class="identity-item"><div class="l">LVRMIC ID</div><div class="v" id="i-id">—</div></div>
+        <div class="identity-item"><div class="l">Name</div><div class="v" id="i-name">—</div></div>
+        <div class="identity-item"><div class="l">Email</div><div class="v" id="i-email">—</div></div>
+        <div class="identity-item"><div class="l">Mobile</div><div class="v" id="i-phone">—</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:6px;"><i class="fa-solid fa-star"></i> Your feedback</h3>
+      <p id="form-note" style="font-size:13px;margin-bottom:20px;"></p>
+      <div id="qs"></div>
+    </div>
+    <div class="submit-row" id="submit-row">
+      <button type="submit" class="btn btn-gold" id="submit-btn"><i class="fa-solid fa-paper-plane"></i> Submit feedback</button>
+    </div>
+  </form>
 
+  <div class="card thankyou" id="thanks" style="display:none;margin-top:22px;">
+    <i class="fa-solid fa-circle-check"></i>
+    <h3 id="thanks-title" style="justify-content:center;">Thank you for your feedback!</h3>
+    <p id="thanks-text">Thank you for helping us improve. Your response has been recorded.</p>
+    <p class="edit-note" id="thanks-edit"></p>
+  </div>
+
+</div></section>
+
+<footer><div class="wrap">
+  <p><b style="color:#fff;" id="f-dates">26&ndash;28 November 2026</b> &middot; Participant Portal</p>
+  <p>Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology</p>
+  <p>© 2026, Loyola College (Autonomous), Chennai &mdash; <em>“Luceat Lux Vestra — Let Your Light Shine”</em></p>
+</div></footer>
+
+<script src="../participant-common.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
+const L = window.LVRMIC;
+L.startClock('utc-clock');
+L.initMenu();
 
-// Date/time format: "09 Sep 2026 · 3:45 PM IST" — day-month-year, 12-hour with AM/PM.
-function updateClock(){
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
-  const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true });
-  document.getElementById('utc-clock').innerHTML = `<b>${dateStr} &nbsp;·&nbsp; ${timeStr} IST</b>`;
-}
-updateClock(); setInterval(updateClock, 1000);
-
-document.getElementById('pnav-toggle').addEventListener('click', () => document.getElementById('pnav').classList.toggle('open'));
-function toggleUserMenu(){ document.getElementById('user-menu').classList.toggle('open'); }
-document.addEventListener('click', (e) => { if (!e.target.closest('.user-chip')) document.getElementById('user-menu').classList.remove('open'); });
-
-const token = localStorage.getItem('vrmic_token');
+const token = L.session.token();
 if (!token) window.location.href = '../participant-login.html';
-function logout(){ localStorage.removeItem('vrmic_token'); localStorage.removeItem('vrmic_name'); window.location.href = '../participant-login.html'; }
-
-// Turns a Google Drive "view" share link into a URL that actually renders in an <img> tag.
-function driveThumb(url, size){
-  if (!url) return '';
-  const m = String(url).match(/\/d\/([^/]+)/) || String(url).match(/[?&]id=([^&]+)/);
-  if (!m) return url;
-  return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${size || 300}`;
+function logout(){ L.session.clear(); window.location.href = '../participant-login.html'; }
+async function api(action, payload){
+  const res = await L.callApi(action, Object.assign({ token: token }, payload || {}));
+  if (!res.ok && /session expired|log in again/i.test(res.error || '')) { L.session.clear(); window.location.href = '../participant-login.html'; }
+  return res;
 }
 
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action, token }, payload))
-  });
-  return res.json();
-}
-function showErr(msg){ const el = document.getElementById('err'); el.textContent = msg; el.classList.add('show'); window.scrollTo({top:0,behavior:'smooth'}); }
+/* ---------- user menu ---------- */
+const userMenu = document.getElementById('user-menu');
+document.getElementById('user-btn').addEventListener('click', e => { e.stopPropagation(); userMenu.classList.toggle('open'); });
+document.addEventListener('click', e => { if (!e.target.closest('.pop')) userMenu.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') userMenu.classList.remove('open'); });
 
+/* ---------- helpers ---------- */
 const IST = { timeZone: 'Asia/Kolkata' };
 const fmtDT = v => { const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-GB', Object.assign({ day: '2-digit', month: 'short', year: 'numeric' }, IST)) + ', ' + d.toLocaleTimeString('en-US', Object.assign({ hour: 'numeric', minute: '2-digit', hour12: true }, IST)) + ' IST'; };
 const fmtD = v => { const d = new Date(String(v).length === 10 ? v + 'T00:00:00+05:30' : v); return isNaN(d) ? v : d.toLocaleDateString('en-GB', Object.assign({ day: '2-digit', month: 'short', year: 'numeric' }, IST)); };
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const show = (id, on) => { document.getElementById(id).style.display = on ? 'block' : 'none'; };
+function showErr(msg){ const el = document.getElementById('err'); el.textContent = msg; el.classList.add('show'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
 let F = null, A = {}, locked = false;
 
-// ---- build one block per question ----
+/* ---------- questions ---------- */
 function qBlock(q, i) {
   const v = A[q.id];
   const tag = q.scopeType === 'day' ? '<span class="scope-tag">' + esc(fmtD(q.scopeValue)) + '</span>' : q.scopeType === 'venue' ? '<span class="scope-tag">' + esc(q.scopeValue) + '</span>' : '';
@@ -355,62 +303,66 @@ function renderForm() {
   document.getElementById('form-note').textContent = locked ? 'The feedback window has closed. These are the answers you submitted.' :
     (F.submitted ? 'Your feedback is on record. You can change your answers below until the form closes on ' + fmtDT(F.closesAt) + '.' : 'Questions marked * are required. The form closes on ' + fmtDT(F.closesAt) + '.');
 }
-// Thank-you message at the very end of the page
 function showThanks(justSaved, edited) {
-  const lockedNow = locked;
-  document.getElementById('thanks-title').textContent = justSaved ? (edited ? 'Your changes have been saved' : 'Thank you for your feedback!') : 'Thank you for your feedback!';
-  document.getElementById('thanks-text').textContent = justSaved ? 'Thank you for helping us improve VRMIC. Your response has been recorded.' : 'You have already shared your feedback for VRMIC 2026. We appreciate your time.';
-  document.getElementById('thanks-edit').textContent = lockedNow ? '' : 'You can still edit your answers above until ' + fmtDT(F.closesAt) + '.';
+  document.getElementById('thanks-title').textContent = justSaved && edited ? 'Your changes have been saved' : 'Thank you for your feedback!';
+  document.getElementById('thanks-text').textContent = justSaved ? 'Thank you for helping us improve. Your response has been recorded.' : 'You have already shared your feedback. We appreciate your time.';
+  document.getElementById('thanks-edit').textContent = locked ? '' : 'You can still edit your answers above until ' + fmtDT(F.closesAt) + '.';
   show('thanks', true);
   if (justSaved) document.getElementById('thanks').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
+/* ---------- init ---------- */
 (async function init() {
   try {
-    const dash = await callApi('getDashboard', {});
+    const [dash, prof, S] = await Promise.all([api('getDashboard', {}), api('getProfile', {}), L.loadPublicSettings()]);
+    const set = S || {};
     if (!dash.ok) {
-      if (/session|log in/i.test(dash.error || '')) { window.location.href = '../participant-login.html'; return; }
-      document.getElementById('loader').innerHTML = '<p style="color:var(--danger);">' + esc(dash.error || 'Could not load your account.') + '</p>'; return;
+      document.getElementById('loader').innerHTML = '<div class="wrap-narrow"><div class="alert show">' + esc(dash.error || 'Could not load your account.') + '</div></div>'; return;
     }
     const pt = dash.participant;
+    if (!pt.profileCompleted) { window.location.href = 'details.html'; return; }
+
     if (pt.photoUrl) {
-      const thumb = driveThumb(pt.photoUrl, 100), av = document.getElementById('user-avatar');
-      av.src = thumb; av.style.display = ''; av.onerror = () => { av.style.display = 'none'; };
+      const av = document.getElementById('user-avatar');
+      av.onerror = () => { av.style.display = 'none'; document.getElementById('user-avatar-fallback').style.display = ''; };
+      av.src = L.photoUrl(pt.photoUrl, 100); av.style.display = '';
       document.getElementById('user-avatar-fallback').style.display = 'none';
     }
+    document.getElementById('nav-abstract-link').style.display = pt.abstractApplicable ? '' : 'none';
     if (pt.pptRequired) document.getElementById('nav-ppt-link').style.display = '';
+    if (set['sw.verificationOpen'] === 'true') document.getElementById('nav-verify').style.display = '';
+
     document.getElementById('i-id').textContent = pt.id;
     document.getElementById('i-name').textContent = pt.name;
     document.getElementById('i-email').textContent = pt.email;
-    const prof = await callApi('getProfile', {});
     if (prof.ok) document.getElementById('i-phone').textContent = prof.profile.phone || '—';
 
-    F = await callApi('getFeedbackForm', {});
+    F = await api('getFeedbackForm', {});
     document.getElementById('loader').style.display = 'none';
     document.getElementById('content').style.display = 'block';
     if (!F.ok) { showErr(F.error || 'Could not load the feedback form.'); return; }
     A = F.answers || {};
 
     if (F.state === 'before') {
-      show('not-open-view', true);
       document.getElementById('not-open-text').textContent = 'The feedback form opens on ' + fmtDT(F.opensAt) + ', after the conference concludes.';
-      return;
+      show('not-open-view', true); return;
     }
     if (F.legacyDone) { show('already-view', true); return; }
     locked = F.state === 'closed';
     if (locked && !F.submitted) { show('closed-view', true); return; }
     if (!F.questions.length) {
-      document.getElementById('not-open-view').querySelector('h3').textContent = 'No feedback questions yet';
+      document.getElementById('not-open-title').textContent = 'No feedback questions yet';
       document.getElementById('not-open-text').textContent = 'There are no feedback questions for you right now. Please check back later.';
       show('not-open-view', true); return;
     }
     renderForm(); show('feedback-form', true);
     if (F.submitted) showThanks(false, false);
   } catch (err) {
-    document.getElementById('loader').innerHTML = '<p style="color:var(--danger);">Could not reach the server. Check your connection and reload.</p>';
+    document.getElementById('loader').innerHTML = '<div class="wrap-narrow"><div class="alert show">Could not reach the server. Check your connection and reload.</div></div>';
   }
 })();
 
+/* ---------- submit ---------- */
 document.getElementById('feedback-form').addEventListener('submit', async function (e) {
   e.preventDefault();
   if (locked) return;
@@ -425,7 +377,7 @@ document.getElementById('feedback-form').addEventListener('submit', async functi
   const btn = document.getElementById('submit-btn'), label = btn.innerHTML;
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Submitting...';
   try {
-    const res = await callApi('submitFeedbackAnswers', { answers: A });
+    const res = await api('submitFeedbackAnswers', { answers: A });
     if (!res.ok) {
       if (/already submitted/i.test(res.error || '')) { show('feedback-form', false); show('already-view', true); return; }
       showErr(res.error || 'Could not submit feedback.'); btn.disabled = false; btn.innerHTML = label; return;
