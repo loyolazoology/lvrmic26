@@ -3,314 +3,441 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registration | CIMSER, Loyola College</title>
-<meta name="description" content="Your registration details — 4th International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment, Loyola College (Autonomous), Chennai.">
-<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
+<title>Registration | LVRMIC 2026 · CIMSER, Loyola College</title>
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
-
-:root{
-  --paper:#faf6ec;
-  --paper-alt:#f2ecdc;
-  --card:#ffffff;
-  --card-border:#e7ddc4;
-  --navy:#12224a;
-  --navy-soft:#2c3b63;
-  --ink-1:#1b2436;
-  --ink-2:#535f7a;
-  --ink-3:#8791a6;
-  --gold:#a9762f;
-  --gold-deep:#8a5f24;
-  --gold-light:#c9974f;
-  --teal:#1f7a68;
-  --teal-light:#2e9c85;
-  --danger:#c0392b;
-  --warn:#b5791f;
-  --success:#1f7a49;
-  --maxw:1180px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
+:root{--paper:#faf6ec;--paper-alt:#f2ecdc;--card:#fff;--card-border:#e7ddc4;--navy:#12224a;--ink-1:#1b2436;--ink-2:#535f7a;--ink-3:#8791a6;--gold:#a9762f;--gold-deep:#8a5f24;--gold-light:#c9974f;--teal:#1f7a68;--danger:#c0392b;--warn:#b5791f;--success:#1f7a49;--maxw:1180px;}
 *{box-sizing:border-box;}
 html,body{overflow-x:hidden;max-width:100%;}
 body{margin:0;background:var(--paper);color:var(--ink-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .4em;color:var(--navy);}
+body.no-scroll{overflow:hidden;}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .4em;color:var(--navy);}
 p{color:var(--ink-2);margin:0 0 1em;}
-a{color:var(--gold-deep);text-decoration:none;}
-a:hover{text-decoration:underline;}
+a{color:var(--gold-deep);text-decoration:none;}a:hover{text-decoration:underline;}
 .mono{font-family:'IBM Plex Mono',monospace;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
-@media(max-width:600px){.wrap{padding:0 16px;}}
-
-.masthead{background:linear-gradient(180deg,#ffffff,var(--paper));border-bottom:3px solid var(--gold);}
-.masthead-inner{max-width:var(--maxw);margin:0 auto;padding:20px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:18px;flex-shrink:0;}
-.masthead-logos img{height:74px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:56px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:4px;}
-.masthead-text h1{font-size:clamp(1.15rem,2.2vw,1.55rem);line-height:1.25;margin:0 0 4px;color:var(--navy);}
-.masthead-text .m-sub{font-size:12.5px;color:var(--ink-3);margin:0;}
-
-.utcbar{background:var(--navy);border-bottom:1px solid var(--card-border);}
+@media(max-width:600px){.wrap{padding:0 14px;}}
+.utcbar{background:var(--navy);}
 .utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;}
-.utcbar i{color:var(--gold-light);font-size:11px;}
-.utcbar b{color:#e8ecf5;font-weight:500;}
-
-.topnav{background:#ffffff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(20,30,60,.04);}
-.topnav-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-.pnav{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
-.pnav a{display:flex;align-items:center;gap:6px;padding:12px;border-radius:7px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;transition:.2s;border-bottom:2px solid transparent;}
+.utcbar i{color:var(--gold-light);}.utcbar b{color:#e8ecf5;font-weight:500;}
+.masthead{background:linear-gradient(180deg,#fff,var(--paper));border-bottom:3px solid var(--gold);}
+.masthead-inner{max-width:var(--maxw);margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:20px;}
+.masthead-logos{display:flex;gap:16px;flex-shrink:0;}.masthead-logos img{height:64px;width:auto;}
+@media(max-width:700px){.masthead-logos img{height:46px;}.masthead-inner{padding:12px 14px;gap:12px;}}
+.m-super{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;}
+.masthead-text h1{font-size:clamp(.95rem,2vw,1.4rem);line-height:1.25;margin:0;}
+.topnav{background:#fff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;}
+.topnav-inner{max-width:var(--maxw);margin:0 auto;padding:4px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.pnav{display:flex;list-style:none;margin:0;padding:0;}
+.pnav a{display:flex;align-items:center;gap:6px;padding:14px 11px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;}
 .pnav a:hover,.pnav a.active{color:var(--gold-deep);border-bottom-color:var(--gold);text-decoration:none;}
-.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;}
-.user-chip{display:flex;align-items:center;gap:10px;position:relative;}
-.user-chip img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);cursor:pointer;background:#fff;}
-.user-chip .avatar-fallback{width:38px;height:38px;border-radius:50%;background:var(--paper-alt);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-deep);cursor:pointer;font-size:14px;}
-.user-menu{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:10px;min-width:170px;box-shadow:0 18px 40px rgba(20,30,60,.15);opacity:0;visibility:hidden;transform:translateY(8px);transition:.2s;padding:6px;z-index:50;}
-.user-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
-.user-menu a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:6px;color:var(--ink-2);font-size:13px;}
-.user-menu a:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
-@media(max-width:960px){
-  .pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;align-items:stretch;padding:90px 20px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
-  .pnav.open{transform:translateX(0);visibility:visible;}
-  .pnav a{width:100%;font-size:14.5px;padding:12px;}
-  .pnav-toggle{display:block;}
-}
-
-.page-head{padding:32px 0 4px;}
-.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);letter-spacing:.4px;margin-bottom:14px;}
-.breadcrumb a{color:var(--ink-3);}
-.breadcrumb .sep{margin:0 6px;color:var(--card-border);}
-.breadcrumb .current{color:var(--gold-deep);}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-deep);border:1px solid var(--card-border);background:var(--paper-alt);padding:6px 14px;border-radius:999px;margin-bottom:16px;}
-.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:18px 0;}
-
-.section{padding:8px 0 60px;}
-.card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:26px;box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:22px;}
-.card h3{font-size:1.05rem;display:flex;align-items:center;gap:10px;margin-bottom:16px;color:var(--navy);}
+.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;}
+.user-wrap{position:relative;}
+.user-btn{background:none;border:0;padding:0;cursor:pointer;display:block;}
+.user-btn img,.avatar-fallback{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#fff;display:block;}
+.avatar-fallback{display:flex;align-items:center;justify-content:center;background:var(--paper-alt);color:var(--gold-deep);}
+.user-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:180px;background:#fff;border:1px solid var(--card-border);border-radius:12px;box-shadow:0 20px 44px rgba(20,30,60,.18);padding:6px;opacity:0;visibility:hidden;transition:.2s;z-index:60;}
+.user-menu.open{opacity:1;visibility:visible;}
+.user-menu a,.user-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border-radius:7px;color:var(--ink-2);font-size:13px;background:none;border:0;cursor:pointer;font-family:inherit;}
+.user-menu a:hover,.user-menu button:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
+@media(max-width:960px){.pnav-toggle{display:block;position:relative;z-index:101;}
+.pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100dvh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;padding:90px 20px 24px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
+.pnav.open{transform:none;visibility:visible;}.pnav a{padding:12px;border-bottom:0;border-radius:8px;}}
+.page-head{padding:28px 0 2px;}
+.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);margin-bottom:12px;}
+.breadcrumb a{color:var(--ink-3);}.breadcrumb .sep{margin:0 6px;}.breadcrumb .current{color:var(--gold-deep);}
+.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:14px 0;}
+.section{padding:4px 0 56px;}
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:24px;box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:20px;}
+@media(max-width:600px){.card{padding:16px;}}
+.card h3{font-size:1.05rem;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .card h3 i{color:var(--gold-deep);font-size:16px;}
-
-.reg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+.reg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
 @media(max-width:640px){.reg-grid{grid-template-columns:1fr;}}
-.reg-item{border-bottom:1px solid var(--card-border);padding-bottom:16px;}
-.reg-item:last-child,.reg-item:nth-last-child(2){border-bottom:none;padding-bottom:0;}
-.reg-item .label{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:6px;}
-.reg-item .value{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--navy);}
-
-.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;}
+.reg-item{border-bottom:1px solid var(--card-border);padding-bottom:14px;min-width:0;}
+.reg-item .label{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:5px;}
+.reg-item .value{font-family:'Fraunces',serif;font-size:1.12rem;color:var(--navy);overflow-wrap:anywhere;}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;font-family:'Inter',sans-serif;}
+.badge i{font-size:7px;}
 .badge-success{background:rgba(31,122,73,.1);color:var(--success);}
-.badge-pending{background:rgba(181,121,31,.1);color:var(--warn);}
+.badge-pending{background:rgba(181,121,31,.12);color:var(--warn);}
 .badge-danger{background:rgba(192,57,43,.1);color:var(--danger);}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;}
-.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,30,60,.12);}
+.badge-neutral{background:rgba(83,95,122,.1);color:var(--ink-2);}
+.spot-chip{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:2px 9px;border-radius:999px;background:rgba(169,118,47,.14);color:var(--gold-deep);margin-left:8px;vertical-align:middle;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;text-align:center;}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,30,60,.12);text-decoration:none;}
 .btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold-deep));color:#fff;}
 .btn-outline{background:#fff;border-color:var(--card-border);color:var(--navy);}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
 .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+.btn-outline .spinner{border-color:rgba(18,34,74,.2);border-top-color:var(--navy);}
 @keyframes spin{to{transform:rotate(360deg);}}
-
-.alert{border-radius:8px;padding:14px 16px;font-size:14px;margin-bottom:18px;border:1px solid transparent;display:none;}
-.alert.show{display:block;}
-.alert-error{background:rgba(192,57,43,.08);border-color:rgba(192,57,43,.3);color:var(--danger);}
-.alert-success{background:rgba(31,122,73,.08);border-color:rgba(31,122,73,.3);color:var(--success);}
-
-.receipt-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:6px;}
-
-footer{border-top:1px solid var(--card-border);padding:40px 0 24px;background:var(--navy);}
-footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;}
-footer em{color:var(--gold-light);}
-
+.row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.row-left{display:flex;align-items:center;gap:14px;flex:1 1 260px;min-width:0;}
+.mc-icon{width:44px;height:44px;border-radius:12px;background:var(--paper-alt);display:flex;align-items:center;justify-content:center;color:var(--gold-deep);font-size:18px;flex-shrink:0;}
+.row h4{margin:0 0 3px;font-size:14.5px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.row p{margin:0;font-size:13px;overflow-wrap:anywhere;}
+.note{font-size:12.5px;color:var(--ink-3);margin:12px 0 0;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+@media(max-width:640px){.form-grid{grid-template-columns:1fr;}}
+label{display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:4px;}
+input[type=date],input[type=text],textarea{width:100%;padding:10px 12px;border:1px solid var(--card-border);border-radius:8px;font:inherit;font-size:14px;color:var(--ink-1);background:#fff;}
+input:focus,textarea:focus{outline:2px solid var(--gold-light);outline-offset:1px;}
+textarea{resize:vertical;min-height:70px;}
+.opt{font-weight:400;color:var(--ink-3);}
+.choice{display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--gold);border-radius:12px;background:#fff8ec;margin-bottom:14px;}
+.choice i{font-size:20px;color:var(--gold-deep);}
+.choice b{display:block;color:var(--navy);}
+.modal-overlay{position:fixed;inset:0;background:rgba(20,30,60,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:16px;overflow-y:auto;}
+.modal-overlay.show{display:flex;}
+.modal-card{background:#fff;border:1px solid var(--card-border);border-radius:16px;padding:24px;max-width:480px;width:100%;margin:auto;box-shadow:0 30px 70px rgba(20,30,60,.25);}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.modal-head h3{margin:0;}.modal-x{background:none;border:0;font-size:18px;color:var(--ink-3);cursor:pointer;}
+.popup-back{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(4,8,22,.6);}
+.popup-back.show{display:flex;}
+.popup{width:100%;max-width:400px;background:#fff;border:1px solid rgba(192,57,43,.4);border-radius:16px;padding:26px 24px 20px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.35);}
+.popup.ok{border-color:rgba(31,122,73,.4);}
+.popup-icon{width:52px;height:52px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(192,57,43,.1);color:var(--danger);}
+.popup.ok .popup-icon{background:rgba(31,122,73,.1);color:var(--success);}
+.popup p{font-size:14px;margin:0 0 18px;overflow-wrap:anywhere;}
+footer{padding:30px 0 22px;background:var(--navy);}
+footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;}footer em{color:var(--gold-light);}
 .loader{text-align:center;padding:80px 0;color:var(--ink-3);}
 .spinner-lg{width:30px;height:30px;border:3px solid rgba(169,118,47,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
 </style>
 </head>
 <body>
-
 <div class="utcbar"><div class="utcbar-inner"><i class="fa-regular fa-clock"></i><span id="utc-clock"><b>Loading time…</b></span></div></div>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology &middot; Participant Portal</p>
-    </div>
+<div class="masthead"><div class="masthead-inner">
+  <div class="masthead-logos">
+    <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
+    <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
   </div>
-</div>
+  <div class="masthead-text">
+    <div class="m-super">Loyola College (Autonomous), Chennai</div>
+    <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
+  </div>
+</div></div>
 
-<div class="topnav">
-  <div class="topnav-inner">
-    <button class="pnav-toggle" id="pnav-toggle"><i class="fa-solid fa-bars"></i></button>
-    <ul class="pnav" id="pnav">
-      <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
-      <li><a href="registration.html" class="active"><i class="fa-solid fa-id-card"></i> Registration</a></li>
-      <li><a href="abstract.html"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
-      <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
-      <li><a href="schedule.html"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
-      <li><a href="slot.html"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
-      <li><a href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
-    </ul>
-    <div class="user-chip">
-      <img id="user-avatar" style="display:none;" onclick="toggleUserMenu()">
-      <div class="avatar-fallback" id="user-avatar-fallback" onclick="toggleUserMenu()"><i class="fa-solid fa-user"></i></div>
-      <div class="user-menu" id="user-menu">
-        <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
-      </div>
+<div class="topnav"><div class="topnav-inner">
+  <button class="pnav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  <ul class="pnav" id="nav-links">
+    <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
+    <li><a href="registration.html" class="active"><i class="fa-solid fa-id-card"></i> Registration</a></li>
+    <li><a href="abstract.html" id="nav-abstract-link"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
+    <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
+    <li><a href="schedule.html"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
+    <li><a href="slot.html"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
+    <li><a href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
+  </ul>
+  <div class="user-wrap">
+    <button class="user-btn" id="user-btn" type="button" aria-label="My account">
+      <img id="user-avatar" alt="" style="display:none;">
+      <div class="avatar-fallback" id="user-avatar-fallback"><i class="fa-solid fa-user"></i></div>
+    </button>
+    <div class="user-menu" id="user-menu">
+      <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+      <button type="button" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
     </div>
   </div>
-</div>
+</div></div>
 
-<header class="page-head">
-  <div class="wrap">
-    <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Registration</span></div>
-    <span class="eyebrow"><i class="fa-solid fa-id-card"></i>&nbsp; Registration</span>
-    <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);">Your registration details</h1>
-    <div class="helix-rule"></div>
-  </div>
-</header>
+<header class="page-head"><div class="wrap">
+  <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Registration</span></div>
+  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);">Your registration details</h1>
+  <div class="helix-rule"></div>
+</div></header>
 
 <div id="loader" class="loader"><div class="spinner-lg"></div><p style="margin-top:14px;">Loading…</p></div>
 
-<section class="section" id="content" style="display:none;">
-  <div class="wrap">
-    <div class="alert alert-error" id="err"></div>
-    <div class="alert alert-success" id="ok"></div>
+<section class="section" id="content" style="display:none;"><div class="wrap">
 
-    <div class="card">
-      <div class="reg-grid">
-        <div class="reg-item">
-          <div class="label">VRMIC ID</div>
-          <div class="value mono" id="r-id">—</div>
-        </div>
-        <div class="reg-item">
-          <div class="label">Status</div>
-          <div class="value"><span class="badge badge-success" id="r-status"><i class="fa-solid fa-circle-check"></i> Registered</span></div>
-        </div>
-        <div class="reg-item">
-          <div class="label">Category</div>
-          <div class="value" id="r-category">—</div>
-        </div>
-        <div class="reg-item">
-          <div class="label">Registration date</div>
-          <div class="value" id="r-date">—</div>
-        </div>
-        <div class="reg-item">
-          <div class="label">Amount paid</div>
-          <div class="value" id="r-amount">—</div>
-        </div>
-        <div class="reg-item">
-          <div class="label">Payment status</div>
-          <div class="value"><span class="badge" id="r-fee-badge">—</span></div>
-        </div>
-      </div>
+  <!-- Registration summary -->
+  <div class="card">
+    <div class="reg-grid">
+      <div class="reg-item"><div class="label">LVRMIC ID</div><div class="value mono" id="r-id">—</div></div>
+      <div class="reg-item"><div class="label">Status</div><div class="value"><span class="badge badge-success" id="r-status"></span><span class="spot-chip" id="r-spot" style="display:none;">Spot registration</span></div></div>
+      <div class="reg-item"><div class="label">Category</div><div class="value" id="r-category">—</div></div>
+      <div class="reg-item"><div class="label">Registration date</div><div class="value" id="r-date">—</div></div>
+      <div class="reg-item"><div class="label">Amount paid</div><div class="value" id="r-amount">—</div></div>
+      <div class="reg-item"><div class="label">Payment status</div><div class="value"><span class="badge" id="r-fee-badge">—</span></div></div>
     </div>
-
-    <div class="card">
-      <h3><i class="fa-solid fa-receipt"></i> Payment receipt / bill</h3>
-      <p style="margin-bottom:6px;">Need an official receipt or bill for reimbursement? Request one and the organising secretariat will email it to your registered address.</p>
-      <div class="receipt-row">
-        <span style="font-size:12.5px;color:var(--ink-3);">Sent to your registered email on file.</span>
-        <button class="btn btn-gold" id="receipt-btn"><i class="fa-solid fa-paper-plane"></i> Request receipt</button>
-      </div>
+    <div class="row" style="margin-top:18px;">
+      <span class="note" style="margin:0;">Keep a copy of your registration details for the registration desk.</span>
+      <button class="btn btn-outline" id="pdf-btn" type="button"><i class="fa-solid fa-file-pdf"></i> Download registration details (PDF)</button>
     </div>
   </div>
-</section>
+
+  <!-- Payment details (read-only) -->
+  <div class="card">
+    <h3><i class="fa-solid fa-money-check-dollar"></i> Payment details</h3>
+    <div class="reg-grid">
+      <div class="reg-item"><div class="label">Payment date</div><div class="value" id="pay-date">—</div></div>
+      <div class="reg-item"><div class="label">Reference / transaction ID</div><div class="value mono" id="pay-ref" style="font-size:1rem;">—</div></div>
+    </div>
+    <p class="note" id="pay-note"></p>
+  </div>
+
+  <!-- Meal -->
+  <div class="card">
+    <h3><i class="fa-solid fa-utensils"></i> Meal preference</h3>
+    <div class="row">
+      <div class="row-left"><div class="mc-icon"><i class="fa-solid fa-bowl-food" id="meal-icon"></i></div>
+        <div><h4><span id="meal-value">—</span> <span id="meal-badge"></span></h4><p>This is the meal option recorded for you at registration.</p></div></div>
+      <button class="btn btn-outline" id="meal-btn" type="button"><i class="fa-solid fa-repeat"></i> Request meal change</button>
+    </div>
+  </div>
+
+  <!-- Receipt -->
+  <div class="card">
+    <h3><i class="fa-solid fa-receipt"></i> Payment receipt / bill</h3>
+    <div class="row">
+      <div class="row-left"><div class="mc-icon"><i class="fa-solid fa-receipt" id="rc-icon"></i></div>
+        <div><h4><span id="rc-title">Request your receipt</span> <span id="rc-badge"></span></h4><p id="rc-text">Need an official receipt or bill for reimbursement? Send your request here.</p></div></div>
+      <button class="btn btn-gold" id="receipt-btn" type="button"><i class="fa-solid fa-paper-plane"></i> Request receipt</button>
+    </div>
+  </div>
+
+  <!-- Certificate -->
+  <div class="card">
+    <h3><i class="fa-solid fa-award"></i> Attendance certificate</h3>
+    <div class="row" id="cert-card"></div>
+  </div>
+
+</div></section>
 
 <footer><div class="wrap"><p>© 2026, Centre for Insect Molecular Studies and Environmental Research (CIMSER) — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai <em><br>"Luceat Lux Vestra — Let Your Light Shine"</em></p></div></footer>
 
+<!-- Meal change modal -->
+<div class="modal-overlay" id="meal-modal"><div class="modal-card">
+  <div class="modal-head"><h3><i class="fa-solid fa-utensils" style="color:var(--gold-deep);"></i> Request meal change</h3><button class="modal-x" type="button" id="meal-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <p style="font-size:13px;">Current option: <b id="mm-current"></b></p>
+  <div id="mm-choices"></div>
+  <label for="mm-reason">Reason <span class="opt">(optional)</span></label>
+  <textarea id="mm-reason" maxlength="300"></textarea>
+  <p class="note">This opens your email app with a ready message to the organising team. Your meal option changes only after the team confirms.</p>
+  <button class="btn btn-gold" id="mm-send" type="button" style="width:100%;"><i class="fa-regular fa-envelope"></i> Open email</button>
+</div></div>
+
+<!-- Pop-up -->
+<div class="popup-back" id="popup-back"><div class="popup" id="popup" role="alertdialog" aria-modal="true">
+  <div class="popup-icon"><i class="fa-solid fa-triangle-exclamation" id="popup-i"></i></div>
+  <h3 id="popup-title"></h3><p id="popup-msg"></p>
+  <button type="button" class="btn btn-gold" style="width:100%;" id="popup-ok">OK</button>
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../participant-common.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
-
-function updateClock(){
-  const now = new Date();
-  const opts = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', timeZone: 'Asia/Kolkata', timeZoneName: 'short' };
-  const dateTimeStr = now.toLocaleDateString('en-GB', opts);
-  const timeStr = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-  document.getElementById('utc-clock').innerHTML = `<b>${dateTimeStr} &nbsp;·&nbsp; ${timeStr}</b>`;
-}
-updateClock(); setInterval(updateClock, 1000);
-
-document.getElementById('pnav-toggle').addEventListener('click', () => document.getElementById('pnav').classList.toggle('open'));
-function toggleUserMenu(){ document.getElementById('user-menu').classList.toggle('open'); }
-document.addEventListener('click', (e) => { if (!e.target.closest('.user-chip')) document.getElementById('user-menu').classList.remove('open'); });
-
-const token = localStorage.getItem('vrmic_token');
+const L = window.LVRMIC;
+L.startClock('utc-clock');
+const MEAL_MAIL = 'mounishdesk@gmail.com';
+const token = L.session.token();
 if (!token) window.location.href = '../participant-login.html';
-function logout(){ localStorage.removeItem('vrmic_token'); localStorage.removeItem('vrmic_name'); window.location.href = '../participant-login.html'; }
+function logout(){ L.session.clear(); window.location.href = '../participant-login.html'; }
+async function api(action, payload){
+  const res = await L.callApi(action, Object.assign({ token: token }, payload || {}));
+  if (!res.ok && /session expired|log in again/i.test(res.error || '')) { L.session.clear(); window.location.href = '../participant-login.html'; }
+  return res;
+}
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const badge = (t, k) => `<span class="badge badge-${k}"><i class="fa-solid fa-circle"></i> ${esc(t)}</span>`;
+const fmtDate = v => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }); };
 
-// Turns a Google Drive "view" share link into a URL that actually renders in an <img> tag.
-function driveThumb(url, size){
-  if (!url) return '';
-  const m = String(url).match(/\/d\/([^/]+)/) || String(url).match(/[?&]id=([^&]+)/);
-  if (!m) return url;
-  return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${size || 300}`;
+/* menus */
+L.initMenu();
+const userMenu = document.getElementById('user-menu');
+document.getElementById('user-btn').addEventListener('click', e => { e.stopPropagation(); userMenu.classList.toggle('open'); });
+document.addEventListener('click', () => userMenu.classList.remove('open'));
+
+/* pop-up */
+const popupBack = document.getElementById('popup-back');
+function showPopup(msg, title, ok){
+  document.getElementById('popup-title').textContent = title || (ok ? 'Done' : 'Something went wrong');
+  document.getElementById('popup-msg').textContent = msg || '';
+  document.getElementById('popup').classList.toggle('ok', !!ok);
+  document.getElementById('popup-i').className = 'fa-solid ' + (ok ? 'fa-circle-check' : 'fa-triangle-exclamation');
+  popupBack.classList.add('show'); document.getElementById('popup-ok').focus();
+}
+document.getElementById('popup-ok').addEventListener('click', () => popupBack.classList.remove('show'));
+popupBack.addEventListener('click', e => { if (e.target === popupBack) popupBack.classList.remove('show'); });
+
+let REG = null, PT = null, S = {};
+
+/* ---------- meal ---------- */
+function normMeal(v){ const s = String(v || '').toLowerCase(); if (/non/.test(s)) return 'Non-Veg'; if (/veg/.test(s)) return 'Veg'; return ''; }
+function renderMeal(){
+  const m = normMeal(REG.foodPreference);
+  document.getElementById('meal-value').textContent = m || 'Not recorded';
+  document.getElementById('meal-badge').innerHTML = m ? badge(m, m === 'Veg' ? 'success' : 'pending') : badge('Not set', 'neutral');
+  document.getElementById('meal-icon').className = 'fa-solid ' + (m === 'Veg' ? 'fa-leaf' : m === 'Non-Veg' ? 'fa-drumstick-bite' : 'fa-bowl-food');
+}
+const mealModal = document.getElementById('meal-modal');
+function closeMeal(){ mealModal.classList.remove('show'); document.body.classList.remove('no-scroll'); }
+document.getElementById('meal-close').addEventListener('click', closeMeal);
+mealModal.addEventListener('click', e => { if (e.target === mealModal) closeMeal(); });
+let mealTarget = '';
+document.getElementById('meal-btn').addEventListener('click', () => {
+  const cur = normMeal(REG.foodPreference);
+  // Only the opposite option is offered; if nothing is recorded, both are offered.
+  const targets = cur === 'Veg' ? ['Non-Veg'] : cur === 'Non-Veg' ? ['Veg'] : ['Veg', 'Non-Veg'];
+  mealTarget = targets[0];
+  document.getElementById('mm-current').textContent = cur || 'Not recorded';
+  document.getElementById('mm-choices').innerHTML = targets.map((t, i) => `<label class="choice" style="cursor:pointer;margin-bottom:12px;"><input type="radio" name="mm-opt" value="${t}" ${i === 0 ? 'checked' : ''}><i class="fa-solid ${t === 'Veg' ? 'fa-leaf' : 'fa-drumstick-bite'}"></i><span><b>Change to ${t}</b></span></label>`).join('');
+  document.querySelectorAll('input[name=mm-opt]').forEach(r => r.addEventListener('change', () => { mealTarget = r.value; }));
+  document.getElementById('mm-reason').value = '';
+  mealModal.classList.add('show'); document.body.classList.add('no-scroll');
+});
+document.getElementById('mm-send').addEventListener('click', () => {
+  const sel = document.querySelector('input[name=mm-opt]:checked'); if (sel) mealTarget = sel.value;
+  const cur = normMeal(REG.foodPreference) || 'not recorded', reason = document.getElementById('mm-reason').value.trim();
+  const subject = 'Meal option change request – ' + REG.id;
+  const body = 'Dear Organising Team,\n\nPlease change my meal option.\n\nName: ' + (PT.name || '') + '\nLVRMIC ID: ' + REG.id + '\nCurrent meal option: ' + cur + '\nRequested meal option: ' + mealTarget + (reason ? '\nReason: ' + reason : '') + '\n\nThank you.';
+  window.location.href = 'mailto:' + MEAL_MAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  closeMeal();
+});
+
+/* ---------- payment details (read-only, recorded by the organising team) ---------- */
+function renderPayment(){
+  document.getElementById('pay-date').textContent = fmtDate(REG.paymentDate) || '—';
+  document.getElementById('pay-ref').textContent = REG.paymentRef || '—';
+  const spot = REG.spot || /spot/i.test(REG.registrationType || '');
+  document.getElementById('pay-note').textContent = !REG.feePaid && spot
+    ? 'Payment pending — please pay at the registration desk. Your payment details will appear here once the organising team records them.'
+    : 'Payment details are recorded by the organising team and cannot be edited here.';
 }
 
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action, token }, payload))
+/* ---------- receipt (no mail trigger from the participant side) ---------- */
+const RC_TEXT = 'Your request has been received. You will receive your receipt by email from the organising team.';
+function renderReceipt(){
+  if (!REG.receiptRequested) return;
+  document.getElementById('rc-title').textContent = 'Request received';
+  document.getElementById('rc-badge').innerHTML = badge('Requested', 'pending');
+  document.getElementById('rc-text').textContent = RC_TEXT;
+  document.getElementById('rc-icon').className = 'fa-solid fa-hourglass-half';
+  const b = document.getElementById('receipt-btn'); b.disabled = true; b.innerHTML = '<i class="fa-solid fa-check"></i> Requested';
+}
+document.getElementById('receipt-btn').addEventListener('click', async function(){
+  const b = this; b.disabled = true; b.innerHTML = '<span class="spinner"></span> Sending request...';
+  try {
+    const res = await api('requestReceipt', {});
+    if (!res.ok) { showPopup(res.error || 'Could not send the request.', 'Request not sent'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request receipt'; return; }
+    REG.receiptRequested = true; renderReceipt();
+    showPopup(RC_TEXT, 'Request received', true);
+  } catch (err) { showPopup(err.message, 'Connection problem'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request receipt'; }
+});
+
+/* ---------- certificate (same status handling as the home page) ---------- */
+function renderCertificate(){
+  const pt = PT, state = pt.certificateStatus || (pt.certificatesReleased ? (pt.certificateRequested ? 'In progress' : 'Open') : 'Not released');
+  const email = S['conf.convenerEmail'] || S['conf.contactEmail'] || '';
+  const map = {
+    'Not released': { icon: 'fa-lock', kind: 'neutral', title: 'Certificates not released yet', text: 'Attendance certificates will be released after the conference. You will be able to send your request from here.', btn: false },
+    'Open': { icon: 'fa-certificate', kind: 'success', title: 'Request your attendance certificate', text: 'Send your request here. The organising team will email your attendance certificate once the conference is over, or you can collect it from the registration desk.', btn: true },
+    'In progress': { icon: 'fa-hourglass-half', kind: 'pending', title: 'Request received', text: 'Your request has been received. The organising team will email your attendance certificate once the conference is over, or you can collect it from the registration desk.', btn: false },
+    'Closed': { icon: 'fa-circle-check', kind: 'success', title: 'Certificate issued', text: 'Your attendance certificate has been issued. Please check your email, or collect it from the registration desk.', btn: false },
+    'Rejected': { icon: 'fa-circle-xmark', kind: 'danger', title: 'Request not approved', text: 'Your certificate request could not be approved.' + (email ? ' Please contact ' + email + '.' : ' Please contact the organising team.'), btn: false }
+  };
+  const m = map[state] || map['Not released'];
+  document.getElementById('cert-card').innerHTML = `<div class="row-left"><div class="mc-icon"><i class="fa-solid ${m.icon}"></i></div><div><h4>${esc(m.title)} ${badge(state, m.kind)}</h4><p>${esc(m.text)}</p></div></div>
+    ${m.btn ? '<button class="btn btn-gold" id="cert-btn" type="button"><i class="fa-solid fa-paper-plane"></i> Request certificate</button>' : ''}`;
+  const b = document.getElementById('cert-btn');
+  if (b) b.addEventListener('click', async () => {
+    b.disabled = true; b.innerHTML = '<span class="spinner"></span> Sending request...';
+    try {
+      const res = await api('requestCertificate', {});
+      if (!res.ok) { showPopup(res.error || 'Could not send the request.', 'Request not sent'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request certificate'; return; }
+      pt.certificateStatus = 'In progress'; renderCertificate();
+      showPopup(map['In progress'].text, 'Request received', true);
+    } catch (err) { showPopup(err.message, 'Connection problem'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request certificate'; }
   });
-  return res.json();
 }
-function showErr(msg){ const el = document.getElementById('err'); el.textContent = msg; el.classList.add('show'); }
-function showOk(msg){ const el = document.getElementById('ok'); el.textContent = msg; el.classList.add('show'); }
 
+/* ---------- PDF download (IP + date/time in footer) ---------- */
+async function getIp(){ return (await L.getClientIp()) || 'Not available'; }
+// Loads a same-site image as PNG data for the PDF; resolves null if it fails.
+function loadImg(url){
+  return new Promise(res => {
+    const im = new Image();
+    im.onload = () => { try { const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight; c.getContext('2d').drawImage(im, 0, 0); res({ d: c.toDataURL('image/png'), w: im.naturalWidth, h: im.naturalHeight }); } catch (e) { res(null); } };
+    im.onerror = () => res(null); im.src = url;
+  });
+}
+document.getElementById('pdf-btn').addEventListener('click', async function(){
+  const b = this;
+  if (!window.jspdf) { showPopup('The PDF tool could not be loaded. Check your connection and reload.', 'PDF unavailable'); return; }
+  b.disabled = true; b.innerHTML = '<span class="spinner"></span> Preparing PDF...';
+  const [ip, logoL, logoC] = await Promise.all([getIp(), loadImg('../assets/loyola-crest.png'), loadImg('../assets/cimser-logo.png')]);
+  const when = new Date().toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) + ' IST';
+  const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' }), W = 210, M = 18;
+  const LH = 22;
+  if (logoL) doc.addImage(logoL.d, 'PNG', M, 8, LH * logoL.w / logoL.h, LH);
+  if (logoC) { const w = LH * logoC.w / logoC.h; doc.addImage(logoC.d, 'PNG', W - M - w, 8, w, LH); }
+  doc.setTextColor(18, 34, 74); doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+  doc.text('LVRMIC 2026 - Registration Details', W / 2, 15, { align: 'center' });
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(83, 95, 122);
+  doc.text('4th International Conference on Life Sciences & Vector Risk Management', W / 2, 21, { align: 'center' });
+  doc.text('Loyola College (Autonomous), Chennai  |  26-28 November 2026', W / 2, 26, { align: 'center' });
+  doc.setDrawColor(169, 118, 47); doc.setLineWidth(1); doc.line(0, 35, W, 35);
+  const meal = normMeal(REG.foodPreference) || 'Not recorded';
+  const rows = [
+    ['Name', PT.name], ['LVRMIC ID', REG.id], ['Participant type', PT.participantType], ['Category', REG.category],
+    ['Institution', PT.institution], ['Mode', PT.mode], ['Registration status', REG.status + (REG.spot || /spot/i.test(REG.registrationType || '') ? ' (Spot registration)' : '')],
+    ['Registration date', fmtDate(REG.registrationDate)], ['Amount paid', REG.amountPaid ? 'Rs. ' + REG.amountPaid : 'Not recorded'],
+    ['Payment status', REG.feePaid ? 'Paid' : 'Pending'], ['Payment date', fmtDate(REG.paymentDate)], ['Payment reference', REG.paymentRef], ['Meal preference', meal]
+  ];
+  let y = 50;
+  rows.forEach((r, i) => {
+    if (i % 2 === 0) { doc.setFillColor(250, 246, 236); doc.rect(M - 3, y - 6, W - 2 * M + 6, 10, 'F'); }
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(83, 95, 122); doc.text(r[0], M, y);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(27, 36, 54);
+    doc.text(doc.splitTextToSize(String(r[1] || '-'), 105)[0], M + 58, y);
+    y += 10;
+  });
+  doc.setFontSize(8.5); doc.setTextColor(135, 145, 166);
+  doc.text('Please carry this document (or your LVRMIC ID) to the registration desk.', M, y + 8);
+  doc.setDrawColor(231, 221, 196); doc.setLineWidth(.3); doc.line(M, 280, W - M, 280);
+  doc.setFontSize(8); doc.text('Downloaded on: ' + when + '   |   IP address: ' + ip, M, 286);
+  doc.save('LVRMIC26-Registration-' + REG.id + '.pdf');
+  b.disabled = false; b.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Download registration details (PDF)';
+});
+
+/* ---------- init ---------- */
 (async function init(){
   try {
-    const dash = await callApi('getDashboard', {});
+    const [dash, res, settings] = await Promise.all([api('getDashboard', {}), api('getRegistration', {}), L.loadPublicSettings()]);
+    S = settings || {};
     if (dash.ok) {
-      if (dash.participant.photoUrl) {
-        const thumb = driveThumb(dash.participant.photoUrl, 100);
-        const av = document.getElementById('user-avatar');
-        av.src = thumb; av.style.display = '';
-        av.onerror = () => { av.style.display = 'none'; };
-        document.getElementById('user-avatar-fallback').style.display = 'none';
+      PT = dash.participant;
+      if (PT.photoUrl) {
+        const av = document.getElementById('user-avatar'); av.onerror = () => { av.style.display = 'none'; document.getElementById('user-avatar-fallback').style.display = ''; };
+        av.src = L.photoUrl(PT.photoUrl, 100); av.style.display = ''; document.getElementById('user-avatar-fallback').style.display = 'none';
       }
-      if (dash.participant.pptRequired) document.getElementById('nav-ppt-link').style.display = '';
+      if (PT.pptRequired) document.getElementById('nav-ppt-link').style.display = '';
+      if (!PT.abstractApplicable) document.getElementById('nav-abstract-link').style.display = 'none';
     }
-
-    const res = await callApi('getRegistration', {});
-    if (!res.ok) {
-      if (/session/i.test(res.error || '')) { window.location.href = '../participant-login.html'; return; }
-      document.getElementById('loader').innerHTML = `<p style="color:var(--danger);">${res.error}</p>`;
-      return;
-    }
-    const r = res.registration;
-    document.getElementById('r-id').textContent = r.id;
-    document.getElementById('r-status').innerHTML = `<i class="fa-solid fa-circle-check"></i> ${r.status}`;
-    document.getElementById('r-category').textContent = r.category || '—';
-    document.getElementById('r-date').textContent = r.registrationDate ? new Date(r.registrationDate).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—';
-    document.getElementById('r-amount').textContent = r.amountPaid ? ('₹ ' + r.amountPaid) : 'Not recorded';
-    const feeBadge = document.getElementById('r-fee-badge');
-    if (r.feePaid) { feeBadge.className = 'badge badge-success'; feeBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> Paid'; }
-    else { feeBadge.className = 'badge badge-pending'; feeBadge.innerHTML = '<i class="fa-solid fa-clock"></i> Pending'; }
-
+    if (!res.ok) { document.getElementById('loader').innerHTML = `<p style="color:var(--danger);">${esc(res.error || 'Could not load your registration.')}</p>`; return; }
+    if (!dash.ok) PT = { name: '', participantType: '', institution: '', mode: '' };
+    REG = res.registration;
+    document.getElementById('r-id').textContent = REG.id;
+    document.getElementById('r-status').innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + esc(REG.status || 'Registered');
+    document.getElementById('r-category').textContent = REG.category || '—';
+    document.getElementById('r-date').textContent = fmtDate(REG.registrationDate) || '—';
+    document.getElementById('r-amount').textContent = REG.amountPaid ? '₹ ' + REG.amountPaid : 'Not recorded';
+    const fb = document.getElementById('r-fee-badge');
+    if (REG.feePaid) { fb.className = 'badge badge-success'; fb.innerHTML = '<i class="fa-solid fa-circle-check"></i> Paid'; }
+    else { fb.className = 'badge badge-pending'; fb.innerHTML = '<i class="fa-solid fa-clock"></i> Pending'; }
+    if (REG.spot || /spot/i.test(REG.registrationType || '')) document.getElementById('r-spot').style.display = '';
+    renderMeal(); renderPayment(); renderReceipt(); renderCertificate();
     document.getElementById('loader').style.display = 'none';
     document.getElementById('content').style.display = 'block';
   } catch (err) {
-    document.getElementById('loader').innerHTML = '<p style="color:var(--danger);">Could not reach the server. Check your connection and reload.</p>';
+    document.getElementById('loader').innerHTML = `<p style="color:var(--danger);">${esc(err.message || 'Could not reach the server. Check your connection and reload.')}</p>`;
   }
 })();
-
-document.getElementById('receipt-btn').addEventListener('click', async function(){
-  const btn = this;
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Sending request...';
-  try {
-    const res = await callApi('requestReceipt', {});
-    if (!res.ok) { showErr(res.error || 'Could not send request.'); btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request receipt'; return; }
-    showOk('Request sent — the organising secretariat will email your receipt shortly.');
-    btn.innerHTML = '<i class="fa-solid fa-check"></i> Requested';
-  } catch (err) {
-    showErr('Could not reach the server. Check your connection and try again.');
-    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request receipt';
-  }
-});
 </script>
 </body>
 </html>
