@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Schedule | LVRMIC 2026 · CIMSER, Loyola College</title>
+<title>Schedule | LVRMIC 2026, Loyola College</title>
 <meta name="description" content="Conference programme — 4th International Conference on Life Sciences and Vector Risk Management (LVRMIC 2026), Loyola College (Autonomous), Chennai.">
 <link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -271,7 +271,7 @@ function main() {
       const [dash, S, prog, slot] = await Promise.all([
         L.api('getDashboard', {}),
         L.loadPublicSettings(),
-        L.api('getSchedule', {}, { anon: true }),
+        L.api('getScheduleV2', {}, { anon: true }),
         L.api('getSlot', {}, { stay: true })
       ]);
       settings = S || {};
