@@ -3,179 +3,405 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conference Schedule | CIMSER, Loyola College</title>
-<link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
+<title>Schedule | LVRMIC 2026 · CIMSER, Loyola College</title>
+<meta name="description" content="Conference programme — 4th International Conference on Life Sciences and Vector Risk Management (LVRMIC 2026), Loyola College (Autonomous), Chennai.">
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
-:root{--paper:#faf6ec;--paper-alt:#f2ecdc;--card:#fff;--card-border:#e7ddc4;--navy:#12224a;--ink-1:#1b2436;--ink-2:#535f7a;--ink-3:#8791a6;--gold:#a9762f;--gold-deep:#8a5f24;--gold-light:#c9974f;--teal:#1f7a68;--danger:#c0392b;--maxw:1180px;}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
+:root{--paper:#faf6ec;--paper-alt:#f2ecdc;--card:#fff;--card-border:#e7ddc4;--navy:#12224a;--ink-1:#1b2436;--ink-2:#535f7a;--ink-3:#8791a6;--gold:#a9762f;--gold-deep:#8a5f24;--gold-light:#c9974f;--teal:#1f7a68;--danger:#c0392b;--warn:#b5791f;--success:#1f7a49;--maxw:1180px;}
 *{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
 html,body{overflow-x:hidden;max-width:100%;}
 body{margin:0;background:var(--paper);color:var(--ink-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;}
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .4em;color:var(--navy);}
-p{color:var(--ink-2);margin:0 0 1em;} a{color:var(--gold-deep);text-decoration:none;}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;} @media(max-width:600px){.wrap{padding:0 16px;}}
-.masthead{background:linear-gradient(180deg,#fff,var(--paper));border-bottom:3px solid var(--gold);}
-.masthead-inner{max-width:var(--maxw);margin:0 auto;padding:20px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:18px;} .masthead-logos img{height:74px;width:auto;} @media(max-width:700px){.masthead-logos img{height:56px;}}
-.masthead-text{flex:1;min-width:220px;} .m-super{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;}
-.masthead-text h1{font-size:clamp(1.15rem,2.2vw,1.55rem);line-height:1.25;margin:4px 0;} .m-sub{font-size:12.5px;color:var(--ink-3);margin:0;}
-.utcbar{background:var(--navy);} .utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;} .utcbar i{color:var(--gold-light);} .utcbar b{color:#e8ecf5;font-weight:500;}
-.topnav{background:#fff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;}
-.topnav-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-.pnav{display:flex;gap:2px;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
-.pnav a{display:flex;align-items:center;gap:6px;padding:12px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;}
-.pnav a:hover,.pnav a.active{color:var(--gold-deep);border-bottom-color:var(--gold);text-decoration:none;}
-.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;}
-.user-chip{position:relative;display:flex;align-items:center;}
-.user-chip img,.avatar-fallback{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);cursor:pointer;background:#fff;}
-.avatar-fallback{display:flex;align-items:center;justify-content:center;color:var(--gold-deep);background:var(--paper-alt);}
-.user-menu{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:10px;min-width:170px;box-shadow:0 18px 40px rgba(20,30,60,.15);opacity:0;visibility:hidden;transition:.2s;padding:6px;z-index:50;}
-.user-menu.open{opacity:1;visibility:visible;} .user-menu a{display:flex;gap:8px;padding:9px 12px;border-radius:6px;color:var(--ink-2);font-size:13px;cursor:pointer;} .user-menu a:hover{background:var(--paper-alt);text-decoration:none;}
-@media(max-width:800px){.pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;padding:90px 20px 24px;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}.pnav.open{transform:none;visibility:visible;}.pnav-toggle{display:block;}}
-.page-head{padding:28px 0 4px;} .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);margin-bottom:12px;} .breadcrumb a{color:var(--ink-3);}
-.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:14px 0;}
-.section{padding:8px 0 60px;}
+p{color:var(--ink-2);margin:0 0 1em;}
+a{color:var(--gold-deep);text-decoration:none;}a:hover{text-decoration:underline;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+@media(max-width:600px){.wrap{padding:0 14px;}}
 
-.my{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid var(--gold);border-left:5px solid var(--gold);border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:14px;}
-.my i{color:var(--gold-deep);} .my .sp{flex:1;}
-.btn{font:600 13px Inter,sans-serif;background:#fff;color:var(--navy);border:1px solid var(--card-border);border-radius:8px;padding:8px 14px;cursor:pointer;} .btn:hover{border-color:var(--gold);}
-.day-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
-.day-tab{flex:1;min-width:150px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:12px 16px;cursor:pointer;text-align:left;font-family:inherit;}
-.day-tab.active{background:rgba(201,151,79,.12);border-color:var(--gold);}
-.day-tab:focus-visible,.btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
-.day-tab .a{font-size:11px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;} .day-tab .b{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--navy);} .day-tab .c{font-size:12px;color:var(--gold-deep);}
-.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px;} .bar .sp{flex:1;}
-.bar select{font:13px Inter,sans-serif;padding:8px 10px;border:1px solid var(--card-border);border-radius:8px;background:#fff;color:var(--ink-1);}
-.group{display:grid;gap:12px;margin-bottom:12px;}
-.ses{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:14px 16px;}
-.ses.mine{border:2px solid var(--gold);background:#fffaf0;}
-.ses h3{font-size:1.02rem;margin:0;} .meta{font-size:12.5px;color:var(--ink-3);margin-top:2px;}
-.hall{display:inline-block;font:700 11px Inter,sans-serif;background:var(--paper-alt);color:var(--gold-deep);border-radius:999px;padding:2px 9px;margin-left:6px;}
-.roles{font-size:13px;color:var(--ink-2);margin-top:8px;display:flex;gap:4px 18px;flex-wrap:wrap;}
-.it{display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--card-border);margin-top:8px;font-size:13.5px;}
+/* ---- shared page shell (same on every participant page) ---- */
+.utcbar{background:var(--navy);}
+.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;flex-wrap:wrap;}
+.utcbar i{color:var(--gold-light);font-size:11px;}.utcbar b{color:#e8ecf5;font-weight:500;}
+@media(max-width:700px){.utcbar-inner{justify-content:center;padding:6px 12px;font-size:10.5px;}}
+.masthead{background:linear-gradient(180deg,#fff,var(--paper));border-bottom:3px solid var(--gold);}
+.masthead-inner{max-width:var(--maxw);margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:20px;}
+.masthead-logos{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.masthead-logos img{height:64px;width:auto;object-fit:contain;}
+@media(max-width:700px){.masthead-logos img{height:46px;}.masthead-inner{padding:12px 14px;gap:12px;}}
+.m-super{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:2px;}
+.masthead-text h1{font-size:clamp(.95rem,2vw,1.4rem);line-height:1.25;margin:0;}
+.topnav{background:#fff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(20,30,60,.04);}
+.topnav-inner{max-width:var(--maxw);margin:0 auto;padding:4px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+@media(max-width:600px){.topnav-inner{padding:4px 14px;}}
+.pnav{display:flex;align-items:center;list-style:none;margin:0;padding:0;}
+.pnav a{display:flex;align-items:center;gap:6px;padding:14px 11px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
+.pnav a:hover,.pnav a.active{color:var(--gold-deep);border-bottom-color:var(--gold);text-decoration:none;}
+.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;line-height:1;}
+.pop-wrap{position:relative;}
+.pop{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:12px;box-shadow:0 20px 44px rgba(20,30,60,.18);opacity:0;visibility:hidden;transform:translateY(8px);transition:.2s;z-index:60;}
+.pop.open{opacity:1;visibility:visible;transform:none;}
+.user-menu{min-width:190px;padding:6px;}
+.user-menu a,.user-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border-radius:7px;color:var(--ink-2);font-size:13px;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left;}
+.user-menu a:hover,.user-menu button:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
+.user-chip-btn{background:none;border:0;padding:0;cursor:pointer;display:block;border-radius:50%;}
+.user-chip-btn img,.avatar-fallback{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#fff;display:block;}
+.avatar-fallback{display:flex;align-items:center;justify-content:center;background:var(--paper-alt);color:var(--gold-deep);font-size:14px;}
+@media(max-width:960px){
+  .pnav-toggle{display:block;position:relative;z-index:101;}
+  .pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;height:100dvh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;align-items:stretch;padding:90px 20px 24px;gap:2px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
+  .pnav.open{transform:none;visibility:visible;}
+  .pnav a{padding:12px;font-size:14.5px;border-bottom:0;border-radius:8px;}
+  .pnav a:hover,.pnav a.active{background:var(--paper-alt);}
+}
+.page-head{padding:28px 0 4px;}
+.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);margin-bottom:12px;}
+.breadcrumb a{color:var(--ink-3);}.breadcrumb .sep{margin:0 6px;color:var(--card-border);}.breadcrumb .current{color:var(--gold-deep);}
+.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:16px 0;}
+.section{padding:4px 0 56px;}
+.sk{background:linear-gradient(90deg,#efe8d6 25%,#f8f3e5 37%,#efe8d6 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:14px;}
+@keyframes shimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
+.notice{display:flex;gap:14px;align-items:flex-start;border-radius:14px;padding:16px 18px;margin-bottom:20px;border:1px solid var(--gold-light);background:linear-gradient(135deg,#fff7e3,#fdf0cf);}
+.notice>i{font-size:20px;color:var(--gold-deep);margin-top:2px;}
+.notice.bad{background:#fff3f1;border-color:rgba(192,57,43,.4);}.notice.bad>i{color:var(--danger);}
+.notice .nb{flex:1;min-width:0;}.notice b{display:block;color:var(--navy);margin-bottom:2px;}.notice p{margin:0 0 4px;font-size:13.5px;overflow-wrap:anywhere;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13px;padding:9px 16px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;text-align:center;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,30,60,.12);text-decoration:none;}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold-deep));color:#fff;}
+.btn-outline{background:#fff;border-color:var(--card-border);color:var(--navy);}
+.btn-outline:hover{border-color:var(--gold);}
+.btn:focus-visible,.day-tab:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.empty-note{text-align:center;padding:50px 20px;color:var(--ink-3);border:1px dashed var(--card-border);border-radius:14px;background:#fff;}
+.empty-note>i{font-size:26px;color:var(--gold-deep);margin-bottom:10px;display:block;}
+.empty-note h3{font-size:1.05rem;}.empty-note p{max-width:520px;margin:0 auto;}
+footer{padding:34px 0 24px;background:var(--navy);}
+footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0 0 6px;}footer em{color:var(--gold-light);}
+
+/* ---- schedule ---- */
+.my{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid var(--gold-light);border-left:5px solid var(--gold);border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:14px;box-shadow:0 4px 16px rgba(20,30,60,.04);}
+.my>i{color:var(--gold-deep);font-size:18px;}.my .sp{flex:1;}
+.day-tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:18px;}
+.day-tab{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:12px 16px;cursor:pointer;text-align:left;font-family:inherit;transition:.2s;}
+.day-tab:hover{border-color:var(--gold-light);}
+.day-tab.active{background:linear-gradient(135deg,#fff7e3,#fdf0cf);border-color:var(--gold);box-shadow:0 4px 14px rgba(169,118,47,.15);}
+.day-tab .a{font-size:11px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.6px;}
+.day-tab .b{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--navy);margin:2px 0;}
+.day-tab .c{font-size:12px;color:var(--gold-deep);font-weight:600;}.day-tab .c.none{color:var(--ink-3);font-weight:500;}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px;}.bar .sp{flex:1;}
+.bar label{font-size:13px;color:var(--ink-2);font-weight:600;}
+.bar select{font:13px Inter,sans-serif;padding:9px 12px;border:1px solid var(--card-border);border-radius:8px;background:#fff;color:var(--ink-1);min-width:160px;}
+.day-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.day-title h2{font-size:1.25rem;margin:0;}.day-title span{font-size:13px;color:var(--ink-3);}
+.row{display:grid;grid-template-columns:92px 1fr;gap:14px;margin-bottom:14px;align-items:start;}
+.row-t{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:700;color:var(--gold-deep);padding-top:14px;text-align:right;line-height:1.35;}
+.row-t small{display:block;font-weight:500;color:var(--ink-3);font-size:11px;}
+.par{display:grid;gap:12px;grid-template-columns:repeat(var(--n),minmax(0,1fr));}
+.ses{background:var(--card);border:1px solid var(--card-border);border-top:3px solid var(--gold-light);border-radius:12px;padding:14px 16px;box-shadow:0 4px 16px rgba(20,30,60,.04);min-width:0;}
+.ses.mine{border:2px solid var(--gold);background:#fffaf0;box-shadow:0 8px 24px rgba(169,118,47,.18);}
+.ses h3{font-size:1.02rem;margin:0;overflow-wrap:anywhere;}
+.meta{font-size:12.5px;color:var(--ink-3);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;}
+.hall{display:inline-block;font:700 11px Inter,sans-serif;background:var(--paper-alt);color:var(--gold-deep);border-radius:999px;padding:2px 10px;}
+.you{font:700 11px Inter,sans-serif;background:var(--gold);color:#fff;border-radius:999px;padding:2px 10px;}
+.roles{margin:10px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px;}
+.roles dt{color:var(--ink-3);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;padding-top:2px;}.roles dd{margin:0;color:var(--navy);font-weight:600;overflow-wrap:anywhere;}
+.desc{font-size:13px;color:var(--ink-2);margin-top:8px;}
+.it{display:grid;grid-template-columns:104px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--card-border);margin-top:9px;font-size:13.5px;}
 .it-t{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-deep);}
-.it ul{margin:4px 0 0 18px;padding:0;} .gl{color:var(--danger);font-weight:600;font-size:13px;}
+.it-b{min-width:0;overflow-wrap:anywhere;}
+.it ul{margin:4px 0 0 18px;padding:0;color:var(--ink-2);}
+.gl{color:var(--danger);font-weight:600;font-size:13px;margin-top:3px;}
 .tag{font-size:11px;border:1px solid var(--card-border);border-radius:999px;padding:1px 8px;color:var(--ink-3);}
-.pl{margin:6px 0 0 18px;padding:0;font-size:13px;color:var(--ink-2);} .pl li.me{background:#fff1cf;border-radius:4px;font-weight:700;color:var(--navy);padding:0 4px;margin-left:-4px;}
-.brk{text-align:center;font-size:13px;color:var(--ink-2);padding:10px;border:1px dashed var(--card-border);border-radius:10px;background:var(--paper-alt);}
-.empty-note{text-align:center;padding:46px 20px;color:var(--ink-3);border:1px dashed var(--card-border);border-radius:14px;}
-.loader{text-align:center;padding:80px 0;color:var(--ink-3);} .spinner-lg{width:30px;height:30px;border:3px solid rgba(169,118,47,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;} @keyframes spin{to{transform:rotate(360deg);}}
-footer{padding:36px 0 22px;background:var(--navy);} footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;} footer em{color:var(--gold-light);}
-@media(max-width:720px){.group{grid-template-columns:1fr !important;}.it{grid-template-columns:1fr;gap:2px;}}
-.print-title{display:none;}.no-scroll{overflow:hidden;}
-@media print{.utcbar,.topnav,.page-head,.day-tabs,.bar,.my,footer,.masthead-logos{display:none !important;}body{background:#fff;}.print-title{display:block;font:600 16px Fraunces,serif;margin-bottom:10px;}.ses{break-inside:avoid;}.group{grid-template-columns:repeat(var(--n),1fr) !important;}}
+.pl{margin:6px 0 0 20px;padding:0;font-size:13px;color:var(--ink-2);}
+.pl li{padding:1px 4px;margin-left:-4px;border-radius:4px;}.pl li.me{background:#fff1cf;font-weight:700;color:var(--navy);}
+.brk{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;text-align:center;font-size:13.5px;color:var(--ink-2);padding:10px 14px;border:1px dashed var(--gold-light);border-radius:10px;background:var(--paper-alt);}
+.brk i{color:var(--gold-deep);}
+.pday{display:none;}.print-title{display:none;}
+@media(max-width:860px){.row{grid-template-columns:1fr;gap:4px;}.row-t{text-align:left;padding-top:0;}.row-t small{display:inline;margin-left:6px;}.par{grid-template-columns:1fr;}}
+@media(max-width:520px){.it{grid-template-columns:1fr;gap:2px;}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+/* ---- print / save as PDF ---- */
+@media print{
+  @page{margin:12mm;}
+  body{background:#fff;font-size:11.5px;}
+  .utcbar,.masthead-logos,.topnav,.page-head,.day-tabs,.bar,.my,footer,.pnav-toggle{display:none !important;}
+  .masthead{border:0;background:#fff;}.masthead-inner{padding:0 0 8px;}
+  .print-title{display:block;font:600 15px Fraunces,serif;margin:0 0 10px;color:#000;}
+  .section{padding:0;}.wrap{padding:0;max-width:none;}
+  .row{grid-template-columns:78px 1fr;margin-bottom:8px;break-inside:avoid;}
+  .par{grid-template-columns:repeat(var(--n),minmax(0,1fr)) !important;}
+  .ses{box-shadow:none;break-inside:avoid;padding:8px 10px;}.ses.mine{background:#fff;}
+  body.printing-all #content{display:none !important;}
+  body.printing-all .pday{display:block;break-after:page;}
+  body.printing-all .pday:last-child{break-after:auto;}
+  .pday h2{font-size:16px;border-bottom:2px solid var(--gold);padding-bottom:4px;}
+}
 </style>
 </head>
 <body>
+
 <div class="utcbar"><div class="utcbar-inner"><i class="fa-regular fa-clock"></i><span id="utc-clock"><b>Loading time…</b></span></div></div>
+
 <div class="masthead"><div class="masthead-inner">
-  <div class="masthead-logos"><img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'"><img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'"></div>
-  <div class="masthead-text"><div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
+  <div class="masthead-logos">
+    <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
+    <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
+  </div>
+  <div class="masthead-text">
+    <div class="m-super">Loyola College (Autonomous), Chennai</div>
     <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-    <p class="m-sub">Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology · Participant Portal</p></div>
+  </div>
 </div></div>
+
 <div class="topnav"><div class="topnav-inner">
   <button class="pnav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
   <ul class="pnav" id="nav-links">
     <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
     <li><a href="registration.html"><i class="fa-solid fa-id-card"></i> Registration</a></li>
-    <li><a href="abstract.html"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
+    <li><a href="abstract.html" id="nav-abstract-link"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
     <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
     <li><a href="schedule.html" class="active"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
     <li><a href="slot.html"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
     <li><a href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
+    <li id="nav-verify" style="display:none;"><a href="verification.html"><i class="fa-solid fa-user-check"></i> Verification</a></li>
   </ul>
-  <div class="user-chip"><img id="user-avatar" alt="" style="display:none;" onclick="toggleUserMenu()"><div class="avatar-fallback" id="user-avatar-fallback" onclick="toggleUserMenu()"><i class="fa-solid fa-user"></i></div>
-    <div class="user-menu" id="user-menu"><a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a><a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</a></div></div>
+  <div class="pop-wrap">
+    <button class="user-chip-btn" id="user-btn" type="button" aria-label="My account">
+      <img id="user-avatar" alt="" style="display:none;">
+      <div class="avatar-fallback" id="user-avatar-fallback"><i class="fa-solid fa-user"></i></div>
+    </button>
+    <div class="pop user-menu" id="user-menu">
+      <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+      <button type="button" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+    </div>
+  </div>
 </div></div>
 
 <header class="page-head"><div class="wrap">
-  <div class="breadcrumb"><a href="home.html">Dashboard</a> / <span>Schedule</span></div>
-  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);">Conference schedule</h1><div class="helix-rule"></div>
-  <p style="max-width:620px;">Only sessions the organisers have published are shown. Your own slot is highlighted.</p>
+  <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Schedule</span></div>
+  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);margin:0;">Conference schedule</h1>
+  <div class="helix-rule"></div>
+  <p style="max-width:640px;">Only sessions the organisers have published are shown. Your own presentation slot is highlighted.</p>
 </div></header>
 
-<div id="loader" class="loader"><div class="spinner-lg"></div><p style="margin-top:14px;">Loading…</p></div>
+<section class="section" id="loader"><div class="wrap">
+  <div class="sk" style="height:74px;"></div><div class="sk" style="height:180px;margin-top:18px;"></div>
+</div></section>
+
 <section class="section" id="content" style="display:none;"><div class="wrap">
   <div id="my"></div>
-  <div class="day-tabs" id="day-tabs" role="tablist"></div>
-  <div class="bar"><label for="venue" style="font-size:13px;color:var(--ink-2);">Venue</label><select id="venue"></select><span class="sp"></span>
-    <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / save as PDF</button></div>
+  <div class="day-tabs" id="day-tabs" role="tablist" aria-label="Conference days"></div>
+  <div class="bar">
+    <label for="venue">Venue</label><select id="venue"></select>
+    <span class="sp"></span>
+    <button class="btn btn-outline" type="button" id="print-day"><i class="fa-solid fa-print"></i> Print this day</button>
+    <button class="btn btn-outline" type="button" id="print-all"><i class="fa-regular fa-file-pdf"></i> Full programme (PDF)</button>
+  </div>
   <div class="print-title" id="print-title"></div>
-  <div id="day-content"></div>
+  <div id="day-content" role="tabpanel"></div>
 </div></section>
-<footer><div class="wrap"><p>© 2026, CIMSER — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai <em><br>"Luceat Lux Vestra — Let Your Light Shine"</em></p></div></footer>
+<div id="print-area"></div>
+
+<footer><div class="wrap">
+  <p><b style="color:#fff;" id="f-dates"></b> &middot; Participant Portal</p>
+  <p>Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology</p>
+  <p>© 2026, Loyola College (Autonomous), Chennai &mdash; <em>“Luceat Lux Vestra — Let Your Light Shine”</em></p>
+</div></footer>
 
 <script src="../participant-common.js"></script>
 <script>
-if (LVRMIC.init()) (async function () {
-  const E = LVRMIC.esc, $ = id => document.getElementById(id), MS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
-  let D = [], sel = '', venue = '', my = null, myIso = '', myName = '';
-  const mins = hm => { const m = /^(\d\d):(\d\d)$/.exec(hm || ''); return m ? +m[1] * 60 + +m[2] : null; };
-  const t12 = s => { const m = /(\d{1,2}):(\d{2})\s*(AM|PM)/i.exec(s || ''); return m ? (+m[1] % 12 + (/pm/i.test(m[3]) ? 12 : 0)) * 60 + +m[2] : null; };
-  const isoOf = s => { const m = /^(\d{1,2})\s+([A-Za-z]{3})\w*\s+(\d{4})$/.exec(s || ''), i = m ? MS.indexOf(m[2].toLowerCase()) : -1; return i < 0 ? '' : m[3] + '-' + String(i + 1).padStart(2, '0') + '-' + String(m[1]).padStart(2, '0'); };
-  const rng = (a, b) => LVRMIC.hm12(a) + (b ? ' – ' + LVRMIC.hm12(b) : '');
-  const mine = (s, d) => { if (!my || d.date !== myIso || String(s.hall).toLowerCase() !== my.venue.toLowerCase()) return false;
-    if (my.room && s.room && my.room.toLowerCase() !== String(s.room).toLowerCase()) return false;
-    const t = t12(my.time), a = mins(s.start), b = mins(s.end); return t == null || a == null || b == null || (t >= a && t < b); };
+/* Uses ONLY what your existing participant-common.js already provides (same as home.html / slot.html):
+   startClock, initMenu, session, callApi, loadPublicSettings, photoUrl. Everything else is local to this page. */
+const C = window.LVRMIC, $ = id => document.getElementById(id);
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], MONTH = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const E = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const L = {
+  esc: E,
+  formatDate: k => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(k || ''); return m ? (+m[3]) + ' ' + MON[+m[2] - 1] + ' ' + m[1] : ''; },
+  hm12: hm => { const m = /^(\d{1,2}):(\d{2})/.exec(hm || ''); if (!m) return ''; let h = +m[1]; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m[2] + ' ' + ap; },
+  minutes: t => { const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i.exec(String(t || '').trim()); if (!m) return null; let h = +m[1]; if (m[3]) h = h % 12 + (/pm/i.test(m[3]) ? 12 : 0); return h * 60 + +m[2]; },
+  dateKey: s => { s = String(s || '').trim(); let m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s); if (m) return m[0]; m = /^(\d{1,2})\s+([A-Za-z]{3})\w*\s+(\d{4})$/.exec(s); const i = m ? MON.map(x => x.toLowerCase()).indexOf(m[2].toLowerCase()) : -1; return i < 0 ? '' : m[3] + '-' + String(i + 1).padStart(2, '0') + '-' + String(m[1]).padStart(2, '0'); },
+  todayKey: () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }),
+  confDates: S => { const a = /^(\d{4})-(\d{2})-(\d{2})/.exec((S || {})['conf.startDate'] || ''), b = /^(\d{4})-(\d{2})-(\d{2})/.exec((S || {})['conf.endDate'] || ''); if (!a) return '';
+    if (!b || a[0] === b[0]) return (+a[3]) + ' ' + MONTH[+a[2] - 1] + ' ' + a[1];
+    if (a[2] === b[2] && a[1] === b[1]) return (+a[3]) + '–' + (+b[3]) + ' ' + MONTH[+a[2] - 1] + ' ' + a[1];
+    return (+a[3]) + ' ' + MONTH[+a[2] - 1] + ' ' + a[1] + ' – ' + (+b[3]) + ' ' + MONTH[+b[2] - 1] + ' ' + b[1]; },
+  loadPublicSettings: () => C.loadPublicSettings(),
+  logout: () => { C.session.clear(); location.href = '../participant-login.html'; },
+  setAvatar: url => { const img = $('user-avatar'), fb = $('user-avatar-fallback'); if (!img || !url) return; img.onerror = () => { img.style.display = 'none'; fb.style.display = ''; }; img.src = C.photoUrl(url, 100); img.style.display = ''; fb.style.display = 'none'; },
+  api: async (action, payload, opts) => {
+    opts = opts || {};
+    let res;
+    try { res = await C.callApi(action, opts.anon ? (payload || {}) : Object.assign({ token: C.session.token() }, payload || {})); }
+    catch (err) { return { ok: false, error: err.message || 'Could not reach the server.' }; }
+    if (!opts.anon && !opts.stay && res && !res.ok && /session expired|log in again/i.test(res.error || '')) L.logout();
+    return res;
+  }
+};
+C.startClock('utc-clock'); C.initMenu();
+{ const ub = $('user-btn'), um = $('user-menu');
+  ub.addEventListener('click', e => { e.stopPropagation(); um.classList.toggle('open'); });
+  document.addEventListener('click', e => { if (!e.target.closest('#user-menu')) um.classList.remove('open'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') um.classList.remove('open'); }); }
+if (!C.session.token()) location.href = '../participant-login.html'; else main();
 
-  try {
-    const [dash, set, v2, slot] = await Promise.all([LVRMIC.api('getDashboard', {}), LVRMIC.loadPublicSettings(), LVRMIC.api('getScheduleV2', {}, { anon: true }), LVRMIC.api('getSlot', {}, { stay: true }).catch(function () { return {}; })]);
-    if (dash.ok) { LVRMIC.setAvatar(dash.participant.photoUrl); myName = dash.participant.name || ''; if (dash.participant.pptRequired) $('nav-ppt-link').style.display = ''; }
-    if (slot.ok && slot.published && slot.slot.venue) { my = slot.slot; myIso = isoOf(my.date); }
-    if (!v2.ok) throw new Error(v2.error || 'Could not load the schedule.');
+function main() {
+  $('logout-btn').addEventListener('click', L.logout);
 
-    const byDate = {}; (v2.days || []).forEach(d => byDate[d.date] = d);
-    const dates = new Set(Object.keys(byDate)), st = set['conf.startDate'], en = set['conf.endDate'];
-    if (st && en) for (let t = new Date(st + 'T12:00:00Z'), e = new Date(en + 'T12:00:00Z'), n = 0; t <= e && n < 10; t.setUTCDate(t.getUTCDate() + 1), n++) dates.add(t.toISOString().slice(0, 10));
-    D = [...dates].sort().map((date, i) => ({ date: date, no: i + 1, label: (byDate[date] || {}).label, venue: (byDate[date] || {}).venue, sessions: (byDate[date] || {}).sessions || [] }));
-    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-    sel = (D.find(d => d.date === today) || D.find(d => d.date === myIso) || D[0] || {}).date || '';
-    $('loader').style.display = 'none'; $('content').style.display = 'block'; draw();
-  } catch (err) {
-    $('loader').innerHTML = '<p style="color:var(--danger);">' + E(err.message && err.message.indexOf('Unknown action') > -1 ? 'The server needs to be redeployed with the latest script.' : 'Could not load the schedule. Check your connection and reload.') + '</p>';
+  let days = [], sel = '', venue = '', my = null, myIso = '', myName = '', settings = {};
+  const BREAK_TYPES = ['tea', 'lunch', 'break', 'registration', 'coffee', 'dinner', 'inauguration-break'];
+  const BREAK_WORDS = /\b(tea|coffee|lunch|dinner|break|registration)\b/i;
+  const mins = L.minutes;
+  const range = (a, b) => L.hm12(a) + (b ? ' – ' + L.hm12(b) : '');
+  const isBreak = s => !(s.items || []).length && !s.chair && (BREAK_TYPES.indexOf(s.type) > -1 || BREAK_WORDS.test(s.name || ''));
+  const weekday = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' });
+
+  /* does this session hold my slot? (same date + venue [+ room] + my start time inside it) */
+  function isMine(s, day) {
+    if (!my || day.date !== myIso || String(s.hall).toLowerCase() !== String(my.venue).toLowerCase()) return false;
+    if (my.room && s.room && String(my.room).toLowerCase() !== String(s.room).toLowerCase()) return false;
+    const t = mins(my.time), a = mins(s.start), b = mins(s.end);
+    return t == null || a == null || b == null || (t >= a && t < b);
   }
 
+  (async function load() {
+    try {
+      const [dash, S, prog, slot] = await Promise.all([
+        L.api('getDashboard', {}),
+        L.loadPublicSettings(),
+        L.api('getSchedule', {}, { anon: true }),
+        L.api('getSlot', {}, { stay: true })
+      ]);
+      settings = S || {};
+      if (dash.ok) {
+        const pt = dash.participant; myName = pt.name || '';
+        if (pt.profileCompleted === false) { location.href = 'details.html'; return; }
+        L.setAvatar(pt.photoUrl);
+        $('nav-abstract-link').style.display = pt.abstractApplicable ? '' : 'none';
+        if (pt.pptRequired) $('nav-ppt-link').style.display = '';
+      }
+      if (settings['sw.verificationOpen'] === 'true') $('nav-verify').style.display = '';
+      $('f-dates').textContent = L.confDates(settings);
+      if (slot && slot.ok && slot.published && slot.slot && slot.slot.venue) { my = slot.slot; myIso = L.dateKey(my.date); }
+      if (!prog.ok) throw new Error(prog.error || 'Could not load the schedule.');
+
+      /* day tabs: every date from Settings (start → end) + any extra day the organisers created */
+      const byDate = {}; (prog.days || []).forEach(d => byDate[d.date] = d);
+      const dates = new Set(Object.keys(byDate));
+      const st = settings['conf.startDate'], en = settings['conf.endDate'];
+      if (st && en) for (let t = new Date(st + 'T12:00:00Z'), e = new Date(en + 'T12:00:00Z'), n = 0; t <= e && n < 14; t.setUTCDate(t.getUTCDate() + 1), n++) dates.add(t.toISOString().slice(0, 10));
+      days = [...dates].sort().map((date, i) => { const d = byDate[date] || {}; return { date, no: i + 1, label: d.label || '', venue: d.venue || '', sessions: d.sessions || [] }; });
+
+      const hash = (location.hash || '').slice(1);
+      sel = (days.find(d => d.date === hash) || days.find(d => d.date === L.todayKey()) || days.find(d => d.date === myIso) || days.find(d => d.sessions.length) || days[0] || {}).date || '';
+      $('loader').style.display = 'none'; $('content').style.display = 'block';
+      draw();
+    } catch (err) {
+      $('loader').innerHTML = '<div class="wrap"><div class="notice bad"><i class="fa-solid fa-triangle-exclamation"></i><div class="nb"><b>Could not load the schedule</b><p>' +
+        E(err.message || 'Check your connection and reload.') + '</p><button class="btn btn-outline" type="button" onclick="location.reload()"><i class="fa-solid fa-rotate"></i> Try again</button></div></div></div>';
+    }
+  })();
+
+  /* ---------- drawing ---------- */
   function draw() {
-    $('my').innerHTML = my ? '<div class="my"><i class="fa-solid fa-location-crosshairs"></i><span><b>Your slot:</b> ' + E([my.venue, my.room && 'Room ' + my.room, my.date, my.time && rng2(my)].filter(Boolean).join(' · ')) + '</span><span class="sp"></span><button class="btn" id="go-my">Show on schedule</button></div>' : '';
-    const g = $('go-my'); if (g) g.onclick = () => { if (myIso) { sel = myIso; venue = ''; draw(); } const m = document.querySelector('.mine'); if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
-    $('day-tabs').innerHTML = D.map(d => '<button class="day-tab' + (d.date === sel ? ' active' : '') + '" role="tab" aria-selected="' + (d.date === sel) + '" data-d="' + d.date + '"><div class="a">Day ' + d.no + ' · ' + LVRMIC.formatDate(d.date) + '</div><div class="b">' + E(d.label || 'Day ' + d.no) + '</div><div class="c">' + (d.sessions.length ? d.sessions.length + ' sessions' : 'Not published yet') + '</div></button>').join('');
-    document.querySelectorAll('.day-tab').forEach(b => b.onclick = () => { sel = b.dataset.d; venue = ''; draw(); });
-    const day = D.find(d => d.date === sel), area = $('day-content');
-    if (!day) { $('venue').innerHTML = ''; area.innerHTML = '<div class="empty-note"><i class="fa-regular fa-calendar"></i><br>The programme will appear here once the organisers publish it.</div>'; return; }
+    const day = days.find(d => d.date === sel);
+    drawMy(); drawTabs();
+    const area = $('day-content');
+    if (!day) { $('venue').innerHTML = ''; area.innerHTML = empty('The programme will appear here once the organisers publish it.'); return; }
     const halls = [...new Set(day.sessions.map(s => s.hall).filter(Boolean))];
-    $('venue').innerHTML = '<option value="">All venues</option>' + halls.map(h => '<option' + (h === venue ? ' selected' : '') + '>' + E(h) + '</option>').join('');
-    $('venue').onchange = e => { venue = e.target.value; draw(); };
-    $('print-title').textContent = 'Day ' + day.no + ' · ' + LVRMIC.formatDate(day.date) + (venue ? ' · ' + venue : '');
-    const list = day.sessions.filter(s => !venue || s.hall === venue);
-    if (!list.length) { area.innerHTML = '<div class="empty-note"><i class="fa-regular fa-calendar"></i><br>The programme for this day has not been published yet. Check your dashboard announcements for updates.</div>'; return; }
-    area.innerHTML = groups(list).map(gr => '<div class="group" style="--n:' + gr.length + ';grid-template-columns:repeat(' + gr.length + ',1fr);">' + gr.map(s => card(s, day)).join('') + '</div>').join('');
+    if (venue && halls.indexOf(venue) < 0) venue = '';
+    $('venue').innerHTML = '<option value="">All venues</option>' + halls.map(h => '<option value="' + E(h) + '"' + (h === venue ? ' selected' : '') + '>' + E(h) + '</option>').join('');
+    $('venue').disabled = halls.length < 2;
+    $('print-title').textContent = 'Day ' + day.no + ' · ' + L.formatDate(day.date) + (venue ? ' · ' + venue : '');
+    area.innerHTML = dayHtml(day, venue);
   }
-  function rng2(m) { return m.time + (m.endTime ? ' – ' + m.endTime : ''); }
-  function groups(ss) {   // sessions that overlap in time but sit in different halls are shown side by side
-    const out = []; let c = null;
-    ss.forEach(s => { const a = mins(s.start), b = mins(s.end), h = String(s.hall).toLowerCase();
-      if (c && a != null && c.a != null && a < c.b && b > c.a && c.h.indexOf(h) < 0 && c.l.length < 4) { c.l.push(s); c.h.push(h); c.a = Math.min(c.a, a); c.b = Math.max(c.b, b); }
-      else { c = { l: [s], a: a, b: b, h: [h] }; out.push(c); } });
-    return out.map(x => x.l);
+  function drawMy() {
+    const box = $('my');
+    if (!my) { box.innerHTML = ''; return; }
+    const when = [my.date, my.time && (my.time + (my.endTime ? ' – ' + my.endTime : ''))].filter(Boolean).join(', ');
+    box.innerHTML = '<div class="my"><i class="fa-solid fa-location-crosshairs"></i><span><b>Your slot:</b> ' + E([my.venue, my.room && 'Room ' + my.room, when].filter(Boolean).join(' · ')) +
+      '</span><span class="sp"></span><button class="btn btn-gold" type="button" id="go-my">Show on schedule</button></div>';
+    $('go-my').onclick = () => {
+      if (myIso && days.some(d => d.date === myIso)) { sel = myIso; venue = ''; draw(); history.replaceState(null, '', '#' + sel); }
+      const m = document.querySelector('.ses.mine, .pl li.me'); if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
   }
+  function drawTabs() {
+    $('day-tabs').innerHTML = days.map(d => {
+      const n = d.sessions.filter(s => !isBreak(s)).length;
+      return '<button class="day-tab' + (d.date === sel ? ' active' : '') + '" role="tab" aria-selected="' + (d.date === sel) + '" data-d="' + d.date + '">' +
+        '<div class="a">Day ' + d.no + ' · ' + E(weekday(d.date)) + '</div><div class="b">' + E(L.formatDate(d.date)) + '</div>' +
+        '<div class="c' + (n ? '' : ' none') + '">' + (n ? n + (n === 1 ? ' session' : ' sessions') : 'Not published yet') + '</div></button>';
+    }).join('');
+    const tabs = [].slice.call(document.querySelectorAll('.day-tab'));
+    tabs.forEach((b, i) => {
+      b.onclick = () => { sel = b.dataset.d; venue = ''; history.replaceState(null, '', '#' + sel); draw(); };
+      b.onkeydown = e => { const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (k && tabs[i + k]) { tabs[i + k].focus(); tabs[i + k].click(); tabs[i + k].focus(); } };
+    });
+  }
+  const empty = msg => '<div class="empty-note"><i class="fa-regular fa-calendar"></i><h3>Nothing to show yet</h3><p>' + E(msg) + '</p></div>';
+
+  function dayHtml(day, v) {
+    const list = day.sessions.filter(s => !v || s.hall === v || isBreak(s));
+    const real = list.filter(s => !isBreak(s));
+    const head = '<div class="day-title"><h2>' + E('Day ' + day.no + (day.label && !/^day\s*\d+$/i.test(day.label) ? ' · ' + day.label : '')) + '</h2><span>' + E(weekday(day.date) + ', ' + L.formatDate(day.date)) + (day.venue ? ' · ' + E(day.venue) : '') + '</span></div>';
+    if (!real.length) return head + empty('The programme for this day has not been published yet. Check the announcements on your dashboard for updates.');
+    return head + rows(list, day);
+  }
+
+  /* group in time order; sessions that overlap in time in different halls sit side by side */
+  function rows(list, day) {
+    const out = []; let cur = null;
+    list.forEach(s => {
+      const a = mins(s.start), b = mins(s.end), h = String(s.hall).toLowerCase();
+      if (isBreak(s)) { cur = null; out.push({ brk: true, l: [s], a, b }); return; }
+      if (cur && a != null && cur.a != null && a < cur.b && (b == null || b > cur.a) && cur.h.indexOf(h) < 0 && cur.l.length < 4) {
+        cur.l.push(s); cur.h.push(h); cur.a = Math.min(cur.a, a); cur.b = Math.max(cur.b, b == null ? cur.b : b);
+      } else { cur = { l: [s], a, b: b == null ? (a == null ? 0 : a + 1) : b, h: [h] }; out.push(cur); }
+    });
+    return out.map(g => {
+      const t = g.l[0], when = '<div class="row-t">' + E(L.hm12(t.start) || '') + (t.end ? '<small>to ' + E(L.hm12(t.end)) + '</small>' : '') + '</div>';
+      if (g.brk) return '<div class="row">' + when + '<div class="brk"><i class="fa-solid fa-mug-hot"></i><b>' + E(t.name) + '</b>' + (t.hall ? '<span class="tag">' + E([t.hall, t.room].filter(Boolean).join(' · ')) + '</span>' : '') + '</div></div>';
+      return '<div class="row">' + when + '<div class="par" style="--n:' + g.l.length + '">' + g.l.map(s => card(s, day)).join('') + '</div></div>';
+    }).join('');
+  }
+
   function card(s, day) {
-    const its = s.items || [];
-    if (['tea', 'lunch', 'registration'].indexOf(s.type) > -1 && !its.length) return '<div class="brk"><b>' + E(rng(s.start, s.end)) + '</b> &nbsp; ' + E(s.name) + '</div>';
-    const roles = [s.chair && 'Chairperson: <b>' + E(s.chair) + '</b>', s.coChair && 'Co-Chair: <b>' + E(s.coChair) + '</b>', s.rapporteur && 'Rapporteur: <b>' + E(s.rapporteur) + '</b>'].filter(Boolean);
-    return '<div class="ses' + (mine(s, day) ? ' mine' : '') + '"><h3>' + (s.number ? 'Session ' + E(s.number) + ' — ' : '') + E(s.name) + '</h3>'
-      + '<div class="meta">' + E(rng(s.start, s.end)) + '<span class="hall">' + E([s.hall, s.room, s.track && 'Track ' + s.track].filter(Boolean).join(' · ')) + '</span>' + (mine(s, day) ? ' <b style="color:var(--gold-deep);">· your slot</b>' : '') + '</div>'
-      + (roles.length ? '<div class="roles">' + roles.map(r => '<span>' + r + '</span>').join('') + '</div>' : '') + (s.description ? '<div class="meta">' + E(s.description) + '</div>' : '')
-      + its.map(item).join('') + '</div>';
+    const mine = isMine(s, day);
+    const roles = [['Chairperson', s.chair], ['Co-Chair', s.coChair], ['Rapporteur', s.rapporteur]].filter(r => r[1]);
+    return '<article class="ses' + (mine ? ' mine' : '') + '"><h3>' + (s.number ? 'Session ' + E(s.number) + ' — ' : '') + E(s.name) + '</h3>' +
+      '<div class="meta"><span>' + E(range(s.start, s.end)) + '</span><span class="hall"><i class="fa-solid fa-location-dot"></i> ' + E([s.hall, s.room && 'Room ' + s.room, s.track && 'Track ' + s.track].filter(Boolean).join(' · ')) + '</span>' + (mine ? '<span class="you">Your slot</span>' : '') + '</div>' +
+      (roles.length ? '<dl class="roles">' + roles.map(r => '<dt>' + r[0] + '</dt><dd>' + E(r[1]) + '</dd>').join('') + '</dl>' : '') +
+      (s.description ? '<div class="desc">' + E(s.description) + '</div>' : '') +
+      (s.items || []).map(item).join('') + '</article>';
   }
+
   function item(i) {
-    const pl = (i.presenterList || []).map(p => '<li class="' + ((my && p.token && p.token === my.token) || (myName && p.name === myName) ? 'me' : '') + '">' + E((p.time ? LVRMIC.hm12(p.time) + ' · ' : '') + [p.token || p.board, p.name].filter(Boolean).join(' · ') + (p.institution ? ', ' + p.institution : '')) + '</li>').join('');
-    return '<div class="it"><div class="it-t">' + E(rng(i.Start, i.End)) + '</div><div>' + (i.Speaker ? '<b>' + E(i.Speaker) + '</b>' + (i.Affiliation ? ', ' + E(i.Affiliation) : '') + '<br>' : '') + E(i.Topic || '')
-      + (i.Mode && i.Mode !== 'Physical' ? ' <span class="tag">' + E(i.Mode) + '</span>' : '') + ((i.Lines || []).length ? '<ul>' + i.Lines.map(l => '<li>' + E(l) + '</li>').join('') + '</ul>' : '')
-      + (i.Guests || []).map(g => '<div class="gl">' + (g.role ? E(g.role) + ': ' : '') + E(g.text) + '</div>').join('') + (pl ? '<ol class="pl">' + pl + '</ol>' : '') + '</div></div>';
+    const mineP = p => (my && my.token && p.token) ? String(p.token) === String(my.token) : (myName && p.name === myName);
+    const pl = (i.presenterList || []).map(p => '<li' + (mineP(p) ? ' class="me"' : '') + '>' +
+      E((p.time ? L.hm12(p.time) + ' · ' : '') + [p.token || p.board, p.name].filter(Boolean).join(' · ') + (p.institution ? ', ' + p.institution : '')) + '</li>').join('');
+    return '<div class="it"><div class="it-t">' + E(range(i.Start, i.End)) + '</div><div class="it-b">' +
+      (i.Speaker ? '<b>' + E(i.Speaker) + '</b>' + (i.Affiliation ? ', ' + E(i.Affiliation) : '') + '<br>' : '') + E(i.Topic || '') +
+      (i.Mode && i.Mode !== 'Physical' ? ' <span class="tag">' + E(i.Mode) + '</span>' : '') +
+      ((i.Lines || []).length ? '<ul>' + i.Lines.map(l => '<li>' + E(l) + '</li>').join('') + '</ul>' : '') +
+      (i.Guests || []).map(g => '<div class="gl">' + (g.role ? E(g.role) + ': ' : '') + E(g.text) + '</div>').join('') +
+      (pl ? '<ol class="pl">' + pl + '</ol>' : '') + '</div></div>';
   }
-})();
+
+  /* ---------- controls ---------- */
+  $('venue').addEventListener('change', e => { venue = e.target.value; draw(); });
+  $('print-day').addEventListener('click', () => window.print());
+  $('print-all').addEventListener('click', () => {
+    const shown = days.filter(d => d.sessions.some(s => !isBreak(s)));
+    if (!shown.length) { alert('Nothing has been published yet.'); return; }
+    $('print-area').innerHTML = '<div class="print-title">' + E(settings['conf.shortName'] ? settings['conf.shortName'] + ' — Programme' : 'Programme') + '</div>' + shown.map(d => '<section class="pday">' + dayHtml(d, '')+ '</section>').join('');
+    document.body.classList.add('printing-all');
+    window.print();
+  });
+  window.addEventListener('afterprint', () => { document.body.classList.remove('printing-all'); $('print-area').innerHTML = ''; if (days.length) draw(); });
+}
 </script>
 </body>
 </html>
