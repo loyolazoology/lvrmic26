@@ -3,323 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Schedule Report | VRMIC 2026 Admin</title>
+<title>Schedule Report | LVRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
 <style>
-:root{
-  --navy-950:#0a1230; --navy-900:#0e1938; --navy-850:#122043; --navy-800:#152750;
-  --navy-border:rgba(226,187,120,.24);
-  --gold:#c9974f; --gold-light:#e8c983;
-  --teal:#279c85; --teal-light:#6fc9b6;
-  --text-1:#f3f5fb; --text-2:#b3bcd6; --text-3:#8390b3;
-  --danger:#d8695a; --warn:#dba43c; --success:#4fa980;
-  --sidebar-w:250px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Inter',sans-serif;color:var(--text-1);line-height:1.6;background:var(--navy-950);display:flex;flex-direction:column;min-height:100vh;}
-h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 4px;}
-a{color:var(--gold-light);text-decoration:none;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-
-.masthead{background:var(--navy-900);border-bottom:3px solid var(--gold);flex-shrink:0;}
-.masthead-inner{padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.masthead-logos img{height:52px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:40px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-light);font-weight:700;margin-bottom:2px;}
-.masthead-text h1{font-size:clamp(.92rem,1.7vw,1.15rem);line-height:1.25;margin:0;color:var(--text-1);}
-.masthead-text .m-sub{font-size:11px;color:var(--text-3);margin:0;}
-
-.body-row{flex:1;display:flex;min-height:0;}
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-900);border-right:1px solid var(--navy-border);display:flex;flex-direction:column;overflow-y:auto;}
-.sidebar-brand{padding:22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--navy-border);}
-.sidebar-brand img{height:36px;width:auto;}
-.sidebar-brand div{font-family:'Fraunces',serif;font-size:14px;line-height:1.3;}
-.sidebar-brand small{display:block;color:var(--text-3);font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px;}
-.sidebar-nav{flex:1;padding:14px 12px;}
-.nav-section{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);padding:14px 12px 6px;}
-.nav-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:var(--text-2);font-size:13.5px;font-weight:500;margin-bottom:2px;cursor:pointer;transition:.15s;}
-.nav-link i{width:16px;text-align:center;color:var(--text-3);font-size:13px;}
-.nav-link:hover{background:rgba(232,201,131,.06);color:var(--text-1);}
-.nav-link.active{background:rgba(232,201,131,.1);color:var(--gold-light);}
-.nav-link.active i{color:var(--gold-light);}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--navy-border);}
-.sidebar-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-800);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-size:14px;flex-shrink:0;}
-.sidebar-user div{min-width:0;}
-.sidebar-user b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-user span{font-size:11px;color:var(--text-3);}
-.logout-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:8px;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);font-size:12.5px;cursor:pointer;}
-.logout-btn:hover{border-color:var(--gold);color:var(--gold-light);}
-.sidebar-toggle{display:none;position:fixed;top:70px;left:16px;z-index:60;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;}
-@media(max-width:960px){
-  .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:70;transform:translateX(-100%);width:min(280px,85vw);transition:transform .3s ease;}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-toggle{display:block;}
-}
-.main{flex:1;min-width:0;overflow-y:auto;}
-.topbar{background:rgba(6,11,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--navy-border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
-.topbar h1{font-size:1.3rem;}
-.topbar .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-3);letter-spacing:.4px;}
-.wrap{padding:28px;max-width:1400px;}
-
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
-.toolbar input[type=text]{flex:1;min-width:200px;background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:14px;}
-.toolbar select{background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-2);border-radius:8px;padding:10px 12px;font-size:13.5px;}
-.toolbar input:focus,.toolbar select:focus{outline:2px solid var(--gold);outline-offset:1px;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:13px;padding:10px 16px;border-radius:8px;cursor:pointer;border:1px solid var(--navy-border);background:transparent;color:var(--text-2);transition:.2s;}
-.btn:hover{color:var(--gold-light);border-color:var(--gold);}
-.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;border-color:transparent;}
-.btn-gold:hover{color:#241a06;}
-
-.stat-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
-.stat-pill{background:var(--navy-850);border:1px solid var(--navy-border);border-radius:999px;padding:7px 15px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-2);}
-.stat-pill b{color:var(--gold-light);}
-
-.table-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:14px;overflow:hidden;}
-.scroll-x{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead th{text-align:left;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--navy-border);white-space:nowrap;}
-tbody td{padding:11px 14px;border-bottom:1px solid rgba(226,187,120,.08);color:var(--text-2);vertical-align:top;white-space:nowrap;}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover{background:rgba(232,201,131,.03);}
-.id-cell{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-weight:600;}
-.name-cell{color:var(--text-1);font-weight:600;}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;}
-.badge-oral{background:rgba(31,122,104,.16);color:var(--teal-light);}
-.badge-poster{background:rgba(205,163,85,.16);color:var(--gold-light);}
-.badge-participant{background:rgba(179,188,214,.1);color:var(--text-2);}
-.badge-success{background:rgba(79,169,128,.14);color:var(--teal-light);}
-.badge-pending{background:rgba(219,164,60,.14);color:var(--warn);}
-.badge-danger{background:rgba(216,105,90,.14);color:#e8988c;}
-.badge-neutral{background:rgba(179,188,214,.1);color:var(--text-2);}
-.day-tab-btn{background:var(--navy-850);border:1px solid var(--navy-border);color:var(--text-2);padding:9px 16px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;}
-.day-tab-btn.active{background:linear-gradient(180deg,rgba(232,201,131,.14),rgba(201,151,79,.08));border-color:var(--gold);color:var(--gold-light);}
-.timeline{position:relative;padding-left:26px;}
-.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--gold),var(--teal));border-radius:2px;}
-.tl-item{position:relative;padding:0 0 20px 16px;}
-.tl-item:last-child{padding-bottom:0;}
-.tl-item::before{content:'';position:absolute;left:-26px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--navy-950);border:2px solid var(--gold-light);}
-.tl-time{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-light);margin-bottom:4px;}
-.tl-card{background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:12px;padding:14px 16px;}
-.tl-card h4{font-size:14px;margin:0 0 4px;color:var(--text-1);font-weight:600;}
-.tl-card .tl-speaker{font-size:12.5px;color:var(--teal-light);margin-bottom:4px;}
-.tl-card .tl-venue{font-size:11.5px;color:var(--text-3);}
-.loading-state,.empty-state{padding:60px 20px;text-align:center;color:var(--text-3);}
-.loading-state i,.empty-state i{font-size:26px;color:var(--gold-light);margin-bottom:12px;display:block;}
-.spinner-lg{width:24px;height:24px;border:3px solid rgba(232,201,131,.25);border-top-color:var(--gold-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
-@keyframes spin{to{transform:rotate(360deg);}}
+.rp-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:12px;}
+.rp-sum{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.rp-sum div{border:1px solid var(--navy-border);border-radius:10px;padding:8px 14px;background:var(--navy-950);font-size:12px;color:var(--text-3);}
+.rp-sum b{display:block;font-size:20px;color:var(--gold-light);font-family:'IBM Plex Mono',monospace;}
+.rp-wrap{overflow:auto;border:1px solid var(--navy-border);border-radius:12px;}
+.rp-t{width:100%;border-collapse:collapse;font-size:12.5px;min-width:900px;}
+.rp-t th,.rp-t td{border-bottom:1px solid var(--navy-border);padding:7px 9px;text-align:left;vertical-align:top;}
+.rp-t th{position:sticky;top:0;background:#131d38;color:var(--text-2);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;white-space:nowrap;}
+.rp-t tr.day td{background:rgba(232,201,131,.1);color:var(--gold-light);font-weight:700;}
+.rp-t .mono{font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+.rp-t tr.draft td{opacity:.65;}
+.rp-chip{font:700 11px Inter,sans-serif;padding:2px 8px;border-radius:999px;}
+.rp-chip.pub{background:rgba(60,180,120,.15);color:var(--success);} .rp-chip.draft{background:rgba(232,201,131,.15);color:var(--gold-light);}
+.rp-tl{display:grid;gap:14px;margin-top:6px;}
+.rp-tl h4{margin:0 0 6px;font-size:13px;color:var(--text-2);}
+.rp-lane{position:relative;height:30px;border:1px solid var(--navy-border);border-radius:8px;background:var(--navy-950);margin-bottom:4px;}
+.rp-lane span.hl{position:absolute;left:-0px;top:-16px;font-size:10.5px;color:var(--text-3);}
+.rp-bar{position:absolute;top:3px;bottom:3px;border-radius:6px;background:rgba(232,201,131,.28);border:1px solid var(--gold);font-size:10.5px;color:var(--text-1);padding:0 5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:22px;}
+.rp-bar.draft{border-style:dashed;opacity:.65;}
+.rp-ax{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-3);font-family:'IBM Plex Mono',monospace;}
+.rp-empty{text-align:center;padding:30px;color:var(--text-3);}
+.rp-views{display:flex;gap:6px;margin-bottom:12px;}
+.rp-views button[aria-pressed=true]{border-color:var(--gold);color:var(--gold-light);}
 </style>
 </head>
 <body>
-
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; CIMSER &middot; Administration Portal</p>
-    </div>
+<div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Schedule report</h1><a class="btn btn-sm" href="schedule-manage.html"><i class="fa-solid fa-calendar-days"></i> Schedule editor</a></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div>
+  <div class="rp-filters">
+    <div><label for="f-day">Day</label><select id="f-day"><option value="">All days</option></select></div>
+    <div><label for="f-hall">Hall / venue</label><select id="f-hall"><option value="">All</option></select></div>
+    <div><label for="f-type">Session type</label><select id="f-type"><option value="">All</option></select></div>
+    <div><label for="f-st">Status</label><select id="f-st"><option value="">All</option><option>Published</option><option>Draft</option></select></div>
+    <div><label for="f-q">Search</label><input id="f-q" placeholder="Name, chair, topic, speaker"></div>
   </div>
+  <div class="rp-sum" id="sum"></div>
+  <div class="sc-bar" style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+    <div class="rp-views" role="group" aria-label="View"><button class="btn btn-sm" id="v-tab" aria-pressed="true"><i class="fa-solid fa-table"></i> Table</button><button class="btn btn-sm" id="v-tl" aria-pressed="false"><i class="fa-solid fa-chart-gantt"></i> Timeline</button></div>
+    <label style="display:flex;gap:6px;align-items:center;margin:0;"><input type="checkbox" id="f-items"> Show every item</label>
+    <span style="flex:1"></span><div id="exp"></div>
+  </div>
+  <div id="main"></div>
 </div>
-
-<button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
-
-<div class="body-row">
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div>VRMIC 2026<small>ADMIN CONTROL PANEL</small></div></div>
-  <nav class="sidebar-nav" id="sidebar-nav"></nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-user"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div><b id="admin-name">—</b><span id="admin-position">—</span></div></div>
-    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div><div class="breadcrumb">ADMIN / SCHEDULE</div><h1>Schedule Report</h1></div>
-    <a href="schedule-manage.html" class="btn btn-gold"><i class="fa-solid fa-calendar-days"></i> Edit schedule</a>
-  </div>
-
-  <div class="wrap">
-    <div class="stat-strip" id="stat-strip"></div>
-
-    <div class="stat-strip" id="stat-strip"></div>
-
-    <div class="day-tabs" style="display:flex;gap:8px;margin-bottom:18px;">
-      <button class="day-tab-btn active" data-day="1">Day 1 &middot; 26 Nov</button>
-      <button class="day-tab-btn" data-day="2">Day 2 &middot; 27 Nov</button>
-      <button class="day-tab-btn" data-day="3">Day 3 &middot; 28 Nov</button>
-    </div>
-
-    <div style="text-align:right;margin-bottom:14px;">
-      <button class="btn" id="export-btn"><i class="fa-solid fa-file-csv"></i> Export full schedule CSV</button>
-    </div>
-
-    <div id="day-content"></div>
-    <div class="loading-state" id="loading-state"><div class="spinner-lg"></div>Loading schedule...</div>
-  </div>
-</div>
-</div>
-
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
-const token = localStorage.getItem('vrmic_admin_token');
-if (!token) window.location.href = '../admin-login.html';
-let permissions = {};
-try { permissions = JSON.parse(localStorage.getItem('vrmic_admin_permissions') || '{}'); } catch(e) {}
-function can(k, a){ return !!(permissions[k] && permissions[k][a]); }
-function logout(){ localStorage.removeItem('vrmic_admin_token'); localStorage.removeItem('vrmic_admin_name'); localStorage.removeItem('vrmic_admin_position'); localStorage.removeItem('vrmic_admin_permissions'); window.location.href = '../admin-login.html'; }
-document.getElementById('sidebar-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
-
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action, token }, payload)) });
-  return res.json();
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!(VR.can('schedule', 'report') || VR.can('schedule', 'transaction'))) { VR.denied('You do not have permission to open the schedule report.'); return; }
+let S = null, sortK = 'start', sortD = 1, view = 'tab', rows = [];
+const q = s => document.querySelector(s);
+const T = hm => hm ? hm12(hm) : '';
+const min = hm => { const m = String(hm || '').match(/^(\d\d):(\d\d)$/); return m ? +m[1] * 60 + +m[2] : null; };
+const TL = { registration: 'Registration', inaugural: 'Inaugural', plenary: 'Plenary', keynote: 'Keynote', oral: 'Oral', poster: 'Poster', panel: 'Panel', tea: 'Tea break', lunch: 'Lunch break', valedictory: 'Valedictory', other: 'Other' };
+(async function init() {
+  try { S = await VR.api('adminScheduleGet', {}); } catch (e) { return showErr('Could not reach the server.'); }
+  if (!S.ok) return showErr(S.error || 'Could not load the schedule.');
+  const dayBy = {}; S.days.forEach(d => dayBy[d.DayID] = d);
+  rows = S.sessions.map(s => { const d = dayBy[s.DayID] || {}, its = S.items.filter(i => i.SessionID === s.SessionID), np = its.reduce((n, i) => n + ((S.presenters[i.ItemID] || []).length), 0);
+    const judges = S.judges.filter(j => j.sessionId === s.SessionID).length;
+    return { s: s, d: d, day: d.Date || '', dayNo: d.DayNo || 0, dayLabel: d.Label || ('Day ' + d.DayNo), hall: s.Hall || d.MainVenue || '', start: s.Start || '', end: s.End || '', items: its, np: np, judges: judges }; });
+  q('#f-day').innerHTML += S.days.map(d => '<option value="' + esc(d.DayID) + '">' + esc((d.Label || 'Day ' + d.DayNo) + ' · ' + fmtD(d.Date)) + '</option>').join('');
+  const uniq = a => Array.from(new Set(a.filter(Boolean))).sort();
+  q('#f-hall').innerHTML += uniq(rows.map(r => r.hall)).map(h => '<option>' + esc(h) + '</option>').join('');
+  q('#f-type').innerHTML += uniq(rows.map(r => r.s.Type)).map(t => '<option value="' + esc(t) + '">' + esc(TL[t] || t) + '</option>').join('');
+  ['f-day', 'f-hall', 'f-type', 'f-st', 'f-items'].forEach(id => q('#' + id).onchange = draw); q('#f-q').oninput = draw;
+  q('#v-tab').onclick = () => setView('tab'); q('#v-tl').onclick = () => setView('tl');
+  VR.exportBar(q('#exp'), { name: 'schedule_report', title: 'LVRMIC 2026 schedule', getData: () => {
+    const f = filtered(), withItems = q('#f-items').checked, out = [];
+    f.forEach(r => { const base = [fmtD(r.day), r.dayLabel, r.s.Number ? 'Session ' + r.s.Number : '', r.s.Name, TL[r.s.Type] || r.s.Type, T(r.start), T(r.end), r.hall, r.s.Room, r.s.Chair, r.s.CoChair, r.s.Rapporteur, r.judges, r.np, r.s.Status];
+      if (!withItems || !r.items.length) out.push(base.concat(['', '', '', '']));
+      else r.items.forEach(i => out.push(base.concat([(T(i.Start) + (i.End ? ' – ' + T(i.End) : '')).trim(), i.Topic, i.Speaker, i.Affiliation]))); });
+    return { headers: ['Date', 'Day', 'Session', 'Name', 'Type', 'Start', 'End', 'Hall', 'Room', 'Chairperson', 'Co-Chairperson', 'Rapporteur', 'Judges', 'Presenters', 'Status', 'Item time', 'Item topic', 'Speaker', 'Affiliation'], rows: out }; } });
+  draw();
+})();
+function setView(v) { view = v; q('#v-tab').setAttribute('aria-pressed', v === 'tab'); q('#v-tl').setAttribute('aria-pressed', v === 'tl'); draw(); }
+function filtered() {
+  const d = q('#f-day').value, h = q('#f-hall').value, t = q('#f-type').value, st = q('#f-st').value, k = q('#f-q').value.trim().toLowerCase();
+  let f = rows.filter(r => (!d || r.s.DayID === d) && (!h || r.hall === h) && (!t || r.s.Type === t) && (!st || r.s.Status === st) &&
+    (!k || [r.s.Name, r.s.Chair, r.s.CoChair, r.s.Rapporteur, r.s.Room, r.hall].concat(r.items.map(i => i.Topic + ' ' + i.Speaker + ' ' + i.Affiliation)).join(' ').toLowerCase().indexOf(k) > -1));
+  const val = r => sortK === 'start' ? (r.day + ' ' + (r.start || '99:99')) : sortK === 'name' ? r.s.Name.toLowerCase() : sortK === 'hall' ? r.hall.toLowerCase() : sortK === 'chair' ? (r.s.Chair || '').toLowerCase() : sortK === 'np' ? String(1e6 + r.np) : '';
+  return f.slice().sort((a, b) => val(a) < val(b) ? -sortD : val(a) > val(b) ? sortD : 0);
 }
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-const NAV_ITEMS = [
-  { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', href: 'home.html', always: true },
-  { section: 'Participants' },
-  { key: 'participants', sub: 'transaction', label: 'Manage Participants', icon: 'fa-user-plus', href: 'participants-manage.html' },
-  { key: 'participants', sub: 'report', label: 'Participant Report', icon: 'fa-table-list', href: 'participants-report.html' },
-  { section: 'Abstract Review' },
-  { key: 'abstract', sub: 'transaction', label: 'Review Abstracts', icon: 'fa-file-circle-check', href: 'abstracts-review.html' },
-  { key: 'abstract', sub: 'report', label: 'Abstract Report', icon: 'fa-table-list', href: 'abstracts-report.html' },
-  { section: 'Slot Allotment' },
-  { key: 'slot', sub: 'transaction', label: 'Allot Slots', icon: 'fa-location-crosshairs', href: 'slots-manage.html' },
-  { key: 'slot', sub: 'report', label: 'Slot Report', icon: 'fa-table-list', href: 'slots-report.html' },
-  { section: 'Attendance' },
-  { key: 'attendance', sub: 'transaction', label: 'Mark Attendance', icon: 'fa-calendar-check', href: 'attendance-mark.html' },
-  { key: 'attendance', sub: 'report', label: 'Attendance Report', icon: 'fa-table-list', href: 'attendance-report.html' },
-  { section: 'Presentation Access' },
-  { key: 'presentationAccess', sub: 'report', label: 'Venue Presentation List', icon: 'fa-display', href: 'presentation-access.html' },
-  { section: 'Certificates' },
-  { key: 'certificates', sub: 'transaction', label: 'Generate Certificate', icon: 'fa-certificate', href: 'certificates-manage.html' },
-  { key: 'certificates', sub: 'report', label: 'Certificate Report', icon: 'fa-table-list', href: 'certificates-report.html' },
-  { section: 'Receipts' },
-  { key: 'receipts', sub: 'transaction', label: 'Fulfill Receipt', icon: 'fa-receipt', href: 'receipts-manage.html' },
-  { key: 'receipts', sub: 'report', label: 'Receipt Report', icon: 'fa-table-list', href: 'receipts-report.html' },
-  { section: 'Feedback' },
-  { key: 'feedback', sub: 'report', label: 'Feedback Report', icon: 'fa-comment-dots', href: 'feedback-report.html' },
-  { section: 'Schedule' },
-  { key: 'schedule', sub: 'transaction', label: 'Edit Schedule', icon: 'fa-calendar-days', href: 'schedule-manage.html' },
-  { key: 'schedule', sub: 'report', label: 'Schedule Report', icon: 'fa-table-list', href: 'schedule-report.html' },
-  { section: 'Announcements' },
-  { key: 'announcements', sub: 'transaction', label: 'Post Announcement', icon: 'fa-bullhorn', href: 'announcements-manage.html' },
-  { key: 'announcements', sub: 'report', label: 'Announcement Report', icon: 'fa-table-list', href: 'announcements-report.html' },
-  { section: 'Mail' },
-  { key: 'mail', sub: 'transaction', label: 'Send Invite', icon: 'fa-paper-plane', href: 'mail-send.html' },
-  { key: 'mail', sub: 'report', label: 'Mail Report', icon: 'fa-table-list', href: 'mail-report.html' },
-  { section: 'Volunteer Management' },
-  { key: 'volunteers', sub: 'transaction', label: 'Assign Volunteers', icon: 'fa-user-group', href: 'volunteers-manage.html' },
-  { key: 'volunteers', sub: 'report', label: 'Volunteer Report', icon: 'fa-table-list', href: 'volunteers-report.html' },
-  { section: 'Settings' },
-  { key: 'settings', sub: 'transaction', label: 'Edit Settings', icon: 'fa-sliders', href: 'settings-manage.html' },
-  { key: 'settings', sub: 'report', label: 'Current Settings', icon: 'fa-table-list', href: 'settings-report.html' },
-  { section: 'Admin Users' },
-  { key: 'adminUsers', sub: 'transaction', label: 'Manage Admin Users', icon: 'fa-user-shield', href: 'admin-users-manage.html' },
-  { key: 'adminUsers', sub: 'report', label: 'Admin User Report', icon: 'fa-table-list', href: 'admin-users-report.html' }
-];
-function renderSidebar(){
-  const nav = document.getElementById('sidebar-nav');
-  let html = '', pendingSection = null;
-  NAV_ITEMS.forEach(item => {
-    if (item.section) { pendingSection = item.section; return; }
-    if (!item.always && !can(item.key, item.sub)) return;
-    if (pendingSection) { html += `<div class="nav-section">${pendingSection}</div>`; pendingSection = null; }
-    const activeClass = item.href === 'schedule-report.html' ? 'active' : '';
-    html += `<a class="nav-link ${activeClass}" href="${item.href}"><i class="fa-solid ${item.icon}"></i> ${item.label}</a>`;
+function draw() {
+  const f = filtered(); q('#sum').innerHTML = [['Sessions', f.length], ['Published', f.filter(r => r.s.Status === 'Published').length], ['Halls', new Set(f.map(r => r.hall).filter(Boolean)).size], ['Presenters placed', f.reduce((n, r) => n + r.np, 0)], ['Without chair', f.filter(r => !r.s.Chair && ['oral', 'poster', 'plenary', 'keynote', 'panel'].indexOf(r.s.Type) > -1).length]].map(x => '<div><b>' + x[1] + '</b>' + x[0] + '</div>').join('');
+  if (!f.length) { q('#main').innerHTML = '<div class="card rp-empty">Nothing matches. ' + (rows.length ? 'Clear a filter.' : 'No sessions have been added yet — use the Schedule editor.') + '</div>'; return; }
+  q('#main').innerHTML = view === 'tl' ? timeline(f) : table(f);
+  document.querySelectorAll('.rp-t th[data-k]').forEach(th => th.onclick = () => { if (sortK === th.dataset.k) sortD = -sortD; else { sortK = th.dataset.k; sortD = 1; } draw(); });
+}
+function table(f) {
+  const withItems = q('#f-items').checked; let last = null, h = '<div class="rp-wrap"><table class="rp-t"><thead><tr><th data-k="start">Time</th><th>Session</th><th data-k="name">Name</th><th data-k="hall">Hall / room</th><th data-k="chair">Chair · Co-chair · Rapporteur</th><th>Judges</th><th data-k="np">Presenters</th><th>Status</th></tr></thead><tbody>';
+  f.forEach(r => {
+    if (sortK === 'start' && sortD === 1 && r.day !== last) { last = r.day; h += '<tr class="day"><td colspan="8">' + esc(r.dayLabel) + ' · ' + esc(fmtD(r.day)) + '</td></tr>'; }
+    h += '<tr class="' + (r.s.Status === 'Published' ? '' : 'draft') + '"><td class="mono">' + esc(T(r.start) + (r.end ? ' – ' + T(r.end) : '')) + '</td><td>' + esc(r.s.Number ? 'Session ' + r.s.Number : TL[r.s.Type] || '') + '</td><td><b>' + esc(r.s.Name) + '</b></td><td>' + esc(r.hall) + (r.s.Room ? ' / ' + esc(r.s.Room) : '') + '</td><td>' + [r.s.Chair, r.s.CoChair, r.s.Rapporteur].map(x => esc(x || '—')).join(' · ') + '</td><td>' + (r.judges || '—') + '</td><td>' + (r.np || '—') + '</td><td><span class="rp-chip ' + (r.s.Status === 'Published' ? 'pub' : 'draft') + '">' + esc(r.s.Status) + '</span></td></tr>';
+    if (withItems) r.items.forEach(i => { h += '<tr class="' + (r.s.Status === 'Published' ? '' : 'draft') + '"><td class="mono" style="padding-left:22px;color:var(--text-3)">' + esc(T(i.Start) + (i.End ? ' – ' + T(i.End) : '')) + '</td><td colspan="7" style="color:var(--text-2)">' + esc([i.Topic, i.Speaker, i.Affiliation].filter(Boolean).join(' · ')) + '</td></tr>'; });
   });
-  nav.innerHTML = html || `<p style="padding:14px 12px;font-size:12.5px;color:var(--text-3);">No modules assigned yet.</p>`;
+  return h + '</tbody></table></div>';
 }
-renderSidebar();
-document.getElementById('admin-name').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-document.getElementById('admin-position').textContent = localStorage.getItem('vrmic_admin_position') || '';
-
-if (!can('schedule', 'report')) {
-  document.querySelector('.wrap').innerHTML = `<div style="color:var(--danger);padding:20px;">You do not have permission to view this report. Contact the administrator.</div>`;
-} else {
-
-let scheduleByDay = { 1: [], 2: [], 3: [] };
-let currentDay = 1;
-
-document.querySelectorAll('.day-tab-btn').forEach(btn => {
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('.day-tab-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    currentDay = Number(this.dataset.day);
-    renderDay();
+function timeline(f) {
+  const mins = f.map(r => min(r.start)).filter(x => x != null), maxs = f.map(r => min(r.end)).filter(x => x != null);
+  if (!mins.length) return '<div class="card rp-empty">The sessions have no times yet.</div>';
+  const a = Math.floor(Math.min.apply(null, mins) / 60) * 60, b = Math.ceil(Math.max.apply(null, maxs.concat(mins)) / 60) * 60 || a + 60, span = Math.max(60, b - a), days = {};
+  f.forEach(r => (days[r.s.DayID] = days[r.s.DayID] || []).push(r));
+  let h = '<div class="rp-tl">';
+  Object.keys(days).forEach(did => {
+    const list = days[did], halls = Array.from(new Set(list.map(r => r.hall || '—'))).sort();
+    h += '<div class="card"><h4>' + esc(list[0].dayLabel) + ' · ' + esc(fmtD(list[0].day)) + '</h4>';
+    halls.forEach(hl => { h += '<div style="font-size:11.5px;color:var(--text-3);margin:8px 0 3px;">' + esc(hl) + '</div><div class="rp-lane">' + list.filter(r => (r.hall || '—') === hl).map(r => { const s = min(r.start), e = min(r.end); if (s == null) return ''; const en = e == null ? s + 30 : e; return '<div class="rp-bar ' + (r.s.Status === 'Published' ? '' : 'draft') + '" style="left:' + ((s - a) / span * 100) + '%;width:' + Math.max(1.5, (en - s) / span * 100) + '%" title="' + esc(r.s.Name + ' · ' + T(r.start) + ' – ' + T(r.end)) + '">' + esc(r.s.Name) + '</div>'; }).join('') + '</div>'; });
+    let ax = ''; for (let m = a; m <= b; m += 60) ax += '<span>' + hm12(String(Math.floor(m / 60)).padStart(2, '0') + ':00') + '</span>';
+    h += '<div class="rp-ax" style="margin-top:4px;">' + ax + '</div></div>';
   });
-});
-
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-function renderDay(){
-  const items = scheduleByDay[currentDay];
-  const area = document.getElementById('day-content');
-  if (!items.length) {
-    area.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar"></i>No sessions published for this day yet.</div>`;
-    return;
-  }
-  area.innerHTML = `<div class="timeline">` + items.map(it => `
-    <div class="tl-item">
-      <div class="tl-time">${escapeHtml(it.time)}</div>
-      <div class="tl-card">
-        <h4>${escapeHtml(it.title)}</h4>
-        ${it.speaker ? `<div class="tl-speaker"><i class="fa-solid fa-microphone-lines"></i> ${escapeHtml(it.speaker)}</div>` : ''}
-        ${it.venue ? `<div class="tl-venue"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(it.venue)}</div>` : ''}
-      </div>
-    </div>`).join('') + `</div>`;
+  return h + '</div>';
 }
-
-async function loadData(){
-  document.getElementById('loading-state').style.display = 'block';
-  try {
-    const res = await callApi('getSchedule', {});
-    if (!res.ok) { if (/session/i.test(res.error||'')) { logout(); return; } alert(res.error || 'Could not load schedule.'); return; }
-    scheduleByDay = { 1: [], 2: [], 3: [] };
-    res.schedule.forEach(it => {
-      const d = Number(it.day);
-      if (scheduleByDay[d]) scheduleByDay[d].push(it);
-    });
-    const total = res.schedule.length;
-    document.getElementById('stat-strip').innerHTML = `<div class="stat-pill">Total sessions: <b>${total}</b></div><div class="stat-pill">Day 1: <b>${scheduleByDay[1].length}</b></div><div class="stat-pill">Day 2: <b>${scheduleByDay[2].length}</b></div><div class="stat-pill">Day 3: <b>${scheduleByDay[3].length}</b></div>`;
-    renderDay();
-  } catch (err) {
-    alert('Could not reach the server. Check your connection and try again.');
-  } finally {
-    document.getElementById('loading-state').style.display = 'none';
-  }
-}
-
-document.getElementById('export-btn').addEventListener('click', function(){
-  const headers = ['Day','Time','Title','Speaker','Venue'];
-  const csvRows = [headers.join(',')];
-  [1,2,3].forEach(day => {
-    scheduleByDay[day].forEach(it => {
-      const line = [day, it.time, it.title, it.speaker, it.venue].map(v => '"' + String(v||'').replace(/"/g,'""') + '"');
-      csvRows.push(line.join(','));
-    });
-  });
-  const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'VRMIC2026_Schedule_' + new Date().toISOString().slice(0,10) + '.csv';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-
-loadData();
-}
+})();
 </script>
 </body>
 </html>

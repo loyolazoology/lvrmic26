@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chairs and Judges | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.ch-days{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--navy-border);margin-bottom:14px;}
+.ch-day{background:none;border:0;border-bottom:3px solid transparent;color:var(--text-3);font:600 14px Inter,sans-serif;padding:10px 14px;cursor:pointer;text-align:left;}
+.ch-day small{display:block;font-weight:400;font-size:11px;}
+.ch-day[aria-selected=true]{color:var(--gold-light);border-bottom-color:var(--gold);}
+.ch-warn{border:1px solid var(--gold);background:rgba(232,201,131,.07);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);}
+.ch-warn summary{cursor:pointer;font-weight:600;color:var(--gold-light);} .ch-warn li{margin:3px 0;} .ch-warn li.error{color:var(--danger,#e5646b);}
+.ch-wrap{overflow:auto;border:1px solid var(--navy-border);border-radius:12px;}
+.ch-t{width:100%;border-collapse:collapse;font-size:13px;min-width:1000px;}
+.ch-t th,.ch-t td{border-bottom:1px solid var(--navy-border);padding:8px;text-align:left;vertical-align:top;}
+.ch-t th{background:#131d38;color:var(--text-2);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;}
+.ch-t tr.dirty td{background:rgba(232,201,131,.06);} .ch-t tr.flag td:first-child{box-shadow:inset 3px 0 0 var(--gold);}
+.ch-t input{width:100%;box-sizing:border-box;}
+.ch-s{font-weight:700;color:var(--text-1);} .ch-m{font-size:11.5px;color:var(--text-3);margin-top:2px;}
+.ch-j{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px;}
+.ch-jc{display:inline-flex;gap:5px;align-items:center;border:1px solid var(--navy-border);border-radius:999px;padding:2px 4px 2px 9px;font-size:12px;color:var(--text-1);}
+.ch-jc.noscore{border-color:var(--gold);} .ch-jc button{background:none;border:0;color:var(--text-3);cursor:pointer;padding:0 5px;font-size:13px;}
+.ch-t select{width:100%;}
+.ch-empty{text-align:center;padding:30px;color:var(--text-3);}
+.ch-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0;} .ch-bar .sp{flex:1;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-user-tie" style="color:var(--gold-light);"></i> Chairs, rapporteurs and judges</h1><a class="btn btn-sm" href="schedule-manage.html"><i class="fa-solid fa-calendar-days"></i> Schedule editor</a></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <p class="hint">Chairs, co-chairs and rapporteurs can be anyone, including outside guests: type the name. Judges must be admin accounts with scoring permission. They appear in the printed programme and the volunteer view.</p>
+  <div class="ch-days" id="days" role="tablist" aria-label="Conference days"></div>
+  <div id="warn"></div>
+  <div id="main"></div>
+  <div class="ch-bar" id="bar"></div>
+</div>
+<datalist id="dl-names"></datalist>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!(VR.can('schedule', 'transaction') || VR.can('schedule', 'report'))) { VR.denied('You do not have permission to open this page.'); return; }
+const EDIT = VR.can('schedule', 'transaction');
+let S = null, selDay = null, draft = {}; // draft[sessionId] = {chair,coChair,rapporteur,judges[]}
+const q = s => document.querySelector(s), qa = s => Array.from(document.querySelectorAll(s));
+const T = hm => hm ? hm12(hm) : '';
+const adm = id => S.admins.find(a => a.id === id);
+const skip = t => t === 'tea' || t === 'lunch' || t === 'registration';
+async function load(keepDraft) {
+  hideAlerts(); let r; try { r = await VR.api('adminScheduleRoles', {}); } catch (e) { return showErr('Could not reach the server.'); }
+  if (!r.ok) return showErr(r.error || 'Could not load.'); S = r;
+  if (!keepDraft) draft = {};
+  if (!S.days.some(d => d.DayID === selDay)) selDay = (S.days[0] || {}).DayID || null;
+  q('#dl-names').innerHTML = S.knownNames.map(n => '<option value="' + esc(n) + '">').join('');
+  render();
+}
+const cur = s => draft[s.SessionID] || { chair: s.Chair || '', coChair: s.CoChair || '', rapporteur: s.Rapporteur || '', judges: s.Judges.slice() };
+const isDirty = s => !!draft[s.SessionID];
+function render() {
+  q('#days').innerHTML = S.days.map(d => '<button class="ch-day" role="tab" data-id="' + esc(d.DayID) + '" aria-selected="' + (d.DayID === selDay) + '">' + esc(d.Label || 'Day ' + d.DayNo) + '<small>' + esc(fmtD(d.Date)) + '</small></button>').join('');
+  qa('.ch-day').forEach(b => b.onclick = () => { selDay = b.dataset.id; render(); });
+  const sess = S.sessions.filter(s => s.DayID === selDay && !skip(s.Type));
+  const dayIds = new Set(sess.map(s => s.SessionID)), W = S.warnings.filter(w => dayIds.has(w.sessionId) || (w.related || []).some(x => dayIds.has(x)));
+  q('#warn').innerHTML = W.length ? '<details class="ch-warn" open><summary><i class="fa-solid fa-triangle-exclamation"></i> ' + W.length + ' thing' + (W.length === 1 ? '' : 's') + ' to check</summary><ul>' + W.map(w => '<li class="' + w.level + '">' + esc(w.message) + '</li>').join('') + '</ul></details>' : '';
+  if (!S.days.length) { q('#main').innerHTML = '<div class="card ch-empty">No days or sessions yet. Build the schedule in the Schedule editor first.</div>'; q('#bar').innerHTML = ''; return; }
+  if (!sess.length) { q('#main').innerHTML = '<div class="card ch-empty">No sessions on this day.</div>'; q('#bar').innerHTML = ''; return; }
+  const flagged = new Set(); W.forEach(w => { flagged.add(w.sessionId); (w.related || []).forEach(x => flagged.add(x)); });
+  let h = '<div class="ch-wrap"><table class="ch-t"><thead><tr><th style="width:22%">Session</th><th>Chairperson</th><th>Co-chairperson</th><th>Rapporteur</th><th style="width:24%">Judges</th><th style="width:70px"></th></tr></thead><tbody>';
+  sess.forEach(s => {
+    const c = cur(s), id = esc(s.SessionID), hall = s.Hall || (S.halls[s.DayID] || '');
+    h += '<tr data-id="' + id + '" class="' + (isDirty(s) ? 'dirty ' : '') + (flagged.has(s.SessionID) ? 'flag' : '') + '"><td><div class="ch-s">' + esc(s.Number ? 'Session ' + s.Number + ' · ' : '') + esc(s.Name) + '</div><div class="ch-m">' + esc(T(s.Start) + (s.End ? ' – ' + T(s.End) : '')) + ' · ' + esc(hall) + (s.Room ? ' / ' + esc(s.Room) : '') + (s.Status === 'Published' ? '' : ' · Draft') + '</div></td>'
+      + ['chair', 'coChair', 'rapporteur'].map(k => '<td><input list="dl-names" data-f="' + k + '" value="' + esc(c[k]) + '" maxlength="120" aria-label="' + k + ' for ' + esc(s.Name) + '"' + (EDIT ? '' : ' disabled') + '></td>').join('')
+      + '<td><div class="ch-j">' + c.judges.map(j => { const a = adm(j); return '<span class="ch-jc' + (a && !a.canScore ? ' noscore' : '') + '" title="' + (a && !a.canScore ? 'No scoring permission' : '') + '">' + esc(a ? a.name : 'Unknown ' + j) + (EDIT ? '<button data-rm="' + esc(j) + '" aria-label="Remove judge">&times;</button>' : '') + '</span>'; }).join('') + '</div>'
+      + (EDIT ? '<select data-add aria-label="Add a judge"><option value="">+ Add judge…</option>' + S.admins.filter(a => c.judges.indexOf(a.id) < 0).map(a => '<option value="' + esc(a.id) + '">' + esc(a.name + (a.canScore ? '' : ' (no scoring access)') + (a.position ? ' — ' + a.position : '')) + '</option>').join('') + '</select>' : '') + '</td>'
+      + '<td>' + (EDIT ? '<button class="btn btn-sm btn-gold" data-save ' + (isDirty(s) ? '' : 'disabled') + '>Save</button>' : '') + '</td></tr>';
+  });
+  q('#main').innerHTML = h + '</tbody></table></div>';
+  const nd = sess.filter(isDirty).length;
+  q('#bar').innerHTML = EDIT ? '<span class="sp"></span><button class="btn" id="b-reset"' + (Object.keys(draft).length ? '' : ' disabled') + '>Discard changes</button><button class="btn btn-gold" id="b-all"' + (Object.keys(draft).length ? '' : ' disabled') + '><i class="fa-solid fa-floppy-disk"></i> Save all changed (' + Object.keys(draft).length + ')</button>' : '';
+  qa('#main tr[data-id]').forEach(tr => {
+    const sid = tr.dataset.id, s = S.sessions.find(x => x.SessionID === sid);
+    const edit = fn => { const c = JSON.parse(JSON.stringify(cur(s))); fn(c); const same = c.chair === (s.Chair || '') && c.coChair === (s.CoChair || '') && c.rapporteur === (s.Rapporteur || '') && c.judges.join() === s.Judges.join(); if (same) delete draft[sid]; else draft[sid] = c; };
+    tr.querySelectorAll('input[data-f]').forEach(i => i.onchange = () => { edit(c => c[i.dataset.f] = i.value.trim()); setTimeout(render, 0); });
+    tr.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { edit(c => c.judges = c.judges.filter(x => x !== b.dataset.rm)); render(); });
+    const a = tr.querySelector('[data-add]'); if (a) a.onchange = () => { if (a.value) { edit(c => c.judges.push(a.value)); setTimeout(render, 0); } };
+    const sv = tr.querySelector('[data-save]'); if (sv) sv.onclick = () => save([sid]);
+  });
+  const ra = q('#b-all'); if (ra) ra.onclick = () => save(Object.keys(draft)); const rs = q('#b-reset'); if (rs) rs.onclick = () => { draft = {}; render(); };
+}
+async function save(ids) {
+  hideAlerts(); let done = 0, msgs = [];
+  for (const sid of ids) {
+    const s = S.sessions.find(x => x.SessionID === sid), c = draft[sid]; if (!c) continue;
+    let r; try { r = await VR.api('adminScheduleSaveRoles', { sessionId: sid, chair: c.chair, coChair: c.coChair, rapporteur: c.rapporteur, judges: c.judges, expectUpdatedAt: s.UpdatedAt }); } catch (e) { showErr('Could not reach the server. Nothing more was saved.'); break; }
+    if (!r.ok) { showErr((s.Name || 'Session') + ': ' + (r.error || 'Could not save.')); break; }
+    delete draft[sid]; done++;
+    // keep the local copy in step so a second save of the same row is not seen as stale
+    s.Chair = c.chair; s.CoChair = c.coChair; s.Rapporteur = c.rapporteur; s.Judges = c.judges.slice(); s.UpdatedAt = r.updatedAt;
+  }
+  if (done) showOk(done + ' session' + (done === 1 ? '' : 's') + ' saved.');
+  await load(true);
+}
+window.addEventListener('beforeunload', e => { if (Object.keys(draft).length) { e.preventDefault(); e.returnValue = ''; } });
+load();
+})();
+</script>
+</body>
+</html>

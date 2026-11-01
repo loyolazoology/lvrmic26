@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schedule Editor | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.sc-days{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-end;border-bottom:1px solid var(--navy-border);margin-bottom:14px;}
+.sc-day{background:none;border:0;border-bottom:3px solid transparent;color:var(--text-3);font:600 14px Inter,sans-serif;padding:10px 14px;cursor:pointer;text-align:left;}
+.sc-day small{display:block;font-weight:400;font-size:11px;}
+.sc-day[aria-selected=true]{color:var(--gold-light);border-bottom-color:var(--gold);}
+.sc-day:focus-visible,.sc-grip:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+.sc-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+.sc-bar .sp{flex:1;}
+.sc-chip{display:inline-block;font:700 11px Inter,sans-serif;padding:2px 9px;border-radius:999px;white-space:nowrap;}
+.sc-chip.pub{background:rgba(60,180,120,.15);color:var(--success);} .sc-chip.draft{background:rgba(232,201,131,.15);color:var(--gold-light);}
+.sc-chip.type{border:1px solid var(--navy-border);color:var(--text-3);font-weight:600;}
+.sc-warn{border:1px solid var(--gold);background:rgba(232,201,131,.07);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);}
+.sc-warn summary{cursor:pointer;font-weight:600;color:var(--gold-light);}
+.sc-warn li{margin:3px 0;} .sc-warn li.error{color:var(--danger,#e5646b);}
+.sc-group{display:grid;gap:10px;margin-bottom:10px;}
+.sc-card{border:1px solid var(--navy-border);border-radius:12px;background:var(--navy-950);padding:12px 14px;position:relative;}
+.sc-card.dragover{outline:2px dashed var(--gold);}
+.sc-card.draft{border-style:dashed;}
+.sc-head{display:flex;gap:8px;align-items:flex-start;}
+.sc-grip{cursor:grab;background:none;border:0;color:var(--text-3);padding:4px 6px;font-size:15px;}
+.sc-title{font-weight:700;color:var(--text-1);font-size:14.5px;} .sc-meta{font-size:12px;color:var(--text-3);margin-top:2px;}
+.sc-roles{font-size:12.5px;color:var(--text-2);margin-top:6px;}
+.sc-items{list-style:none;margin:8px 0 0;padding:0;font-size:12.5px;color:var(--text-2);}
+.sc-items li{display:grid;grid-template-columns:104px 1fr;gap:8px;padding:3px 0;border-top:1px solid var(--navy-border);}
+.sc-items .t{font-family:'IBM Plex Mono',monospace;color:var(--text-3);font-size:11.5px;}
+.sc-act{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.sc-empty{text-align:center;padding:30px 10px;color:var(--text-3);}
+.sc-modal{position:fixed;inset:0;background:rgba(5,9,22,.72);z-index:50;display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:24px 12px;}
+.sc-modal[hidden]{display:none;}
+.sc-dlg{background:#131d38;border:1px solid var(--navy-border);border-radius:14px;width:100%;max-width:880px;padding:20px;}
+.sc-dlg h3{margin:0 0 12px;}
+.sc-g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;} .sc-g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;} .sc-g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.sc-dlg label{font-size:12px;margin-bottom:3px;}
+.sc-item{border:1px solid var(--navy-border);border-radius:10px;padding:10px;margin-bottom:8px;background:var(--navy-950);}
+.sc-item.dragover{outline:2px dashed var(--gold);}
+.sc-item .row{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;}
+.sc-item textarea{width:100%;min-height:54px;background:#0b1220;color:#fff;border:1px solid var(--navy-border);border-radius:8px;padding:8px;font:13px Inter,sans-serif;box-sizing:border-box;}
+.sc-pre table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;color:#111;}
+.sc-pre th,.sc-pre td{border:1px solid #444;padding:6px 8px;vertical-align:top;text-align:left;}
+.sc-pre .banner td{background:#d99694;text-align:center;font-weight:700;}
+.sc-pre .ses td.l{font-weight:700;} .sc-pre .brk td{text-align:center;}
+.sc-pre .draftrow td{opacity:.55;} .sc-pre .gl{color:#b00020;font-weight:700;}
+.sc-pre ul{margin:2px 0 2px 16px;padding:0;} .sc-pre .pl{font-size:12px;color:#333;margin-top:4px;}
+.sc-drop{border:2px dashed var(--navy-border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;color:var(--text-2);}
+.sc-table{width:100%;border-collapse:collapse;font-size:12.5px;} .sc-table td,.sc-table th{border-bottom:1px solid var(--navy-border);padding:6px 8px;text-align:left;}
+@media (max-width:720px){.sc-g2,.sc-g3,.sc-g4{grid-template-columns:1fr;}.sc-group{grid-template-columns:1fr !important;}}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-calendar-days" style="color:var(--gold-light);"></i> Schedule editor</h1><a class="btn btn-sm" href="schedule-report.html"><i class="fa-solid fa-table-list"></i> Schedule report</a></div>
+<div class="wrap" style="max-width:1200px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="sc-days" id="days" role="tablist" aria-label="Conference days"></div>
+  <div id="main"></div>
+</div>
+
+<!-- day dialog -->
+<div class="sc-modal" id="m-day" hidden role="dialog" aria-modal="true" aria-labelledby="m-day-t"><div class="sc-dlg" style="max-width:520px;">
+  <h3 id="m-day-t">Day</h3>
+  <div class="sc-g2"><div><label for="d-date">Date *</label><input id="d-date" type="date"></div><div><label for="d-label">Label</label><input id="d-label" placeholder="Day 1" maxlength="60"></div></div>
+  <div style="margin-top:10px;"><label for="d-venue">Main venue</label><input id="d-venue" list="dl-venues" placeholder="e.g. Bertram Hall" maxlength="80"><div class="hint">Sessions without their own hall use this venue.</div></div>
+  <div style="margin-top:10px;"><label for="d-note">Note (shown under the day banner)</label><input id="d-note" maxlength="200"></div>
+  <div class="sc-bar" style="margin:16px 0 0;"><span class="sp"></span><button class="btn" data-close>Cancel</button><button class="btn btn-gold" id="d-save">Save day</button></div>
+</div></div>
+
+<!-- session dialog -->
+<div class="sc-modal" id="m-ses" hidden role="dialog" aria-modal="true" aria-labelledby="m-ses-t"><div class="sc-dlg">
+  <h3 id="m-ses-t">Session</h3>
+  <div class="sc-g4">
+    <div><label for="s-num">Number</label><input id="s-num" placeholder="III" maxlength="12"></div>
+    <div style="grid-column:span 2;"><label for="s-name">Name *</label><input id="s-name" placeholder="e.g. Inaugural ceremony, Plenary session, Tea break" maxlength="120"></div>
+    <div><label for="s-type">Type</label><select id="s-type"></select></div>
+  </div>
+  <div class="sc-g4" style="margin-top:10px;">
+    <div><label for="s-start">Start *</label><input id="s-start" type="time"></div><div><label for="s-end">End *</label><input id="s-end" type="time"></div>
+    <div><label for="s-hall">Hall</label><input id="s-hall" list="dl-venues" placeholder="(day's main venue)" maxlength="80"></div>
+    <div><label for="s-room">Room</label><input id="s-room" list="dl-rooms" placeholder="JF-02" maxlength="40"></div>
+  </div>
+  <div class="sc-g4" style="margin-top:10px;">
+    <div><label for="s-track">Parallel track</label><input id="s-track" placeholder="A" maxlength="20"></div>
+    <div><label for="s-chair">Chairperson</label><input id="s-chair" maxlength="120"></div>
+    <div><label for="s-co">Co-Chairperson</label><input id="s-co" maxlength="120"></div>
+    <div><label for="s-rap">Rapporteur</label><input id="s-rap" maxlength="120"></div>
+  </div>
+  <div style="margin-top:10px;"><label for="s-desc">Note</label><input id="s-desc" maxlength="300" placeholder="Optional line shown under the session heading"></div>
+  <div class="sc-bar" style="margin:16px 0 8px;"><h3 style="margin:0;">Items in this session</h3><span class="sp"></span><button class="btn btn-sm" id="i-add"><i class="fa-solid fa-plus"></i> Add item</button></div>
+  <div id="items"></div>
+  <div class="hint" id="s-hint"></div>
+  <div class="sc-bar" style="margin:16px 0 0;"><span class="sp"></span><button class="btn" data-close>Cancel</button><button class="btn btn-gold" id="s-save"><i class="fa-solid fa-floppy-disk"></i> Save session</button></div>
+</div></div>
+
+<!-- preview dialog -->
+<div class="sc-modal" id="m-pre" hidden role="dialog" aria-modal="true" aria-labelledby="m-pre-t"><div class="sc-dlg" style="max-width:980px;background:#eee;color:#111;">
+  <div class="sc-bar"><h3 id="m-pre-t" style="margin:0;color:#111;">Preview as participant</h3><span class="sp"></span>
+    <label style="display:flex;gap:6px;align-items:center;color:#111;font-size:13px;margin:0;"><input type="checkbox" id="pre-draft" style="width:auto;"> also show drafts (faded)</label><button class="btn btn-sm" data-close>Close</button></div>
+  <div class="sc-pre" id="pre-body"></div>
+</div></div>
+
+<!-- import dialog -->
+<div class="sc-modal" id="m-imp" hidden role="dialog" aria-modal="true" aria-labelledby="m-imp-t"><div class="sc-dlg">
+  <h3 id="m-imp-t">Import schedule from Excel or CSV</h3>
+  <p class="hint" style="margin-bottom:8px;">One row per item. Sessions are matched by Day and Session number: a matched session gets its items replaced, new sessions and days are added as Drafts, and nothing else is touched.</p>
+  <div class="sc-bar"><button class="btn btn-sm" id="imp-tpl"><i class="fa-solid fa-download"></i> Download template</button></div>
+  <div class="sc-drop" id="imp-drop" tabindex="0" role="button">Drop the file here or click to choose (.xlsx, .csv, up to 600 rows)</div>
+  <input type="file" id="imp-file" accept=".xlsx,.xls,.csv" style="display:none;">
+  <div id="imp-out" style="margin-top:12px;"></div>
+  <div class="sc-bar" style="margin:14px 0 0;"><span class="sp"></span><button class="btn" data-close>Close</button><button class="btn btn-gold" id="imp-go" disabled>Import</button></div>
+</div></div>
+
+<datalist id="dl-venues"></datalist><datalist id="dl-rooms"></datalist>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!(VR.can('schedule', 'transaction') || VR.can('schedule', 'report'))) { VR.denied('You do not have permission to open the schedule.'); return; }
+const EDIT = VR.can('schedule', 'transaction');
+let S = null, selDay = null;
+const q = (s, r) => (r || document).querySelector(s), qa = (s, r) => Array.from((r || document).querySelectorAll(s));
+const T12 = hm => hm ? hm12(hm) : '—';
+const range = (a, b) => (a ? T12(a) : '') + (b ? ' – ' + T12(b) : '');
+const min = hm => { const m = String(hm || '').match(/^(\d\d):(\d\d)$/); return m ? +m[1] * 60 + +m[2] : null; };
+const lines = v => String(v || '').split('\n').map(x => x.trim()).filter(Boolean);
+const TYPE_LABEL = { registration: 'Registration', inaugural: 'Inaugural', plenary: 'Plenary', keynote: 'Keynote', oral: 'Oral', poster: 'Poster', panel: 'Panel', tea: 'Tea break', lunch: 'Lunch break', valedictory: 'Valedictory', other: 'Other', ceremony: 'Ceremony' };
+const isBreak = t => t === 'tea' || t === 'lunch' || t === 'registration';
+const dayBy = id => S.days.find(d => d.DayID === id);
+const hallOf = s => s.Hall || (dayBy(s.DayID) || {}).MainVenue || '';
+
+/* ---------- loading ---------- */
+async function load(keep) {
+  const r = await VR.api('adminScheduleGet', {}); if (!r.ok) return showErr(r.error || 'Could not load the schedule.');
+  S = r; if (!S.days.some(d => d.DayID === selDay)) selDay = (S.days[0] || {}).DayID || null; if (keep) selDay = keep;
+  q('#dl-venues').innerHTML = (S.venues || []).map(v => '<option value="' + esc(v.name) + '">').join('');
+  render();
+}
+async function call(action, payload, okMsg) {
+  hideAlerts();
+  try { const r = await VR.api(action, payload); if (!r.ok) { showErr(r.error || 'That did not work.'); return null; } if (okMsg) showOk(okMsg); return r; }
+  catch (e) { showErr('Could not reach the server. Check your connection and try again.'); return null; }
+}
+
+/* ---------- main render ---------- */
+function render() {
+  q('#days').innerHTML = S.days.map(d => '<button class="sc-day" role="tab" data-id="' + esc(d.DayID) + '" aria-selected="' + (d.DayID === selDay) + '">' + esc(d.Label || 'Day ' + d.DayNo) + '<small>' + esc(fmtD(d.Date)) + ' · ' + (d.Status === 'Published' ? 'Published' : 'Draft') + '</small></button>').join('')
+    + (EDIT ? '<button class="btn btn-sm" id="add-day" style="margin:0 0 6px 8px;"><i class="fa-solid fa-plus"></i> Add day</button>' : '');
+  qa('.sc-day').forEach(b => b.onclick = () => { selDay = b.dataset.id; render(); });
+  const ad = q('#add-day'); if (ad) ad.onclick = () => openDay(null);
+  const main = q('#main'), day = dayBy(selDay);
+  if (!day) { main.innerHTML = '<div class="card sc-empty"><p>No conference days yet.</p>' + (EDIT ? '<button class="btn btn-gold" id="first-day"><i class="fa-solid fa-plus"></i> Add the first day</button> <button class="btn" id="imp-open0"><i class="fa-solid fa-file-import"></i> Import from Excel</button>' : '') + '</div>';
+    const f = q('#first-day'); if (f) f.onclick = () => openDay(null); const i0 = q('#imp-open0'); if (i0) i0.onclick = openImport; return; }
+  const sess = S.sessions.filter(s => s.DayID === day.DayID), W = S.warnings.filter(w => w.dayId === day.DayID);
+  let h = '<div class="sc-bar"><b style="font-size:15px;">' + esc(fmtD(day.Date)) + '</b><span class="sc-meta">Main venue: ' + esc(day.MainVenue || 'not set') + '</span><span class="sc-chip ' + (day.Status === 'Published' ? 'pub' : 'draft') + '">' + day.Status + '</span><span class="sp"></span>'
+    + '<button class="btn btn-sm" id="b-pre"><i class="fa-solid fa-eye"></i> Preview as participant</button>'
+    + (EDIT ? '<button class="btn btn-sm" id="b-edit-day"><i class="fa-solid fa-pen"></i> Day details</button><button class="btn btn-sm" id="b-time"><i class="fa-solid fa-arrow-down-1-9"></i> Sort by time</button><button class="btn btn-sm" id="b-dup"><i class="fa-solid fa-copy"></i> Duplicate day</button><button class="btn btn-sm" id="b-imp"><i class="fa-solid fa-file-import"></i> Import</button>'
+      + '<button class="btn btn-sm" id="b-pubday">' + (day.Status === 'Published' ? '<i class="fa-solid fa-eye-slash"></i> Unpublish day' : '<i class="fa-solid fa-bullhorn"></i> Publish day') + '</button><button class="btn btn-sm" id="b-del-day"><i class="fa-solid fa-trash"></i></button>' : '') + '</div>';
+  if (day.Note) h += '<p class="hint" style="margin:-4px 0 10px;">' + esc(day.Note) + '</p>';
+  if (W.length) h += '<details class="sc-warn" open><summary><i class="fa-solid fa-triangle-exclamation"></i> ' + W.length + ' thing' + (W.length === 1 ? '' : 's') + ' to check</summary><ul>' + W.map(w => '<li class="' + w.level + '">' + esc(w.message) + '</li>').join('') + '</ul></details>';
+  if (!sess.length) h += '<div class="card sc-empty"><p>No sessions on this day yet.</p></div>';
+  groups(sess).forEach(g => { h += '<div class="sc-group" style="grid-template-columns:repeat(' + g.length + ',1fr);">' + g.map(sessionCard).join('') + '</div>'; });
+  if (EDIT) h += '<div class="sc-bar"><button class="btn btn-gold" id="b-add-ses"><i class="fa-solid fa-plus"></i> Add session</button><span class="hint">Drag the <i class="fa-solid fa-grip-vertical"></i> handle to reorder sessions.</span></div>';
+  main.innerHTML = h; wire(day);
+}
+// sessions that overlap in time but sit in different halls are shown side by side
+function groups(sess) {
+  const out = []; let cur = null;
+  sess.forEach(s => {
+    const a = min(s.Start), b = min(s.End);
+    if (cur && a != null && cur.a != null && a < cur.b && b > cur.a && !cur.halls.some(x => x.toLowerCase() === hallOf(s).toLowerCase() && x !== '') && cur.list.length < 4) { cur.list.push(s); cur.a = Math.min(cur.a, a); cur.b = Math.max(cur.b, b); cur.halls.push(hallOf(s)); }
+    else { cur = { list: [s], a: a, b: b, halls: [hallOf(s)] }; out.push(cur); }
+  });
+  return out.map(g => g.list);
+}
+function sessionCard(s) {
+  const its = S.items.filter(i => i.SessionID === s.SessionID), where = [hallOf(s), s.Room, s.Track ? 'Track ' + s.Track : ''].filter(Boolean).join(' · ');
+  const roles = [s.Chair && 'Chairperson: <b>' + esc(s.Chair) + '</b>', s.CoChair && 'Co-Chair: <b>' + esc(s.CoChair) + '</b>', s.Rapporteur && 'Rapporteur: <b>' + esc(s.Rapporteur) + '</b>'].filter(Boolean).join(' &nbsp; ');
+  return '<div class="sc-card ' + (s.Status === 'Published' ? '' : 'draft') + '" data-id="' + esc(s.SessionID) + '"' + (EDIT ? ' draggable="true"' : '') + '><div class="sc-head">'
+    + (EDIT ? '<button class="sc-grip" aria-label="Drag to reorder" tabindex="-1"><i class="fa-solid fa-grip-vertical"></i></button>' : '')
+    + '<div style="flex:1;min-width:0;"><div class="sc-title">' + (s.Number ? 'Session ' + esc(s.Number) + ' — ' : '') + esc(s.Name) + '</div><div class="sc-meta">' + esc(range(s.Start, s.End)) + (where ? ' · ' + esc(where) : '') + '</div></div>'
+    + '<span class="sc-chip type">' + esc(TYPE_LABEL[s.Type] || s.Type) + '</span><span class="sc-chip ' + (s.Status === 'Published' ? 'pub' : 'draft') + '">' + s.Status + '</span></div>'
+    + (roles ? '<div class="sc-roles">' + roles + '</div>' : '')
+    + (its.length ? '<ul class="sc-items">' + its.map(i => '<li><span class="t">' + esc(range(i.Start, i.End)) + '</span><span>' + esc(i.Topic || TYPE_LABEL[i.Type] || '') + (i.Speaker ? ' — <i>' + esc(i.Speaker) + '</i>' : '')
+      + (i.Presenters ? ' <span class="sc-chip type">' + ((S.presenters[i.ItemID] || []).length) + ' ' + i.Presenters + ' presenter' + ((S.presenters[i.ItemID] || []).length === 1 ? '' : 's') + '</span>' : '') + (i.Mode && i.Mode !== 'Physical' ? ' <span class="sc-chip type">' + esc(i.Mode) + '</span>' : '') + '</span></li>').join('') + '</ul>' : '')
+    + (EDIT ? '<div class="sc-act"><button class="btn btn-sm" data-a="edit"><i class="fa-solid fa-pen"></i> Edit</button><button class="btn btn-sm" data-a="pub">' + (s.Status === 'Published' ? 'Unpublish' : 'Publish') + '</button><button class="btn btn-sm" data-a="up" aria-label="Move earlier"><i class="fa-solid fa-arrow-up"></i></button><button class="btn btn-sm" data-a="down" aria-label="Move later"><i class="fa-solid fa-arrow-down"></i></button><button class="btn btn-sm" data-a="del" aria-label="Delete session"><i class="fa-solid fa-trash"></i></button></div>' : '') + '</div>';
+}
+function wire(day) {
+  const on = (id, fn) => { const e = q(id); if (e) e.onclick = fn; };
+  on('#b-pre', openPreview); on('#b-edit-day', () => openDay(day)); on('#b-imp', openImport); on('#b-add-ses', () => openSession(null));
+  on('#b-time', async () => { if (await call('adminScheduleReorder', { kind: 'session', parentId: day.DayID, byTime: true }, 'Sessions sorted by start time.')) load(); });
+  on('#b-pubday', async () => { const pub = day.Status !== 'Published'; if (pub && !confirm('Publish ' + fmtD(day.Date) + ' and all its sessions? Participants will see them.')) return; if (await call('adminScheduleSetStatus', { scope: 'day', id: day.DayID, status: pub ? 'Published' : 'Draft' }, pub ? 'Day published.' : 'Day is now a draft.')) load(); });
+  on('#b-dup', async () => { const d = prompt('Copy ' + fmtD(day.Date) + ' to which date? (yyyy-mm-dd)'); if (!d) return; const r = await call('adminScheduleDuplicateDay', { dayId: day.DayID, date: d }, 'Day copied as a draft.'); if (r) load(r.dayId); });
+  on('#b-del-day', async () => { const c = prompt('This deletes the day, all its sessions and items.\nType the date (' + day.Date + ') to confirm:'); if (c == null) return; if (await call('adminScheduleDeleteDay', { dayId: day.DayID, confirmDate: c.trim(), reason: 'Deleted from the editor' }, 'Day deleted.')) load(); });
+  qa('.sc-card').forEach(card => {
+    const id = card.dataset.id, s = S.sessions.find(x => x.SessionID === id);
+    qa('[data-a]', card).forEach(b => b.onclick = async () => {
+      const a = b.dataset.a;
+      if (a === 'edit') openSession(s);
+      else if (a === 'pub') { if (await call('adminScheduleSetStatus', { scope: 'session', id: id, status: s.Status === 'Published' ? 'Draft' : 'Published' })) load(); }
+      else if (a === 'del') { if (!confirm('Delete ' + (s.Number ? 'Session ' + s.Number : s.Name) + ' and its items?')) return; if (await call('adminScheduleDeleteSession', { sessionId: id, reason: 'Deleted from the editor' }, 'Session deleted.')) load(); }
+      else move(day, id, a === 'up' ? -1 : 1);
+    });
+    card.addEventListener('dragstart', e => { if (e.target !== card) return; e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'move'; });
+    card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('dragover'); }); card.addEventListener('dragleave', () => card.classList.remove('dragover'));
+    card.addEventListener('drop', async e => { e.preventDefault(); card.classList.remove('dragover'); const from = e.dataTransfer.getData('text/plain'); if (!from || from === id) return; await reorderTo(day, from, id); });
+  });
+}
+async function reorderTo(day, fromId, beforeId) {
+  const ids = S.sessions.filter(s => s.DayID === day.DayID).map(s => s.SessionID); ids.splice(ids.indexOf(fromId), 1); ids.splice(ids.indexOf(beforeId), 0, fromId);
+  if (await call('adminScheduleReorder', { kind: 'session', parentId: day.DayID, orderedIds: ids })) load();
+}
+async function move(day, id, dir) {
+  const ids = S.sessions.filter(s => s.DayID === day.DayID).map(s => s.SessionID), i = ids.indexOf(id), j = i + dir; if (j < 0 || j >= ids.length) return;
+  ids.splice(i, 1); ids.splice(j, 0, id); if (await call('adminScheduleReorder', { kind: 'session', parentId: day.DayID, orderedIds: ids })) load();
+}
+
+/* ---------- dialogs ---------- */
+let lastFocus = null;
+function openModal(id) { lastFocus = document.activeElement; q(id).hidden = false; const f = q('input,select,button', q(id)); setTimeout(() => f && f.focus(), 30); }
+function closeModals() { qa('.sc-modal').forEach(m => m.hidden = true); if (lastFocus && lastFocus.focus) try { lastFocus.focus(); } catch (e) {} }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && qa('.sc-modal').some(m => !m.hidden)) closeModals(); });
+qa('[data-close]').forEach(b => b.onclick = closeModals);
+qa('.sc-modal').forEach(m => m.addEventListener('mousedown', e => { if (e.target === m) closeModals(); }));
+
+/* ----- day ----- */
+let editDay = null;
+function openDay(d) {
+  editDay = d; q('#m-day-t').textContent = d ? 'Edit day' : 'Add day';
+  q('#d-date').value = d ? d.Date : (S.days.length ? nextDate(S.days[S.days.length - 1].Date) : (S.confDates.start || '')); q('#d-label').value = d ? d.Label : 'Day ' + (S.days.length + 1);
+  q('#d-venue').value = d ? d.MainVenue : (S.days.length ? S.days[S.days.length - 1].MainVenue : ((S.venues[0] || {}).name || '')); q('#d-note').value = d ? d.Note : '';
+  openModal('#m-day');
+}
+function nextDate(iso) { const t = new Date(iso + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() + 1); return t.toISOString().slice(0, 10); }
+q('#d-save').onclick = () => VR.busy(q('#d-save'), 'Saving…', async () => {
+  const r = await call('adminScheduleSaveDay', { dayId: editDay ? editDay.DayID : undefined, date: q('#d-date').value, label: q('#d-label').value, mainVenue: q('#d-venue').value, note: q('#d-note').value }, 'Day saved.');
+  if (r) { closeModals(); load(r.dayId); }
+});
+
+/* ----- session + items ----- */
+let editSes = null, draftItems = [];
+const itemTemplate = () => ({ itemId: '', start: '', end: '', type: 'other', topic: '', speaker: '', affiliation: '', mode: '', lines: [], guests: [], presenters: '' });
+function openSession(s) {
+  editSes = s; q('#m-ses-t').textContent = s ? 'Edit session' : 'Add session';
+  q('#s-type').innerHTML = S.types.session.map(t => '<option value="' + t + '">' + esc(TYPE_LABEL[t] || t) + '</option>').join('');
+  const last = S.sessions.filter(x => x.DayID === selDay).slice(-1)[0];
+  const v = s || { Number: '', Name: '', Type: 'other', Start: last ? last.End : '', End: '', Hall: '', Room: '', Track: '', Chair: '', CoChair: '', Rapporteur: '', Description: '' };
+  q('#s-num').value = v.Number; q('#s-name').value = v.Name; q('#s-type').value = v.Type; q('#s-start').value = v.Start; q('#s-end').value = v.End; q('#s-hall').value = v.Hall; q('#s-room').value = v.Room;
+  q('#s-track').value = v.Track; q('#s-chair').value = v.Chair; q('#s-co').value = v.CoChair; q('#s-rap').value = v.Rapporteur; q('#s-desc').value = v.Description;
+  draftItems = s ? S.items.filter(i => i.SessionID === s.SessionID).map(i => ({ itemId: i.ItemID, start: i.Start, end: i.End, type: i.Type, topic: i.Topic, speaker: i.Speaker, affiliation: i.Affiliation, mode: i.Mode, lines: i.Lines.slice(), guests: i.Guests.slice(), presenters: i.Presenters })) : [];
+  roomList(); renderItems(); q('#s-hint').textContent = ''; openModal('#m-ses');
+}
+function roomList() { const v = (S.venues || []).find(x => x.name.toLowerCase() === (q('#s-hall').value || (dayBy(selDay) || {}).MainVenue || '').toLowerCase()); q('#dl-rooms').innerHTML = ((v && v.rooms) || []).map(r => '<option value="' + esc(r) + '">').join(''); }
+q('#s-hall').addEventListener('input', roomList);
+function renderItems() {
+  const box = q('#items');
+  if (!draftItems.length) { box.innerHTML = '<div class="hint" style="padding:6px 0;">No items. A break or a simple session does not need any.</div>'; return; }
+  box.innerHTML = draftItems.map((it, n) => '<div class="sc-item" draggable="true" data-n="' + n + '"><div class="row"><button class="sc-grip" aria-label="Drag to reorder" tabindex="-1"><i class="fa-solid fa-grip-vertical"></i></button>'
+    + '<input type="time" data-k="start" value="' + esc(it.start) + '" aria-label="Item start" style="width:130px;"> – <input type="time" data-k="end" value="' + esc(it.end) + '" aria-label="Item end" style="width:130px;">'
+    + '<select data-k="type" aria-label="Item type" style="width:140px;">' + S.types.item.map(t => '<option value="' + t + '"' + (t === it.type ? ' selected' : '') + '>' + esc(TYPE_LABEL[t] || t) + '</option>').join('') + '</select>'
+    + '<select data-k="mode" aria-label="Mode" style="width:120px;"><option value="">Mode</option>' + S.types.mode.map(t => '<option' + (t === it.mode ? ' selected' : '') + '>' + t + '</option>').join('') + '</select>'
+    + '<span style="flex:1;"></span><button class="btn btn-sm" data-i="up" aria-label="Move item up"><i class="fa-solid fa-arrow-up"></i></button><button class="btn btn-sm" data-i="down" aria-label="Move item down"><i class="fa-solid fa-arrow-down"></i></button><button class="btn btn-sm" data-i="dup" aria-label="Duplicate item"><i class="fa-solid fa-copy"></i></button><button class="btn btn-sm" data-i="del" aria-label="Delete item"><i class="fa-solid fa-trash"></i></button></div>'
+    + '<div class="sc-g2"><div><label>Topic / heading</label><input data-k="topic" value="' + esc(it.topic) + '" maxlength="300"></div><div><label>Speaker</label><input data-k="speaker" value="' + esc(it.speaker) + '" maxlength="200"></div></div>'
+    + '<div class="sc-g2" style="margin-top:6px;"><div><label>Affiliation</label><input data-k="affiliation" value="' + esc(it.affiliation) + '" maxlength="250"></div><div><label>Presenter list</label><select data-k="presenters"><option value="">None</option><option value="oral"' + (it.presenters === 'oral' ? ' selected' : '') + '>Oral presenters (from slots)</option><option value="poster"' + (it.presenters === 'poster' ? ' selected' : '') + '>Poster presenters (from slots)</option></select></div></div>'
+    + '<div class="sc-g2" style="margin-top:6px;"><div><label>Bullet lines (one per line)</label><textarea data-k="lines" placeholder="Prayer song&#10;Welcome address by …">' + esc(it.lines.join('\n')) + '</textarea></div>'
+    + '<div><label>Guests (one per line: Role | Name, affiliation)</label><textarea data-k="guests" placeholder="Chief guest | Dr …, Director, …&#10;Guest of Honour | Prof. …">' + esc(it.guests.map(g => (g.role ? g.role + ' | ' : '') + g.text).join('\n')) + '</textarea></div></div></div>').join('');
+  qa('.sc-item', box).forEach(el => {
+    const n = +el.dataset.n;
+    qa('[data-k]', el).forEach(inp => { const k = inp.dataset.k, f = () => { const v = inp.value; if (k === 'lines') draftItems[n].lines = lines(v); else if (k === 'guests') draftItems[n].guests = lines(v).map(l => { const i = l.indexOf('|'); return i > -1 ? { role: l.slice(0, i).trim(), text: l.slice(i + 1).trim() } : { role: '', text: l }; }); else draftItems[n][k] = v; }; inp.addEventListener('input', f); inp.addEventListener('change', f); });
+    qa('[data-i]', el).forEach(b => b.onclick = () => { const a = b.dataset.i; if (a === 'del') draftItems.splice(n, 1); else if (a === 'dup') draftItems.splice(n + 1, 0, Object.assign(JSON.parse(JSON.stringify(draftItems[n])), { itemId: '' })); else { const j = n + (a === 'up' ? -1 : 1); if (j < 0 || j >= draftItems.length) return; const t = draftItems[n]; draftItems[n] = draftItems[j]; draftItems[j] = t; } renderItems(); });
+    el.addEventListener('dragstart', e => { if (e.target !== el) return; e.dataTransfer.setData('text/plain', 'i' + n); });
+    el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('dragover'); }); el.addEventListener('dragleave', () => el.classList.remove('dragover'));
+    el.addEventListener('drop', e => { e.preventDefault(); el.classList.remove('dragover'); const d = e.dataTransfer.getData('text/plain'); if (d[0] !== 'i') return; const from = +d.slice(1); if (from === n) return; const [m] = draftItems.splice(from, 1); draftItems.splice(n, 0, m); renderItems(); });
+  });
+}
+q('#i-add').onclick = () => { const last = draftItems[draftItems.length - 1], it = itemTemplate(); it.start = last ? last.end : q('#s-start').value; it.type = ({ keynote: 'keynote', oral: 'oral', poster: 'poster', plenary: 'plenary', inaugural: 'ceremony', valedictory: 'valedictory', tea: 'tea', lunch: 'lunch' })[q('#s-type').value] || 'other'; draftItems.push(it); renderItems(); const f = qa('.sc-item').slice(-1)[0]; if (f) q('[data-k=topic]', f).focus(); };
+q('#s-save').onclick = () => VR.busy(q('#s-save'), 'Saving…', async () => {
+  const payload = { session: { sessionId: editSes ? editSes.SessionID : undefined, dayId: selDay, number: q('#s-num').value, name: q('#s-name').value, type: q('#s-type').value, start: q('#s-start').value, end: q('#s-end').value,
+    hall: q('#s-hall').value, room: q('#s-room').value, track: q('#s-track').value, chair: q('#s-chair').value, coChair: q('#s-co').value, rapporteur: q('#s-rap').value, description: q('#s-desc').value, expectUpdatedAt: editSes ? editSes.UpdatedAt : undefined }, items: draftItems };
+  const r = await call('adminScheduleSaveSession', payload, 'Session saved.');
+  if (!r) return; closeModals(); await load();
+  if (r.warnings && r.warnings.length) showErr('Saved. Please check: ' + r.warnings.map(w => w.message).join(' '));
+});
+
+/* ----- preview (as participants see it, 2024 programme layout) ----- */
+function openPreview() { q('#pre-draft').checked = false; drawPreview(); openModal('#m-pre'); }
+q('#pre-draft').onchange = drawPreview;
+function drawPreview() {
+  const day = dayBy(selDay), withDraft = q('#pre-draft').checked; if (!day) return;
+  const dd = new Date(day.Date + 'T12:00:00Z'), ds = dd.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+  let h = '<table><thead><tr><th style="width:22%;text-align:center;">Timing / Venue</th><th style="text-align:center;">Programme</th></tr></thead><tbody><tr class="banner"><td colspan="2">' + esc(day.Label || 'Day ' + day.DayNo) + ', Date: ' + esc(ds) + (day.MainVenue ? ' &nbsp;&nbsp; Venue: ' + esc(day.MainVenue) : '') + '</td></tr>';
+  S.sessions.filter(s => s.DayID === day.DayID && (withDraft || s.Status === 'Published')).forEach(s => {
+    const cls = s.Status === 'Published' ? '' : ' draftrow', its = S.items.filter(i => i.SessionID === s.SessionID);
+    if (isBreak(s.Type) && !its.length) { h += '<tr class="brk' + cls + '"><td>' + esc(range(s.Start, s.End)) + '</td><td>' + esc(s.Name) + '</td></tr>'; return; }
+    const roles = [s.Chair && 'Chairperson: ' + s.Chair, s.CoChair && 'Co-Chair: ' + s.CoChair, s.Rapporteur && 'Rapporteur: ' + s.Rapporteur].filter(Boolean);
+    const where = hallOf(s) && hallOf(s) !== day.MainVenue ? 'Venue: ' + hallOf(s) + (s.Room ? ' (' + s.Room + ')' : '') : '';
+    h += '<tr class="ses' + cls + '"><td class="l">' + (s.Number ? 'Session ' + esc(s.Number) : '') + '</td><td><b>' + esc(s.Name) + '</b>' + (roles.length ? '<div>' + esc(roles.join('    ')) + '</div>' : '') + (where ? '<div>' + esc(where) + '</div>' : '') + (s.Description ? '<div>' + esc(s.Description) + '</div>' : '') + '</td></tr>';
+    its.forEach(i => {
+      const pl = S.presenters[i.ItemID] || [];
+      h += '<tr class="' + cls + '"><td>' + esc(range(i.Start, i.End)) + '</td><td>' + (i.Speaker ? '<b>' + esc(i.Speaker) + '</b>' + (i.Affiliation ? ', ' + esc(i.Affiliation) : '') + '<br>' : '') + (i.Topic ? (i.Speaker ? 'Topic: ' : '<b>') + esc(i.Topic) + (i.Speaker ? '' : '</b>') : '') + (i.Mode && i.Mode !== 'Physical' ? ' <i>(' + esc(i.Mode) + ')</i>' : '')
+        + (i.Lines.length ? '<ul>' + i.Lines.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul>' : '') + (i.Guests.length ? i.Guests.map(g => '<div class="gl">' + (g.role ? esc(g.role.toUpperCase()) + ': ' : '') + esc(g.text) + '</div>').join('') : '')
+        + (i.Presenters ? '<div class="pl"><b>' + (i.Presenters === 'oral' ? 'Oral' : 'Poster') + ' presenters (' + pl.length + ')' + (S.slotsVisible ? '' : ' — hidden from participants until slots are made visible in Settings') + '</b>' + (pl.length ? '<ol>' + pl.map(p => '<li>' + esc(p.time ? hm12(p.time) + ' · ' : '') + esc(p.token || p.board) + ' · ' + esc(p.name) + (p.institution ? ', ' + esc(p.institution) : '') + '</li>').join('') + '</ol>' : '') + '</div>' : '') + '</td></tr>';
+    });
+  });
+  q('#pre-body').innerHTML = h + '</tbody></table>';
+}
+
+/* ----- import ----- */
+const IMP_COLS = [['day', 'Day', ['day', 'date']], ['session', 'Session', ['session', 'session no', 'session number']], ['sessionName', 'Session name', ['session name', 'session title']], ['sessionType', 'Session type', ['session type']],
+  ['start', 'Session start', ['session start', 'start']], ['end', 'Session end', ['session end', 'end']], ['hall', 'Hall', ['hall', 'venue']], ['room', 'Room', ['room']], ['track', 'Track', ['track', 'parallel track']],
+  ['chair', 'Chairperson', ['chairperson', 'chair']], ['coChair', 'Co-Chairperson', ['co chairperson', 'co chair', 'cochair']], ['rapporteur', 'Rapporteur', ['rapporteur']],
+  ['itemStart', 'Item start', ['item start', 'from']], ['itemEnd', 'Item end', ['item end', 'to']], ['itemType', 'Item type', ['item type', 'type']], ['topic', 'Topic', ['topic', 'title']], ['speaker', 'Speaker', ['speaker']],
+  ['affiliation', 'Affiliation', ['affiliation', 'institution']], ['mode', 'Mode', ['mode']], ['lines', 'Bullet lines', ['bullet lines', 'lines', 'agenda']]];
+let impRows = [];
+function openImport() { q('#imp-out').innerHTML = ''; q('#imp-go').disabled = true; impRows = []; openModal('#m-imp'); }
+q('#imp-tpl').onclick = () => {
+  const ws = XLSX.utils.aoa_to_sheet([IMP_COLS.map(c => c[1]),
+    ['26 Nov 2026', 'I', 'Inaugural ceremony', 'inaugural', '8:45 am', '11:00 am', 'Bertram Hall', '', '', '', '', '', '8:45 am', '11:00 am', 'ceremony', 'Inaugural ceremony', '', '', 'Physical', 'Prayer song | Welcome address | Lighting of the lamp'],
+    ['26 Nov 2026', 'III', 'Keynote session', 'keynote', '2:00 pm', '4:00 pm', 'Bertram Hall', '', '', 'Dr A', 'Dr B', 'Dr C', '2:00 pm', '2:30 pm', 'keynote', 'AI in surveillance', 'Dr X', 'University Y', 'Physical', ''],
+    ['26 Nov 2026', 'III', '', '', '', '', '', '', '', '', '', '', '2:30 pm', '3:00 pm', 'keynote', 'Arboviral diseases', 'Dr Z', 'Institute W', 'Online', '']]);
+  ws['!cols'] = IMP_COLS.map(() => ({ wch: 18 })); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Schedule'); XLSX.writeFile(wb, 'LVRMIC2026_schedule_template.xlsx');
+};
+const drop = q('#imp-drop'), fileIn = q('#imp-file');
+drop.onclick = () => fileIn.click(); drop.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileIn.click(); } };
+drop.addEventListener('dragover', e => e.preventDefault()); drop.addEventListener('drop', e => { e.preventDefault(); if (e.dataTransfer.files[0]) readImport(e.dataTransfer.files[0]); });
+fileIn.onchange = () => { if (fileIn.files[0]) readImport(fileIn.files[0]); fileIn.value = ''; };
+const pad2 = n => String(n).padStart(2, '0');
+function cellVal(v, kind) {
+  if (v == null) return '';
+  if (v instanceof Date) { const t = new Date(v.getTime() + 30000); if (t.getFullYear() < 1910 || kind === 'time') return pad2(t.getHours()) + ':' + pad2(t.getMinutes()); return t.getFullYear() + '-' + pad2(t.getMonth() + 1) + '-' + pad2(t.getDate()); }
+  return typeof v === 'number' ? (Number.isInteger(v) ? String(v) : v) : String(v).trim();
+}
+async function readImport(f) {
+  hideAlerts();
+  try {
+    const wb = XLSX.read(await f.arrayBuffer(), { type: 'array', cellDates: true }), grid = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true, defval: '' });
+    const nh = s => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); let hi = -1, map = {};
+    for (let h = 0; h < Math.min(grid.length, 10) && hi < 0; h++) { const m = {}; grid[h].forEach((c, i) => { const k = nh(c); IMP_COLS.forEach(d => { if (m[d[0]] === undefined && (nh(d[1]) === k || d[2].indexOf(k) > -1)) m[d[0]] = i; }); }); if (m.day !== undefined && (m.session !== undefined || m.sessionName !== undefined)) { hi = h; map = m; } }
+    if (hi < 0) return showErr('Could not find the header row (Day, Session, ...). Please use the template.');
+    impRows = []; for (let r = hi + 1; r < grid.length; r++) { const o = { rowNo: r + 1 }; let any = false; IMP_COLS.forEach(d => { const v = map[d[0]] === undefined ? '' : grid[r][map[d[0]]]; o[d[0]] = cellVal(v, /start|end/i.test(d[0]) ? 'time' : (d[0] === 'day' ? 'date' : '')); if (String(o[d[0]]) !== '') any = true; }); if (any) impRows.push(o); }
+    if (!impRows.length) return showErr('The file has no rows.'); if (impRows.length > 600) return showErr('Import at most 600 rows at a time.');
+    const r = await call('adminScheduleImportPreview', { rows: impRows }); if (!r) return;
+    q('#imp-out').innerHTML = (r.problems.length ? '<div class="sc-warn"><b>' + r.problems.length + ' problem row(s) must be fixed first</b><ul>' + r.problems.slice(0, 30).map(p => '<li class="error">Row ' + p.row + ': ' + esc(p.message) + '</li>').join('') + '</ul></div>' : '')
+      + '<table class="sc-table"><thead><tr><th>Day</th><th>Session</th><th>Time</th><th>Hall</th><th>Items</th><th>What happens</th></tr></thead><tbody>' + r.sessions.map(s => '<tr><td>' + esc(fmtD(s.date)) + (s.newDay ? ' <span class="sc-chip draft">new day</span>' : '') + '</td><td>' + esc((s.number ? s.number + ' ' : '') + s.name) + '</td><td>' + esc(range(s.start, s.end)) + '</td><td>' + esc(s.hall) + '</td><td>' + s.items + '</td><td>' + (s.existing ? 'Updated, ' + s.replaces + ' old item(s) replaced' : 'New session (draft)') + '</td></tr>').join('') + '</tbody></table>';
+    q('#imp-go').disabled = r.problems.length > 0 || !r.sessions.length;
+  } catch (e) { showErr('Could not read that file.'); }
+}
+q('#imp-go').onclick = () => VR.busy(q('#imp-go'), 'Importing…', async () => {
+  const r = await call('adminScheduleImportCommit', { rows: impRows }); if (!r) return;
+  closeModals(); await load(); showOk('Imported: ' + r.created + ' new and ' + r.updated + ' updated session(s), ' + r.items + ' item(s), ' + r.days + ' new day(s). Imported sessions are drafts until you publish them.');
+});
+
+load();
+})();
+</script>
+</body>
+</html>
