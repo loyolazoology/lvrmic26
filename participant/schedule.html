@@ -4,289 +4,176 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Conference Schedule | CIMSER, Loyola College</title>
-<meta name="description" content="Conference programme — 4th International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment, Loyola College (Autonomous), Chennai.">
 <link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/vrmic26/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
-
-:root{
-  --paper:#faf6ec;
-  --paper-alt:#f2ecdc;
-  --card:#ffffff;
-  --card-border:#e7ddc4;
-  --navy:#12224a;
-  --navy-soft:#2c3b63;
-  --ink-1:#1b2436;
-  --ink-2:#535f7a;
-  --ink-3:#8791a6;
-  --gold:#a9762f;
-  --gold-deep:#8a5f24;
-  --gold-light:#c9974f;
-  --teal:#1f7a68;
-  --teal-light:#2e9c85;
-  --danger:#c0392b;
-  --warn:#b5791f;
-  --success:#1f7a49;
-  --maxw:1180px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
+:root{--paper:#faf6ec;--paper-alt:#f2ecdc;--card:#fff;--card-border:#e7ddc4;--navy:#12224a;--ink-1:#1b2436;--ink-2:#535f7a;--ink-3:#8791a6;--gold:#a9762f;--gold-deep:#8a5f24;--gold-light:#c9974f;--teal:#1f7a68;--danger:#c0392b;--maxw:1180px;}
 *{box-sizing:border-box;}
 html,body{overflow-x:hidden;max-width:100%;}
 body{margin:0;background:var(--paper);color:var(--ink-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .4em;color:var(--navy);}
-p{color:var(--ink-2);margin:0 0 1em;}
-a{color:var(--gold-deep);text-decoration:none;}
-a:hover{text-decoration:underline;}
-.mono{font-family:'IBM Plex Mono',monospace;}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
-@media(max-width:600px){.wrap{padding:0 16px;}}
-
-.masthead{background:linear-gradient(180deg,#ffffff,var(--paper));border-bottom:3px solid var(--gold);}
+p{color:var(--ink-2);margin:0 0 1em;} a{color:var(--gold-deep);text-decoration:none;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;} @media(max-width:600px){.wrap{padding:0 16px;}}
+.masthead{background:linear-gradient(180deg,#fff,var(--paper));border-bottom:3px solid var(--gold);}
 .masthead-inner{max-width:var(--maxw);margin:0 auto;padding:20px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
-.masthead-logos{display:flex;align-items:center;gap:18px;flex-shrink:0;}
-.masthead-logos img{height:74px;width:auto;object-fit:contain;}
-@media(max-width:700px){.masthead-logos img{height:56px;}}
-.masthead-text{flex:1;min-width:220px;}
-.masthead-text .m-super{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:4px;}
-.masthead-text h1{font-size:clamp(1.15rem,2.2vw,1.55rem);line-height:1.25;margin:0 0 4px;color:var(--navy);}
-.masthead-text .m-sub{font-size:12.5px;color:var(--ink-3);margin:0;}
-
-.utcbar{background:var(--navy);border-bottom:1px solid var(--card-border);}
-.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;}
-.utcbar i{color:var(--gold-light);font-size:11px;}
-.utcbar b{color:#e8ecf5;font-weight:500;}
-
-.topnav{background:#ffffff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(20,30,60,.04);}
+.masthead-logos{display:flex;align-items:center;gap:18px;} .masthead-logos img{height:74px;width:auto;} @media(max-width:700px){.masthead-logos img{height:56px;}}
+.masthead-text{flex:1;min-width:220px;} .m-super{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;}
+.masthead-text h1{font-size:clamp(1.15rem,2.2vw,1.55rem);line-height:1.25;margin:4px 0;} .m-sub{font-size:12.5px;color:var(--ink-3);margin:0;}
+.utcbar{background:var(--navy);} .utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;} .utcbar i{color:var(--gold-light);} .utcbar b{color:#e8ecf5;font-weight:500;}
+.topnav{background:#fff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;}
 .topnav-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-.pnav{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
-.pnav a{display:flex;align-items:center;gap:6px;padding:12px;border-radius:7px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;transition:.2s;border-bottom:2px solid transparent;}
+.pnav{display:flex;gap:2px;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
+.pnav a{display:flex;align-items:center;gap:6px;padding:12px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;}
 .pnav a:hover,.pnav a.active{color:var(--gold-deep);border-bottom-color:var(--gold);text-decoration:none;}
 .pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;}
-.user-chip{display:flex;align-items:center;gap:10px;position:relative;}
-.user-chip img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);cursor:pointer;background:#fff;}
-.user-chip .avatar-fallback{width:38px;height:38px;border-radius:50%;background:var(--paper-alt);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-deep);cursor:pointer;font-size:14px;}
-.user-menu{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:10px;min-width:170px;box-shadow:0 18px 40px rgba(20,30,60,.15);opacity:0;visibility:hidden;transform:translateY(8px);transition:.2s;padding:6px;z-index:50;}
-.user-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
-.user-menu a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:6px;color:var(--ink-2);font-size:13px;}
-.user-menu a:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
-@media(max-width:960px){
-  .pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;align-items:stretch;padding:90px 20px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
-  .pnav.open{transform:translateX(0);visibility:visible;}
-  .pnav a{width:100%;font-size:14.5px;padding:12px;}
-  .pnav-toggle{display:block;}
-}
-
-.page-head{padding:32px 0 4px;}
-.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);letter-spacing:.4px;margin-bottom:14px;}
-.breadcrumb a{color:var(--ink-3);}
-.breadcrumb .sep{margin:0 6px;color:var(--card-border);}
-.breadcrumb .current{color:var(--gold-deep);}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-deep);border:1px solid var(--card-border);background:var(--paper-alt);padding:6px 14px;border-radius:999px;margin-bottom:16px;}
-.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:18px 0;}
-
+.user-chip{position:relative;display:flex;align-items:center;}
+.user-chip img,.avatar-fallback{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);cursor:pointer;background:#fff;}
+.avatar-fallback{display:flex;align-items:center;justify-content:center;color:var(--gold-deep);background:var(--paper-alt);}
+.user-menu{position:absolute;right:0;top:calc(100% + 10px);background:#fff;border:1px solid var(--card-border);border-radius:10px;min-width:170px;box-shadow:0 18px 40px rgba(20,30,60,.15);opacity:0;visibility:hidden;transition:.2s;padding:6px;z-index:50;}
+.user-menu.open{opacity:1;visibility:visible;} .user-menu a{display:flex;gap:8px;padding:9px 12px;border-radius:6px;color:var(--ink-2);font-size:13px;cursor:pointer;} .user-menu a:hover{background:var(--paper-alt);text-decoration:none;}
+@media(max-width:960px){.pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100vh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;padding:90px 20px 24px;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}.pnav.open{transform:none;visibility:visible;}.pnav-toggle{display:block;}}
+.page-head{padding:28px 0 4px;} .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);margin-bottom:12px;} .breadcrumb a{color:var(--ink-3);}
+.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:14px 0;}
 .section{padding:8px 0 60px;}
 
-.day-tabs{display:flex;gap:8px;margin-bottom:26px;flex-wrap:wrap;}
-.day-tab{flex:1;min-width:150px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:14px 18px;cursor:pointer;transition:.2s;text-align:left;box-shadow:0 4px 16px rgba(20,30,60,.04);}
-.day-tab:hover{border-color:var(--gold);}
-.day-tab.active{background:linear-gradient(180deg,rgba(201,151,79,.12),rgba(169,118,47,.06));border-color:var(--gold);}
-.day-tab .dt-label{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;}
-.day-tab .dt-date{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--navy);margin:4px 0 2px;}
-.day-tab .dt-theme{font-size:12px;color:var(--gold-deep);}
-
-.timeline{position:relative;padding-left:28px;}
-.timeline::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--gold),var(--teal));border-radius:2px;}
-.tl-item{position:relative;padding:0 0 26px 18px;}
-.tl-item:last-child{padding-bottom:0;}
-.tl-item::before{content:'';position:absolute;left:-28px;top:4px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--gold-deep);}
-.tl-time{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--gold-deep);margin-bottom:4px;}
-.tl-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:16px 18px;box-shadow:0 4px 16px rgba(20,30,60,.04);}
-.tl-card h4{font-size:14.5px;margin:0 0 4px;color:var(--navy);font-weight:600;font-family:'Inter',sans-serif;}
-.tl-card .tl-speaker{font-size:13px;color:var(--teal);margin-bottom:4px;}
-.tl-card .tl-venue{font-size:12px;color:var(--ink-3);display:flex;align-items:center;gap:6px;}
-
-.empty-note{text-align:center;padding:50px 20px;color:var(--ink-3);border:1px dashed var(--card-border);border-radius:14px;}
-.empty-note i{font-size:26px;color:var(--gold-deep);margin-bottom:10px;display:block;}
-.loader{text-align:center;padding:80px 0;color:var(--ink-3);}
-.spinner-lg{width:30px;height:30px;border:3px solid rgba(169,118,47,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-footer{border-top:1px solid var(--card-border);padding:40px 0 24px;background:var(--navy);}
-footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;}
-footer em{color:var(--gold-light);}
+.my{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid var(--gold);border-left:5px solid var(--gold);border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:14px;}
+.my i{color:var(--gold-deep);} .my .sp{flex:1;}
+.btn{font:600 13px Inter,sans-serif;background:#fff;color:var(--navy);border:1px solid var(--card-border);border-radius:8px;padding:8px 14px;cursor:pointer;} .btn:hover{border-color:var(--gold);}
+.day-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.day-tab{flex:1;min-width:150px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:12px 16px;cursor:pointer;text-align:left;font-family:inherit;}
+.day-tab.active{background:rgba(201,151,79,.12);border-color:var(--gold);}
+.day-tab:focus-visible,.btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.day-tab .a{font-size:11px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;} .day-tab .b{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--navy);} .day-tab .c{font-size:12px;color:var(--gold-deep);}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px;} .bar .sp{flex:1;}
+.bar select{font:13px Inter,sans-serif;padding:8px 10px;border:1px solid var(--card-border);border-radius:8px;background:#fff;color:var(--ink-1);}
+.group{display:grid;gap:12px;margin-bottom:12px;}
+.ses{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:14px 16px;}
+.ses.mine{border:2px solid var(--gold);background:#fffaf0;}
+.ses h3{font-size:1.02rem;margin:0;} .meta{font-size:12.5px;color:var(--ink-3);margin-top:2px;}
+.hall{display:inline-block;font:700 11px Inter,sans-serif;background:var(--paper-alt);color:var(--gold-deep);border-radius:999px;padding:2px 9px;margin-left:6px;}
+.roles{font-size:13px;color:var(--ink-2);margin-top:8px;display:flex;gap:4px 18px;flex-wrap:wrap;}
+.it{display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--card-border);margin-top:8px;font-size:13.5px;}
+.it-t{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-deep);}
+.it ul{margin:4px 0 0 18px;padding:0;} .gl{color:var(--danger);font-weight:600;font-size:13px;}
+.tag{font-size:11px;border:1px solid var(--card-border);border-radius:999px;padding:1px 8px;color:var(--ink-3);}
+.pl{margin:6px 0 0 18px;padding:0;font-size:13px;color:var(--ink-2);} .pl li.me{background:#fff1cf;border-radius:4px;font-weight:700;color:var(--navy);padding:0 4px;margin-left:-4px;}
+.brk{text-align:center;font-size:13px;color:var(--ink-2);padding:10px;border:1px dashed var(--card-border);border-radius:10px;background:var(--paper-alt);}
+.empty-note{text-align:center;padding:46px 20px;color:var(--ink-3);border:1px dashed var(--card-border);border-radius:14px;}
+.loader{text-align:center;padding:80px 0;color:var(--ink-3);} .spinner-lg{width:30px;height:30px;border:3px solid rgba(169,118,47,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;} @keyframes spin{to{transform:rotate(360deg);}}
+footer{padding:36px 0 22px;background:var(--navy);} footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;} footer em{color:var(--gold-light);}
+@media(max-width:720px){.group{grid-template-columns:1fr !important;}.it{grid-template-columns:1fr;gap:2px;}}
+.print-title{display:none;}
+@media print{.utcbar,.topnav,.page-head,.day-tabs,.bar,.my,footer,.masthead-logos{display:none !important;}body{background:#fff;}.print-title{display:block;font:600 16px Fraunces,serif;margin-bottom:10px;}.ses{break-inside:avoid;}.group{grid-template-columns:repeat(var(--n),1fr) !important;}}
 </style>
 </head>
 <body>
-
 <div class="utcbar"><div class="utcbar-inner"><i class="fa-regular fa-clock"></i><span id="utc-clock"><b>Loading time…</b></span></div></div>
+<div class="masthead"><div class="masthead-inner">
+  <div class="masthead-logos"><img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'"><img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'"></div>
+  <div class="masthead-text"><div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
+    <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
+    <p class="m-sub">Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology · Participant Portal</p></div>
+</div></div>
+<div class="topnav"><div class="topnav-inner">
+  <button class="pnav-toggle" id="pnav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  <ul class="pnav" id="pnav">
+    <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
+    <li><a href="registration.html"><i class="fa-solid fa-id-card"></i> Registration</a></li>
+    <li><a href="abstract.html"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
+    <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
+    <li><a href="schedule.html" class="active"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
+    <li><a href="slot.html"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
+    <li><a href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
+  </ul>
+  <div class="user-chip"><img id="user-avatar" alt="" style="display:none;" onclick="toggleUserMenu()"><div class="avatar-fallback" id="user-avatar-fallback" onclick="toggleUserMenu()"><i class="fa-solid fa-user"></i></div>
+    <div class="user-menu" id="user-menu"><a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a><a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</a></div></div>
+</div></div>
 
-<div class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-logos">
-      <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
-      <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
-    </div>
-    <div class="masthead-text">
-      <div class="m-super">Loyola College (Autonomous), Chennai · Est. 1925</div>
-      <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
-      <p class="m-sub">26&ndash;28 November 2026 &middot; Centre for Insect Molecular Studies and Environmental Research (CIMSER), PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology &middot; Participant Portal</p>
-    </div>
-  </div>
-</div>
-
-<div class="topnav">
-  <div class="topnav-inner">
-    <button class="pnav-toggle" id="pnav-toggle"><i class="fa-solid fa-bars"></i></button>
-    <ul class="pnav" id="pnav">
-      <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
-      <li><a href="registration.html"><i class="fa-solid fa-id-card"></i> Registration</a></li>
-      <li><a href="abstract.html"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
-      <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
-      <li><a href="schedule.html" class="active"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
-      <li><a href="slot.html"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
-      <li><a href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
-    </ul>
-    <div class="user-chip">
-      <img id="user-avatar" style="display:none;" onclick="toggleUserMenu()">
-      <div class="avatar-fallback" id="user-avatar-fallback" onclick="toggleUserMenu()"><i class="fa-solid fa-user"></i></div>
-      <div class="user-menu" id="user-menu">
-        <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<header class="page-head">
-  <div class="wrap">
-    <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Schedule</span></div>
-    <span class="eyebrow"><i class="fa-regular fa-calendar"></i>&nbsp; Conference programme</span>
-    <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);">Conference schedule</h1>
-    <div class="helix-rule"></div>
-    <p style="max-width:600px;">Inauguration to Valedictory — 26&ndash;28 November 2026, Loyola College, Chennai. The detailed session-wise programme will appear here as it is finalised.</p>
-  </div>
-</header>
+<header class="page-head"><div class="wrap">
+  <div class="breadcrumb"><a href="home.html">Dashboard</a> / <span>Schedule</span></div>
+  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);">Conference schedule</h1><div class="helix-rule"></div>
+  <p style="max-width:620px;">Only sessions the organisers have published are shown. Your own slot is highlighted.</p>
+</div></header>
 
 <div id="loader" class="loader"><div class="spinner-lg"></div><p style="margin-top:14px;">Loading…</p></div>
+<section class="section" id="content" style="display:none;"><div class="wrap">
+  <div id="my"></div>
+  <div class="day-tabs" id="day-tabs" role="tablist"></div>
+  <div class="bar"><label for="venue" style="font-size:13px;color:var(--ink-2);">Venue</label><select id="venue"></select><span class="sp"></span>
+    <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / save as PDF</button></div>
+  <div class="print-title" id="print-title"></div>
+  <div id="day-content"></div>
+</div></section>
+<footer><div class="wrap"><p>© 2026, CIMSER — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai <em><br>"Luceat Lux Vestra — Let Your Light Shine"</em></p></div></footer>
 
-<section class="section" id="content" style="display:none;">
-  <div class="wrap">
-
-    <div class="day-tabs" id="day-tabs">
-      <button class="day-tab active" data-day="1">
-        <div class="dt-label">Day 1 &middot; 26 Nov 2026</div>
-        <div class="dt-date">Inauguration</div>
-        <div class="dt-theme">Opening ceremony &amp; keynotes</div>
-      </button>
-      <button class="day-tab" data-day="2">
-        <div class="dt-label">Day 2 &middot; 27 Nov 2026</div>
-        <div class="dt-date">Technical Sessions</div>
-        <div class="dt-theme">Oral &amp; poster presentations</div>
-      </button>
-      <button class="day-tab" data-day="3">
-        <div class="dt-label">Day 3 &middot; 28 Nov 2026</div>
-        <div class="dt-date">Valedictory</div>
-        <div class="dt-theme">Awards &amp; closing ceremony</div>
-      </button>
-    </div>
-
-    <div id="day-content"></div>
-
-  </div>
-</section>
-
-<footer><div class="wrap"><p>© 2026, Centre for Insect Molecular Studies and Environmental Research (CIMSER) — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai <em><br>"Luceat Lux Vestra — Let Your Light Shine"</em></p></div></footer>
-
+<script src="participant-common.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkN1CF441d8ZtOykNIiM0oV1xaOF8lWzT2xKA3QufWBd71KvnoHR1LqRfFS3IoV4d/exec';
+if (VRP.init()) (async function () {
+  const E = VRP.esc, $ = id => document.getElementById(id), MS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+  let D = [], sel = '', venue = '', my = null, myIso = '', myName = '';
+  const mins = hm => { const m = /^(\d\d):(\d\d)$/.exec(hm || ''); return m ? +m[1] * 60 + +m[2] : null; };
+  const t12 = s => { const m = /(\d{1,2}):(\d{2})\s*(AM|PM)/i.exec(s || ''); return m ? (+m[1] % 12 + (/pm/i.test(m[3]) ? 12 : 0)) * 60 + +m[2] : null; };
+  const isoOf = s => { const m = /^(\d{1,2})\s+([A-Za-z]{3})\w*\s+(\d{4})$/.exec(s || ''), i = m ? MS.indexOf(m[2].toLowerCase()) : -1; return i < 0 ? '' : m[3] + '-' + String(i + 1).padStart(2, '0') + '-' + String(m[1]).padStart(2, '0'); };
+  const rng = (a, b) => VRP.hm12(a) + (b ? ' – ' + VRP.hm12(b) : '');
+  const mine = (s, d) => { if (!my || d.date !== myIso || String(s.hall).toLowerCase() !== my.venue.toLowerCase()) return false;
+    if (my.room && s.room && my.room.toLowerCase() !== String(s.room).toLowerCase()) return false;
+    const t = t12(my.time), a = mins(s.start), b = mins(s.end); return t == null || a == null || b == null || (t >= a && t < b); };
 
-// Date/time format: "09 Sep 2026 · 3:45 PM IST" — day-month-year, 12-hour with AM/PM.
-function updateClock(){
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
-  const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true });
-  document.getElementById('utc-clock').innerHTML = `<b>${dateStr} &nbsp;·&nbsp; ${timeStr} IST</b>`;
-}
-updateClock(); setInterval(updateClock, 1000);
-
-document.getElementById('pnav-toggle').addEventListener('click', () => document.getElementById('pnav').classList.toggle('open'));
-function toggleUserMenu(){ document.getElementById('user-menu').classList.toggle('open'); }
-document.addEventListener('click', (e) => { if (!e.target.closest('.user-chip')) document.getElementById('user-menu').classList.remove('open'); });
-
-const token = localStorage.getItem('vrmic_token');
-if (!token) window.location.href = '../participant-login.html';
-function logout(){ localStorage.removeItem('vrmic_token'); localStorage.removeItem('vrmic_name'); window.location.href = '../participant-login.html'; }
-
-// Turns a Google Drive "view" share link into a URL that actually renders in an <img> tag.
-function driveThumb(url, size){
-  if (!url) return '';
-  const m = String(url).match(/\/d\/([^/]+)/) || String(url).match(/[?&]id=([^&]+)/);
-  if (!m) return url;
-  return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${size || 300}`;
-}
-
-async function callApi(action, payload) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action, token }, payload))
-  });
-  return res.json();
-}
-function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-let scheduleByDay = { 1: [], 2: [], 3: [] };
-
-function renderDay(day){
-  const items = scheduleByDay[day] || [];
-  const area = document.getElementById('day-content');
-  if (!items.length) {
-    area.innerHTML = `<div class="empty-note"><i class="fa-regular fa-calendar"></i>The detailed programme for this day will be published here soon. Check the announcements on your dashboard for updates.</div>`;
-    return;
-  }
-  area.innerHTML = `<div class="timeline">` + items.map(it => `
-    <div class="tl-item">
-      <div class="tl-time">${escapeHtml(it.time)}</div>
-      <div class="tl-card">
-        <h4>${escapeHtml(it.title)}</h4>
-        ${it.speaker ? `<div class="tl-speaker"><i class="fa-solid fa-microphone-lines"></i> ${escapeHtml(it.speaker)}</div>` : ''}
-        ${it.venue ? `<div class="tl-venue"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(it.venue)}</div>` : ''}
-      </div>
-    </div>`).join('') + `</div>`;
-}
-
-document.querySelectorAll('.day-tab').forEach(tab => {
-  tab.addEventListener('click', function(){
-    document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-    this.classList.add('active');
-    renderDay(this.dataset.day);
-  });
-});
-
-(async function init(){
   try {
-    const dash = await callApi('getDashboard', {});
-    if (!dash.ok) { if (/session/i.test(dash.error||'')) { window.location.href='../participant-login.html'; return; } }
-    if (dash.ok && dash.participant.photoUrl) {
-      const thumb = driveThumb(dash.participant.photoUrl, 100);
-      const av = document.getElementById('user-avatar');
-      av.src = thumb; av.style.display = '';
-      av.onerror = () => { av.style.display = 'none'; };
-      document.getElementById('user-avatar-fallback').style.display = 'none';
-    }
-    if (dash.ok && dash.participant.pptRequired) document.getElementById('nav-ppt-link').style.display = '';
+    const [dash, set, v2, slot] = await Promise.all([VRP.api('getDashboard', {}), VRP.settings(), VRP.api('getScheduleV2', {}, { anon: true }), VRP.api('getSlot', {}, { stay: true })]);
+    if (dash.ok) { VRP.avatar(dash.participant.photoUrl); myName = dash.participant.name || ''; if (dash.participant.pptRequired) $('nav-ppt-link').style.display = ''; }
+    if (slot.ok && slot.published && slot.slot.venue) { my = slot.slot; myIso = isoOf(my.date); }
+    if (!v2.ok) throw new Error(v2.error || 'Could not load the schedule.');
 
-    const res = await callApi('getSchedule', {});
-    if (res.ok) {
-      res.schedule.forEach(it => {
-        const d = Number(it.day);
-        if (scheduleByDay[d]) scheduleByDay[d].push(it);
-      });
-    }
-    document.getElementById('loader').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-    renderDay(1);
+    const byDate = {}; (v2.days || []).forEach(d => byDate[d.date] = d);
+    const dates = new Set(Object.keys(byDate)), st = set['conf.startDate'], en = set['conf.endDate'];
+    if (st && en) for (let t = new Date(st + 'T12:00:00Z'), e = new Date(en + 'T12:00:00Z'), n = 0; t <= e && n < 10; t.setUTCDate(t.getUTCDate() + 1), n++) dates.add(t.toISOString().slice(0, 10));
+    D = [...dates].sort().map((date, i) => ({ date: date, no: i + 1, label: (byDate[date] || {}).label, venue: (byDate[date] || {}).venue, sessions: (byDate[date] || {}).sessions || [] }));
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    sel = (D.find(d => d.date === today) || D.find(d => d.date === myIso) || D[0] || {}).date || '';
+    $('loader').style.display = 'none'; $('content').style.display = 'block'; draw();
   } catch (err) {
-    document.getElementById('loader').innerHTML = '<p style="color:var(--danger);">Could not reach the server. Check your connection and reload.</p>';
+    $('loader').innerHTML = '<p style="color:var(--danger);">' + E(err.message && err.message.indexOf('Unknown action') > -1 ? 'The server needs to be redeployed with the latest script.' : 'Could not load the schedule. Check your connection and reload.') + '</p>';
+  }
+
+  function draw() {
+    $('my').innerHTML = my ? '<div class="my"><i class="fa-solid fa-location-crosshairs"></i><span><b>Your slot:</b> ' + E([my.venue, my.room && 'Room ' + my.room, my.date, my.time && rng2(my)].filter(Boolean).join(' · ')) + '</span><span class="sp"></span><button class="btn" id="go-my">Show on schedule</button></div>' : '';
+    const g = $('go-my'); if (g) g.onclick = () => { if (myIso) { sel = myIso; venue = ''; draw(); } const m = document.querySelector('.mine'); if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+    $('day-tabs').innerHTML = D.map(d => '<button class="day-tab' + (d.date === sel ? ' active' : '') + '" role="tab" aria-selected="' + (d.date === sel) + '" data-d="' + d.date + '"><div class="a">Day ' + d.no + ' · ' + VRP.fmtDate(d.date) + '</div><div class="b">' + E(d.label || 'Day ' + d.no) + '</div><div class="c">' + (d.sessions.length ? d.sessions.length + ' sessions' : 'Not published yet') + '</div></button>').join('');
+    document.querySelectorAll('.day-tab').forEach(b => b.onclick = () => { sel = b.dataset.d; venue = ''; draw(); });
+    const day = D.find(d => d.date === sel), area = $('day-content');
+    if (!day) { $('venue').innerHTML = ''; area.innerHTML = '<div class="empty-note"><i class="fa-regular fa-calendar"></i><br>The programme will appear here once the organisers publish it.</div>'; return; }
+    const halls = [...new Set(day.sessions.map(s => s.hall).filter(Boolean))];
+    $('venue').innerHTML = '<option value="">All venues</option>' + halls.map(h => '<option' + (h === venue ? ' selected' : '') + '>' + E(h) + '</option>').join('');
+    $('venue').onchange = e => { venue = e.target.value; draw(); };
+    $('print-title').textContent = 'Day ' + day.no + ' · ' + VRP.fmtDate(day.date) + (venue ? ' · ' + venue : '');
+    const list = day.sessions.filter(s => !venue || s.hall === venue);
+    if (!list.length) { area.innerHTML = '<div class="empty-note"><i class="fa-regular fa-calendar"></i><br>The programme for this day has not been published yet. Check your dashboard announcements for updates.</div>'; return; }
+    area.innerHTML = groups(list).map(gr => '<div class="group" style="--n:' + gr.length + ';grid-template-columns:repeat(' + gr.length + ',1fr);">' + gr.map(s => card(s, day)).join('') + '</div>').join('');
+  }
+  function rng2(m) { return m.time + (m.endTime ? ' – ' + m.endTime : ''); }
+  function groups(ss) {   // sessions that overlap in time but sit in different halls are shown side by side
+    const out = []; let c = null;
+    ss.forEach(s => { const a = mins(s.start), b = mins(s.end), h = String(s.hall).toLowerCase();
+      if (c && a != null && c.a != null && a < c.b && b > c.a && c.h.indexOf(h) < 0 && c.l.length < 4) { c.l.push(s); c.h.push(h); c.a = Math.min(c.a, a); c.b = Math.max(c.b, b); }
+      else { c = { l: [s], a: a, b: b, h: [h] }; out.push(c); } });
+    return out.map(x => x.l);
+  }
+  function card(s, day) {
+    const its = s.items || [];
+    if (['tea', 'lunch', 'registration'].indexOf(s.type) > -1 && !its.length) return '<div class="brk"><b>' + E(rng(s.start, s.end)) + '</b> &nbsp; ' + E(s.name) + '</div>';
+    const roles = [s.chair && 'Chairperson: <b>' + E(s.chair) + '</b>', s.coChair && 'Co-Chair: <b>' + E(s.coChair) + '</b>', s.rapporteur && 'Rapporteur: <b>' + E(s.rapporteur) + '</b>'].filter(Boolean);
+    return '<div class="ses' + (mine(s, day) ? ' mine' : '') + '"><h3>' + (s.number ? 'Session ' + E(s.number) + ' — ' : '') + E(s.name) + '</h3>'
+      + '<div class="meta">' + E(rng(s.start, s.end)) + '<span class="hall">' + E([s.hall, s.room, s.track && 'Track ' + s.track].filter(Boolean).join(' · ')) + '</span>' + (mine(s, day) ? ' <b style="color:var(--gold-deep);">· your slot</b>' : '') + '</div>'
+      + (roles.length ? '<div class="roles">' + roles.map(r => '<span>' + r + '</span>').join('') + '</div>' : '') + (s.description ? '<div class="meta">' + E(s.description) + '</div>' : '')
+      + its.map(item).join('') + '</div>';
+  }
+  function item(i) {
+    const pl = (i.presenterList || []).map(p => '<li class="' + ((my && p.token && p.token === my.token) || (myName && p.name === myName) ? 'me' : '') + '">' + E((p.time ? VRP.hm12(p.time) + ' · ' : '') + [p.token || p.board, p.name].filter(Boolean).join(' · ') + (p.institution ? ', ' + p.institution : '')) + '</li>').join('');
+    return '<div class="it"><div class="it-t">' + E(rng(i.Start, i.End)) + '</div><div>' + (i.Speaker ? '<b>' + E(i.Speaker) + '</b>' + (i.Affiliation ? ', ' + E(i.Affiliation) : '') + '<br>' : '') + E(i.Topic || '')
+      + (i.Mode && i.Mode !== 'Physical' ? ' <span class="tag">' + E(i.Mode) + '</span>' : '') + ((i.Lines || []).length ? '<ul>' + i.Lines.map(l => '<li>' + E(l) + '</li>').join('') + '</ul>' : '')
+      + (i.Guests || []).map(g => '<div class="gl">' + (g.role ? E(g.role) + ': ' : '') + E(g.text) + '</div>').join('') + (pl ? '<ol class="pl">' + pl + '</ol>' : '') + '</div></div>';
   }
 })();
 </script>
