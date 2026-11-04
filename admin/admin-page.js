@@ -1,4 +1,4 @@
-/* VRMIC 2026 admin - small helpers shared by the newer pages. Include AFTER admin-common.js. */
+/* LVRMIC 2026 admin - small helpers shared by the newer pages. Include AFTER admin-common.js. */
 (function () {
   window.$ = id => document.getElementById(id);
   window.esc = VR.esc;
