@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verification | LVRMIC 2026, Loyola College</title>
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
+:root{--paper:#faf6ec;--paper-alt:#f2ecdc;--card:#fff;--card-border:#e7ddc4;--navy:#12224a;--ink-1:#1b2436;--ink-2:#535f7a;--ink-3:#8791a6;--gold:#a9762f;--gold-deep:#8a5f24;--gold-light:#c9974f;--teal:#1f7a68;--danger:#c0392b;--warn:#b5791f;--success:#1f7a49;--maxw:1180px;}
+*{box-sizing:border-box;}
+html,body{overflow-x:hidden;max-width:100%;}
+body{margin:0;background:var(--paper);color:var(--ink-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body.no-scroll{overflow:hidden;}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .4em;color:var(--navy);}
+p{color:var(--ink-2);margin:0 0 1em;}
+a{color:var(--gold-deep);text-decoration:none;}a:hover{text-decoration:underline;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+@media(max-width:600px){.wrap{padding:0 14px;}}
+.utcbar{background:var(--navy);}
+.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#c7cede;}
+.utcbar i{color:var(--gold-light);}.utcbar b{color:#e8ecf5;font-weight:500;}
+.masthead{background:linear-gradient(180deg,#fff,var(--paper));border-bottom:3px solid var(--gold);}
+.masthead-inner{max-width:var(--maxw);margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:20px;}
+.masthead-logos{display:flex;gap:16px;flex-shrink:0;}.masthead-logos img{height:64px;width:auto;}
+@media(max-width:700px){.masthead-logos img{height:46px;}.masthead-inner{padding:12px 14px;gap:12px;}}
+.m-super{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-deep);font-weight:700;}
+.masthead-text h1{font-size:clamp(.95rem,2vw,1.4rem);line-height:1.25;margin:0;}
+.topnav{background:#fff;border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;}
+.topnav-inner{max-width:var(--maxw);margin:0 auto;padding:4px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.pnav{display:flex;list-style:none;margin:0;padding:0;}
+.pnav a{display:flex;align-items:center;gap:6px;padding:14px 11px;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;}
+.pnav a:hover,.pnav a.active{color:var(--gold-deep);border-bottom-color:var(--gold);text-decoration:none;}
+.pnav-toggle{display:none;background:none;border:1px solid var(--card-border);color:var(--navy);padding:8px 12px;border-radius:8px;cursor:pointer;}
+.user-wrap{position:relative;}
+.user-btn{background:none;border:0;padding:0;cursor:pointer;display:block;}
+.user-btn img,.avatar-fallback{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#fff;display:block;}
+.avatar-fallback{display:flex;align-items:center;justify-content:center;background:var(--paper-alt);color:var(--gold-deep);}
+.user-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:180px;background:#fff;border:1px solid var(--card-border);border-radius:12px;box-shadow:0 20px 44px rgba(20,30,60,.18);padding:6px;opacity:0;visibility:hidden;transition:.2s;z-index:60;}
+.user-menu.open{opacity:1;visibility:visible;}
+.user-menu a,.user-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border-radius:7px;color:var(--ink-2);font-size:13px;background:none;border:0;cursor:pointer;font-family:inherit;}
+.user-menu a:hover,.user-menu button:hover{background:var(--paper-alt);color:var(--gold-deep);text-decoration:none;}
+@media(max-width:960px){.pnav-toggle{display:block;position:relative;z-index:101;}
+.pnav{position:fixed;right:0;top:0;width:min(300px,85vw);height:100dvh;background:#fff;border-left:1px solid var(--card-border);flex-direction:column;padding:90px 20px 24px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;z-index:99;}
+.pnav.open{transform:none;visibility:visible;}.pnav a{padding:12px;border-bottom:0;border-radius:8px;}}
+.page-head{padding:28px 0 2px;}
+.breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);margin-bottom:12px;}
+.breadcrumb a{color:var(--ink-3);}.breadcrumb .sep{margin:0 6px;}.breadcrumb .current{color:var(--gold-deep);}
+.helix-rule{height:3px;width:64px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;margin:14px 0;}
+.section{padding:4px 0 56px;}
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:22px;box-shadow:0 4px 16px rgba(20,30,60,.04);margin-bottom:18px;}
+@media(max-width:600px){.card{padding:16px;}}
+.card h3{font-size:1.02rem;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.card h3 i{color:var(--gold-deep);font-size:15px;}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;}
+.badge i{font-size:7px;}
+.badge-success{background:rgba(31,122,73,.1);color:var(--success);}
+.badge-pending{background:rgba(181,121,31,.12);color:var(--warn);}
+.badge-danger{background:rgba(192,57,43,.1);color:var(--danger);}
+.badge-neutral{background:rgba(83,95,122,.1);color:var(--ink-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:.2s;font-family:inherit;text-align:center;}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,30,60,.12);text-decoration:none;}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold-deep));color:#fff;}
+.btn-outline{background:#fff;border-color:var(--card-border);color:var(--navy);}
+.btn-danger{background:#fff;border-color:rgba(192,57,43,.4);color:var(--danger);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+.btn-outline .spinner,.btn-danger .spinner{border-color:rgba(18,34,74,.2);border-top-color:var(--navy);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader{text-align:center;padding:80px 0;color:var(--ink-3);}
+.spinner-lg{width:30px;height:30px;border:3px solid rgba(169,118,47,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
+
+/* banners */
+.banner{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--gold-light);background:linear-gradient(135deg,#fff7e3,#fdf0cf);border-radius:14px;padding:14px 18px;margin-bottom:16px;}
+.banner>i{font-size:20px;color:var(--gold-deep);margin-top:2px;}
+.banner b{display:block;color:var(--navy);}
+.banner p{margin:2px 0 0;font-size:13px;overflow-wrap:anywhere;}
+.banner.ok{background:#eef8f1;border-color:rgba(31,122,73,.4);}.banner.ok>i{color:var(--success);}
+.banner.bad{background:#fff3f1;border-color:rgba(192,57,43,.4);}.banner.bad>i{color:var(--danger);}
+.banner.calm{background:#fff;border-color:var(--card-border);}.banner.calm>i{color:var(--ink-3);}
+.dl-line{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;margin-bottom:16px;color:var(--ink-2);}
+.dl-line b.mono{color:var(--navy);}
+
+/* profile header + grids */
+.pf-top{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px;}
+.photo-box{text-align:center;}
+.pf-photo,.pf-photo-fb{width:108px;height:144px;border-radius:10px;border:1px solid var(--card-border);object-fit:cover;background:var(--paper-alt);display:block;}
+.pf-photo-fb{display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:28px;border-style:dashed;}
+.photo-box small{display:block;font-size:11px;color:var(--ink-3);margin-top:4px;max-width:108px;}
+.pf-name{flex:1 1 220px;min-width:0;}
+.pf-name h2{font-size:1.25rem;margin-bottom:6px;overflow-wrap:anywhere;}
+.id-chip{display:inline-flex;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--navy);background:#fff;border:1.5px solid var(--gold);padding:5px 13px;border-radius:999px;font-weight:700;margin-right:6px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px 26px;}
+.item{border-bottom:1px solid var(--paper-alt);padding-bottom:8px;min-width:0;}
+.item span{display:block;font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
+.item b{display:block;font-size:14px;font-weight:600;color:var(--ink-1);overflow-wrap:anywhere;}
+.item.full{grid-column:1/-1;}
+.item .req{display:block;font-size:12.5px;color:var(--gold-deep);margin-top:2px;font-weight:600;}
+.item.ro b{color:var(--ink-2);}
+.lock{color:var(--ink-3);font-size:11px;margin-left:4px;}
+
+/* action area */
+.confirm-box{border:2px solid var(--gold);border-radius:14px;background:#fffaf0;padding:20px;}
+.chk{display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:14px;color:var(--ink-1);margin-bottom:16px;}
+.chk input{width:20px;height:20px;margin-top:2px;accent-color:#a9762f;flex-shrink:0;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.or{font-size:12.5px;color:var(--ink-3);}
+.chg-list{margin:8px 0 0;padding:0;list-style:none;}
+.chg-list li{font-size:13px;padding:7px 0;border-bottom:1px solid var(--paper-alt);overflow-wrap:anywhere;}
+.chg-list .old{color:var(--ink-3);text-decoration:line-through;}
+.chg-list .new{color:var(--success);font-weight:600;}
+
+/* modals */
+.modal-overlay{position:fixed;inset:0;background:rgba(20,30,60,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:16px;overflow-y:auto;}
+.modal-overlay.show{display:flex;}
+.modal-card{background:#fff;border:1px solid var(--card-border);border-radius:16px;padding:24px;max-width:720px;width:100%;margin:auto;box-shadow:0 30px 70px rgba(20,30,60,.25);}
+.modal-card.narrow{max-width:460px;}
+@media(max-width:480px){.modal-card{padding:16px 14px;}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;}
+.modal-head h3{margin:0;}.modal-x{background:none;border:0;font-size:18px;color:var(--ink-3);cursor:pointer;padding:6px;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;}
+@media(max-width:600px){.fgrid{grid-template-columns:1fr;}}
+.fgrid .full{grid-column:1/-1;}
+.fgrid h5{grid-column:1/-1;margin:10px 0 0;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--gold-deep);border-bottom:1px solid var(--card-border);padding-bottom:4px;}
+label.l{display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:4px;}
+input[type=text],input[type=date],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--card-border);border-radius:8px;font:inherit;font-size:14px;color:var(--ink-1);background:#fff;}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold-light);outline-offset:1px;}
+input.edited,select.edited,textarea.edited{border-color:var(--gold);background:#fffaf0;}
+textarea{resize:vertical;min-height:70px;}
+.ro-field{padding:10px 12px;border:1px dashed var(--card-border);border-radius:8px;background:var(--paper-alt);font-size:14px;color:var(--ink-2);overflow-wrap:anywhere;}
+.photo-up{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+.photo-up ul{margin:0 0 10px;padding-left:18px;font-size:12.5px;color:var(--ink-2);}
+.photo-up li{margin-bottom:3px;}
+.err{display:none;background:#fff3f1;border:1px solid rgba(192,57,43,.4);color:var(--danger);border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;}
+.err.show{display:block;}
+table.rv{width:100%;border-collapse:collapse;font-size:13px;}
+table.rv th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);padding:6px 8px;border-bottom:1px solid var(--card-border);}
+table.rv td{padding:8px;border-bottom:1px solid var(--paper-alt);vertical-align:top;overflow-wrap:anywhere;}
+.scroll-x{overflow-x:auto;}
+
+.popup-back{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(4,8,22,.6);}
+.popup-back.show{display:flex;}
+.popup{width:100%;max-width:400px;background:#fff;border:1px solid rgba(192,57,43,.4);border-radius:16px;padding:26px 24px 20px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.35);}
+.popup.ok{border-color:rgba(31,122,73,.4);}
+.popup-icon{width:52px;height:52px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(192,57,43,.1);color:var(--danger);}
+.popup.ok .popup-icon{background:rgba(31,122,73,.1);color:var(--success);}
+.popup p{font-size:14px;margin:0 0 18px;overflow-wrap:anywhere;}
+footer{padding:30px 0 22px;background:var(--navy);}
+footer p{font-size:12.5px;color:#c7cede;text-align:center;margin:0;}footer em{color:var(--gold-light);}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div class="utcbar"><div class="utcbar-inner"><i class="fa-regular fa-clock"></i><span id="utc-clock"><b>Loading time…</b></span></div></div>
+
+<div class="masthead"><div class="masthead-inner">
+  <div class="masthead-logos">
+    <img src="../assets/loyola-crest.png" alt="Loyola College" onerror="this.style.display='none'">
+    <img src="../assets/cimser-logo.png" alt="CIMSER" onerror="this.style.display='none'">
+  </div>
+  <div class="masthead-text">
+    <div class="m-super">Loyola College (Autonomous), Chennai</div>
+    <h1>4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment</h1>
+  </div>
+</div></div>
+
+<div class="topnav"><div class="topnav-inner">
+  <button class="pnav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  <ul class="pnav" id="nav-links">
+    <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
+    <li><a href="registration.html"><i class="fa-solid fa-id-card"></i> Registration</a></li>
+    <li><a href="abstract.html" id="nav-abstract-link"><i class="fa-solid fa-file-lines"></i> Abstract</a></li>
+    <li><a href="ppt.html" id="nav-ppt-link" style="display:none;"><i class="fa-solid fa-display"></i> PPT</a></li>
+    <li><a href="schedule.html"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
+    <li><a href="slot.html"><i class="fa-solid fa-location-crosshairs"></i> My Slot</a></li>
+    <li><a href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Feedback</a></li>
+    <li><a href="verification.html" class="active"><i class="fa-solid fa-user-check"></i> Verification</a></li>
+  </ul>
+  <div class="user-wrap">
+    <button class="user-btn" id="user-btn" type="button" aria-label="My account">
+      <img id="user-avatar" alt="" style="display:none;">
+      <div class="avatar-fallback" id="user-avatar-fallback"><i class="fa-solid fa-user"></i></div>
+    </button>
+    <div class="user-menu" id="user-menu">
+      <a href="home.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+      <button type="button" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+    </div>
+  </div>
+</div></div>
+
+<header class="page-head"><div class="wrap">
+  <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Verification</span></div>
+  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);">Verify your details</h1>
+  <div class="helix-rule"></div>
+</div></header>
+
+<div id="loader" class="loader"><div class="spinner-lg"></div><p style="margin-top:14px;">Loading…</p></div>
+<section class="section" id="content" style="display:none;"><div class="wrap" id="root"></div></section>
+
+<footer><div class="wrap"><p>© 2026, Centre for Insect Molecular Studies and Environmental Research (CIMSER) — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai <em><br>"Luceat Lux Vestra — Let Your Light Shine"</em></p></div></footer>
+
+<!-- Correction request -->
+<div class="modal-overlay" id="edit-modal"><div class="modal-card">
+  <div class="modal-head"><h3><i class="fa-solid fa-pen-to-square" style="color:var(--gold-deep);"></i> <span id="em-title">Request corrections</span></h3><button class="modal-x" type="button" id="em-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="err" id="em-err"></div>
+
+  <div id="pane-edit">
+    <p style="font-size:13px;">Change only what is wrong. Edited fields are highlighted. Your email and LVRMIC ID cannot be changed here. The organisers will check your request and update your record. After that, you can confirm your details.</p>
+    <div class="fgrid" id="em-form"></div>
+    <div class="fgrid" style="margin-top:6px;"><h5>Photo (for your ID card and badge)</h5>
+      <div class="full photo-up">
+        <div class="photo-box"><div id="ph-prev"></div><small id="ph-cap">Current photo</small></div>
+        <div style="flex:1 1 260px;min-width:0;">
+          <ul><li>Recent passport-style colour photo, <b>JPG or PNG</b>.</li>
+            <li>Upright (portrait) photo, <b>3:4 ratio</b>, e.g. 600 × 800 px. It is resized automatically.</li>
+            <li>Face clearly visible, plain light background, no cap or dark glasses.</li>
+            <li>The same photo is printed on your <b>ID card / badge</b> and shown on your portal profile, so it appears cropped to 3:4 as in the preview.</li></ul>
+          <div class="btn-row"><label class="btn btn-outline" for="ph-file" style="margin:0;"><i class="fa-solid fa-camera"></i> Choose new photo</label>
+            <button class="btn btn-danger" type="button" id="ph-clear" style="display:none;"><i class="fa-solid fa-xmark"></i> Remove</button></div>
+          <input type="file" id="ph-file" accept="image/jpeg,image/png" style="display:none;">
+        </div>
+      </div></div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:18px;">
+      <button class="btn btn-outline" type="button" id="em-cancel">Cancel</button>
+      <button class="btn btn-gold" type="button" id="em-review"><i class="fa-solid fa-list-check"></i> Review changes</button>
+    </div>
+  </div>
+
+  <div id="pane-review" style="display:none;">
+    <p style="font-size:13px;">Please check these changes. They are sent to the organisers for approval, and nothing in your record changes until they approve.</p>
+    <div class="scroll-x"><table class="rv"><thead><tr><th>Detail</th><th>Now</th><th>Requested</th></tr></thead><tbody id="rv-body"></tbody></table></div>
+    <label class="l" for="rv-note" style="margin-top:14px;">Note for the organisers <span style="font-weight:400;color:var(--ink-3);">(optional)</span></label>
+    <textarea id="rv-note" maxlength="300"></textarea>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:16px;">
+      <button class="btn btn-outline" type="button" id="rv-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      <button class="btn btn-gold" type="button" id="rv-send"><i class="fa-solid fa-paper-plane"></i> Send request</button>
+    </div>
+  </div>
+</div></div>
+
+<!-- Final confirmation (step 2) -->
+<div class="modal-overlay" id="final-modal"><div class="modal-card narrow">
+  <div class="modal-head"><h3><i class="fa-solid fa-shield-halved" style="color:var(--gold-deep);"></i> Final confirmation</h3><button class="modal-x" type="button" id="fm-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="err" id="fm-err"></div>
+  <p style="font-size:13.5px;"><b>This cannot be undone.</b> Once you confirm, your details are locked and no further changes are allowed from your side.</p>
+  <label class="l" for="fm-id">Type your LVRMIC ID <b class="mono" id="fm-idhint" style="color:var(--navy);"></b> to confirm</label>
+  <input type="text" id="fm-id" autocomplete="off" autocapitalize="characters" spellcheck="false">
+  <div class="btn-row" style="justify-content:flex-end;margin-top:16px;">
+    <button class="btn btn-outline" type="button" id="fm-cancel">Go back</button>
+    <button class="btn btn-gold" type="button" id="fm-ok" disabled><i class="fa-solid fa-check"></i> Confirm and lock</button>
+  </div>
+</div></div>
+
+<div class="popup-back" id="popup-back"><div class="popup" id="popup" role="alertdialog" aria-modal="true">
+  <div class="popup-icon"><i class="fa-solid fa-triangle-exclamation" id="popup-i"></i></div>
+  <h3 id="popup-title"></h3><p id="popup-msg"></p>
+  <button type="button" class="btn btn-gold" style="width:100%;" id="popup-ok">OK</button>
+</div></div>
+
+<script src="../participant-common.js"></script>
+<script>
+const L = window.LVRMIC;
+L.startClock('utc-clock'); L.initMenu();
+const token = L.session.token();
+if (!token) window.location.href = '../participant-login.html';
+function logout(){ L.session.clear(); window.location.href = '../participant-login.html'; }
+async function api(action, payload){
+  const res = await L.callApi(action, Object.assign({ token: token }, payload || {}));
+  if (!res.ok && /session expired|log in again/i.test(res.error || '')) { L.session.clear(); window.location.href = '../participant-login.html'; }
+  return res;
+}
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const dmy = k => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(k || ''); return m ? (+m[3]) + ' ' + MON[+m[2] - 1] + ' ' + m[1] : (k || ''); };
+const fmtDT = v => { const d = L.parseDeadline(v); return d ? d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) + ' IST' : ''; };
+const badge = (t, k) => `<span class="badge badge-${k}"><i class="fa-solid fa-circle"></i> ${esc(t)}</span>`;
+
+/* menus + popup */
+const userMenu = $('user-menu');
+$('user-btn').addEventListener('click', e => { e.stopPropagation(); userMenu.classList.toggle('open'); });
+document.addEventListener('click', () => userMenu.classList.remove('open'));
+const popupBack = $('popup-back');
+function showPopup(msg, title, ok){
+  $('popup-title').textContent = title || (ok ? 'Done' : 'Something went wrong'); $('popup-msg').textContent = msg || '';
+  $('popup').classList.toggle('ok', !!ok); $('popup-i').className = 'fa-solid ' + (ok ? 'fa-circle-check' : 'fa-triangle-exclamation');
+  popupBack.classList.add('show'); $('popup-ok').focus();
+}
+$('popup-ok').addEventListener('click', () => popupBack.classList.remove('show'));
+popupBack.addEventListener('click', e => { if (e.target === popupBack) popupBack.classList.remove('show'); });
+function modal(id, on){ $(id).classList.toggle('show', on); document.body.classList.toggle('no-scroll', on || ['edit-modal','final-modal'].some(x => $(x).classList.contains('show'))); }
+function setErr(id, msg){ const e = $(id); e.textContent = msg || ''; e.classList.toggle('show', !!msg); }
+
+/* ---------- field definitions ---------- */
+const GROUPS = [
+  { t: 'Personal', i: 'fa-user', f: ['name', 'gender', 'dob', 'phone'] },
+  { t: 'Location', i: 'fa-location-dot', f: ['country', 'state', 'city'] },
+  { t: 'Professional', i: 'fa-briefcase', f: ['institution', 'department', 'designation', 'designationOther'] },
+  { t: 'Meal', i: 'fa-utensils', f: ['foodPreference'] },
+  { t: 'Abstract', i: 'fa-file-lines', f: ['abstractTitle', 'abstractTheme'], abs: true }
+];
+const LABEL = { name: 'Full name', gender: 'Gender', dob: 'Date of birth', phone: 'Mobile number', country: 'Country', state: 'State', city: 'City', institution: 'Institution', department: 'Department', designation: 'Designation', designationOther: 'Designation (other)', foodPreference: 'Meal preference', abstractTitle: 'Abstract title', abstractTheme: 'Abstract theme' };
+const MAXLEN = { name: 100, gender: 30, phone: 16, country: 60, state: 60, city: 60, institution: 200, department: 120, designation: 80, designationOther: 80 };
+const DESIGNATIONS = ['Student', 'Research Scholar', 'Assistant Professor', 'Associate Professor', 'Professor', 'Scientist', 'Industry Professional', 'Other'];
+
+let D = null, newPhoto = null;
+const show = (k, v) => k === 'dob' ? dmy(v) : v;
+
+/* ---------- render ---------- */
+function banner(kind, icon, title, text){ return `<div class="banner ${kind}"><i class="fa-solid ${icon}"></i><div><b>${esc(title)}</b>${text ? `<p>${esc(text)}</p>` : ''}</div></div>`; }
+function render(){
+  const root = $('root'), W = D.window, st = D.status, P = D.participant, F = D.fields;
+  if (!D.available) {
+    root.innerHTML = banner('calm', 'fa-lock', 'Verification is not open', 'The organisers will open verification before the conference. You will see a banner on your dashboard when it opens.') + `<a class="btn btn-outline" href="home.html"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</a>`;
+    return;
+  }
+  const R = D.request, pend = st === 'Change requested' && R && R.status === 'Pending' ? R : null, ch = pend ? pend.changes : {};
+  let h = '';
+  if (st === 'Pending' && R && R.status === 'Approved') h += banner('ok', 'fa-circle-check', 'Your corrections were approved', 'Your record has been updated with the details below. Please review them once more, then confirm.' + (R.decisionNote ? ' Note from organisers: ' + R.decisionNote : ''));
+  if (st === 'Pending' && R && R.status === 'Rejected') h += banner('bad', 'fa-circle-xmark', 'Your correction request was not approved', (R.decisionNote ? R.decisionNote + ' ' : '') + 'You can send a new request, or confirm your details as they are.' + (D.contactEmail ? ' Questions: ' + D.contactEmail : ''));
+  if (st === 'Verified') h += banner('ok', 'fa-circle-check', 'Your details are verified', 'Confirmed on ' + (fmtDT(D.verifiedAt) || '—') + '. Your details are now locked. To correct anything further, write to ' + (D.contactEmail || 'the organisers') + '.');
+  else if (W.passed) h += banner('bad', 'fa-hourglass-end', 'Verification has closed', 'The deadline has passed and your details were not confirmed. Please contact ' + (D.contactEmail || 'the organisers') + '.');
+  else h += `<div class="dl-line"><i class="fa-solid fa-hourglass-half" style="color:var(--gold-deep);"></i> Verification closes on <b>${esc(fmtDT(W.deadline))}</b> &middot; time left <b class="mono" id="dl-left">…</b></div>`;
+  if (pend) h += banner('', 'fa-hourglass-half', 'Your correction request is waiting for approval', 'You can confirm your details after the organisers decide. Sent on ' + fmtDT(pend.requestedAt) + '.');
+
+  // identity
+  const photo = L.photoUrl(D.photoUrl, 400);
+  const ph = photo ? `<img class="pf-photo" src="${esc(photo)}" alt="Your photo" onerror="this.outerHTML='<div class=&quot;pf-photo-fb&quot;><i class=&quot;fa-solid fa-user&quot;></i></div>'">` : '<div class="pf-photo-fb"><i class="fa-solid fa-user"></i></div>';
+  const newPh = pend && pend.hasPhoto ? `<div class="photo-box"><div>${pend.photoPreview ? `<img class="pf-photo" src="${esc(pend.photoPreview)}" alt="New photo">` : '<div class="pf-photo-fb"><i class="fa-solid fa-image"></i></div>'}</div><small>New photo (awaiting approval)</small></div>` : '';
+  const stBadge = st === 'Verified' ? badge('Verified', 'success') : st === 'Change requested' ? badge('Correction requested', 'pending') : badge('Not yet verified', 'neutral');
+  h += `<div class="card"><div class="pf-top"><div class="photo-box">${ph}<small>Current photo</small></div>${newPh}
+    <div class="pf-name"><h2>${esc(F.name)}</h2><div style="margin-bottom:8px;"><span class="id-chip">${esc(P.id)}</span> ${stBadge}</div>
+    <p style="margin:0;font-size:13px;">${esc(F.institution)}</p></div></div>
+    <div class="grid">
+      <div class="item ro"><span>Email <i class="fa-solid fa-lock lock" title="Cannot be changed"></i></span><b>${esc(P.email)}</b></div>
+      <div class="item ro"><span>LVRMIC ID <i class="fa-solid fa-lock lock"></i></span><b>${esc(P.id)}</b></div>
+      <div class="item ro"><span>Registration category <i class="fa-solid fa-lock lock"></i></span><b>${esc(P.category || '—')}</b></div>
+      <div class="item ro"><span>Participant type</span><b>${esc(P.type)}</b></div>
+      <div class="item ro"><span>Mode</span><b>${esc(P.mode)}</b></div>
+      <div class="item ro"><span>Registration status</span><b>${esc(P.registrationStatus)}</b></div></div></div>`;
+
+  GROUPS.forEach(g => {
+    if (g.abs && !D.abstractApplicable) return;
+    const items = g.f.filter(k => F[k] !== undefined && !(k === 'designationOther' && F.designation !== 'Other' && !ch.designationOther)).map(k => {
+      const c = ch[k], full = k === 'abstractTitle' || k === 'institution';
+      return `<div class="item${full ? ' full' : ''}"><span>${esc(LABEL[k])}</span><b>${esc(show(k, F[k]) || '—')}</b>${c ? `<em class="req">Requested: ${esc(show(k, c.new) || '—')}</em>` : ''}</div>`;
+    }).join('');
+    h += `<div class="card"><h3><i class="fa-solid ${g.i}"></i> ${g.t}</h3><div class="grid">${items}</div></div>`;
+  });
+  if (!D.abstractApplicable && P.type !== 'Participant') h += `<p class="or" style="margin:-6px 0 16px;">No abstract has been submitted, so there is nothing to verify there.</p>`;
+
+  // actions
+  if (pend) {
+    const li = Object.keys(ch).map(k => `<li><b>${esc(ch[k].label)}:</b> <span class="old">${esc(show(k, ch[k].old) || '—')}</span> &rarr; <span class="new">${esc(show(k, ch[k].new) || '—')}</span></li>`).join('') + (pend.hasPhoto ? '<li><b>Photo:</b> <span class="new">new photo uploaded</span></li>' : '');
+    h += `<div class="card"><h3><i class="fa-solid fa-paper-plane"></i> Your request</h3><ul class="chg-list">${li}</ul>${pend.note ? `<p class="or" style="margin-top:10px;">Your note: ${esc(pend.note)}</p>` : ''}
+      <div class="btn-row" style="margin-top:14px;"><button class="btn btn-danger" type="button" id="wd-btn"><i class="fa-solid fa-rotate-left"></i> Withdraw request</button></div></div>`;
+  } else if (D.canAct) {
+    h += `<div class="confirm-box"><h3 style="margin-bottom:10px;"><i class="fa-solid fa-user-check" style="color:var(--gold-deep);"></i> Is everything above correct?</h3>
+      <label class="chk"><input type="checkbox" id="ack"><span>I have carefully checked every detail above, including my photo, and they are correct. I understand that I cannot change them after confirming.</span></label>
+      <div class="btn-row"><button class="btn btn-gold" type="button" id="go-confirm" disabled><i class="fa-solid fa-check"></i> Continue to final confirmation</button>
+        <span class="or">or</span><button class="btn btn-outline" type="button" id="go-edit"><i class="fa-solid fa-pen-to-square"></i> Something is wrong, request a correction</button></div></div>`;
+  }
+  root.innerHTML = h;
+  if (W.open && st !== 'Verified') L.countdown(W.deadline, $('dl-left'));
+  if ($('ack')) { $('ack').addEventListener('change', () => { $('go-confirm').disabled = !$('ack').checked; }); $('go-confirm').addEventListener('click', openFinal); $('go-edit').addEventListener('click', openEdit); }
+  if ($('wd-btn')) $('wd-btn').addEventListener('click', withdraw);
+}
+
+/* ---------- correction form ---------- */
+function fieldHtml(k){
+  const v = D.fields[k] || '', lab = `<label class="l" for="f-${k}">${esc(LABEL[k])}</label>`, cls = (k === 'abstractTitle') ? ' full' : '';
+  let ctl;
+  if (k === 'gender') { const o = ['Male', 'Female', 'Other']; if (v && o.indexOf(v) < 0) o.push(v); ctl = `<select id="f-${k}" data-k="${k}">${o.map(x => `<option${x === v ? ' selected' : ''}>${esc(x)}</option>`).join('')}</select>`; }
+  else if (k === 'foodPreference') ctl = `<select id="f-${k}" data-k="${k}">${v ? '' : '<option value="">Select…</option>'}${['Veg', 'Non-Veg'].map(x => `<option${x === v ? ' selected' : ''}>${x}</option>`).join('')}</select>`;
+  else if (k === 'abstractTheme') { const o = D.themes.slice(); if (v && o.indexOf(v) < 0) o.unshift(v); ctl = `<select id="f-${k}" data-k="${k}">${o.map(x => `<option${x === v ? ' selected' : ''}>${esc(x)}</option>`).join('')}</select>`; }
+  else if (k === 'abstractTitle') ctl = `<textarea id="f-${k}" data-k="${k}" maxlength="300">${esc(v)}</textarea>`;
+  else if (k === 'dob') { const c = new Date(); c.setFullYear(c.getFullYear() - 16); ctl = `<input type="date" id="f-${k}" data-k="${k}" value="${esc(v)}" max="${c.toISOString().slice(0, 10)}">`; }
+  else if (k === 'designation') ctl = `<input type="text" id="f-${k}" data-k="${k}" value="${esc(v)}" maxlength="80" list="dl-desig"><datalist id="dl-desig">${DESIGNATIONS.map(x => `<option value="${x}">`).join('')}</datalist>`;
+  else ctl = `<input type="text" id="f-${k}" data-k="${k}" value="${esc(v)}" maxlength="${MAXLEN[k] || 100}"${k === 'phone' ? ' inputmode="tel"' : ''}>`;
+  return `<div class="${cls.trim()}" id="w-${k}"${k === 'designationOther' && D.fields.designation !== 'Other' ? ' style="display:none;"' : ''}>${lab}${ctl}</div>`;
+}
+function openEdit(){
+  setErr('em-err', ''); newPhoto = null;
+  $('em-form').innerHTML = GROUPS.map(g => (g.abs && !D.abstractApplicable) ? '' : `<h5>${g.t}</h5>` + g.f.filter(k => D.fields[k] !== undefined).map(fieldHtml).join('')).join('');
+  $('em-form').querySelectorAll('[data-k]').forEach(el => el.addEventListener('input', () => {
+    el.classList.toggle('edited', clean(el.dataset.k, el.value) !== D.fields[el.dataset.k]);
+    if (el.dataset.k === 'designation') $('w-designationOther').style.display = el.value.trim() === 'Other' ? '' : 'none';
+  }));
+  paintPhoto(); $('pane-edit').style.display = ''; $('pane-review').style.display = 'none'; $('em-title').textContent = 'Request corrections';
+  modal('edit-modal', true);
+}
+const clean = (k, v) => { v = String(v == null ? '' : v).replace(/\s+/g, ' ').trim(); return k === 'phone' ? v.replace(/[\s-]+/g, '') : v; };
+function collect(){
+  const ch = {};
+  $('em-form').querySelectorAll('[data-k]').forEach(el => { const k = el.dataset.k, v = clean(k, el.value); if (v !== D.fields[k]) ch[k] = v; });
+  if (ch.designation !== undefined || D.fields.designation) {
+    const des = ch.designation !== undefined ? ch.designation : D.fields.designation;
+    if (des !== 'Other') { if (D.fields.designationOther) ch.designationOther = ''; else delete ch.designationOther; }
+  }
+  return ch;
+}
+function paintPhoto(){
+  const cur = L.photoUrl(D.photoUrl, 300);
+  $('ph-prev').innerHTML = newPhoto ? `<img class="pf-photo" src="${newPhoto.dataUrl}" alt="New photo preview">` : (cur ? `<img class="pf-photo" src="${esc(cur)}" alt="Current photo">` : '<div class="pf-photo-fb"><i class="fa-solid fa-user"></i></div>');
+  $('ph-cap').textContent = newPhoto ? 'New photo (as on ID card)' : 'Current photo'; $('ph-clear').style.display = newPhoto ? '' : 'none';
+}
+function prepPhoto(file){
+  return new Promise((res, rej) => {
+    if (!/^image\/(jpeg|png)$/.test(file.type)) return rej(new Error('Photo must be a JPG or PNG file.'));
+    if (file.size > 10 * 1024 * 1024) return rej(new Error('That file is over 10 MB. Please choose a smaller photo.'));
+    const url = URL.createObjectURL(file), im = new Image();
+    im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('That image could not be opened. Please choose another.')); };
+    im.onload = () => {
+      URL.revokeObjectURL(url);
+      const w = im.naturalWidth, h = im.naturalHeight;
+      if (Math.min(w, h) < 240) return rej(new Error('The photo is too small. Use at least 240 px on the short side (600 × 800 px is ideal).'));
+      if (w > h * 1.05) return rej(new Error('Please use an upright (portrait) photo, like a passport photo, so it fits the ID card.'));
+      const s = Math.min(1, 600 / w, 800 / h), c = document.createElement('canvas'); c.width = Math.round(w * s); c.height = Math.round(h * s);
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+      const d = c.toDataURL('image/jpeg', .88); res({ dataUrl: d, b64: d.split(',')[1] });
+    };
+    im.src = url;
+  });
+}
+$('ph-file').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return; setErr('em-err', '');
+  try { newPhoto = await prepPhoto(f); paintPhoto(); } catch (err) { setErr('em-err', err.message); }
+});
+$('ph-clear').addEventListener('click', () => { newPhoto = null; paintPhoto(); });
+['em-close', 'em-cancel'].forEach(i => $(i).addEventListener('click', () => modal('edit-modal', false)));
+
+let pendingChanges = {};
+$('em-review').addEventListener('click', () => {
+  setErr('em-err', ''); const ch = collect(), keys = Object.keys(ch);
+  if (!keys.length && !newPhoto) return setErr('em-err', 'You have not changed anything yet. Edit a detail or choose a new photo, or cancel if everything is correct.');
+  const des = ch.designation !== undefined ? ch.designation : D.fields.designation, oth = ch.designationOther !== undefined ? ch.designationOther : D.fields.designationOther;
+  if (des === 'Other' && !oth) return setErr('em-err', 'Please specify your designation in the "Designation (other)" box.');
+  for (const k of keys) { if (ch[k] === '' && k !== 'department' && k !== 'designationOther') return setErr('em-err', LABEL[k] + ' cannot be empty.'); }
+  pendingChanges = ch;
+  $('rv-body').innerHTML = keys.map(k => `<tr><td><b>${esc(LABEL[k])}</b></td><td style="color:var(--ink-3);">${esc(show(k, D.fields[k]) || '—')}</td><td style="color:var(--success);font-weight:600;">${esc(show(k, ch[k]) || '—')}</td></tr>`).join('')
+    + (newPhoto ? `<tr><td><b>Photo</b></td><td style="color:var(--ink-3);">Current photo</td><td><img src="${newPhoto.dataUrl}" alt="" style="width:54px;height:72px;object-fit:cover;border-radius:6px;border:1px solid var(--card-border);"></td></tr>` : '');
+  $('pane-edit').style.display = 'none'; $('pane-review').style.display = ''; $('em-title').textContent = 'Review your request';
+});
+$('rv-back').addEventListener('click', () => { setErr('em-err', ''); $('pane-review').style.display = 'none'; $('pane-edit').style.display = ''; $('em-title').textContent = 'Request corrections'; });
+$('rv-send').addEventListener('click', async function(){
+  const b = this; setErr('em-err', ''); b.disabled = true; b.innerHTML = '<span class="spinner"></span> Sending...';
+  try {
+    const ip = (await L.getClientIp()) || '';
+    const res = await api('submitVerificationChanges', { changes: pendingChanges, note: $('rv-note').value, photoData: newPhoto ? newPhoto.b64 : '', photoFileName: newPhoto ? 'photo.jpg' : '', ip: ip });
+    if (!res.ok) { setErr('em-err', res.error || 'Could not send the request.'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send request'; return; }
+    modal('edit-modal', false); $('rv-note').value = '';
+    showPopup('Your correction request has been sent to the organisers. You can confirm your details once they have approved it.', 'Request sent', true);
+    await load();
+  } catch (err) { setErr('em-err', err.message); }
+  b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send request';
+});
+
+/* ---------- withdraw ---------- */
+async function withdraw(){
+  if (!confirm('Withdraw your correction request? Your record stays as it is now.')) return;
+  const b = $('wd-btn'); b.disabled = true; b.innerHTML = '<span class="spinner"></span> Withdrawing...';
+  try {
+    const res = await api('withdrawVerificationRequest', { ip: (await L.getClientIp()) || '' });
+    if (!res.ok) { showPopup(res.error, 'Could not withdraw'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-rotate-left"></i> Withdraw request'; return; }
+    await load();
+  } catch (err) { showPopup(err.message, 'Connection problem'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-rotate-left"></i> Withdraw request'; }
+}
+
+/* ---------- final confirmation: step 2 (type the ID) ---------- */
+function openFinal(){ setErr('fm-err', ''); $('fm-id').value = ''; $('fm-ok').disabled = true; $('fm-idhint').textContent = D.participant.id; modal('final-modal', true); setTimeout(() => $('fm-id').focus(), 50); }
+$('fm-id').addEventListener('input', () => { $('fm-ok').disabled = $('fm-id').value.trim().toUpperCase() !== D.participant.id.toUpperCase(); });
+['fm-close', 'fm-cancel'].forEach(i => $(i).addEventListener('click', () => modal('final-modal', false)));
+$('fm-ok').addEventListener('click', async function(){
+  const b = this; setErr('fm-err', ''); b.disabled = true; b.innerHTML = '<span class="spinner"></span> Confirming...';
+  try {
+    const ip = (await L.getClientIp()) || '';
+    const res = await api('confirmVerification', { reviewed: true, typedId: $('fm-id').value.trim(), ip: ip });
+    if (!res.ok) { setErr('fm-err', res.error || 'Could not confirm.'); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-check"></i> Confirm and lock'; return; }
+    modal('final-modal', false);
+    showPopup('Thank you. Your details are verified and locked.', 'Verified', true);
+    await load();
+  } catch (err) { setErr('fm-err', err.message); b.disabled = false; b.innerHTML = '<i class="fa-solid fa-check"></i> Confirm and lock'; }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { modal('final-modal', false); modal('edit-modal', false); popupBack.classList.remove('show'); } });
+
+/* ---------- load ---------- */
+async function load(){
+  const res = await api('getVerification', {});
+  if (res.needProfile) { window.location.href = 'details.html'; return; }
+  if (!res.ok) { $('loader').innerHTML = `<p style="color:var(--danger);">${esc(res.error || 'Could not load verification.')}</p>`; return; }
+  D = res; render(); $('loader').style.display = 'none'; $('content').style.display = 'block'; window.scrollTo({ top: 0 });
+}
+(async function init(){
+  try {
+    const dash = await api('getDashboard', {});
+    if (dash.ok) {
+      const pt = dash.participant;
+      if (pt.photoUrl) { const av = $('user-avatar'); av.onerror = () => { av.style.display = 'none'; $('user-avatar-fallback').style.display = ''; }; av.src = L.photoUrl(pt.photoUrl, 100); av.style.display = ''; $('user-avatar-fallback').style.display = 'none'; }
+      if (pt.pptRequired) $('nav-ppt-link').style.display = '';
+      if (!pt.abstractApplicable) $('nav-abstract-link').style.display = 'none';
+    }
+    await load();
+  } catch (err) { $('loader').innerHTML = `<p style="color:var(--danger);">${esc(err.message || 'Could not reach the server. Check your connection and reload.')}</p>`; }
+})();
+</script>
+</body>
+</html>
