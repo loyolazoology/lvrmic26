@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Portal | VRMIC 2026</title>
+<title>Admin Portal | LVRMIC26</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="icon" type="image/x-icon" href="../assets/cimser-logo.png">
@@ -92,14 +92,14 @@ iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(
 
 <header class="top">
   <button class="ib" id="navBtn" title="Show or hide menu" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
-  <div class="brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div><b id="shortName">VRMIC 2026</b><small>Admin portal</small></div></div>
+  <div class="brand"><img src="../assets/cimser-logo.png" alt="" onerror="this.style.display='none'"><div><b id="shortName">LVRMIC26</b><small>Admin portal</small></div></div>
   <div class="sp1"></div>
   <div class="last" id="lastLogin"><b>Last login</b><span>-</span></div>
   <div class="clock" title="Indian Standard Time"><div class="t" id="clockT">--:--:--</div><div class="d" id="clockD">&nbsp;</div></div>
   <button class="ib" id="refreshBtn" title="Refresh this page and your access" aria-label="Refresh"><i class="fa-solid fa-rotate"></i></button>
   <button class="ib" id="fsBtn" title="Full screen" aria-label="Full screen"><i class="fa-solid fa-expand"></i></button>
   <div class="user">
-    <div class="av wait" id="av"><i class="fa-solid fa-user-shield"></i><img id="avImg" alt=""><span class="ld"></span></div>
+    <div class="av" id="av"><i class="fa-solid fa-user-shield"></i><img id="avImg" alt=""><span class="ld"></span></div>
     <div><b id="uName">Admin</b><span id="uPos"></span></div>
   </div>
   <button class="logout" id="logoutBtn" title="Log out"><i class="fa-solid fa-right-from-bracket"></i><span>Log out</span></button>
@@ -125,8 +125,7 @@ iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(
 const $ = id => document.getElementById(id), esc = VR.esc;
 if (!VR.token()) location.replace(VR.LOGIN_URL);
 
-/* Photo shown only for the Convener account (ID 1001). */
-const PHOTO_1001 = 'https://lh3.googleusercontent.com/d/1n43Ne3m3JGDymDtjAr8UYSlCNvANstTv=w600?authuser=0';
+const SHORT = 'LVRMIC26';   /* conference short name shown in the top bar and tab title */
 
 /* ============ MENU: one place to edit. Item = [label, page, icon, moduleOverride?] ============
    cf = Configuration, tx = Transaction, rp = Report (shown as small headings inside one dropdown).
@@ -138,6 +137,9 @@ const MENU = [
  { id:'participants', label:'Participants', icon:'fa-users', mod:'participants',
    tx:[['Participant creation','participants-manage.html','fa-user-plus'],['Participant edit','participants-details.html','fa-user-pen'],['Bulk import and merge','participants-import.html','fa-file-import']],
    rp:[['List view','participants-report.html','fa-table-list'],['Individual view','participants-individual.html','fa-id-card'],['QR codes','students-report.html?kind=participant','fa-qrcode']] },
+ { id:'verification', label:'Verification', icon:'fa-user-check', mod:'verification',
+   tx:[['Corrections and approvals','verification-manage.html','fa-user-pen']],
+   rp:[['Verification report','verification-report.html','fa-table-list']] },
  { id:'spot', label:'Spot Registration', icon:'fa-bolt', mod:'spotRegistration',
    tx:[['New spot registration','spot-registration.html','fa-bolt'],['Payment and badge desk','spot-desk.html','fa-cash-register']],
    rp:[['Spot registration report','spot-report.html','fa-table-list']] },
@@ -153,7 +155,7 @@ const MENU = [
  { id:'scoring', label:'Scoring and Evaluation', icon:'fa-star-half-stroke', mod:'scoring',
    cf:[['Scoring criteria','scoring-config.html','fa-list-check']],
    tx:[['Score entry','scoring-entry.html','fa-pen-ruler']],
-   rp:[['Score sheet','scoring-report.html','fa-table-list'],['Rankings and winners','scoring-rank.html','fa-trophy']] },
+   rp:[['Score sheet','scoring-report.html','fa-table-list'],['Rankings and winners','scoring-rank.html','fa-trophy'],['Blank score sheets','scoring-blank.html','fa-file-pen']] },
  { id:'attendance', label:'Participant Attendance', icon:'fa-calendar-check', mod:'attendance',
    cf:[['Attendance sessions','sessions-config.html?kind=participant','fa-clock','attendanceConfig']],
    tx:[['Manual attendance entry','attendance-entry.html?kind=participant','fa-keyboard'],['QR scan attendance','attendance-scan.html?kind=participant','fa-qrcode']],
@@ -212,7 +214,9 @@ const perms = () => { try { return JSON.parse(localStorage.getItem('vrmic_admin_
 const FIELD = ['presentationAccess','attendance','studentAttendance','scoring','liveBoard'];   /* field-team access: no dashboard by default */
 const fieldOnly = () => { const p = perms(), k = Object.keys(p).filter(x => p[x] && (p[x].report || p[x].transaction)); return k.length > 0 && k.every(x => FIELD.indexOf(x) > -1); };
 const isSuper = () => String(localStorage.getItem('vrmic_admin_id') || '') === '1001';   /* Administrator: full access, display only; the server decides for real */
-const itemOk = (g, k, i) => { if (isSuper()) return true; const m = i[3] || g.mod; return k === 'tx' ? VR.can(m,'transaction') : k === 'rp' ? VR.can(m,'report') : (VR.can(m,'transaction') || VR.can(m,'report')); };
+/* page-level permissions: when a user is limited to certain pages of a module, hide the others */
+const pageOk = (m, page) => { const pg = (perms()[m] || {}).pages; return !pg || !Object.keys(pg).length || pg[page.split('?')[0].replace('.html','')] === true; };
+const itemOk = (g, k, i) => { if (isSuper()) return true; const m = i[3] || g.mod; if (!pageOk(m, i[1])) return false; return k === 'tx' ? VR.can(m,'transaction') : k === 'rp' ? VR.can(m,'report') : (VR.can(m,'transaction') || VR.can(m,'report')); };
 const firstAllowed = () => { for (const g of MENU) for (const k of ['tx','rp']) for (const i of (g[k]||[])) if (itemOk(g,k,i)) return i[1]; return 'dashboard.html'; };
 const DEFAULT_PAGE = () => fieldOnly() ? firstAllowed() : 'dashboard.html';
 const SAFE_PAGE = /^[a-z0-9][a-z0-9_-]*\.html(\?[A-Za-z0-9_=&%.\-]*)?$/i;
@@ -260,7 +264,7 @@ function mark(page) {
   const a = document.querySelector(`.nl[data-page="${CSS.escape(key)}"]`);
   if (a) { a.classList.add('active'); const grp = a.closest('.grp'); if (grp) { grp.classList.add('has'); if (!query) { document.querySelectorAll('.grp.open').forEach(x => x.classList.remove('open')); grp.classList.add('open'); openId = grp.dataset.id; } } }
   $('crumb').innerHTML = hit ? (hit.kind ? `${esc(hit.g.label)} &rsaquo; ${KINDS[hit.kind]} &rsaquo; <b>${esc(hit.label)}</b>` : `<b>${esc(hit.label)}</b>`) : esc(base);
-  document.title = (hit ? hit.label + ' | ' : '') + 'VRMIC 2026 Admin';
+  document.title = (hit ? hit.label + ' | ' : '') + SHORT + ' Admin';
 }
 
 /* ============ frame and routing ============ */
@@ -287,32 +291,54 @@ function showLastLogin() {
   const d = l.at ? new Date(l.at) : null;
   $('lastLogin').innerHTML = '<b>Last login</b>' + (d && !isNaN(d) ? esc(d.toLocaleString('en-GB', Object.assign({ day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:true }, IST))) + (l.ip ? ' | IP ' + esc(l.ip) : '') : 'First login on this account');
 }
-function setAvatar() {
-  const id = String(localStorage.getItem('vrmic_admin_id') || ''), av = $('av'), img = $('avImg');
-  if (id !== '1001') { av.classList.remove('wait'); img.classList.remove('ok'); return; }
-  if (img.dataset.done) { av.classList.remove('wait'); return; }
-  av.classList.add('wait');
-  img.onload = () => { img.classList.add('ok'); img.dataset.done = 1; av.classList.remove('wait'); };
-  img.onerror = () => av.classList.remove('wait');
-  img.src = PHOTO_1001;
+
+/* ---- profile photo: each admin's own photo from the Admins sheet (Photo column, a Drive link) ----
+   Fetched through the server (adminGetTeamPhoto), shrunk to a small thumbnail and cached on this device. */
+const PH_KEY = id => 'vrmic_admin_photo_' + id;
+const adminId = () => String(localStorage.getItem('vrmic_admin_id') || '');
+function thumb(dataUrl) {
+  return new Promise(res => {
+    const im = new Image();
+    im.onerror = () => res('');
+    im.onload = () => { try { const s = 96, c = document.createElement('canvas'); c.width = c.height = s; const k = Math.max(s / im.width, s / im.height), w = im.width * k, h = im.height * k;
+      c.getContext('2d').drawImage(im, (s - w) / 2, (s - h) * 0.25, w, h); res(c.toDataURL('image/jpeg', .85)); } catch (e) { res(dataUrl); } };
+    im.src = dataUrl;
+  });
+}
+function paintAvatar(src) {
+  const img = $('avImg');
+  if (!src) { img.classList.remove('ok'); return; }
+  img.onload = () => img.classList.add('ok'); img.onerror = () => img.classList.remove('ok'); img.src = src;
+}
+function cachedAvatar() { const id = adminId(); if (!id) return; try { paintAvatar(localStorage.getItem(PH_KEY(id)) || ''); } catch (e) {} }
+async function loadAvatar(hasPhoto, force) {
+  const id = adminId(), av = $('av'); if (!id) return;
+  if (hasPhoto === false) { try { localStorage.removeItem(PH_KEY(id)); } catch (e) {} paintAvatar(''); return; }   /* no photo in the sheet: show the icon */
+  let src = ''; if (!force) { try { src = localStorage.getItem(PH_KEY(id)) || ''; } catch (e) {} }
+  if (!src) {
+    av.classList.add('wait');
+    try { const r = await VR.api('adminGetTeamPhoto', {}); if (r.ok && r.photo) { src = await thumb(r.photo); if (src) { try { localStorage.setItem(PH_KEY(id), src); } catch (e) {} } } } catch (e) {}
+    av.classList.remove('wait');
+  }
+  paintAvatar(src);
 }
 function showUser() {
   $('uName').textContent = localStorage.getItem('vrmic_admin_name') || 'Admin';
-  $('uPos').textContent = isSuper() ? 'Administrator (full access)' : (localStorage.getItem('vrmic_admin_position') || localStorage.getItem('vrmic_admin_category') || '');
-  setAvatar();
+  $('uPos').textContent = isSuper() ? 'Administrator' : (localStorage.getItem('vrmic_admin_position') || localStorage.getItem('vrmic_admin_category') || '');
+  cachedAvatar();
 }
-async function syncSelf() {   /* permissions re-read from the server, so changes apply without a new login */
+async function syncSelf(force) {   /* permissions re-read from the server, so changes apply without a new login */
   const r = await VR.api('adminGetSelf', {});
   if (!r.ok) return false;
   const a = r.admin;
   [['name',a.name],['position',a.position],['category',a.category],['id',a.id || a.adminId]].forEach(x => localStorage.setItem('vrmic_admin_' + x[0], x[1] == null ? '' : x[1]));
   localStorage.setItem('vrmic_admin_permissions', JSON.stringify(a.permissions || {}));
-  showUser(); renderMenu(); return true;
+  showUser(); renderMenu(); loadAvatar(a.hasPhoto, force); return true;
 }
 
 $('refreshBtn').onclick = async function () {
   const b = this; b.classList.add('spin'); sessionStorage.removeItem('vrmic_pub');
-  try { await syncSelf(); } catch (e) {}
+  try { await syncSelf(true); } catch (e) {}
   try { frame.contentWindow.location.reload(); $('loadTxt').textContent = 'Refreshing'; $('loading').classList.remove('hide'); } catch (e) { load(currentPage(), 'Refreshing'); }
   setTimeout(() => b.classList.remove('spin'), 700);
   b.title = 'Refreshed at ' + VR.now();
@@ -321,12 +347,11 @@ function fsState() { const on = !!document.fullscreenElement; $('fsBtn').innerHT
 if (!document.fullscreenEnabled) $('fsBtn').style.display = 'none';
 $('fsBtn').onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); };
 document.addEventListener('fullscreenchange', fsState);
-$('logoutBtn').onclick = () => { if (confirm('Log out of the admin portal?')) VR.logout(); };
+$('logoutBtn').onclick = () => { if (confirm('Log out of the admin portal?')) { try { localStorage.removeItem(PH_KEY(adminId())); } catch (e) {} VR.logout(); } };
 $('navBtn').onclick = () => { if (innerWidth <= 960) document.body.classList.toggle('navopen'); else document.body.classList.toggle('collapsed'); };
 $('scrim').onclick = () => document.body.classList.remove('navopen');
 
 /* ============ start ============ */
-VR.settings().then(s => { if (s['conf.shortName']) $('shortName').textContent = s['conf.shortName']; });
 showUser(); showLastLogin();
 if (Object.keys(perms()).length) renderMenu();           /* instant menu from last known access */
 syncSelf().then(ok => { if (!ok && !Object.keys(perms()).length) renderMenu(); load(currentPage()); });
