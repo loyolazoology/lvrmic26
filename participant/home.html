@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Dashboard | LVRMIC 2026 · CIMSER, Loyola College</title>
+<title>My Dashboard | LVRMIC 2026, Loyola College</title>
 <meta name="description" content="Participant dashboard — 4th International Conference on Life Sciences and Vector Risk Management (LVRMIC 2026), Loyola College (Autonomous), Chennai.">
 <link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
 <link rel="shortcut icon" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
@@ -551,7 +551,7 @@ function renderDeadlines(pt, S){
   }
   if (pt.pptRequired && (!pt.pptSubmitted || pt.pptCanReplace)) add('fa-display', pt.pptSubmitted ? 'PPT replacement closes' : 'PPT upload closes', D.ppt);
   const lock = pt.profileLock || S['dl.profileLock']; if (lock && L.parseDeadline(lock) && L.parseDeadline(lock).getTime() > now) add('fa-user-lock', 'Profile editing locks', lock);
-  if (S['sw.verificationOpen'] === 'true' && S['dl.verification']) add('fa-user-check', 'Verification closes', S['dl.verification']);
+  if (S['sw.verificationOpen'] === 'true' && S['dl.verification'] && pt.verificationStatus !== 'Verified') add('fa-user-check', 'Verification closes', S['dl.verification']);
   const fo = L.parseDeadline(D.feedbackOpen), fc = L.parseDeadline(D.feedbackClose);
   if (fo && now < fo.getTime()) add('fa-comment-dots', 'Feedback opens', D.feedbackOpen);
   else if (fc && !pt.feedbackSubmitted) add('fa-comment-dots', 'Feedback closes', D.feedbackClose);
@@ -730,14 +730,22 @@ function renderSupport(S){
 }
 
 /* ---------- verification ---------- */
-function renderVerification(S){
-  const open = S['sw.verificationOpen'] === 'true';
-  document.getElementById('nav-verify').style.display = open ? '' : 'none';
+function renderVerification(pt, S){
+  const visible = S['sw.verificationOpen'] === 'true' && !!S['dl.verification'];   // date must be set
+  const passed = visible && L.isPast(S['dl.verification']);
+  const verified = pt.verificationStatus === 'Verified';
+  document.getElementById('nav-verify').style.display = visible ? '' : 'none';
   const area = document.getElementById('verify-area');
-  if (!open) { area.innerHTML = ''; return; }
-  area.innerHTML = `<div class="verify-banner reveal" style="margin-top:18px;"><i class="fa-solid fa-user-check"></i><div><b>Verification is now open</b>
-    <p>Please verify your details and submit them for final corrections${S['dl.verification'] ? ' before <b>' + esc(fmtDT(S['dl.verification'])) + '</b>' : ''}.</p></div>
-    <a class="btn btn-gold" href="verification.html"><i class="fa-solid fa-arrow-right"></i> Verify now</a></div>`;
+  if (!visible) { area.innerHTML = ''; return; }
+  if (verified) {
+    area.innerHTML = `<div class="verify-banner reveal" style="margin-top:18px;background:#eef8f1;border-color:rgba(31,122,73,.4);"><i class="fa-solid fa-circle-check" style="color:var(--success);"></i><div><b>Your details are verified</b><p>Thank you. Your details are locked.</p></div><a class="btn btn-outline" href="verification.html">View</a></div>`;
+  } else if (passed) {
+    area.innerHTML = `<div class="verify-banner reveal" style="margin-top:18px;background:#fff3f1;border-color:rgba(192,57,43,.4);"><i class="fa-solid fa-hourglass-end" style="color:var(--danger);"></i><div><b>Verification has closed</b><p>The deadline has passed. Please contact the organisers if you need help.</p></div></div>`;
+  } else {
+    area.innerHTML = `<div class="verify-banner reveal" style="margin-top:18px;"><i class="fa-solid fa-user-check"></i><div><b>Verification is now open</b>
+      <p>Please verify your details${pt.verificationStatus === 'Change requested' ? ' (your correction request is awaiting approval)' : ''} before <b>${esc(fmtDT(S['dl.verification']))}</b>.</p></div>
+      <a class="btn btn-gold" href="verification.html"><i class="fa-solid fa-arrow-right"></i> Verify now</a></div>`;
+  }
 }
 
 /* ---------- profile modal ---------- */
@@ -771,7 +779,7 @@ async function openProfile(){
     <div class="pf-sec">Academic profiles</div><div class="pf-grid">${pfItem('ORCID iD', p.orcidId)}${pfItem('Google Scholar', p.googleScholar, true)}${pfItem('LinkedIn', p.linkedIn, true)}</div>
     <div class="pf-note"><i class="fa-solid fa-circle-info"></i> To correct any detail${help ? ', email <a href="mailto:' + esc(help) + '">' + esc(help) + '</a>' : ', contact the organisers'} with valid proof${S_verifyOpen() ? ', or use the <a href="verification.html">verification page</a>' : ''}.</div>`;
 }
-function S_verifyOpen(){ return settingsCache['sw.verificationOpen'] === 'true'; }
+   function S_verifyOpen(){ return settingsCache['sw.verificationOpen'] === 'true' && !!settingsCache['dl.verification'] && !L.isPast(settingsCache['dl.verification']); }
 
 /* ---------- init ---------- */
 (async function init(){
@@ -793,7 +801,7 @@ function S_verifyOpen(){ return settingsCache['sw.verificationOpen'] === 'true';
       document.getElementById('welcome-photo-fallback').style.display = 'none'; document.getElementById('user-avatar-fallback').style.display = 'none';
     }
 
-    renderVerification(S);
+    renderVerification(pt, S);
     renderDeadlines(pt, S);
     renderStatusGrid(pt, S);
     renderModeCard(pt, S);
