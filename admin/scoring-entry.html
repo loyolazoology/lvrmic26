@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Entry | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.ses{display:block;width:100%;text-align:left;cursor:pointer;margin-bottom:10px;}
+.ses b{font-size:15px;} .ses .tiny{display:block;margin-top:3px;}
+.pc{margin-bottom:14px;} .pc.done{border-color:var(--success);} .pc.ns{opacity:.5;}
+.pc h3{margin:0 0 2px;font-size:15px;} .sid{font-family:'IBM Plex Mono',monospace;color:var(--gold-light);font-weight:700;font-size:13px;}
+.cr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--navy-border);flex-wrap:wrap;}
+.cr label{margin:0;font-size:13.5px;font-weight:600;flex:1;min-width:120px;} .cr label small{color:var(--text-3);font-weight:400;}
+.stp{display:flex;align-items:center;gap:6px;}
+.stp button{width:44px;height:44px;font-size:20px;border-radius:10px;border:1.5px solid var(--navy-border);background:var(--navy-950);color:var(--text-1);cursor:pointer;}
+.stp input{width:72px;height:44px;text-align:center;font:700 17px 'IBM Plex Mono',monospace;border-radius:10px;}
+.stp input.bad{border-color:var(--danger,#e57373);outline:2px solid var(--danger,#e57373);}
+.er{flex-basis:100%;color:var(--danger,#e57373);font-size:12.5px;font-weight:600;min-height:0;}
+.pf{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.tot{font:700 16px 'IBM Plex Mono',monospace;} .stt{font-size:12px;color:var(--text-3);}
+.bar{position:sticky;bottom:0;background:var(--navy-950);border-top:1px solid var(--navy-border);padding:12px;display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:10px;z-index:5;}
+.prog{font-weight:700;} textarea.rmk{width:100%;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-pen-to-square" style="color:var(--gold-light);"></i> Score entry</h1><button class="btn btn-sm" id="back" style="display:none;"><i class="fa-solid fa-arrow-left"></i> My sessions</button></div>
+<div class="wrap" style="max-width:760px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div id="main"><div class="card"><p class="tiny">Loading your sessions…</p></div></div>
+</div>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('scoring', 'transaction')) { VR.denied('You do not have permission to enter scores.'); return; }
+let S = null;
+const fmtNum = n => String(Math.round(n * 100) / 100);
+const complete = p => !p.noShow && S.criteria[p.category].every(c => p.marks[c.id] != null);
+const ro = () => S.locked || S.submitted || !!S.windowMessage;
+
+async function list() {
+  hideAlerts(); S = null; $('back').style.display = 'none';
+  const r = await VR.api('adminScoreMySessions', {}); if (!r.ok) { $('main').innerHTML = ''; return showErr(r.error || 'Could not load your sessions.'); }
+  $('main').innerHTML = (r.windowMessage ? '<div class="alert alert-error show">' + esc(r.windowMessage) + '</div>' : '') + (r.sessions.length ? r.sessions.map(s => '<button class="card ses" data-s="' + esc(s.sessionId) + '"><b>' + esc(s.label) + '</b><span class="tiny">' + esc(fmtD(s.date)) + ' · ' + esc(s.hall) + (s.room ? ' · ' + esc(s.room) : '') + (s.start ? ' · ' + hm12(s.start) : '') + '</span><span class="tiny">' + s.scored + ' of ' + s.total + ' scored · ' + (s.locked ? 'Locked' : s.submitted ? 'Submitted' : 'In progress') + '</span></button>').join('') : '<div class="card"><p class="tiny">No sessions are assigned to you yet. Please contact the organisers.</p></div>');
+}
+async function openSes(id) {
+  hideAlerts(); const r = await VR.api('adminScoreSession', { sessionId: id }); if (!r.ok) return showErr(r.error || 'Could not open the session.');
+  S = r; $('back').style.display = ''; draw();
+}
+function draw() {
+  const banner = S.locked ? 'This session is locked. No changes are allowed.' : S.submitted ? 'You have submitted your scores. They cannot be changed.' : S.windowMessage;
+  $('main').innerHTML = '<div class="card"><h3 style="margin:0;">' + esc(S.session.label) + '</h3><div class="tiny">' + esc(fmtD(S.session.date)) + ' · ' + esc(S.session.hall) + (S.session.room ? ' · ' + esc(S.session.room) : '') + '</div></div>'
+    + (banner ? '<div class="alert alert-error show">' + esc(banner) + '</div>' : '') + '<div id="cards">' + S.presenters.map(cardHtml).join('') + '</div>'
+    + '<div class="bar"><span class="prog" id="prog"></span>' + (ro() ? '' : '<button class="btn btn-gold" id="submit"><i class="fa-solid fa-lock"></i> Submit and lock my scores</button>') + '</div>';
+  progress();
+}
+function cardHtml(p) {
+  const cs = S.criteria[p.category], dis = ro() || p.noShow ? ' disabled' : '';
+  return '<div class="card pc' + (p.noShow ? ' ns' : complete(p) ? ' done' : '') + '" data-id="' + esc(p.id) + '"><span class="sid">' + esc(p.slotId || '—') + '</span><h3>' + esc(p.name) + (p.noShow ? ' <span class="tiny">(no-show, not scored)</span>' : '') + '</h3><div class="tiny">' + esc(p.title) + (p.institution ? ' · ' + esc(p.institution) : '') + '</div>'
+    + (p.noShow ? '' : cs.map(c => '<div class="cr"><label>' + esc(c.label) + ' <small>out of ' + c.max + '</small></label><div class="stp"><button type="button" data-d="-1"' + dis + ' aria-label="Decrease">−</button><input inputmode="decimal" data-c="' + esc(c.id) + '" data-max="' + c.max + '" data-l="' + esc(c.label) + '" value="' + (p.marks[c.id] == null ? '' : fmtNum(p.marks[c.id])) + '"' + dis + '><button type="button" data-d="1"' + dis + ' aria-label="Increase">+</button></div><div class="er"></div></div>').join('')
+    + '<textarea class="rmk" rows="2" maxlength="300" placeholder="Remarks (optional)"' + dis + '>' + esc(p.remarks) + '</textarea><div class="pf"><span class="tot">Total: <span data-t>' + fmtNum(p.total) + '</span> / ' + cs.reduce((n, c) => n + c.max, 0) + '</span><span class="stt" data-st>' + (p.status === 'Draft' ? 'Draft saved' : p.status === 'Submitted' ? 'Submitted' : 'Not scored') + '</span>' + (ro() ? '' : '<button class="btn btn-sm" data-save><i class="fa-solid fa-floppy-disk"></i> Save</button>') + '</div>') + '</div>';
+}
+function progress() { const t = S.presenters.filter(p => !p.noShow); $('prog').textContent = t.filter(complete).length + ' of ' + t.length + ' scored'; }
+// strict check: returns an error message or ''
+function check(inp) {
+  const v = inp.value.trim(), max = +inp.dataset.max, l = inp.dataset.l; if (v === '') return '';
+  const n = Number(v); if (!/^\d+(\.\d+)?$/.test(v) || !isFinite(n)) return l + ' must be a number.';
+  if (n > max) return l + ' cannot be more than ' + max + ' (you entered ' + fmtNum(n) + ').';
+  if ((n * 2) % 1 !== 0) return l + ' must be a whole or half mark, for example 7 or 7.5.'; return '';
+}
+function refresh(card) {
+  let bad = 0, sum = 0;
+  card.querySelectorAll('input[data-c]').forEach(i => { const e = check(i); i.classList.toggle('bad', !!e); i.closest('.cr').querySelector('.er').textContent = e; if (e) bad++; else if (i.value.trim() !== '') sum += Number(i.value); });
+  card.querySelector('[data-t]').textContent = fmtNum(sum); card.dataset.bad = bad; const b = card.querySelector('[data-save]'); if (b) b.disabled = bad > 0; return bad;
+}
+async function save(card) {
+  if (refresh(card)) { showErr('Fix the marks shown in red before saving.'); return false; }
+  const marks = {}; card.querySelectorAll('input[data-c]').forEach(i => { if (i.value.trim() !== '') marks[i.dataset.c] = Number(i.value); });
+  const r = await VR.api('adminScoreSave', { sessionId: S.session.sessionId, presenterId: card.dataset.id, marks, remarks: card.querySelector('textarea').value });
+  if (!r.ok) { showErr(r.error || 'Could not save.'); return false; }
+  const p = S.presenters.filter(x => x.id === card.dataset.id)[0]; p.marks = marks; p.total = r.total; p.status = 'Draft'; p.remarks = card.querySelector('textarea').value; delete card.dataset.dirty;
+  card.querySelector('[data-st]').textContent = 'Draft saved'; card.classList.toggle('done', complete(p)); progress(); return true;
+}
+$('main').onclick = async e => {
+  const li = e.target.closest('[data-s]'); if (li && li.classList.contains('ses')) return openSes(li.dataset.s);
+  const st = e.target.closest('[data-d]'); if (st) { const inp = st.parentNode.querySelector('input'), max = +inp.dataset.max; let n = Number(inp.value.trim() || 0); if (!isFinite(n)) n = 0; n = Math.min(max, Math.max(0, n + 0.5 * +st.dataset.d)); inp.value = fmtNum(n); const c = inp.closest('.pc'); c.dataset.dirty = 1; refresh(c); return; }
+  const sv = e.target.closest('[data-save]'); if (sv) { hideAlerts(); await VR.busy(sv, 'Saving…', () => save(sv.closest('.pc'))); return; }
+  if (e.target.closest('#submit')) {
+    hideAlerts(); const b = e.target.closest('#submit');
+    await VR.busy(b, 'Checking…', async () => {
+      for (const c of document.querySelectorAll('.pc[data-dirty]')) if (!await save(c)) return;
+      const need = S.presenters.filter(p => !p.noShow && !complete(p)); if (need.length) return showErr(need.length + ' presenter(s) are not fully scored: ' + need.slice(0, 4).map(p => p.name).join(', ') + (need.length > 4 ? '…' : ''));
+      if (!confirm('Submit and lock your scores for this session?\n\nThis is final. You cannot change them afterwards.')) return;
+      const r = await VR.api('adminScoreSubmit', { sessionId: S.session.sessionId }); if (!r.ok) return showErr(r.error || 'Could not submit.');
+      showOk('Scores submitted and locked. Thank you.'); openSes(S.session.sessionId);
+    });
+  }
+};
+$('main').oninput = e => { const c = e.target.closest('.pc'); if (!c) return; c.dataset.dirty = 1; if (e.target.matches('input[data-c]')) refresh(c); };
+$('back').onclick = list;
+list();
+})();
+</script>
+</body>
+</html>

@@ -37,7 +37,7 @@ table.list tr.detail td{white-space:normal;background:rgba(232,201,131,.04);padd
 <body>
 
 <div class="topbar"><h1><i class="fa-solid fa-table-list" style="color:var(--gold-light);"></i> Participant list</h1><a class="btn btn-sm" id="add" href="participants-manage.html"><i class="fa-solid fa-user-plus"></i> Add participant</a></div>
-<div class="wrap" style="max-width:1500px;">
+<div class="wrap" style="max-width:1600px;">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
   <div class="stats" id="stats"></div>
 
@@ -48,14 +48,15 @@ table.list tr.detail td{white-space:normal;background:rgba(232,201,131,.04);padd
     <select id="fa"><option value="">All abstract statuses</option><option>Not Submitted</option><option>Submitted</option><option>Accepted</option><option>Revision Requested</option><option>Rejected</option><option>Not Applicable</option></select>
     <select id="fr"><option value="">Any registration</option><option>Registered</option><option>Pending</option><option>Cancelled</option></select>
     <select id="fp"><option value="">Any profile</option><option value="y">Profile complete</option><option value="n">Profile incomplete</option></select>
+    <select id="fv"><option value="">Any verification</option><option value="Verified">Verified</option><option value="Change requested">Change requested</option><option value="Pending">Not verified yet</option></select>
     <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
     <div id="xp" style="margin-left:auto;"></div>
   </div>
 
   <div class="table-card">
     <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
-    <div class="scroll-x" id="tc"><table class="list" id="tbl"><thead><tr><th style="width:26px;"></th><th>VRMIC ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Institution</th><th>Category</th><th>Mode</th><th>Registration</th><th>Profile</th><th>Abstract</th><th>Created</th><th class="noprint"></th></tr></thead>
-      <tbody id="tb"><tr><td class="empty" colspan="13">Loading participants…</td></tr></tbody></table></div>
+    <div class="scroll-x" id="tc"><table class="list" id="tbl"><thead><tr><th style="width:26px;"></th><th>VRMIC ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Institution</th><th>Category</th><th>Mode</th><th>Registration</th><th>Profile</th><th>Verification</th><th>Abstract</th><th>Created</th><th class="noprint"></th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="14">Loading participants…</td></tr></tbody></table></div>
   </div>
   <p class="tiny noprint" style="margin-top:10px;">Click a row to expand the full record. This is a view-only list; to change a participant, use <b>Participant details</b> (the pencil button on each row opens it).</p>
 </div>
@@ -67,6 +68,7 @@ if (VR.guard() && VR.frameOnly()) (function () {
 if (!VR.can('participants', 'report')) { VR.denied('You do not have permission to view the participant list.'); return; }
 const canEdit = VR.can('participants', 'transaction');
 if (!canEdit) $('add').style.display = 'none';
+const COLS = 14;
 
 let all = [], view = [], open = new Set();
 
@@ -77,16 +79,21 @@ const created = r => r.CreatedAt ? fmtD(String(r.CreatedAt).slice(0, 10)) : '—
 const profile = r => String(r.ProfileCompleted).toUpperCase() === 'TRUE';
 const reg = r => r.RegistrationStatus || 'Registered';
 const paid = r => r.AmountPaid === '' || r.AmountPaid == null ? '—' : '₹' + r.AmountPaid;
+const ver = r => { const s = String(r.VerificationStatus || ''); return (s === 'Verified' || s === 'Change requested') ? s : 'Pending'; };
+const verLabel = s => s === 'Pending' ? 'Not verified' : s;
+const verCls = s => s === 'Verified' ? 's-Present' : s === 'Change requested' ? 's-Late' : 'a-Not';
+const verAt = r => { if (!r.VerifiedAt) return ''; const d = new Date(r.VerifiedAt); return isNaN(d) ? String(r.VerifiedAt) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) + ' IST'; };
 
 function filtered() {
-  const q = $('q').value.trim().toLowerCase(), t = $('ft').value, m = $('fm').value, a = $('fa').value, g = $('fr').value, p = $('fp').value;
+  const q = $('q').value.trim().toLowerCase(), t = $('ft').value, m = $('fm').value, a = $('fa').value, g = $('fr').value, p = $('fp').value, v = $('fv').value;
   return all.filter(r => {
-    if (q && ![r.Name, r.Email, r.ID, r.Phone, r.Institution].some(v => String(v || '').toLowerCase().indexOf(q) > -1)) return false;
+    if (q && ![r.Name, r.Email, r.ID, r.Phone, r.Institution].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) return false;
     if (t && r.ParticipantType !== t) return false;
     if (m && r.Mode !== m) return false;
     if (a && abs(r) !== a) return false;
     if (g && reg(r) !== g) return false;
     if (p && (p === 'y') !== profile(r)) return false;
+    if (v && ver(r) !== v) return false;
     return true;
   });
 }
@@ -95,7 +102,7 @@ const cell = (k, v, wide) => '<div' + (wide ? ' class="span2"' : '') + '><span>'
 
 function detail(r) {
   const online = r.Mode === 'Online';
-  return '<tr class="detail"><td colspan="13"><div class="x-wrap"><div class="x-body">'
+  return '<tr class="detail"><td colspan="' + COLS + '"><div class="x-wrap"><div class="x-body">'
     + cell('Registration category', r.Role)
     + cell('Food preference', r.FoodPreference)
     + cell('Amount paid', paid(r))
@@ -105,6 +112,9 @@ function detail(r) {
     + cell('City / State / Country', [r.City, r.State, r.Country].filter(Boolean).join(', '))
     + cell('Designation', r.Designation)
     + cell('Department', r.Department)
+    + cell('Verification', verLabel(ver(r)))
+    + cell('Verified at', verAt(r))
+    + cell('Verified from (IP)', r.VerifiedIP)
     + cell(online ? 'Meeting link' : 'Venue', online ? r.MeetingLink : r.Location, true)
     + cell('Abstract title', r.AbstractTitle, true)
     + cell('Abstract theme', r.AbstractTheme)
@@ -115,7 +125,7 @@ function detail(r) {
 function render() {
   view = filtered();
   $('tb').innerHTML = view.length ? view.map(r => {
-    const k = key(r), o = open.has(k);
+    const k = key(r), o = open.has(k), vs = ver(r);
     let h = '<tr class="main" data-row="' + esc(k) + '"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td>'
       + '<td class="id">' + esc(r.ID) + '</td>'
       + '<td class="nm wrapc">' + esc(r.Name) + '</td>'
@@ -126,13 +136,14 @@ function render() {
       + '<td>' + esc(r.Mode || '—') + '</td>'
       + '<td>' + esc(reg(r)) + '</td>'
       + '<td>' + (profile(r) ? '<span class="badge s-Present">Complete</span>' : '<span class="badge s-Late">Incomplete</span>') + '</td>'
+      + '<td><span class="badge ' + verCls(vs) + '">' + esc(verLabel(vs)) + '</span>' + (vs === 'Verified' && r.VerifiedAt ? '<span class="tiny">' + esc(verAt(r)) + '</span>' : '') + '</td>'
       + '<td><span class="badge ' + aCls(abs(r)) + '">' + esc(abs(r)) + '</span></td>'
       + '<td>' + esc(created(r)) + '</td>'
       + '<td class="noprint">' + (canEdit ? '<a class="btn btn-sm" title="Edit in Participant details" href="participants-details.html?id=' + encodeURIComponent(r.ID) + '"><i class="fa-solid fa-pen"></i></a> ' : '')
       + '<a class="btn btn-sm" title="Individual view" href="participants-individual.html?id=' + encodeURIComponent(r.ID) + '"><i class="fa-solid fa-id-card"></i></a></td></tr>';
     if (o) h += detail(r);
     return h;
-  }).join('') : '<tr><td class="empty" colspan="13">' + (all.length ? 'No participants match these filters.' : 'No participants yet.') + '</td></tr>';
+  }).join('') : '<tr><td class="empty" colspan="' + COLS + '">' + (all.length ? 'No participants match these filters.' : 'No participants yet.') + '</td></tr>';
   $('info').textContent = 'Showing ' + view.length + ' of ' + all.length;
   stats();
 }
@@ -143,24 +154,25 @@ function stats() {
   $('stats').innerHTML = c('fa-users', 'Participants', view.length, 'of ' + all.length + ' in total')
     + c('fa-display', 'Oral · Poster', n(r => r.ParticipantType === 'Oral') + ' · ' + n(r => r.ParticipantType === 'Poster'), n(r => r.ParticipantType === 'Participant') + ' delegates only')
     + c('fa-location-dot', 'Offline · Online', n(r => r.Mode === 'Offline') + ' · ' + n(r => r.Mode === 'Online'), n(r => profile(r)) + ' profiles complete')
-    + c('fa-file-circle-check', 'Abstracts accepted', n(r => abs(r) === 'Accepted'), n(r => abs(r) === 'Submitted') + ' awaiting review');
+    + c('fa-file-circle-check', 'Abstracts accepted', n(r => abs(r) === 'Accepted'), n(r => abs(r) === 'Submitted') + ' awaiting review')
+    + c('fa-user-check', 'Verified', n(r => ver(r) === 'Verified'), n(r => ver(r) === 'Change requested') + ' correction(s) waiting');
 }
 
 async function load() {
   hideAlerts();
-  $('tb').innerHTML = '<tr><td class="empty" colspan="13">Loading participants…</td></tr>';
+  $('tb').innerHTML = '<tr><td class="empty" colspan="' + COLS + '">Loading participants…</td></tr>';
   try {
     const r = await VR.api('adminListParticipants', {});
-    if (!r.ok) { showErr(r.error || 'Could not load participants.'); $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; return; }
+    if (!r.ok) { showErr(r.error || 'Could not load participants.'); $('tb').innerHTML = '<tr><td class="empty" colspan="' + COLS + '">Could not load.</td></tr>'; return; }
     all = r.participants || []; render();
   } catch (e) {
     showErr('Could not reach the server. Check your connection and try again.');
-    $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>';
+    $('tb').innerHTML = '<tr><td class="empty" colspan="' + COLS + '">Could not load.</td></tr>';
   }
 }
 
 $('q').addEventListener('input', render);
-['ft', 'fm', 'fa', 'fr', 'fp'].forEach(i => $(i).addEventListener('change', render));
+['ft', 'fm', 'fa', 'fr', 'fp', 'fv'].forEach(i => $(i).addEventListener('change', render));
 $('refresh').onclick = load;
 $('tb').onclick = e => {
   if (e.target.closest('a,button')) return;
@@ -168,9 +180,9 @@ $('tb').onclick = e => {
   const k = tr.dataset.row; open.has(k) ? open.delete(k) : open.add(k); render();
 };
 
-const HEAD = ['VRMIC ID', 'Name', 'Email', 'Phone', 'Institution', 'Category', 'Mode', 'Registration', 'Registration category', 'Food', 'Amount paid', 'Profile', 'Abstract', 'Created'];
+const HEAD = ['VRMIC ID', 'Name', 'Email', 'Phone', 'Institution', 'Category', 'Mode', 'Registration', 'Registration category', 'Food', 'Amount paid', 'Profile', 'Verification', 'Verified at', 'Abstract', 'Created'];
 VR.exportBar($('xp'), { name: 'VRMIC2026_Participants', title: 'VRMIC 2026 — Participant list', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
-  getData: () => ({ headers: HEAD, rows: view.map(r => [r.ID, r.Name, r.Email, r.Phone, r.Institution, r.ParticipantType || '', r.Mode || '', reg(r), r.Role || '', r.FoodPreference || '', r.AmountPaid === '' || r.AmountPaid == null ? '' : r.AmountPaid, profile(r) ? 'Complete' : 'Incomplete', abs(r), r.CreatedAt ? String(r.CreatedAt).slice(0, 10) : '']) }) });
+  getData: () => ({ headers: HEAD, rows: view.map(r => [r.ID, r.Name, r.Email, r.Phone, r.Institution, r.ParticipantType || '', r.Mode || '', reg(r), r.Role || '', r.FoodPreference || '', r.AmountPaid === '' || r.AmountPaid == null ? '' : r.AmountPaid, profile(r) ? 'Complete' : 'Incomplete', verLabel(ver(r)), verAt(r), abs(r), r.CreatedAt ? String(r.CreatedAt).slice(0, 10) : '']) }) });
 
 load();
 })();

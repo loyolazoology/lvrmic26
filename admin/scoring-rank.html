@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rankings and Winners | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.rk{font:700 15px 'IBM Plex Mono',monospace;color:var(--gold-light);} .av{font:700 14px 'IBM Plex Mono',monospace;}
+.pv{font-size:11px;color:var(--gold-light);display:block;} .tie{font-size:11.5px;color:var(--danger,#e57373);display:block;font-weight:600;} .tn{font-size:11.5px;color:var(--text-2);display:block;}
+.win{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;} .wc{border:1px solid var(--gold);border-radius:10px;padding:10px 14px;min-width:200px;background:rgba(232,201,131,.06);} .wc b{display:block;color:var(--gold-light);}
+h3.sec{margin:20px 0 8px;font-size:15px;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-trophy" style="color:var(--gold-light);"></i> Rankings and winners</h1><a class="btn btn-sm" href="scoring-report.html"><i class="fa-solid fa-table-cells"></i> Score sheet</a></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="toolbar noprint">
+    <select id="fc"><option value="">Oral and Poster</option><option>Oral</option><option>Poster</option></select>
+    <select id="fv"><option value="">All venues</option></select>
+    <select id="ft"><option value="">All themes</option></select>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <div id="xp" style="margin-left:auto;"></div>
+  </div>
+  <div class="card" id="wbox"></div>
+  <div id="lists"></div>
+  <p class="tiny noprint">Rank is by the average of the judges' submitted totals. "Provisional" means the session is not final-locked or fewer judges than the minimum have submitted. A winner can be marked only after the session is final-locked. Participants never see scores, only the published winners list.</p>
+</div>
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('scoring', 'report')) { VR.denied('You do not have permission to view the rankings.'); return; }
+let D = null; const ORD = ['', '1st', '2nd', '3rd'];
+const winOf = (cat, id) => (D.winners.filter(w => w.category === cat && w.presenterId === id)[0] || {}).rank || 0;
+function table(cat) {
+  const l = D.ranks[cat] || []; if (!l.length) return '<h3 class="sec">' + cat + '</h3><div class="card"><p class="tiny">No submitted scores yet.</p></div>';
+  return '<h3 class="sec">' + cat + ' presentations</h3><div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>Rank</th><th>Slot ID</th><th>Presenter</th><th>Session</th><th>Average</th><th>Judges</th><th>Notes</th>' + (D.canMark ? '<th class="noprint">Winner</th>' : '') + '</tr></thead><tbody>'
+    + l.map(p => '<tr><td class="rk">' + p.rank + '</td><td class="id">' + esc(p.slotId || '—') + '</td><td class="nm">' + esc(p.name) + '<div class="tiny">' + esc(p.institution) + '</div></td><td>' + esc(p.session) + '<div class="tiny">' + esc(p.hall) + '</div></td><td class="av">' + p.avg + ' <span class="tiny">/ ' + p.maxTotal + '</span></td><td>' + p.count + '</td>'
+      + '<td>' + (p.tied ? '<span class="tie">Tie: same average and tie-break</span>' : '') + (p.tieNote ? '<span class="tn">' + esc(p.tieNote) + '</span>' : '') + (p.provisional ? '<span class="pv">Provisional' + (p.locked ? '' : ' (not locked)') + '</span>' : '') + '</td>'
+      + (D.canMark ? '<td class="noprint"><select data-c="' + cat + '" data-p="' + esc(p.presenterId || p.id) + '"' + (D.published ? ' disabled' : '') + '>' + ORD.map((o, i) => '<option value="' + i + '"' + (winOf(cat, p.id) === i ? ' selected' : '') + '>' + (i ? o : '—') + '</option>').join('') + '</select></td>' : '') + '</tr>').join('') + '</tbody></table></div></div>';
+}
+function wbox() {
+  const w = D.winners;
+  $('wbox').innerHTML = '<h3 style="margin:0;"><i class="fa-solid fa-medal" style="color:var(--gold-light);"></i> Winners' + (D.published ? ' <span class="pv" style="display:inline;">(published)</span>' : '') + '</h3>'
+    + (w.length ? '<div class="win">' + w.map(x => '<div class="wc"><b>' + esc(x.category) + ' · ' + ORD[x.rank] + '</b>' + esc(x.name) + '<div class="tiny">' + esc(x.institution) + '</div></div>').join('') + '</div>' : '<p class="tiny">No winners marked yet. Use the Winner column below.</p>')
+    + '<div class="noprint" style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;"><button class="btn btn-sm" id="pw"' + (w.length ? '' : ' disabled') + '><i class="fa-solid fa-print"></i> Print winners list</button>'
+    + (D.canMark ? '<button class="btn btn-sm btn-gold" id="pub"' + (w.length ? '' : ' disabled') + '><i class="fa-solid fa-' + (D.published ? 'eye-slash' : 'bullhorn') + '"></i> ' + (D.published ? 'Unpublish winners' : 'Publish winners') + '</button>' : '') + '</div>';
+}
+function draw() { wbox(); const c = $('fc').value; $('lists').innerHTML = (c ? [c] : ['Oral', 'Poster']).map(table).join(''); }
+async function load() {
+  hideAlerts(); const r = await VR.api('adminScoreRank', { venue: $('fv').value, theme: $('ft').value }); if (!r.ok) return showErr(r.error || 'Could not load the rankings.'); D = r;
+  const keep = [$('fv').value, $('ft').value]; $('fv').innerHTML = '<option value="">All venues</option>' + r.venues.map(x => '<option>' + esc(x) + '</option>').join(''); $('ft').innerHTML = '<option value="">All themes</option>' + r.themes.map(x => '<option>' + esc(x) + '</option>').join('');
+  $('fv').value = keep[0]; $('ft').value = keep[1]; draw();
+}
+$('lists').onchange = async e => {
+  const s = e.target.closest('select[data-c]'); if (!s) return; hideAlerts();
+  const r = await VR.api('adminScoreSetWinner', { category: s.dataset.c, presenterId: s.dataset.p, rank: +s.value }); if (!r.ok) showErr(r.error || 'Could not mark the winner.'); load();
+};
+$('wbox').onclick = async e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.id === 'pw') { VR.printHtml('Winners', VR.tableHtml(['Category', 'Position', 'Name', 'Institution', 'Title'], D.winners.map(x => [x.category, ORD[x.rank], x.name, x.institution, x.title]))); VR.api('adminLogEvent', { event: 'print', module: 'Scoring', what: 'Winners list', detail: D.winners.length + ' winner(s)' }); }
+  if (b.id === 'pub') { if (!confirm(D.published ? 'Unpublish the winners list?' : 'Publish the winners to participants? They will see names and positions, never scores.')) return; await VR.busy(b, 'Please wait…', async () => { const r = await VR.api('adminScorePublish', { publish: !D.published }); if (!r.ok) return showErr(r.error || 'Could not change publishing.'); showOk(r.published ? 'Winners published.' : 'Winners unpublished.'); load(); }); }
+};
+$('fc').onchange = draw; ['fv', 'ft'].forEach(i => $(i).onchange = load); $('refresh').onclick = load;
+VR.exportBar($('xp'), { name: 'Rankings', title: 'LVRMIC 2026 — Rankings', pdfOpts: { orientation: 'landscape' },
+  getData: () => { const rows = []; ['Oral', 'Poster'].forEach(c => (D && D.ranks[c] || []).forEach(p => rows.push([c, p.rank, p.slotId, p.name, p.institution, p.session, p.avg, p.maxTotal, p.count, p.tied ? 'Tie' : '', p.tieNote || '', p.provisional ? 'Provisional' : '', ORD[winOf(c, p.id)]])));
+    return { headers: ['Category', 'Rank', 'Slot ID', 'Presenter', 'Institution', 'Session', 'Average', 'Max', 'Judges', 'Tie', 'Tie-break note', 'Status', 'Winner'], rows: rows }; } });
+load();
+})();
+</script>
+</body>
+</html>
