@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Sheet | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.ss{margin-bottom:18px;}
+.sh{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--navy-border);}
+.sh h3{margin:0 0 3px;font-size:15px;}
+.jc{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.jchip{display:inline-flex;gap:6px;align-items:center;font-size:12px;padding:4px 10px;border:1px solid var(--navy-border);border-radius:999px;background:var(--navy-950);color:var(--text-2);}
+.jchip.ok{border-color:var(--success);color:var(--success);}
+.jchip button{all:unset;cursor:pointer;color:var(--gold-light);font-size:11px;text-decoration:underline;}
+.la{display:flex;gap:8px;align-items:center;}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--navy-border);color:var(--text-2);}
+.pill.lk{border-color:var(--success);color:var(--success);}
+.mk{font-family:'IBM Plex Mono',monospace;font-size:13px;white-space:nowrap;}
+.mk.dr{color:var(--gold-light);} .mk.no{color:var(--text-3);}
+.flag{display:block;font-size:11.5px;color:var(--gold-light);} .flag.disagree,.flag.missing{color:var(--danger,#e57373);}
+.sub td{background:rgba(232,201,131,.04);}
+.sub table{border-collapse:collapse;font-size:12.5px;margin:4px 0;}
+.sub th,.sub td{padding:4px 12px;text-align:left;border-bottom:1px solid var(--navy-border);}
+.rm{font-size:12px;color:var(--text-2);margin-top:4px;}
+tr.ns td{color:var(--text-3);}
+tr[data-k]{cursor:pointer;}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;}
+.dg{background:var(--navy-900,#10193a);border:1px solid var(--navy-border);border-radius:12px;padding:20px;max-width:440px;width:100%;}
+.dg h3{margin:0 0 10px;} .dg textarea,.dg input{width:100%;margin-top:6px;} .dg .de{color:var(--danger,#e57373);font-size:12.5px;min-height:18px;margin-top:6px;}
+.dr{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;} .dg ul{margin:6px 0 0 18px;padding:0;font-size:13px;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-table-cells" style="color:var(--gold-light);"></i> Score sheet</h1><a class="btn btn-sm" href="scoring-rank.html"><i class="fa-solid fa-trophy"></i> Rankings</a></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search presenter, slot ID or LVRMIC ID" autocomplete="off">
+    <select id="fd"><option value="">All days</option></select>
+    <select id="fv"><option value="">All venues</option></select>
+    <select id="fs"><option value="">All sessions</option><option value="flag">With flags only</option><option value="open">Not locked</option><option value="locked">Locked</option></select>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <button class="btn btn-sm btn-gold" id="lockall" style="display:none;"><i class="fa-solid fa-lock"></i> Final lock shown sessions</button>
+    <div id="xp" style="margin-left:auto;"></div>
+  </div>
+  <div id="sessions"><div class="card"><p class="tiny">Loading scores…</p></div></div>
+  <p class="tiny noprint">Averages use submitted scores only. A flag means fewer judges than the minimum have submitted, or two judges differ by more than the allowed gap. Click a presenter to see marks per criterion and remarks. Only the Administrator (1001) can lock, unlock or reopen, and each needs an OTP.</p>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('scoring', 'report')) { VR.denied('You do not have permission to view the score sheet.'); return; }
+let D = null; const open = new Set();
+const critsFor = cat => D.criteria.filter(c => c.applies === 'Both' || c.applies === cat);
+const cellHtml = (c, max) => c.status === 'Submitted' ? '<span class="mk"><b>' + c.total + '</b> / ' + max + '</span>' : c.status === 'Draft' ? '<span class="mk dr" title="Draft, not submitted">Draft ' + c.total + '</span>' : '<span class="mk no">—</span>';
+
+function view() {
+  const q = $('q').value.trim().toLowerCase(), d = $('fd').value, v = $('fv').value, st = $('fs').value;
+  return D.sessions.filter(s => (!d || s.date === d) && (!v || s.hall === v) && (st !== 'locked' || s.locked) && (st !== 'open' || !s.locked)).map(s => Object.assign({}, s, {
+    presenters: s.presenters.filter(p => (!q || [p.name, p.slotId, p.id].some(x => String(x || '').toLowerCase().indexOf(q) > -1)) && (st !== 'flag' || p.flags.length)) })).filter(s => s.presenters.length);
+}
+function detail(s, p) {
+  const cs = critsFor(p.category);
+  return '<tr class="sub"><td></td><td colspan="' + (6 + s.judges.length) + '"><table><thead><tr><th>Criterion</th>' + s.judges.map(j => '<th>' + esc(j.name) + '</th>').join('') + '<th>Average</th></tr></thead><tbody>'
+    + cs.map(c => '<tr><td>' + esc(c.label) + ' <span class="tiny">/ ' + c.max + '</span></td>' + p.cells.map(x => '<td class="mk">' + (x.status === 'None' || x.marks[c.id] == null ? '—' : x.marks[c.id]) + '</td>').join('') + '<td class="mk"><b>' + (p.count ? p.critAvg[c.id] : '—') + '</b></td></tr>').join('')
+    + '</tbody></table>' + p.cells.filter(x => x.remarks).map(x => '<div class="rm"><b>' + esc((s.judges.filter(j => j.id === x.judgeId)[0] || {}).name || x.judgeId) + ':</b> ' + esc(x.remarks) + '</div>').join('') + '</td></tr>';
+}
+function sessionHtml(s) {
+  const head = '<div class="sh"><div><h3>' + esc(s.label) + '</h3><div class="tiny">' + esc(fmtD(s.date)) + ' · ' + esc(s.hall) + (s.room ? ' · ' + esc(s.room) : '') + (s.start ? ' · ' + hm12(s.start) : '') + '</div></div>'
+    + '<div class="jc">' + (s.judges.length ? s.judges.map(j => '<span class="jchip' + (j.submitted ? ' ok' : '') + '"><i class="fa-solid ' + (j.submitted ? 'fa-circle-check' : 'fa-hourglass-half') + '"></i> ' + esc(j.name)
+      + (D.canLock && j.submitted && !s.locked ? ' <button data-reopen="' + esc(s.sessionId + '|' + j.id) + '">reopen</button>' : '') + '</span>').join('') : '<span class="tiny">No judges assigned. Assign them in Chairs and judges.</span>') + '</div>'
+    + '<div class="la">' + (s.locked ? '<span class="pill lk"><i class="fa-solid fa-lock"></i> Final locked</span>' : '<span class="pill">Open</span>')
+    + (D.canLock ? (s.locked ? '<button class="btn btn-sm" data-unlock="' + esc(s.sessionId) + '"><i class="fa-solid fa-lock-open"></i> Unlock</button>' : s.judges.length ? '<button class="btn btn-sm btn-gold" data-lock="' + esc(s.sessionId) + '"><i class="fa-solid fa-lock"></i> Final lock</button>' : '') : '') + '</div></div>';
+  const rows = s.presenters.map(p => {
+    const k = s.sessionId + '|' + p.id, o = open.has(k);
+    if (p.noShow) return '<tr class="ns"><td></td><td class="id">' + esc(p.slotId || '—') + '</td><td>' + esc(p.name) + '</td><td>' + esc(p.category) + '</td><td colspan="' + (s.judges.length + 3) + '">No-show, not scored</td></tr>';
+    return '<tr data-k="' + esc(k) + '"><td><i class="fa-solid fa-chevron-' + (o ? 'down' : 'right') + '" style="font-size:11px;color:var(--text-3);"></i></td><td class="id">' + esc(p.slotId || '—') + '</td><td class="nm">' + esc(p.name) + '<div class="tiny">' + esc(p.title) + '</div></td><td>' + esc(p.category) + '</td>'
+      + p.cells.map(c => '<td>' + cellHtml(c, p.maxTotal) + '</td>').join('') + '<td class="mk"><b>' + (p.avg == null ? '—' : p.avg) + '</b></td><td class="mk">' + p.count + ' / ' + (s.judges.length || 0) + '</td>'
+      + '<td>' + (p.flags.length ? p.flags.map(f => '<span class="flag ' + f.type + '">' + esc(f.text) + '</span>').join('') : '<span class="tiny">OK</span>') + '</td></tr>' + (o ? detail(s, p) : '');
+  }).join('');
+  return '<div class="table-card ss">' + head + '<div class="scroll-x"><table class="list"><thead><tr><th style="width:26px;"></th><th>Slot ID</th><th>Presenter</th><th>Category</th>' + s.judges.map(j => '<th>' + esc(j.name) + '</th>').join('')
+    + '<th>Average</th><th>Judges</th><th>Flags</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
+}
+function render() {
+  const v = view(); $('sessions').innerHTML = v.length ? v.map(sessionHtml).join('') : '<div class="card"><p class="tiny">' + (D.sessions.length ? 'Nothing matches these filters.' : 'No scoring data yet. Sessions appear once they have presenters from the schedule.') + '</p></div>';
+  const all = v.reduce((a, s) => a.concat(s.presenters.filter(p => !p.noShow)), []), c = (ic, h, n, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + n + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-layer-group', 'Sessions', v.length, v.filter(s => s.locked).length + ' final locked') + c('fa-users', 'Presenters', all.length, all.filter(p => p.count >= D.settings.minJudges).length + ' have enough judges')
+    + c('fa-flag', 'Flagged', all.filter(p => p.flags.length).length, 'missing judges or disagreement') + c('fa-user-check', 'Judges submitted', v.reduce((n, s) => n + s.judges.filter(j => j.submitted).length, 0), 'of ' + v.reduce((n, s) => n + s.judges.length, 0) + ' assigned');
+  $('lockall').style.display = D.canLock && v.some(s => !s.locked && s.judges.length) ? '' : 'none';
+}
+async function load() {
+  try { const r = await VR.api('adminScoreSheet', {}); if (!r.ok) { $('sessions').innerHTML = ''; return showErr(r.error || 'Could not load the score sheet.'); } D = r;
+    const keep = [$('fd').value, $('fv').value]; const days = [...new Set(r.sessions.map(s => s.date))], venues = [...new Set(r.sessions.map(s => s.hall))].sort();
+    $('fd').innerHTML = '<option value="">All days</option>' + days.map(x => '<option value="' + esc(x) + '">' + esc(fmtD(x)) + '</option>').join(''); $('fv').innerHTML = '<option value="">All venues</option>' + venues.map(x => '<option>' + esc(x) + '</option>').join('');
+    $('fd').value = days.indexOf(keep[0]) > -1 ? keep[0] : ''; $('fv').value = venues.indexOf(keep[1]) > -1 ? keep[1] : ''; render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+
+/* ---- dialog: validate() may be async and returns an error message ('' = accept) ---- */
+function dlg(title, body, okText, validate) {
+  return new Promise(res => {
+    const o = document.createElement('div'); o.className = 'ov'; o.innerHTML = '<div class="dg" role="dialog" aria-modal="true"><h3>' + title + '</h3>' + body + '<div class="de"></div><div class="dr"><button class="btn btn-sm" data-c>Cancel</button><button class="btn btn-gold btn-sm" data-o>' + okText + '</button></div></div>';
+    document.body.appendChild(o); const f = o.querySelector('input,textarea'); if (f) f.focus(); const done = v => { o.remove(); res(v); };
+    o.querySelector('[data-c]').onclick = () => done(null);
+    o.querySelector('[data-o]').onclick = async e => { const v = f ? f.value : true, b = e.currentTarget; b.disabled = true; const er = validate ? await validate(v) : ''; b.disabled = false; if (er) { o.querySelector('.de').textContent = er; return; } done(v); };
+  });
+}
+async function lockFlow(action, ids, judgeId, all) {
+  hideAlerts(); let reason = '', force = false;
+  const names = { lock: 'Final lock', unlock: 'Unlock session', reopen: 'Reopen judge' };
+  if (action === 'lock') { if (!await dlg('Final lock', '<p>After the final lock no marks can be changed by anyone except the Administrator, who needs an OTP to unlock. An OTP will be e-mailed to the approval address.</p>', 'Send OTP')) return; }
+  else { reason = await dlg(names[action], '<label>Reason *</label><textarea rows="3" maxlength="300"></textarea>', 'Send OTP', v => v.trim() ? '' : 'Enter a reason.'); if (reason == null) return; reason = reason.trim(); }
+  for (;;) {
+    const r = await VR.api('adminScoreLockRequest', { action, sessionIds: ids, all: !!all, judgeId: judgeId || '', reason, force });
+    if (r.needForce && !force) { if (!await dlg('Some judges have not submitted', '<ul>' + r.missing.slice(0, 12).map(m => '<li>' + esc(m.session) + ': ' + esc(m.judgeId) + '</li>').join('') + (r.missing.length > 12 ? '<li>and ' + (r.missing.length - 12) + ' more</li>' : '') + '</ul><p>Their scores will not count.</p>', 'Lock anyway')) return; force = true; continue; }
+    if (!r.ok) return showErr(r.error || 'Could not send the OTP.');
+    break;
+  }
+  let count = 0;
+  const ok = await dlg('Enter OTP', '<p>The OTP was e-mailed to the approval address and is valid for 10 minutes.</p><input inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6-digit OTP">', 'Confirm ' + names[action].toLowerCase(),
+    async v => { const c = await VR.api('adminScoreLockConfirm', { otp: v.trim() }); if (!c.ok) return c.error || 'Could not confirm.'; count = c.count; return ''; });
+  if (ok == null) return; showOk(names[action] + ' done for ' + count + ' session' + (count === 1 ? '' : 's') + '.'); load();
+}
+
+$('sessions').onclick = e => {
+  const b = e.target.closest('button[data-lock],button[data-unlock],button[data-reopen]');
+  if (b) { if (b.dataset.lock) lockFlow('lock', [b.dataset.lock]); else if (b.dataset.unlock) lockFlow('unlock', [b.dataset.unlock]); else { const x = b.dataset.reopen.split('|'); lockFlow('reopen', [x[0]], x[1]); } return; }
+  const tr = e.target.closest('tr[data-k]'); if (!tr) return; const k = tr.dataset.k; open.has(k) ? open.delete(k) : open.add(k); render();
+};
+$('lockall').onclick = () => lockFlow('lock', view().filter(s => !s.locked && s.judges.length).map(s => s.sessionId));
+$('q').addEventListener('input', render); ['fd', 'fv', 'fs'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+
+VR.exportBar($('xp'), { name: 'Score_sheet', title: 'LVRMIC 2026 — Score sheet', imageEl: () => $('sessions'), pdfOpts: { orientation: 'landscape', fontSize: 6.5 },
+  getData: () => {
+    const cr = D ? D.criteria : [], rows = [];
+    view().forEach(s => s.presenters.forEach(p => { if (p.noShow) return rows.push([s.date, s.hall, s.room, s.label, p.slotId, p.name, p.category, '', 'No-show'].concat(cr.map(() => ''), ['', '', '', '']));
+      p.cells.forEach(c => rows.push([s.date, s.hall, s.room, s.label, p.slotId, p.name, p.category, (s.judges.filter(j => j.id === c.judgeId)[0] || {}).name || c.judgeId, c.status].concat(cr.map(x => c.marks[x.id] == null ? '' : c.marks[x.id]), [c.status === 'None' ? '' : c.total, p.avg == null ? '' : p.avg, p.count, p.flags.map(f => f.text).join('; ')]))); }));
+    return { headers: ['Date', 'Venue', 'Room', 'Session', 'Slot ID', 'Presenter', 'Category', 'Judge', 'Status'].concat(cr.map(x => x.label + ' (' + x.max + ')'), ['Judge total', 'Average', 'Judges submitted', 'Flags']), rows: rows };
+  } });
+load();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verification | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.tab{background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-2);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.tab.on{border-color:var(--gold);color:var(--gold-light);background:rgba(232,201,131,.08);}
+.tab b{margin-left:6px;font-family:'IBM Plex Mono',monospace;}
+.rv{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 4px;}
+.rv th{text-align:left;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);padding:6px 8px;border-bottom:1px solid var(--navy-border);}
+.rv td{padding:8px;border-bottom:1px solid rgba(226,187,120,.08);vertical-align:top;word-break:break-word;}
+.rv .old{color:var(--text-3);text-decoration:line-through;}
+.rv .new{color:var(--teal-light);font-weight:600;}
+.photos{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0;}
+.photos figure{margin:0;text-align:center;}
+.photos img,.photos .ph0{width:108px;height:144px;border-radius:8px;border:1px solid var(--navy-border);object-fit:cover;background:var(--navy-950);display:flex;align-items:center;justify-content:center;color:var(--text-3);font-size:11px;}
+.photos figcaption{font-size:11px;color:var(--text-3);margin-top:4px;}
+.meta{font-size:12.5px;color:var(--text-3);margin-bottom:8px;}
+.meta b{color:var(--text-2);font-weight:600;}
+.sub{font-size:12px;color:var(--text-3);margin:14px 0 6px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.5px;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-user-pen" style="color:var(--gold-light);"></i> Verification: corrections and approvals</h1><a class="btn btn-sm" href="verification-report.html"><i class="fa-solid fa-table-list"></i> Report</a></div>
+<div class="wrap" style="max-width:1400px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="banner" id="win"></div>
+  <div class="stats" id="stats"></div>
+  <div class="tabs"><button class="tab on" data-t="req">Correction requests <b id="c-req">0</b></button><button class="tab" data-t="part">Participants <b id="c-part">0</b></button></div>
+
+  <section id="t-req">
+    <div class="toolbar noprint"><input id="q1" placeholder="Search by name, ID or institution" autocomplete="off">
+      <select id="s1"><option value="Pending">Waiting for decision</option><option value="">All requests</option><option>Approved</option><option>Rejected</option><option>Withdrawn</option></select>
+      <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+    <div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>Requested</th><th>ID</th><th>Name</th><th>Corrections</th><th>Status</th><th></th></tr></thead><tbody id="tb1"><tr><td class="empty" colspan="6">Loading…</td></tr></tbody></table></div></div>
+  </section>
+
+  <section id="t-part" style="display:none;">
+    <div class="toolbar noprint"><input id="q2" placeholder="Search by name, ID, email or phone" autocomplete="off">
+      <select id="s2"><option value="">All statuses</option><option>Verified</option><option>Change requested</option><option>Pending</option></select></div>
+    <div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Status</th><th>Verified at</th><th>Requests</th><th></th></tr></thead><tbody id="tb2"></tbody></table></div></div>
+    <p class="tiny" style="margin-top:10px;">Use <b>Reopen</b> to let a verified participant confirm again (for example after you fix their record in Participant details). Use <b>Mark verified</b> for someone verified in person at the desk.</p>
+  </section>
+</div>
+
+<!-- review a request -->
+<div class="modal" id="rm"><div class="box wide" style="max-width:760px;">
+  <h3 id="rm-t" style="margin-bottom:6px;"></h3><div class="meta" id="rm-meta"></div>
+  <div class="alert alert-error" id="rm-err"></div>
+  <table class="rv"><thead><tr><th>Detail</th><th>Now</th><th>Requested</th></tr></thead><tbody id="rm-body"></tbody></table>
+  <div class="photos" id="rm-photos"></div>
+  <div id="rm-note-in" style="display:none;"><div class="sub">Participant's note</div><p id="rm-pnote" style="font-size:13px;color:var(--text-2);"></p></div>
+  <div id="rm-decided" style="display:none;"></div>
+  <div id="rm-act" style="display:none;">
+    <label class="chk" style="margin-top:12px;"><input type="checkbox" id="rm-edit"> Edit the values before approving</label>
+    <div class="grid" id="rm-edit-box" style="display:none;margin-top:10px;"></div>
+    <label for="rm-note" style="margin-top:12px;">Message to the participant <span class="hint" style="display:inline;">(required when rejecting)</span></label>
+    <textarea id="rm-note" maxlength="300" rows="2"></textarea>
+    <p class="hint">Approving overwrites the participant record with these values and swaps in the new photo. The participant then reviews and confirms. Everything is logged in the audit log.</p>
+  </div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;">
+    <button class="btn" id="rm-close">Close</button>
+    <button class="btn btn-danger" id="rm-rej" style="display:none;"><i class="fa-solid fa-xmark"></i> Reject</button>
+    <button class="btn btn-gold" id="rm-app" style="display:none;"><i class="fa-solid fa-check"></i> Approve and update record</button>
+  </div>
+</div></div>
+
+<!-- reopen / mark verified -->
+<div class="modal" id="am"><div class="box">
+  <h3 id="am-t" style="margin-bottom:8px;"></h3><p id="am-p" style="font-size:13.5px;color:var(--text-2);margin-bottom:12px;"></p>
+  <div class="alert alert-error" id="am-err"></div>
+  <label for="am-reason">Reason <span style="color:var(--danger);">*</span></label><textarea id="am-reason" maxlength="300" rows="3"></textarea>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;"><button class="btn" id="am-c">Cancel</button><button class="btn btn-gold" id="am-ok"></button></div>
+</div></div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('verification', 'transaction')) { VR.denied('You do not have permission to manage verification. Use the Verification report to view it.'); return; }
+const PG = { page: 'verification-manage' };
+const dt = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const dob = (k, v) => k === 'dob' ? fmtD(v) : (v || '—');
+const SB = { Pending: 'b-warn', Approved: 'b-ok', Rejected: 'b-bad', Withdrawn: 'b-neu', Verified: 'b-ok', 'Change requested': 'b-warn' };
+let reqs = [], parts = [], themes = [], canEdit = false, cur = null;
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === t));
+  $('t-req').style.display = t.dataset.t === 'req' ? '' : 'none'; $('t-part').style.display = t.dataset.t === 'part' ? '' : 'none';
+});
+
+/* ---------- lists ---------- */
+function renderReqs() {
+  const q = $('q1').value.trim().toLowerCase(), s = $('s1').value;
+  const v = reqs.filter(r => (!s || r.status === s) && (!q || [r.name, r.participantId, r.institution].some(x => String(x || '').toLowerCase().indexOf(q) > -1)));
+  $('tb1').innerHTML = v.length ? v.map(r => '<tr><td>' + esc(dt(r.requestedAt)) + '</td><td class="id">' + esc(r.participantId) + '</td><td class="nm">' + esc(r.name) + '<span class="tiny">' + esc(r.institution) + '</span></td>'
+    + '<td>' + esc(Object.keys(r.changes).map(k => r.changes[k].label).concat(r.hasPhoto ? ['Photo'] : []).join(', ') || '—') + '</td>'
+    + '<td><span class="badge ' + (SB[r.status] || 'b-neu') + '">' + esc(r.status) + '</span></td>'
+    + '<td><button class="btn btn-sm" data-r="' + esc(r.id) + '"><i class="fa-solid fa-magnifying-glass"></i> ' + (r.status === 'Pending' ? 'Review' : 'View') + '</button></td></tr>').join('')
+    : '<tr><td class="empty" colspan="6">' + (reqs.length ? 'No requests match.' : 'No correction requests yet.') + '</td></tr>';
+}
+function renderParts() {
+  const q = $('q2').value.trim().toLowerCase(), s = $('s2').value;
+  const v = parts.filter(r => (!s || r.status === s) && (!q || [r.name, r.id, r.email, r.phone].some(x => String(x || '').toLowerCase().indexOf(q) > -1)));
+  $('tb2').innerHTML = v.length ? v.map(r => '<tr><td class="id">' + esc(r.id) + '</td><td class="nm">' + esc(r.name) + '</td><td>' + esc(r.phone) + '</td>'
+    + '<td><span class="badge ' + (SB[r.status] || 'b-neu') + '">' + esc(r.status) + '</span></td><td>' + esc(dt(r.verifiedAt)) + '</td><td>' + r.requests + '</td><td class="row-actions">'
+    + (r.status === 'Verified' ? '<button class="btn btn-sm" data-reopen="' + esc(r.id) + '"><i class="fa-solid fa-lock-open"></i> Reopen</button>' : '')
+    + (r.status === 'Pending' ? '<button class="btn btn-sm" data-mark="' + esc(r.id) + '"><i class="fa-solid fa-user-check"></i> Mark verified</button>' : '')
+    + (r.status === 'Change requested' ? '<button class="btn btn-sm" data-pend="' + esc(r.id) + '"><i class="fa-solid fa-magnifying-glass"></i> Review request</button>' : '') + '</td></tr>').join('')
+    : '<tr><td class="empty" colspan="7">No participants match.</td></tr>';
+}
+function stats() {
+  const n = s => parts.filter(r => r.status === s).length, tot = parts.length, ver = n('Verified');
+  const c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('stats').innerHTML = c('fa-user-check', 'Verified', ver, tot ? Math.round(ver * 100 / tot) + '% of ' + tot : '')
+    + c('fa-hourglass-half', 'Requests waiting', reqs.filter(r => r.status === 'Pending').length, 'need your decision')
+    + c('fa-user-clock', 'Not yet verified', n('Pending'), 'no request sent')
+    + c('fa-file-circle-check', 'Requests handled', reqs.filter(r => r.status === 'Approved' || r.status === 'Rejected').length, reqs.filter(r => r.status === 'Approved').length + ' approved');
+  $('c-req').textContent = reqs.filter(r => r.status === 'Pending').length; $('c-part').textContent = tot;
+}
+function windowBanner(w) {
+  const state = !w.available ? 'Verification is <b>not open</b>. Switch it on and set a closing date in Settings.' : w.passed ? 'The verification window has <b>closed</b> (' + esc(dt(w.deadline)) + ' IST). Participants cannot confirm or request corrections.' : 'Verification is <b>open</b> until <b>' + esc(dt(w.deadline)) + ' IST</b>.';
+  $('win').className = 'banner' + (w.open ? '' : ' warn'); $('win').innerHTML = '<i class="fa-solid fa-circle-info"></i><div>' + state + '</div>';
+}
+async function load() {
+  hideAlerts();
+  try {
+    const [a, b] = await Promise.all([VR.api('adminVerificationQueue', PG), VR.api('adminVerificationReport', PG)]);
+    if (!a.ok) return showErr(a.error || 'Could not load requests.'); if (!b.ok) return showErr(b.error || 'Could not load participants.');
+    reqs = a.requests; themes = a.themes; canEdit = a.canEdit; parts = b.rows; windowBanner(a.window); stats(); renderReqs(); renderParts();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+['q1', 'q2'].forEach(i => $(i).addEventListener('input', () => { renderReqs(); renderParts(); }));
+['s1', 's2'].forEach(i => $(i).addEventListener('change', () => { renderReqs(); renderParts(); }));
+$('refresh').onclick = load;
+$('tb1').onclick = e => { const b = e.target.closest('[data-r]'); if (b) openReview(b.dataset.r); };
+$('tb2').onclick = e => {
+  let b = e.target.closest('[data-reopen]'); if (b) return openAction('reopen', b.dataset.reopen);
+  b = e.target.closest('[data-mark]'); if (b) return openAction('mark', b.dataset.mark);
+  b = e.target.closest('[data-pend]'); if (b) { const r = reqs.find(x => x.participantId === b.dataset.pend && x.status === 'Pending'); if (r) openReview(r.id); }
+};
+
+/* ---------- review modal ---------- */
+function inputFor(k, v) {
+  if (k === 'gender') { const o = ['Male', 'Female', 'Other']; if (v && o.indexOf(v) < 0) o.push(v); return '<select data-k="' + k + '">' + o.map(x => '<option' + (x === v ? ' selected' : '') + '>' + esc(x) + '</option>').join('') + '</select>'; }
+  if (k === 'foodPreference') return '<select data-k="' + k + '">' + ['Veg', 'Non-Veg'].map(x => '<option' + (x === v ? ' selected' : '') + '>' + x + '</option>').join('') + '</select>';
+  if (k === 'abstractTheme') { const o = themes.slice(); if (v && o.indexOf(v) < 0) o.unshift(v); return '<select data-k="' + k + '">' + o.map(x => '<option' + (x === v ? ' selected' : '') + '>' + esc(x) + '</option>').join('') + '</select>'; }
+  if (k === 'dob') return '<input type="date" data-k="' + k + '" value="' + esc(v) + '">';
+  return '<input type="text" data-k="' + k + '" value="' + esc(v) + '">';
+}
+async function openReview(id) {
+  cur = reqs.find(r => r.id === id); if (!cur) return;
+  const r = cur, keys = Object.keys(r.changes), pend = r.status === 'Pending' && canEdit;
+  $('rm-err').classList.remove('show');
+  $('rm-t').textContent = r.name + ' (' + r.participantId + ')';
+  $('rm-meta').innerHTML = '<b>' + esc(r.institution) + '</b> &middot; ' + esc(r.type) + '<br>Requested ' + esc(dt(r.requestedAt)) + (r.requestedIP ? ' &middot; IP ' + esc(r.requestedIP) : '');
+  $('rm-body').innerHTML = keys.map(k => '<tr><td><b>' + esc(r.changes[k].label) + '</b></td><td class="old">' + esc(dob(k, r.current[k] !== undefined ? r.current[k] : r.changes[k].old)) + '</td><td class="new">' + esc(dob(k, r.changes[k].new)) + '</td></tr>').join('')
+    || '<tr><td colspan="3" class="tiny">Photo change only.</td></tr>';
+  $('rm-note-in').style.display = r.note ? '' : 'none'; $('rm-pnote').textContent = r.note;
+  $('rm-photos').innerHTML = '';
+  if (r.hasPhoto) {
+    $('rm-photos').innerHTML = '<figure><div class="ph0">Loading…</div><figcaption>Current</figcaption></figure><figure><div class="ph0">Loading…</div><figcaption>New (requested)</figcaption></figure>';
+    VR.api('adminVerificationPhotos', Object.assign({ id: r.participantId, reqId: r.id }, PG)).then(p => {
+      if (cur !== r) return;
+      const f = (u, cap) => '<figure>' + (u ? '<img src="' + u + '" alt="">' : '<div class="ph0">No photo</div>') + '<figcaption>' + cap + '</figcaption></figure>';
+      $('rm-photos').innerHTML = f(p.ok ? p.current : '', 'Current') + f(p.ok ? p.pending : '', 'New (requested)');
+    });
+  }
+  const d = $('rm-decided');
+  if (r.status !== 'Pending') { d.style.display = ''; d.innerHTML = '<div class="sub">Decision</div><p style="font-size:13px;color:var(--text-2);"><span class="badge ' + (SB[r.status] || 'b-neu') + '">' + esc(r.status) + '</span> ' + esc(r.decidedBy) + ' &middot; ' + esc(dt(r.decidedAt)) + (r.decisionNote ? '<br>' + esc(r.decisionNote) : '') + '</p>'; } else d.style.display = 'none';
+  $('rm-act').style.display = pend ? '' : 'none'; $('rm-rej').style.display = pend ? '' : 'none'; $('rm-app').style.display = pend ? '' : 'none';
+  $('rm-edit').checked = false; $('rm-edit-box').style.display = 'none'; $('rm-note').value = '';
+  $('rm-edit-box').innerHTML = keys.map(k => '<div' + (k === 'abstractTitle' ? ' class="full"' : '') + '><label>' + esc(r.changes[k].label) + '</label>' + inputFor(k, r.changes[k].new) + '</div>').join('');
+  $('rm').classList.add('show');
+}
+$('rm-edit').onchange = () => { $('rm-edit-box').style.display = $('rm-edit').checked ? '' : 'none'; };
+$('rm-close').onclick = () => { $('rm').classList.remove('show'); cur = null; };
+function decide(btn, decision) {
+  const note = $('rm-note').value.trim(), err = $('rm-err'); err.classList.remove('show');
+  if (decision === 'reject' && !note) { err.textContent = 'Enter a reason. The participant will see it.'; err.classList.add('show'); return; }
+  if (!confirm(decision === 'approve' ? 'Approve and overwrite ' + cur.name + "'s record with these values?" : 'Reject this request?')) return;
+  const ov = {}; if (decision === 'approve' && $('rm-edit').checked) $('rm-edit-box').querySelectorAll('[data-k]').forEach(el => { ov[el.dataset.k] = el.value; });
+  return VR.busy(btn, decision === 'approve' ? 'Approving…' : 'Rejecting…', async () => {
+    try {
+      const r = await VR.api('adminVerificationDecide', { reqId: cur.id, decision: decision, note: note, overrides: ov });
+      if (!r.ok) { err.textContent = r.error || 'Could not save.'; err.classList.add('show'); return; }
+      $('rm').classList.remove('show'); cur = null;
+      showOk(decision === 'approve' ? 'Approved. The record is updated' + (r.photo ? ' and the new photo is in place' : '') + '. The participant can now confirm.' : 'Request rejected. The participant can see your message.');
+      await load();
+    } catch (e) { err.textContent = 'Could not reach the server. Check your connection and try again.'; err.classList.add('show'); }
+  });
+}
+$('rm-app').onclick = function () { return decide(this, 'approve'); };
+$('rm-rej').onclick = function () { return decide(this, 'reject'); };
+
+/* ---------- reopen / mark verified ---------- */
+let act = null;
+function openAction(kind, id) {
+  const r = parts.find(x => x.id === id); if (!r) return; act = { kind: kind, id: id };
+  $('am-err').classList.remove('show'); $('am-reason').value = '';
+  $('am-t').textContent = (kind === 'reopen' ? 'Reopen verification: ' : 'Mark as verified: ') + r.name;
+  $('am-p').textContent = kind === 'reopen' ? 'The participant goes back to "not verified" and can review and confirm again while the window is open.' : 'Use this only when you have checked the details with the participant in person. It is recorded as verified by you.';
+  $('am-ok').innerHTML = kind === 'reopen' ? '<i class="fa-solid fa-lock-open"></i> Reopen' : '<i class="fa-solid fa-user-check"></i> Mark verified';
+  $('am').classList.add('show');
+}
+$('am-c').onclick = () => $('am').classList.remove('show');
+$('am-ok').onclick = function () {
+  const reason = $('am-reason').value.trim(), err = $('am-err'); err.classList.remove('show');
+  if (!reason) { err.textContent = 'Enter a reason.'; err.classList.add('show'); return; }
+  return VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = await VR.api(act.kind === 'reopen' ? 'adminVerificationReopen' : 'adminVerificationMarkVerified', { id: act.id, reason: reason });
+      if (!r.ok) { err.textContent = r.error || 'Could not save.'; err.classList.add('show'); return; }
+      $('am').classList.remove('show'); showOk((act.kind === 'reopen' ? 'Verification reopened.' : 'Marked as verified.') + (r.warning ? ' ' + r.warning : '')); await load();
+    } catch (e) { err.textContent = 'Could not reach the server. Check your connection and try again.'; err.classList.add('show'); }
+  });
+};
+load();
+})();
+</script>
+</body>
+</html>
