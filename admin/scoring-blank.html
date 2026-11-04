@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blank Score Sheets | LVRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.two{display:grid;grid-template-columns:minmax(280px,1fr) minmax(320px,1.2fr);gap:16px;align-items:start;} @media(max-width:860px){.two{grid-template-columns:1fr;}}
+.pick{max-height:340px;overflow:auto;border:1px solid var(--navy-border);border-radius:10px;background:var(--navy-950);}
+.pick label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-bottom:1px solid var(--navy-border);cursor:pointer;margin:0;font-size:13px;font-weight:500;}
+.pick label small{display:block;color:var(--text-3);font-weight:400;font-size:11.5px;}
+.pick input,.chk input{width:auto;margin-top:3px;}
+.chk{display:flex;gap:8px;align-items:center;margin:6px 0;font-size:13px;font-weight:500;} .chk input{margin:0;}
+.og{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:10px;}
+.sheetwrap{margin-top:18px;overflow:auto;}
+.sheet{background:#fff;color:#111;font:11px/1.35 Arial,Helvetica,sans-serif;margin:0 auto 14px;box-sizing:border-box;padding:10mm;box-shadow:0 2px 12px rgba(0,0,0,.35);overflow:hidden;display:flex;flex-direction:column;}
+.sheet h1{font-size:14px;margin:0;text-align:center;} .sheet h2{font-size:12px;margin:2px 0 8px;text-align:center;font-weight:700;}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 14px;margin-bottom:8px;font-size:11px;} .meta div{border-bottom:1px solid #999;padding-bottom:1px;min-height:15px;} .meta b{font-weight:600;color:#444;}
+.sheet table{border-collapse:collapse;width:100%;table-layout:fixed;} .sheet th,.sheet td{border:1px solid #333;padding:2px 4px;vertical-align:middle;overflow:hidden;} .sheet th{background:#e9ecf3;font-size:10.5px;text-align:center;} .sheet td.t{text-align:left;} .sheet td small{display:block;color:#555;font-size:9px;line-height:1.2;}
+.sig{display:flex;justify-content:space-around;gap:16px;margin-top:auto;padding-top:6px;} .sig div{flex:1;text-align:center;font-size:10.5px;} .sig .sp{height:14mm;display:flex;align-items:flex-end;justify-content:center;} .sig img{max-height:13mm;max-width:100%;} .sig .ln{border-top:1px solid #333;padding-top:2px;}
+.pg{text-align:right;font-size:9px;color:#666;margin-top:2px;}
+@media print{
+  body *{visibility:hidden;} .sheetwrap,.sheetwrap *{visibility:visible;} .sheetwrap{position:absolute;left:0;top:0;margin:0;overflow:visible;width:100%;}
+  .sheet{margin:0;box-shadow:none;page-break-after:always;break-after:page;} .sheet:last-child{page-break-after:auto;break-after:auto;}
+}
+</style>
+<style id="pg"></style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-file-pen" style="color:var(--gold-light);"></i> Blank score sheets</h1><a class="btn btn-sm" href="scoring-report.html"><i class="fa-solid fa-table-cells"></i> Score sheet</a></div>
+<div class="wrap" style="max-width:1300px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="two noprint">
+    <div class="card">
+      <h3><i class="fa-solid fa-list-check" style="color:var(--gold-light);"></i> Sessions</h3>
+      <div class="toolbar" style="margin:0 0 8px;"><select id="fd"><option value="">All days</option></select><select id="fv"><option value="">All venues</option></select></div>
+      <div class="pick" id="pick"><div class="tiny" style="padding:12px;">Loading sessions…</div></div>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center;"><button class="btn btn-sm" id="all">Select shown</button><button class="btn btn-sm" id="none">Clear</button><span class="tiny" id="cnt"></span></div>
+      <div class="hint">Tick none to make generic sheets with empty session, venue and judge lines.</div>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-sliders" style="color:var(--gold-light);"></i> Options</h3>
+      <div class="chk"><input type="checkbox" id="o-slot" checked><label for="o-slot" style="margin:0;">With slot ID (rows filled with slot ID, presenter and title)</label></div>
+      <div class="chk"><input type="checkbox" id="o-ns"><label for="o-ns" style="margin:0;">Include no-show presenters</label></div>
+      <div class="og">
+        <div><label>Rows per sheet</label><input type="number" id="o-rows" min="1" max="40" value="10"><div class="hint"><a href="#" data-r="10">10</a> · <a href="#" data-r="12">12</a> · <a href="#" data-r="15">15</a></div></div>
+        <div><label>Paper</label><select id="o-ori"><option value="l">A4 landscape</option><option value="p">A4 portrait</option></select></div>
+        <div><label>Judges</label><select id="o-mode"><option value="judge">One sheet per assigned judge (name printed)</option><option value="one">One sheet per session (judge name blank)</option></select></div>
+        <div><label>Copies of each sheet</label><input type="number" id="o-copies" min="1" max="10" value="1"></div>
+        <div id="g-slot"><label>Blank sheets per session</label><input type="number" id="o-pages" min="1" max="20" value="1"><div class="hint">Used when slot ID is off.</div></div>
+        <div id="g-cat"><label>Category (slot ID off)</label><select id="o-cat"><option>Both</option><option>Oral</option><option>Poster</option></select></div>
+      </div>
+      <label style="margin-top:12px;display:block;">Criteria columns</label><div id="crit"></div>
+      <div class="chk"><input type="checkbox" id="o-tot" checked><label for="o-tot" style="margin:0;">Total column</label></div>
+      <div class="chk"><input type="checkbox" id="o-rem" checked><label for="o-rem" style="margin:0;">Remarks column</label></div>
+      <label style="margin-top:8px;display:block;">Extra blank columns <span class="hint" style="display:inline;">(names, comma separated; leave empty for none)</span></label><input id="o-extra" placeholder="e.g. Judge initials, Rank">
+      <label style="margin-top:12px;display:block;">Signature lines at the bottom</label>
+      <div class="chk"><input type="checkbox" id="s-judge" checked><label for="s-judge" style="margin:0;">Judge</label></div>
+      <div class="chk"><input type="checkbox" id="s-chair"><label for="s-chair" style="margin:0;">Chairperson</label></div>
+      <div class="chk"><input type="checkbox" id="s-rap"><label for="s-rap" style="margin:0;">Rapporteur</label></div>
+      <div class="chk"><input type="checkbox" id="s-conv"><label for="s-conv" style="margin:0;">Convener (blank space to sign)</label></div>
+      <div class="chk"><input type="checkbox" id="s-convimg"><label for="s-convimg" style="margin:0;">Convener with signature image</label></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;"><button class="btn" id="gen"><i class="fa-solid fa-eye"></i> Preview</button><button class="btn btn-gold" id="print"><i class="fa-solid fa-print"></i> Print or save as PDF</button></div>
+      <div class="hint">In the print window choose "Save as PDF" to download. Set margins to "None" and tick background graphics if shading is missing.</div>
+    </div>
+  </div>
+  <div class="sheetwrap" id="out"></div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('scoring', 'report')) { VR.denied('You do not have permission to open the blank score sheets.'); return; }
+const SIGN_URL = 'https://lvrmic26.vercel.app/assets/convener-sign.png';
+let D = null; const ids = new Set(), v$ = id => $(id).value.trim(), on = id => $(id).checked;
+const shown = () => D.index.filter(s => (!$('fd').value || s.date === $('fd').value) && (!$('fv').value || s.hall === $('fv').value));
+function drawPick() {
+  const l = shown(); $('pick').innerHTML = l.length ? l.map(s => '<label><input type="checkbox" data-id="' + esc(s.sessionId) + '"' + (ids.has(s.sessionId) ? ' checked' : '') + '><span>' + esc(s.label) + '<small>' + esc(fmtD(s.date)) + ' · ' + esc(s.hall) + (s.room ? ' · ' + esc(s.room) : '') + ' · ' + s.count + ' presenter(s) · ' + s.judges.length + ' judge(s)</small></span></label>').join('') : '<div class="tiny" style="padding:12px;">No sessions yet. You can still make generic sheets.</div>';
+  $('cnt').textContent = ids.size + ' selected';
+}
+function opts() {
+  return { slot: on('o-slot'), ns: on('o-ns'), rows: Math.max(1, Math.min(40, Math.round(+$('o-rows').value) || 10)), land: v$('o-ori') === 'l', mode: v$('o-mode'), copies: Math.max(1, Math.min(10, Math.round(+$('o-copies').value) || 1)), pages: Math.max(1, Math.min(20, Math.round(+$('o-pages').value) || 1)),
+    cat: v$('o-cat'), tot: on('o-tot'), rem: on('o-rem'), extra: v$('o-extra').split(',').map(x => x.trim()).filter(Boolean).slice(0, 6), crit: [...document.querySelectorAll('#crit input:checked')].map(x => x.value),
+    sig: { judge: on('s-judge'), chair: on('s-chair'), rap: on('s-rap'), conv: on('s-conv'), convimg: on('s-convimg') } };
+}
+const ln = '<i style="display:inline-block;min-width:60px;">&nbsp;</i>';
+function sheetHtml(o, c) {
+  const cs = D.criteria.filter(x => o.crit.indexOf(x.id) > -1 && (c.cat === 'Both' || x.applies === 'Both' || x.applies === c.cat)), maxT = cs.reduce((n, x) => n + x.max, 0), W = o.land ? 297 : 210, H = o.land ? 210 : 297;
+  const sigs = []; if (o.sig.judge) sigs.push(['Judge', c.judge]); if (o.sig.chair) sigs.push(['Chairperson', c.chair]); if (o.sig.rap) sigs.push(['Rapporteur', '']); if (o.sig.conv) sigs.push(['Convener', D.conference.convener || '']); if (o.sig.convimg) sigs.push(['Convener', D.conference.convener || '', 1]);
+  const rowH = Math.max(7, Math.floor((H - 20 - 38 - 12 - (sigs.length ? 28 : 0)) / o.rows * 10) / 10);
+  const fixed = 8 + (o.slot ? 12 : 0), flex = 100 - fixed;                       // column widths in %
+  const nCols = 1 + cs.length + (o.tot ? 1 : 0) + o.extra.length + (o.rem ? 1 : 0), small = Math.max(7, Math.min(11, (flex * 0.55) / Math.max(nCols, 1)));
+  const nameW = flex - (cs.length + (o.tot ? 1 : 0) + o.extra.length) * small - (o.rem ? 14 : 0);
+  const th = (t, w) => '<th style="width:' + w + '%">' + t + '</th>';
+  let head = th('S.No', 5) + (o.slot ? th('Slot ID', 10) : '') + th('Presenter' + (o.slot ? ' / title' : ''), Math.max(nameW, 18)) + cs.map(x => th(esc(x.label) + '<br>(' + x.max + ')', small)).join('') + (o.tot ? th('Total<br>(' + maxT + ')', small) : '') + o.extra.map(x => th(esc(x), small)).join('') + (o.rem ? th('Remarks', 14) : '');
+  const cells = '<td></td>'.repeat(cs.length + (o.tot ? 1 : 0) + o.extra.length + (o.rem ? 1 : 0));
+  let body = ''; for (let i = 0; i < o.rows; i++) { const r = c.rows[i]; body += '<tr style="height:' + rowH + 'mm"><td>' + (r ? r.sno : (o.slot ? '' : i + 1)) + '</td>' + (o.slot ? '<td><b>' + esc(r ? r.slot : '') + '</b></td>' : '') + '<td class="t">' + (r && r.name ? esc(r.name) + (r.title ? '<small>' + esc(r.title.slice(0, 90)) + '</small>' : '') : '') + '</td>' + cells + '</tr>'; }
+  return '<div class="sheet" style="width:' + W + 'mm;height:' + H + 'mm;"><h1>' + esc(D.conference.name || 'LVRMIC 2026') + '</h1><h2>Score sheet' + (c.cat !== 'Both' ? ' — ' + c.cat + ' presentation' : '') + '</h2>'
+    + '<div class="meta"><div><b>Session:</b> ' + (c.label ? esc(c.label) : ln) + '</div><div><b>Date:</b> ' + (c.date ? esc(fmtD(c.date)) : ln) + '</div><div><b>Time:</b> ' + (c.start ? hm12(c.start) + (c.end ? ' – ' + hm12(c.end) : '') : ln) + '</div>'
+    + '<div><b>Venue / room:</b> ' + (c.hall ? esc(c.hall + (c.room ? ' / ' + c.room : '')) : ln) + '</div><div><b>Judge:</b> ' + (c.judge ? esc(c.judge) : ln) + '</div><div><b>Marks:</b> each criterion as shown, half marks allowed</div></div>'
+    + '<table><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table>'
+    + (sigs.length ? '<div class="sig">' + sigs.map(s => '<div><div class="sp">' + (s[2] ? '<img src="' + SIGN_URL + '" alt="">' : '') + '</div><div class="ln">' + esc(s[0]) + (s[1] ? '<br>' + esc(s[1]) : '') + '</div></div>').join('') + '</div>' : '')
+    + '<div class="pg">' + (c.pages > 1 ? 'Page ' + c.page + ' of ' + c.pages : '') + '</div></div>';
+}
+async function build() {
+  hideAlerts(); const o = opts(); if (!o.crit.length) { showErr('Tick at least one criterion.'); return false; }
+  let sess = [];
+  if (ids.size) { const r = await VR.api('adminScoreBlankData', { sessionIds: [...ids] }); if (!r.ok) { showErr(r.error || 'Could not load the sessions.'); return false; } sess = r.sessions; }
+  else sess = [{ label: '', date: '', hall: '', room: '', start: '', end: '', chair: '', judges: [], presenters: null }];
+  const out = [];
+  sess.forEach(s => {
+    const judges = o.mode === 'judge' && s.judges.length ? s.judges.map(j => j.name) : [''];
+    judges.forEach(jn => {
+      let groups;
+      if (o.slot && s.presenters) { groups = {}; s.presenters.filter(p => o.ns || !p.noShow).forEach(p => { (groups[p.category] = groups[p.category] || []).push(p); }); groups = Object.keys(groups).map(k => ({ cat: k, list: groups[k] })); if (!groups.length) groups = [{ cat: 'Both', list: [] }]; }
+      else groups = [{ cat: o.cat, list: null }];
+      groups.forEach(g => {
+        const chunks = []; if (g.list) for (let i = 0; i < g.list.length; i += o.rows) chunks.push(g.list.slice(i, i + o.rows)); else for (let i = 0; i < o.pages; i++) chunks.push([]);
+        if (!chunks.length) chunks.push([]);
+        chunks.forEach((ch, i) => { for (let k = 0; k < o.copies; k++) out.push(sheetHtml(o, { label: s.label, date: s.date, start: s.start, end: s.end, hall: s.hall, room: s.room, chair: s.chair, judge: jn, cat: g.cat, page: i + 1, pages: chunks.length,
+          rows: ch.map((p, n) => ({ sno: i * o.rows + n + 1, slot: p.slotId, name: p.name, title: p.title })) })); });
+      });
+    });
+  });
+  $('pg').textContent = '@media print{@page{size:A4 ' + (o.land ? 'landscape' : 'portrait') + ';margin:0}}';
+  $('out').innerHTML = out.join(''); $('out').dataset.n = out.length; return true;
+}
+$('pick').onchange = e => { const i = e.target.closest('input[data-id]'); if (!i) return; i.checked ? ids.add(i.dataset.id) : ids.delete(i.dataset.id); $('cnt').textContent = ids.size + ' selected'; };
+$('all').onclick = () => { shown().forEach(s => ids.add(s.sessionId)); drawPick(); }; $('none').onclick = () => { ids.clear(); drawPick(); };
+['fd', 'fv'].forEach(i => $(i).addEventListener('change', drawPick));
+document.querySelectorAll('a[data-r]').forEach(a => a.onclick = e => { e.preventDefault(); $('o-rows').value = a.dataset.r; });
+$('o-slot').onchange = () => { $('g-slot').style.opacity = $('g-cat').style.opacity = on('o-slot') ? .45 : 1; }; $('o-slot').onchange();
+$('gen').onclick = async e => { await VR.busy(e.currentTarget, 'Preparing…', async () => { if (await build()) $('out').scrollIntoView({ behavior: 'smooth' }); }); };
+$('print').onclick = async e => { await VR.busy(e.currentTarget, 'Preparing…', async () => { if (await build()) { VR.api('adminLogEvent', { event: 'print', module: 'Scoring', what: 'Blank score sheets', detail: $('out').dataset.n + ' sheet(s)' }); setTimeout(() => window.print(), 300); } }); };
+(async () => {
+  try { const r = await VR.api('adminScoreBlankData', {}); if (!r.ok) { $('pick').innerHTML = ''; return showErr(r.error || 'Could not load.'); } D = r;
+    $('fd').innerHTML = '<option value="">All days</option>' + [...new Set(r.index.map(s => s.date))].map(x => '<option value="' + esc(x) + '">' + esc(fmtD(x)) + '</option>').join(''); $('fv').innerHTML = '<option value="">All venues</option>' + [...new Set(r.index.map(s => s.hall))].sort().map(x => '<option>' + esc(x) + '</option>').join('');
+    $('crit').innerHTML = r.criteria.map(c => '<div class="chk"><input type="checkbox" id="c-' + esc(c.id) + '" value="' + esc(c.id) + '" checked><label for="c-' + esc(c.id) + '" style="margin:0;">' + esc(c.label) + ' <span class="hint" style="display:inline;">(' + c.max + (c.applies !== 'Both' ? ', ' + c.applies + ' only' : '') + ')</span></label></div>').join('');
+    drawPick();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+})();
+})();
+</script>
+</body>
+</html>
