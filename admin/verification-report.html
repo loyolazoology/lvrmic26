@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verification Report | VRMIC 2026 Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+table.list td{white-space:nowrap;vertical-align:middle;}
+table.list td.wrapc{white-space:normal;min-width:170px;max-width:260px;overflow-wrap:anywhere;line-height:1.4;}
+.bar{height:10px;border-radius:6px;background:var(--navy-950);border:1px solid var(--navy-border);overflow:hidden;margin:4px 0 18px;}
+.bar div{height:100%;background:linear-gradient(90deg,var(--teal-light),var(--gold-light));width:0;transition:width .8s;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-user-check" style="color:var(--gold-light);"></i> Verification report</h1><a class="btn btn-sm" id="mg" href="verification-manage.html"><i class="fa-solid fa-user-pen"></i> Corrections and approvals</a></div>
+<div class="wrap" style="max-width:1500px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="banner" id="win"></div>
+  <div class="stats" id="stats"></div>
+  <div class="tiny" id="pct" style="margin:-4px 0 0;"></div>
+  <div class="bar"><div id="bar"></div></div>
+
+  <div class="toolbar noprint">
+    <input id="q" placeholder="Search by name, email, phone or LVRMIC ID" autocomplete="off">
+    <select id="fs"><option value="">All statuses</option><option>Verified</option><option>Change requested</option><option>Pending</option></select>
+    <select id="ft"><option value="">All categories</option><option>Oral</option><option>Poster</option><option>Participant</option></select>
+    <select id="fm"><option value="">All modes</option><option>Offline</option><option>Online</option></select>
+    <select id="fr"><option value="">Any correction history</option><option value="has">Sent correction request(s)</option><option value="none">Never requested a correction</option></select>
+    <select id="fp"><option value="">Any profile</option><option value="y">Profile complete</option><option value="n">Profile incomplete</option></select>
+    <button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+    <div id="xp" style="margin-left:auto;"></div>
+  </div>
+
+  <div class="table-card">
+    <div class="tiny" id="info" style="padding:12px 16px 0;"></div>
+    <div class="scroll-x" id="tc"><table class="list"><thead><tr><th>VRMIC ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Institution</th><th>Category</th><th>Mode</th><th>Profile</th><th>Verification</th><th>Verified at</th><th>Verified from (IP)</th><th>Requests</th><th>Last request</th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="13">Loading…</td></tr></tbody></table></div>
+  </div>
+  <p class="tiny noprint" style="margin-top:10px;"><b>Pending</b> = not verified yet and no correction waiting. <b>Change requested</b> = the participant sent corrections that need your decision. Cancelled registrations are not listed.</p>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('verification', 'report')) { VR.denied('You do not have permission to view the verification report.'); return; }
+if (!VR.can('verification', 'transaction')) $('mg').style.display = 'none';
+const PG = { page: 'verification-report' };
+const dt = v => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? String(v) : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const SB = { Verified: 'b-ok', 'Change requested': 'b-warn', Pending: 'b-neu' }, RB = { Pending: 'b-warn', Approved: 'b-ok', Rejected: 'b-bad', Withdrawn: 'b-neu' };
+let all = [], view = [];
+
+function filtered() {
+  const q = $('q').value.trim().toLowerCase(), s = $('fs').value, t = $('ft').value, m = $('fm').value, r = $('fr').value, p = $('fp').value;
+  return all.filter(x => {
+    if (q && ![x.name, x.email, x.id, x.phone, x.institution].some(v => String(v || '').toLowerCase().indexOf(q) > -1)) return false;
+    if (s && x.status !== s) return false; if (t && x.type !== t) return false; if (m && x.mode !== m) return false;
+    if (r && (r === 'has') !== (x.requests > 0)) return false; if (p && (p === 'y') !== x.profile) return false;
+    return true;
+  });
+}
+function render() {
+  view = filtered();
+  $('tb').innerHTML = view.length ? view.map(r => '<tr><td class="id">' + esc(r.id) + '</td><td class="nm wrapc">' + esc(r.name) + '</td><td>' + esc(r.email) + '</td><td>' + esc(r.phone) + '</td><td class="wrapc">' + esc(r.institution) + '</td>'
+    + '<td><span class="badge ' + (r.type === 'Oral' ? 'b-oral' : r.type === 'Poster' ? 'b-poster' : 'b-neu') + '">' + esc(r.type || '—') + '</span></td><td>' + esc(r.mode || '—') + '</td>'
+    + '<td>' + (r.profile ? '<span class="badge b-ok">Complete</span>' : '<span class="badge b-warn">Incomplete</span>') + '</td>'
+    + '<td><span class="badge ' + SB[r.status] + '">' + esc(r.status) + '</span></td><td>' + esc(dt(r.verifiedAt)) + '</td><td>' + esc(r.verifiedIP || '—') + '</td><td>' + r.requests + '</td>'
+    + '<td>' + (r.lastRequest ? '<span class="badge ' + (RB[r.lastRequest] || 'b-neu') + '">' + esc(r.lastRequest) + '</span><span class="tiny">' + esc(dt(r.lastRequestAt)) + '</span>' : '—') + '</td></tr>').join('')
+    : '<tr><td class="empty" colspan="13">' + (all.length ? 'No participants match these filters.' : 'No participants yet.') + '</td></tr>';
+  $('info').textContent = 'Showing ' + view.length + ' of ' + all.length;
+  const n = s => view.filter(x => x.status === s).length, c = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  const ver = n('Verified'), pc = view.length ? Math.round(ver * 1000 / view.length) / 10 : 0;
+  $('stats').innerHTML = c('fa-users', 'Participants', view.length, 'of ' + all.length + ' in total') + c('fa-user-check', 'Verified', ver, pc + '%')
+    + c('fa-hourglass-half', 'Change requested', n('Change requested'), 'waiting for a decision') + c('fa-user-clock', 'Pending', n('Pending'), 'not verified yet');
+  $('pct').textContent = pc + '% verified'; $('bar').style.width = pc + '%';
+}
+async function load() {
+  hideAlerts(); $('tb').innerHTML = '<tr><td class="empty" colspan="13">Loading…</td></tr>';
+  try {
+    const r = await VR.api('adminVerificationReport', PG);
+    if (!r.ok) { showErr(r.error || 'Could not load the report.'); $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; return; }
+    all = r.rows; const w = r.window;
+    $('win').className = 'banner' + (w.open ? '' : ' warn');
+    $('win').innerHTML = '<i class="fa-solid fa-circle-info"></i><div>' + (!w.available ? 'Verification is <b>not open</b> (switch it on and set a closing date in Settings).' : w.passed ? 'Verification <b>closed</b> on <b>' + esc(dt(w.deadline)) + ' IST</b>.' : 'Verification is <b>open</b> until <b>' + esc(dt(w.deadline)) + ' IST</b>.') + '</div>';
+    render();
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); $('tb').innerHTML = '<tr><td class="empty" colspan="13">Could not load.</td></tr>'; }
+}
+$('q').addEventListener('input', render); ['fs', 'ft', 'fm', 'fr', 'fp'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
+const HEAD = ['VRMIC ID', 'Name', 'Email', 'Phone', 'Institution', 'Category', 'Mode', 'Profile', 'Verification', 'Verified at (IST)', 'Verified from (IP)', 'Correction requests', 'Last request', 'Last request at (IST)'];
+VR.exportBar($('xp'), { name: 'VRMIC2026_Verification', title: 'VRMIC 2026 — Verification report', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: HEAD, rows: view.map(r => [r.id, r.name, r.email, r.phone, r.institution, r.type, r.mode, r.profile ? 'Complete' : 'Incomplete', r.status, r.verifiedAt ? dt(r.verifiedAt) : '', r.verifiedIP, r.requests, r.lastRequest, r.lastRequestAt ? dt(r.lastRequestAt) : '']) }) });
+load();
+})();
+</script>
+</body>
+</html>
