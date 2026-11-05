@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Badge Register | VRMIC 2026 Admin</title>
+<title>Badge Register | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -29,7 +29,7 @@
 
   <div class="card noprint" id="rxCard" style="display:none;">
     <h3><i class="fa-solid fa-hand-holding"></i> Badge received entry</h3>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;"><input id="rx" placeholder="Scan the QR code or type the VRMIC ID, then press Enter" autocomplete="off" style="flex:1;min-width:260px;"><button class="btn btn-gold" id="rxgo"><i class="fa-solid fa-check"></i> Mark received</button></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;"><input id="rx" placeholder="Scan the QR code or type the LVRMIC ID, then press Enter" autocomplete="off" style="flex:1;min-width:260px;"><button class="btn btn-gold" id="rxgo"><i class="fa-solid fa-check"></i> Mark received</button></div>
     <div class="hint" id="rxmsg">Works for participants, students and team members whose badge has been printed.</div>
   </div>
 
@@ -172,7 +172,7 @@ $('tb').onclick = async e => {
   if (e.target.closest('a,button,input')) return;
   open.has(k) ? open.delete(k) : open.add(k); render();
 };
-VR.exportBar($('xp'), { name: 'VRMIC2026_Badge_Register', title: 'VRMIC 2026 — Badge register', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+VR.exportBar($('xp'), { name: 'LVRMIC2026_Badge_Register', title: 'LVRMIC 2026 — Badge register', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
   getData: () => ({ headers: ['ID', 'Name', 'Group', 'Category', 'Organisation', 'Status', 'Prints', 'First printed', 'Last printed', 'Last printed by', 'Reprint reasons', 'Badge received', 'Received at', 'Received by', 'Photo'],
     rows: view.map(p => [p.id, p.name, GN[p.group], p.category, p.org, status(p), p.printCount, p.firstPrint ? dtm(p.firstPrint) : '', p.lastPrint ? dtm(p.lastPrint) : '', p.lastBy || '', reasons(p), p.collected ? 'Yes' : 'No', p.collected ? dtm(p.collectedAt) : '', p.collectedBy || '', p.hasPhoto === null ? 'n/a' : p.hasPhoto ? 'OK' : 'Missing']) }) });
 load();

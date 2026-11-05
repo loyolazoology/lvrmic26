@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Backup List | VRMIC 2026 Admin</title>
+<title>Backup List | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -53,7 +53,7 @@ function notes() {
   let h = '';
   if (!info.triggerInstalled) h += '<div class="banner warn"><i class="fa-solid fa-triangle-exclamation"></i><div><b>The daily backup is not scheduled yet.</b> One-time setup in the Apps Script editor:<ol class="steps"><li>Open the project, choose the function <code>installBackupTrigger</code> in the toolbar.</li><li>Click <b>Run</b> and allow the permissions.</li><li>Refresh this page.</li></ol></div></div>';
   if (!info.enabled) h += '<div class="banner warn"><i class="fa-solid fa-toggle-off"></i><div><b>Daily backup is switched off.</b> Turn it on in Settings, under Backup. “Backup now” still works while it is off.</div></div>';
-  if (info.folderUrl) h += '<div class="banner"><i class="fa-brands fa-google-drive"></i><div>Backups are saved in the Drive folder <b>VRMIC Backups</b>. <a href="' + esc(info.folderUrl) + '" target="_blank" rel="noopener">Open the folder</a>. The copies belong to the portal’s Google account, so the links only open for accounts that can see that folder.</div></div>';
+  if (info.folderUrl) h += '<div class="banner"><i class="fa-brands fa-google-drive"></i><div>Backups are saved in the Drive folder <b>LVRMIC Backups</b>. <a href="' + esc(info.folderUrl) + '" target="_blank" rel="noopener">Open the folder</a>. The copies belong to the portal’s Google account, so the links only open for accounts that can see that folder.</div></div>';
   $('notes').innerHTML = h;
 }
 
@@ -106,7 +106,7 @@ $('run').onclick = () => {
 };
 $('refresh').onclick = load;
 
-VR.exportBar($('xp'), { name: 'VRMIC2026_Backups', title: 'VRMIC 2026 — Backup list', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+VR.exportBar($('xp'), { name: 'LVRMIC2026_Backups', title: 'LVRMIC 2026 — Backup list', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
   getData: () => ({ headers: ['Date and time', 'Type', 'By', 'Size', 'Status', 'Contents', 'File'], rows: list.map(b => [fdt(b.time), b.trigger, b.by, sz(b.size), b.status, b.note, b.fileName]) }) });
 
 load();

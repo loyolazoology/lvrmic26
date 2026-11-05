@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Event Board | VRMIC 2026 Admin</title>
+<title>Live Event Board | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -118,7 +118,7 @@ function demoData() {
       const start = first + i * 10, end = start + 10, past = end <= nowM;
       const status = past ? (i % 5 === 1 ? 'No-show' : 'Presented') : 'Scheduled';
       const chip = status !== 'Scheduled' ? status : (i % 4 === 3 ? 'Expected' : (start - nowM < 10 && i % 4 === 2 ? 'Late' : 'Present'));
-      return { id: 'VRMIC26-' + (vi * 20 + i + 1), name: n, title: 'Vector-borne disease surveillance in coastal Tamil Nadu', inst: 'Loyola College, Chennai', token: 'OR-' + String(i + 1).padStart(3, '0'), time: t12(start), endTime: t12(end), start: start, end: end, mode: i === 6 ? 'Online' : 'Offline', status: status, hasPPT: i !== 4, chip: i === 6 && status === 'Scheduled' ? 'Online' : chip };
+      return { id: 'LVRMIC26-' + (vi * 20 + i + 1), name: n, title: 'Vector-borne disease surveillance in coastal Tamil Nadu', inst: 'Loyola College, Chennai', token: 'OR-' + String(i + 1).padStart(3, '0'), time: t12(start), endTime: t12(end), start: start, end: end, mode: i === 6 ? 'Online' : 'Offline', status: status, hasPPT: i !== 4, chip: i === 6 && status === 'Scheduled' ? 'Online' : chip };
     });
     const now = roster.find(r => r.start <= nowM && nowM < r.end && r.status !== 'No-show') || null;
     return { venue: v[0], room: v[1], now: now, next: roster.filter(r => r !== now && r.status === 'Scheduled' && r.start > nowM).slice(0, 3), roster: roster,

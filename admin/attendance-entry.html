@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attendance Entry | VRMIC 2026 Admin</title>
+<title>Attendance Entry | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -21,7 +21,7 @@
       <div><label>Session *</label><select id="sess"></select><div class="hint" id="sess-h"></div></div>
       <div><label>Mark</label>
         <div style="display:flex;gap:18px;padding-top:9px;"><label class="chk"><input type="radio" name="dir" value="in" checked> Entry (IN)</label><label class="chk" id="w-out"><input type="radio" name="dir" value="out"> Exit (OUT)</label></div></div>
-      <div class="full"><label>Find person (name or ID) *</label><input id="q" autocomplete="off" placeholder="Type a name or ID, e.g. VRMIC26-S001"><div class="suggest" id="sg" style="display:none;"></div></div>
+      <div class="full"><label>Find person (name or ID) *</label><input id="q" autocomplete="off" placeholder="Type a name or ID, e.g. LVRMIC26-S001"><div class="suggest" id="sg" style="display:none;"></div></div>
       <div class="full" id="picked" style="display:none;"></div>
       <div class="full"><label>Reason for manual entry * <span class="hint" style="display:inline;">(always required — for example "QR code not available")</span></label><input id="reason" maxlength="300" autocomplete="off"></div>
     </div>
@@ -41,7 +41,7 @@ if (VR.guard() && VR.frameOnly()) (function () {
 const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'studentAttendance' : 'attendance';
 const label = isStudent ? 'Student' : 'Participant';
 $('ttl').textContent = label + ' attendance entry';
-document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
+document.title = $('ttl').textContent + ' | LVRMIC 2026 Admin';
 $('toscan').href = 'attendance-scan.html?kind=' + kind;
 if (!VR.can(MOD, 'transaction')) { VR.denied('You do not have permission to mark attendance.'); return; }
 

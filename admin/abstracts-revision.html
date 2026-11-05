@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Revision Requests | VRMIC 2026 Admin</title>
+<title>Revision Requests | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -62,11 +62,11 @@ table.list td.rm{white-space:normal;min-width:200px;max-width:340px;font-size:12
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
   <div class="stats" id="stats"></div>
   <div class="toolbar noprint"><input id="q" placeholder="Search by name, ID or title" autocomplete="off"><select id="fs"><option value="">All waiting</option><option value="over">Past deadline</option><option value="open">Within deadline</option></select><button class="btn btn-sm btn-warn" id="bulk"><i class="fa-solid fa-bell"></i> Remind selected</button><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
-  <div class="table-card"><div class="scroll-x" id="tc"><table class="list"><thead><tr><th style="width:28px;"><input type="checkbox" id="all" style="width:auto;"></th><th>VRMIC ID</th><th>Name</th><th>Title</th><th>Ver.</th><th>Requested</th><th>Days waiting</th><th>Deadline</th><th>Remarks sent</th><th class="noprint">Actions</th></tr></thead><tbody id="tb"><tr><td class="empty" colspan="10">Loading…</td></tr></tbody></table></div></div>
+  <div class="table-card"><div class="scroll-x" id="tc"><table class="list"><thead><tr><th style="width:28px;"><input type="checkbox" id="all" style="width:auto;"></th><th>LVRMIC ID</th><th>Name</th><th>Title</th><th>Ver.</th><th>Requested</th><th>Days waiting</th><th>Deadline</th><th>Remarks sent</th><th class="noprint">Actions</th></tr></thead><tbody id="tb"><tr><td class="empty" colspan="10">Loading…</td></tr></tbody></table></div></div>
   <p class="tiny noprint" style="margin-top:10px;">The deadline is the one set in Settings (Revised abstract closes), unless you extend it for one participant. A reminder uses one e-mail from today's mail quota.</p>
 
   <div class="sec" style="margin-top:30px;"><i class="fa-solid fa-file-circle-check"></i><h2>Resubmitted — back in review</h2><span class="n" id="n2"></span></div>
-  <div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>VRMIC ID</th><th>Name</th><th>Title</th><th>Version</th><th>Uploaded</th><th>Status</th><th class="noprint"></th></tr></thead><tbody id="tb2"></tbody></table></div></div>
+  <div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>LVRMIC ID</th><th>Name</th><th>Title</th><th>Version</th><th>Uploaded</th><th>Status</th><th class="noprint"></th></tr></thead><tbody id="tb2"></tbody></table></div></div>
 </div>
 
 <div class="modal" id="m-ext"><div class="box wide">
@@ -186,8 +186,8 @@ async function load() {
   } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
 }
 $('q').addEventListener('input', render); $('fs').addEventListener('change', render); $('refresh').onclick = load;
-VR.exportBar($('xp'), { name: 'VRMIC2026_Revision_Requests', title: 'VRMIC 2026 — Revision requests', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
-  getData: () => ({ headers: ['VRMIC ID', 'Name', 'E-mail', 'Title', 'Version', 'Requested', 'Days waiting', 'Deadline', 'Remarks sent'],
+VR.exportBar($('xp'), { name: 'LVRMIC2026_Revision_Requests', title: 'LVRMIC 2026 — Revision requests', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['LVRMIC ID', 'Name', 'E-mail', 'Title', 'Version', 'Requested', 'Days waiting', 'Deadline', 'Remarks sent'],
     rows: view.map(p => [p.ID, p.Name, p.Email || '', p.AbstractTitle || '', ver(p), dtm(p.AbstractReviewedAt), days(p), effDl(p) ? dtm(effDl(p)) : 'No limit', p.AbstractRemarks || '']) }) });
 load();
 })();

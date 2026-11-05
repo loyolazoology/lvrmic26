@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin User Report | VRMIC 2026 Admin</title>
+<title>Admin User Report | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -123,7 +123,7 @@ try {
   admins = r.admins || []; render();
 } catch (e) { showErr(netErr(e)); }
 
-VR.exportBar($('xp'), { name: 'VRMIC2026_Admin_User_Report', title: 'VRMIC 2026 — Admin user report', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+VR.exportBar($('xp'), { name: 'LVRMIC2026_Admin_User_Report', title: 'LVRMIC 2026 — Admin user report', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
   getData: () => ({ headers: ['ID', 'Name', 'Role', 'Position', 'Email', 'Contact no.', 'Photo', 'Status', 'Last login', 'IP', 'Back-date attendance', 'Access', 'Created'],
     rows: view().map(a => [a.id, a.name, a.isSuper ? 'Administrator' : a.role, a.position || '', a.email || '', a.contactNo || '', a.hasPhoto ? 'Yes' : 'Missing', a.active ? 'Active' : 'Disabled', fmtTime(a.lastLoginAt), a.lastLoginIP || '', special(a) ? 'Yes' : 'No', summaryText(a), fmtDate(a.createdAt)]) }) });
 // Exports happen in the browser, so record them in the audit log (needs the adminLogEvent action).

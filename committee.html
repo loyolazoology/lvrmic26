@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Organising Committee | VRMIC 2026 · CIMSER, Loyola College</title>
-<meta name="description" content="Organising committee of VRMIC 2026 — patrons, chairperson, convener, advisory board and the CIMSER organising team of the 4th International Conference on Life Sciences and Vector Risk Management, Loyola College, Chennai.">
+<title>Organising Committee | LVRMIC 2026</title>
+<meta name="description" content="Organising committee of LVRMIC 2026 — patrons, chairperson, convener, advisory board and the CIMSER organising team of the 4th International Conference on Life Sciences and Vector Risk Management, Loyola College, Chennai.">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap');
 
@@ -326,14 +326,14 @@ footer p{font-size:13px;color:var(--text-3);}
         <img src="assets/cimser-logo.png" alt="CIMSER" class="brand-logo-img" onerror="this.style.display='none'">
       </a>
       <a href="index.html" style="text-decoration:none;">
-        <span class="brand-title">VRMIC 2026</span>
+        <span class="brand-title">LVRMIC 2026</span>
       </a>
     </div>
     <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="committee.html" class="active">Committee</a></li>
-       <!--<li class="has-dropdown">
+      <li class="has-dropdown">
        <a href="#" class="dropdown-toggle">About <i class="fa-solid fa-chevron-down caret"></i></a>
         <ul class="dropdown">
           <li><a href="about/college.html">About the College</a></li>
@@ -342,7 +342,7 @@ footer p{font-size:13px;color:var(--text-3);}
           <li><a href="about/iaes.html">About IAES</a></li>
           <li><a href="about/conference.html">About the Conference</a></li>
         </ul>
-      </li> -->
+      </li>
       <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
       <li><a href="themes.html">Themes</a></li>
       <li><a href="iaes-award.html">IAES Award</a></li>
@@ -363,7 +363,7 @@ footer p{font-size:13px;color:var(--text-3);}
 <header class="page-header">
   <div class="wrap">
     <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span class="current">Committee</span></div>
-    <span class="eyebrow"><i class="fa-solid fa-people-group"></i>&nbsp; VRMIC 2026 · 26–28 Nov 2026</span>
+    <span class="eyebrow"><i class="fa-solid fa-people-group"></i>&nbsp; LVRMIC 2026 · 26–28 Nov 2026</span>
     <h1>Organising committee</h1>
     <div class="helix-rule helix-rule-center"></div>
     <p style="max-width:680px;font-size:16.5px;">Patrons, chairperson, convener, advisory board members and the CIMSER team behind the 4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment.</p>
@@ -398,7 +398,7 @@ footer p{font-size:13px;color:var(--text-3);}
 <!-- CIMSER organising team -->
 <section class="section-alt section team-band" id="team" hidden>
   <div class="wrap">
-    <span class="eyebrow"><i class="fa-solid fa-users-gear"></i>&nbsp; CIMSER · VRMIC'26</span>
+    <span class="eyebrow"><i class="fa-solid fa-users-gear"></i>&nbsp; CIMSER · LVRMIC'26</span>
     <div id="team-root"></div>
   </div>
 </section>
@@ -531,8 +531,8 @@ backToTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smoot
     'Patrons,1,Rev. Dr. A. Louis Arockiaraj SJ,Patron,Principal,Loyola College,Chennai,,,Yes\n' +
     'Patrons,2,Prof. B. D. Joshi,Patron,President,Indian Academy of Environmental Sciences,Haridwar,,,Yes\n' +
     'Convener,1,Dr. M. Raja,Convener,Research Supervisor – CIMSER,Loyola College,Chennai,,,Yes\n' +
-    'Organising Team,1,Mr. Prasanth S,Organising Team,VRMIC\'26,CIMSER,Chennai,,,Yes\n' +
-    'Organising Team,2,Mr. Mounish D,Technical Team,VRMIC\'26,CIMSER,Chennai,,mounishdesk@gmail.com,Yes\n';
+    'Organising Team,1,Mr. Prasanth S,Organising Team,LVRMIC\'26,CIMSER,Chennai,,,Yes\n' +
+    'Organising Team,2,Mr. Mounish D,Technical Team,LVRMIC\'26,CIMSER,Chennai,,mounishdesk@gmail.com,Yes\n';
 
   const root = document.getElementById('committee-root');
   const teamSection = document.getElementById('team');
@@ -688,7 +688,7 @@ backToTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smoot
     sortedSectionNames(map).forEach(n => root.appendChild(sectionBlock(n, map.get(n), isFeatured(n))));
     const teamKey = Array.from(map.keys()).find(k => k.toLowerCase() === CONFIG.TEAM_SECTION.toLowerCase());
     if(teamKey){
-      teamRoot.appendChild(sectionBlock('CIMSER Organising Team — VRMIC\'26', map.get(teamKey), false));
+      teamRoot.appendChild(sectionBlock('CIMSER Organising Team — LVRMIC\'26', map.get(teamKey), false));
       teamSection.hidden = false;
     } else teamSection.hidden = true;
     if(!filtered.length){

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Help | VRMIC 2026 Admin</title>
+<title>Help | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -166,7 +166,7 @@ const G = [
   'Delete permanently is limited to the Administrator and needs the ID typed in. Nothing in Trash is removed automatically.'] },
 { id: 'backup', t: 'Check or run a backup', ic: 'fa-cloud-arrow-down', need: [['trash', 'report'], ['trash', 'transaction']], s: [
   'Open Trash and Backups, then Backup list.',
-  'A full copy of the portal Sheet is saved to the Drive folder “VRMIC Backups” at about 2 AM IST every day, when daily backup is on in Settings.',
+  'A full copy of the portal Sheet is saved to the Drive folder “LVRMIC Backups” at about 2 AM IST every day, when daily backup is on in Settings.',
   'Check that the newest row says Success. A failed backup also emails the organiser address.',
   'Before the event, or after a big change, use Backup now.',
   'To restore, open the copy in Drive and copy the tab you need into the live Sheet. The portal never overwrites the live Sheet by itself.'] }
@@ -271,7 +271,7 @@ function renderTrouble() { $('trouble').innerHTML = TR.map(f => '<details class=
 
 /* ---------- 7. contacts + glossary ---------- */
 const GL = [
- ['VRMIC ID', 'A participant’s unique ID, for example VRMIC26-0042. Students use VRMIC26-S001.'],
+ ['LVRMIC ID', 'A participant’s unique ID, for example LVRMIC26-0042. Students use LVRMIC26-S001.'],
  ['Session', 'One attendance period with a date, entry time and optionally an exit time and on-time and late limits.'],
  ['Slot', 'The venue, room, date and time given to a presenter.'],
  ['Token', 'The presenter’s order number within a slot.'],

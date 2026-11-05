@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bulk Import and Merge | VRMIC 2026 Admin</title>
+<title>Bulk Import and Merge | LVRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -91,7 +91,7 @@
       <ol class="ix-steps">
         <li>Download the Excel template and fill one participant per row (up to 500). Name, email and phone are required.</li>
         <li>Upload it here. Nothing is saved yet: you first see every row marked <b>OK</b>, <b>Warning</b> or <b>Rejected</b>.</li>
-        <li>Each person gets a normal <code>VRMIC26-xxxx</code> ID, and their phone number is the first password.</li>
+        <li>Each person gets a normal <code>LVRMIC26-xxxx</code> ID, and their phone number is the first password.</li>
       </ol>
       <div class="ix-row"><button class="btn" id="tpl"><i class="fa-solid fa-download"></i> Download Excel template</button></div>
       <div style="margin-top:14px;">
@@ -262,7 +262,7 @@ $('tpl').onclick = () => {
     ['Food preference', 'No', ALLOWED['Food preference'].join('  |  ')]];
   const hs = XLSX.utils.aoa_to_sheet(help); hs['!cols'] = [{ wch: 18 }, { wch: 10 }, { wch: 110 }];
   const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Participants'); XLSX.utils.book_append_sheet(wb, hs, 'Read me');
-  XLSX.writeFile(wb, 'VRMIC2026_participants_template.xlsx');
+  XLSX.writeFile(wb, 'LVRMIC2026_participants_template.xlsx');
 };
 
 /* ---------------- read the file ---------------- */
@@ -353,7 +353,7 @@ function rejectedRowsOut(extra) {
   return { head: head, rows: fromPrev.concat(fromSrv).sort((a, b) => a[0] - b[0]) };
 }
 function byRowRaw(n) { return rowsRaw.find(r => r.rowNo === n); }
-$('dl-prev-rej').onclick = () => { const o = rejectedRowsOut([]); downloadXlsx('VRMIC2026_rejected_rows_' + stamp() + '.xlsx', o.head, o.rows); };
+$('dl-prev-rej').onclick = () => { const o = rejectedRowsOut([]); downloadXlsx('LVRMIC2026_rejected_rows_' + stamp() + '.xlsx', o.head, o.rows); };
 
 /* ---------------- save in chunks ---------------- */
 let outcome = null;
@@ -395,7 +395,7 @@ function showDone() {
   $('done-sub').textContent = bits.join('  ·  ');
   $('dl-rej').style.display = rej ? '' : 'none';
 }
-$('dl-added').onclick = () => downloadXlsx('VRMIC2026_added_participants_' + stamp() + '.xlsx', ['VRMIC ID', 'Name', 'Email', 'Phone (initial password)', 'Institution', 'Warnings'],
+$('dl-added').onclick = () => downloadXlsx('LVRMIC2026_added_participants_' + stamp() + '.xlsx', ['LVRMIC ID', 'Name', 'Email', 'Phone (initial password)', 'Institution', 'Warnings'],
   outcome.added.map(a => [a.id, a.name, a.email, a.phone, a.institution, (a.warnings || []).join(' ')]));
 $('dl-rej').onclick = () => { const x = rejectedRowsOut(outcome.rejected.concat(outcome.skipped)); downloadXlsx('VRMIC2026_rejected_rows_' + stamp() + '.xlsx', x.head, x.rows); };
 

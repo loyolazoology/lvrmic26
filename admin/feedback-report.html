@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Feedback Report | VRMIC 2026 Admin</title>
+<title>Feedback Report | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -75,7 +75,7 @@ details.lg{margin-top:22px;} details.lg summary{cursor:pointer;color:var(--gold-
   <div id="sum"><div class="empty">Loading feedback…</div></div>
 
   <div class="sec" style="margin-top:26px;"><i class="fa-solid fa-user-check"></i><h2>Who answered</h2><span class="n" id="n1"></span></div>
-  <div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>VRMIC ID</th><th>Name</th><th>E-mail</th><th>Type</th><th>Category</th><th>Venue</th><th>Submitted</th><th>Last edited</th></tr></thead><tbody id="tb"></tbody></table></div></div>
+  <div class="table-card"><div class="scroll-x"><table class="list"><thead><tr><th>LVRMIC ID</th><th>Name</th><th>E-mail</th><th>Type</th><th>Category</th><th>Venue</th><th>Submitted</th><th>Last edited</th></tr></thead><tbody id="tb"></tbody></table></div></div>
   <p class="tiny" style="margin-top:8px;">Participants never see these results. Names are visible to admins only.</p>
   <div id="lg"></div>
 </div>
@@ -147,11 +147,11 @@ async function load() {
   } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
 }
 ['fd', 'fv', 'fc', 'ft', 'sn'].forEach(i => $(i).addEventListener('change', () => D && render())); $('refresh').onclick = load;
-VR.exportBar($('xp'), { name: 'VRMIC2026_Feedback', title: 'VRMIC 2026 — Feedback responses', imageEl: () => $('sum'), pdfOpts: { orientation: 'landscape' },
+VR.exportBar($('xp'), { name: 'LVRMIC2026_Feedback', title: 'LVRMIC 2026 — Feedback responses', imageEl: () => $('sum'), pdfOpts: { orientation: 'landscape' },
   getData: () => {
     const qs = D.questions, byP = {}; D.answers.forEach(a => { (byP[a.pid] = byP[a.pid] || {})[a.qid] = a.a; });
     const fmt = (q, v) => { if (v == null) return ''; if (q.type === 'multi') { try { return JSON.parse(v).join('; '); } catch (e) { return v; } } return v; };
-    return { headers: ['VRMIC ID', 'Name', 'E-mail', 'Type', 'Category', 'Venue', 'Submitted'].concat(qs.map(q => q.text)),
+    return { headers: ['LVRMIC ID', 'Name', 'E-mail', 'Type', 'Category', 'Venue', 'Submitted'].concat(qs.map(q => q.text)),
       rows: view.map(r => [r.pid, r.name, r.email, r.type, r.category, r.venue, dtm(r.submittedAt)].concat(qs.map(q => fmt(q, (byP[r.pid] || {})[q.id])))) };
   } });
 load();

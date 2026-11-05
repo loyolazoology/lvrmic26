@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Audit Log | VRMIC 2026 Admin</title>
+<title>Audit Log | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -174,7 +174,7 @@ $('dt-close').onclick = () => $('dt').classList.remove('show');
 $('dt').addEventListener('click', e => { if (e.target === $('dt')) $('dt').classList.remove('show'); });
 
 /* ---------- exports ---------- */
-VR.exportBar($('xp'), { name: 'VRMIC2026_Audit_Log', title: 'VRMIC 2026 — Audit log', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+VR.exportBar($('xp'), { name: 'LVRMIC2026_Audit_Log', title: 'LVRMIC 2026 — Audit log', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
   getData: () => ({ headers: ['Time (IST)', 'User ID', 'Name', 'Role', 'Module', 'Action', 'Record ID', 'Old value', 'New value', 'Reason', 'IP'],
     rows: apply().map(r => [fmtTime(r.time), r.userId, r.name, r.role, r.module, r.action, r.recordId, r.oldValue, r.newValue, r.reason, r.ip]) }) });
 $('xp').addEventListener('click', e => { const b = e.target.closest('button,a'); if (b) VR.api('adminLogEvent', { event: 'export', module: 'AuditLog', what: 'Audit log', detail: ((b.textContent || '').trim().slice(0, 30) + ' · ' + apply().length + ' rows') }).catch(() => {}); });

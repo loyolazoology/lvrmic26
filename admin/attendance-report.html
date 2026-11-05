@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attendance Report | VRMIC 2026 Admin</title>
+<title>Attendance Report | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -40,7 +40,7 @@ if (VR.guard() && VR.frameOnly()) (function () {
 const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'studentAttendance' : 'attendance';
 const label = isStudent ? 'Student' : 'Participant';
 $('ttl').textContent = label + ' attendance report';
-document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
+document.title = $('ttl').textContent + ' | LVRMIC 2026 Admin';
 $('toqr').href = 'students-report.html?kind=' + kind;
 if (!VR.can(MOD, 'report')) { VR.denied('You do not have permission to view the attendance report.'); return; }
 
