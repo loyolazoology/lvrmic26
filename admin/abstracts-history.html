@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Review History | VRMIC 2026 Admin</title>
+<title>Review History | LVRMIC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
@@ -62,7 +62,7 @@ table.list td.rm{max-width:420px;}
 <div class="wrap" style="max-width:1500px;">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
   <div class="toolbar noprint">
-    <input id="q" placeholder="Participant name or VRMIC ID" autocomplete="off">
+    <input id="q" placeholder="Participant name or LVRMIC ID" autocomplete="off">
     <select id="fb"><option value="">All people</option></select>
     <select id="fa"><option value="">All actions</option></select>
     <label class="tiny" style="display:flex;align-items:center;gap:6px;">From <input type="date" id="d1" style="width:auto;"></label>
@@ -135,10 +135,10 @@ async function load() {
   } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
 }
 $('q').addEventListener('input', render); ['fb', 'fa', 'd1', 'd2'].forEach(i => $(i).addEventListener('change', render)); $('refresh').onclick = load;
-VR.exportBar($('xp'), { name: 'VRMIC2026_Abstract_History', title: 'VRMIC 2026 — Abstract review history', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
-  getData: () => ({ headers: ['When (IST)', 'VRMIC ID', 'Name', 'Action', 'Old status', 'New status', 'Version', 'By', 'Role', 'Remarks / reason', 'Note'],
+VR.exportBar($('xp'), { name: 'LVRMIC2026_Abstract_History', title: 'LVRMIC 2026 — Abstract review history', imageEl: () => $('tc'), pdfOpts: { orientation: 'landscape' },
+  getData: () => ({ headers: ['When (IST)', 'LVRMIC ID', 'Name', 'Action', 'Old status', 'New status', 'Version', 'By', 'Role', 'Remarks / reason', 'Note'],
     rows: view.map(h => [dtm(h.Time), h.ParticipantID, h.Name, h.Action, h.OldStatus || '', h.NewStatus || '', h.Version || '', h.ByName || '', h.ByRole || '', h.Remarks || '', h.Note || '']) }) });
-VR.exportBar($('xp2'), { name: 'VRMIC2026_Reviewer_Workload', title: 'VRMIC 2026 — Reviewer workload',
+VR.exportBar($('xp2'), { name: 'LVRMIC2026_Reviewer_Workload', title: 'LVRMIC 2026 — Reviewer workload',
   getData: () => ({ headers: ['Reviewer', 'Accepted', 'Rejected', 'Revisions requested', 'Remarks', 'Total decisions', 'Last activity'], rows: wlRows }) });
 load();
 })();
