@@ -3,80 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard | LVRMIC 2026</title>
+<title>Dashboard | LVRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-:root{--n950:#0a1230;--n900:#0e1938;--n850:#122043;--n800:#152750;--bd:rgba(226,187,120,.24);--gold:#c9974f;--gl:#e8c983;--t1:#f3f5fb;--t2:#b3bcd6;--t3:#8390b3;--ok:#6fc9b6;--warn:#dba43c;--bad:#e8988c;--blue:#9db8ee}
+:root{--n950:#0a1230;--n900:#0e1938;--n850:#122043;--n800:#152750;--bd:rgba(226,187,120,.24);--gold:#c9974f;--gl:#e8c983;--t1:#f3f5fb;--t2:#b3bcd6;--t3:#8390b3;--ok:#6fc9b6;--warn:#dba43c;--bad:#e8988c;--blue:#9db8ee;--ease:cubic-bezier(.2,.7,.2,1)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--n950);color:var(--t1);line-height:1.5;font-size:14px;min-height:100vh}
+body{font-family:'Inter',sans-serif;background:radial-gradient(1100px 500px at 85% -10%,rgba(201,151,79,.10),transparent 60%),var(--n950);color:var(--t1);line-height:1.5;font-size:14px;min-height:100vh}
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:500}
 a{color:var(--gl);text-decoration:none}
 button{font-family:inherit}
 :focus-visible{outline:2px solid var(--gl);outline-offset:2px}
-.top{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 22px;background:rgba(6,11,28,.94);border-bottom:1px solid var(--bd)}
-.top h1{font-size:1.25rem;margin-right:auto;display:flex;gap:10px;align-items:center}
+.top{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 22px;background:rgba(6,11,28,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
+.top h1{font-size:1.2rem;margin-right:auto;display:flex;gap:10px;align-items:center}
 .top h1 i{color:var(--gl)}
-.btn{height:34px;padding:0 13px;border-radius:8px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
-.btn:hover{border-color:var(--gold)}
+.btn{height:34px;padding:0 13px;border-radius:8px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .2s,transform .2s,background .2s}
+.btn:hover{border-color:var(--gold);transform:translateY(-1px)}
 .btn.on{background:rgba(219,164,60,.18);border-color:var(--warn);color:var(--warn)}
 .st{font-size:12px;color:var(--t3);text-align:right;line-height:1.3}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px}
-.dot.p{background:var(--warn)}.dot.x{background:var(--bad)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px;box-shadow:0 0 0 0 rgba(111,201,182,.6);animation:pulse 2s infinite}
+.dot.p{background:var(--warn);animation:none}.dot.x{background:var(--bad);animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(111,201,182,0)}100%{box-shadow:0 0 0 0 rgba(111,201,182,0)}}
 .spin i{animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.wrap{padding:18px 22px 36px;max-width:1400px}
+.wrap{padding:18px 22px 40px;max-width:1400px;margin:0 auto}
 .err{display:none;margin-bottom:14px;padding:10px 14px;border-radius:10px;background:rgba(216,105,90,.12);border:1px solid rgba(216,105,90,.4);color:var(--bad);font-size:13px}
 .err.show{display:block}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
-.kpi{background:linear-gradient(180deg,var(--n850),var(--n900));border:1px solid var(--bd);border-radius:12px;padding:14px 16px}
-.kpi small{color:var(--t2);font-size:12px;display:flex;gap:8px;align-items:center}
-.kpi small i{color:var(--gl)}
-.kpi b{display:block;font-family:'IBM Plex Mono',monospace;font-size:1.9rem;line-height:1.15;margin:4px 0 2px;color:var(--t1)}
-.kpi span{font-size:12px;color:var(--t3)}
+
+.hero{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px;padding:18px 22px;border-radius:16px;border:1px solid var(--bd);position:relative;overflow:hidden;background:linear-gradient(120deg,var(--n850),var(--n900) 60%,rgba(201,151,79,.14))}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(232,201,131,.09) 50%,transparent 60%);transform:translateX(-100%);animation:sheen 5s var(--ease) 1s infinite}
+@keyframes sheen{to{transform:translateX(100%)}}
+.hero h2{font-size:1.5rem;line-height:1.25}
+.hero p{color:var(--t2);font-size:13px;margin-top:2px}
+.cd{text-align:right;position:relative;z-index:1}
+.cd b{display:block;font-family:'IBM Plex Mono',monospace;font-size:2rem;line-height:1.1;color:var(--gl)}
+.cd span{font-size:12px;color:var(--t2)}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.kpi{position:relative;display:flex;gap:13px;align-items:center;background:linear-gradient(180deg,var(--n850),var(--n900));border:1px solid var(--bd);border-radius:14px;padding:15px 16px;transition:transform .25s var(--ease),border-color .25s,box-shadow .25s}
+.kpi:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 10px 26px rgba(0,0,0,.28)}
+.kpi .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--gl);background:rgba(232,201,131,.1);flex-shrink:0}
+.kpi small{color:var(--t2);font-size:12px;display:block}
+.kpi b{display:block;font-family:'IBM Plex Mono',monospace;font-size:1.75rem;line-height:1.15;color:var(--t1)}
+.kpi span.s{font-size:11.5px;color:var(--t3)}
+.flash{animation:flash 1.2s ease}
+@keyframes flash{0%{color:var(--gl);text-shadow:0 0 14px rgba(232,201,131,.7)}100%{text-shadow:none}}
+
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
-.card{background:linear-gradient(180deg,var(--n850),var(--n900));border:1px solid var(--bd);border-radius:14px;padding:18px}
+.card{background:linear-gradient(180deg,var(--n850),var(--n900));border:1px solid var(--bd);border-radius:16px;padding:18px;transition:border-color .25s,box-shadow .25s}
+.card:hover{border-color:rgba(232,201,131,.45);box-shadow:0 10px 28px rgba(0,0,0,.25)}
 .card h3{font-size:1rem;margin-bottom:12px;display:flex;gap:9px;align-items:center}
 .card h3 i{color:var(--gl)}
 .card h3 em{margin-left:auto;font-style:normal;font-size:12px;color:var(--t3);font-family:'Inter',sans-serif}
-.act{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(226,187,120,.1)}
+.act{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:9px 6px;border-bottom:1px solid rgba(226,187,120,.1);border-radius:8px;transition:background .2s}
+.act:hover{background:rgba(232,201,131,.05)}
 .act:last-child{border:0}
 .act b{display:block;font-weight:600;font-size:13.5px}
-.act span{font-size:12px;color:var(--t3)}
-.act .n{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.1rem;min-width:34px;text-align:center;padding:2px 8px;border-radius:8px;background:rgba(219,164,60,.16);color:var(--warn);margin-right:4px}
-.act .l{display:flex;align-items:center;gap:10px}
-.act a{font-size:12.5px;white-space:nowrap}
+.act span.d{font-size:12px;color:var(--t3)}
+.act .n{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.05rem;min-width:36px;text-align:center;padding:2px 8px;border-radius:8px;background:rgba(219,164,60,.16);color:var(--warn)}
+.act .l{display:flex;align-items:center;gap:12px}
+.act a{font-size:12.5px;white-space:nowrap;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:.2s}
+.act a:hover{border-color:var(--bd);background:var(--n800)}
 .ok-all{display:flex;gap:10px;align-items:center;color:var(--ok);padding:10px 0}
 .seg{display:flex;height:14px;border-radius:7px;overflow:hidden;background:rgba(255,255,255,.06);margin:6px 0 10px}
-.seg i{display:block;height:100%}
+.seg i{display:block;height:100%;width:var(--w)}
 .leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--t2)}
 .leg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--c)}
 .leg b{color:var(--t1)}
-.row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid rgba(226,187,120,.08);font-size:13px;color:var(--t2)}
-.row:last-child{border:0}
+.row{display:flex;justify-content:space-between;gap:10px;padding:7px 0 0;font-size:13px;color:var(--t2)}
 .row b{color:var(--t1);font-family:'IBM Plex Mono',monospace}
-.bar{height:6px;border-radius:3px;background:rgba(255,255,255,.08);margin-top:4px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--gold)}
-.chart{display:flex;align-items:flex-end;gap:5px;height:130px;margin-top:4px}
+.bar{height:6px;border-radius:3px;background:rgba(255,255,255,.08);margin:4px 0 6px;overflow:hidden}
+.bar i{display:block;height:100%;width:var(--w);background:linear-gradient(90deg,var(--gold),var(--gl));border-radius:3px}
+.chart{display:flex;align-items:flex-end;gap:5px;height:140px;margin-top:4px}
 .chart div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}
-.chart i{display:block;width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--gl),var(--gold));min-height:2px}
+.chart i{display:block;width:100%;height:var(--h);border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--gl),var(--gold));min-height:2px;transform-origin:bottom;transition:filter .2s}
+.chart div:hover i{filter:brightness(1.25)}
 .chart span{font-size:10px;color:var(--t3);margin-top:4px;white-space:nowrap}
 .chart em{font-style:normal;font-size:10.5px;color:var(--t2);margin-bottom:2px}
 .muted{color:var(--t3);font-size:13px;padding:6px 0}
-.skel{height:84px;border-radius:12px;background:linear-gradient(90deg,var(--n850),var(--n800),var(--n850));background-size:200% 100%;animation:sh 1.2s linear infinite}
+.lock{display:inline-flex;gap:6px;align-items:center;font-size:11px;color:var(--t3);border:1px solid var(--bd);border-radius:999px;padding:2px 9px;margin-left:auto}
+
+/* entrance animation: first load only (class "anim" is removed after it plays) */
+.anim .hero,.anim .kpi,.anim .card{animation:up .65s var(--ease) both;animation-delay:calc(var(--i,0)*70ms)}
+.anim .bar i,.anim .seg i{animation:growx 1.1s var(--ease) both;animation-delay:calc(var(--i,0)*70ms + 250ms)}
+.anim .chart i{animation:growy 1s var(--ease) both;animation-delay:calc(var(--i,0)*70ms + 250ms)}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes growx{from{width:0}}
+@keyframes growy{from{height:2px}}
+.skel{height:84px;border-radius:14px;background:linear-gradient(90deg,var(--n850),var(--n800),var(--n850));background-size:200% 100%;animation:sh 1.2s linear infinite}
 @keyframes sh{to{background-position:-200% 0}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
+<body class="anim-pending">
 <div class="top">
   <h1><i class="fa-solid fa-gauge-high"></i> Dashboard</h1>
   <div class="st"><span class="dot" id="dot"></span><span id="upd">Loading…</span><br><span id="nxt"></span></div>
   <button class="btn" id="pause" title="Pause automatic refresh"><i class="fa-solid fa-pause"></i> Pause</button>
   <button class="btn" id="ref" title="Refresh now"><i class="fa-solid fa-rotate"></i> Refresh</button>
 </div>
-<div class="wrap">
+<div class="wrap" id="wrap">
   <div class="err" id="err"></div>
+  <div id="hero"></div>
   <div class="kpis" id="kpis"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
   <div class="cols" id="cols"></div>
 </div>
@@ -87,17 +115,25 @@ const $ = id => document.getElementById(id), esc = VR.esc, EVERY = 60, IST = 'As
 if (!VR.token()) (window.top || window).location.replace(VR.LOGIN_URL);
 if (window.self === window.top) location.replace('home.html#dashboard.html');
 
+/* Money is shown only to these admin IDs. NOTE: this hides it on screen; the server must also
+   withhold it (see the optional backend snippet) to stop it being fetched by other means. */
+const MONEY_IDS = ['1001', '1002'];
+const myId = String(localStorage.getItem('vrmic_admin_id') || '').trim();
+const MONEY = MONEY_IDS.indexOf(myId) > -1;
+const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const yes = v => String(v).toUpperCase() === 'TRUE';
 const istDay = v => { const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-CA', { timeZone: IST }); };
 const money = n => '₹' + Math.round(n).toLocaleString('en-IN');
 const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
-let paused = false, busy = false, nextAt = Date.now() + EVERY * 1000, last = null;
+let paused = false, busy = false, nextAt = Date.now() + EVERY * 1000, last = null, first = true, conf = {};
+const prev = {};
 
-/* ---------- load: three existing actions; a missing permission just hides that part ---------- */
+/* ---------- load ---------- */
 async function load() {
   if (busy) return; busy = true; $('dot').className = 'dot p'; $('ref').classList.add('spin');
   try {
-    const [pr, sp, at] = await Promise.all([VR.api('adminListParticipants', {}), VR.api('adminSpotReport', {}), VR.api('adminAttendanceReport', { kind: 'participant' })]);
+    const [pr, sp, at] = await Promise.all([VR.api('adminListParticipants', {}), MONEY ? VR.api('adminSpotReport', {}) : Promise.resolve({ ok: false }), VR.api('adminAttendanceReport', { kind: 'participant' })]);
     if (!pr.ok) {
       if (!last) { $('kpis').innerHTML = ''; $('cols').innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;color:var(--t3)">${/permission/i.test(pr.error || '') ? 'You do not have access to participant statistics. Use the menu to open your modules.' : esc(pr.error || 'Could not load.')}</div>`; }
       throw new Error(pr.error || 'Could not load.');
@@ -109,39 +145,57 @@ async function load() {
   finally { busy = false; nextAt = Date.now() + EVERY * 1000; $('ref').classList.remove('spin'); }
 }
 
+/* ---------- small builders ---------- */
+let ci = 0;
+const card = (ic, t, em, body) => `<div class="card" style="--i:${ci++}"><h3><i class="fa-solid ${ic}"></i>${t}${em ? '<em>' + esc(em) + '</em>' : ''}</h3>${body}</div>`;
+const num = (k, v, m) => `<span data-k="${k}" data-n="${v}"${m ? ' data-m="1"' : ''}>${m ? money(v) : v}</span>`;
+const bar = (a, b) => `<div class="bar"><i style="--w:${pct(a, b)}%"></i></div>`;
+
+function hero() {
+  const h = +new Date().toLocaleString('en-GB', { timeZone: IST, hour: '2-digit', hour12: false }), g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const name = (localStorage.getItem('vrmic_admin_name') || '').split(' ')[0] || 'there';
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: IST }), st = conf['conf.startDate'], en = conf['conf.endDate'];
+  let big = '', small = '';
+  if (st && en) {
+    const dd = (a, b) => Math.round((new Date(b + 'T00:00:00Z') - new Date(a + 'T00:00:00Z')) / 864e5);
+    if (today < st) { big = dd(today, st); small = 'day' + (dd(today, st) === 1 ? '' : 's') + ' to go'; }
+    else if (today <= en) { big = 'Day ' + (dd(st, today) + 1); small = 'of ' + (dd(st, en) + 1) + ' · conference is live'; }
+    else { big = 'Done'; small = 'conference concluded'; }
+  }
+  $('hero').innerHTML = `<div class="hero" style="--i:0"><div><h2>${g}, ${esc(name)}</h2><p>${esc(conf['conf.shortName'] || 'VRMIC 2026')} · ${new Date().toLocaleDateString('en-GB', { timeZone: IST, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p></div>${big !== '' ? `<div class="cd"><b>${big}</b><span>${small}</span></div>` : ''}</div>`;
+}
+
 /* ---------- render ---------- */
 function render() {
+  ci = 1; hero();
   const P = last.p.filter(x => String(x.ID) !== ''), n = P.length, c = f => P.filter(f).length;
   const presenters = P.filter(x => x.ParticipantType === 'Oral' || x.ParticipantType === 'Poster');
   const accepted = presenters.filter(x => x.AbstractStatus === 'Accepted'), acceptedOral = accepted.filter(x => x.ParticipantType === 'Oral');
-  const fees = P.reduce((s, x) => s + (Number(x.AmountPaid) || 0), 0);
   const submitted = c(x => x.AbstractStatus === 'Submitted'), revs = c(x => x.AbstractStatus === 'Revision Requested');
-  const noSlot = accepted.filter(x => !String(x.SlotVenue || '').trim()).length;
-  const noPpt = acceptedOral.filter(x => !x.PPTLink).length;
-  const certs = c(x => yes(x.CertificateRequested) && !x.CertificateLink);
-  const profile = c(x => yes(x.ProfileCompleted)), unpaid = c(x => !yes(x.FeePaid) && !Number(x.AmountPaid));
-  const online = c(x => x.Mode === 'Online'), spotN = c(x => x.Source === 'Spot');
-  const today = new Date().toLocaleDateString('en-CA', { timeZone: IST });
+  const noSlot = accepted.filter(x => !String(x.SlotVenue || '').trim()).length, noPpt = acceptedOral.filter(x => !x.PPTLink).length;
+  const certs = c(x => yes(x.CertificateRequested) && !x.CertificateLink), profile = c(x => yes(x.ProfileCompleted));
+  const online = c(x => x.Mode === 'Online'), spotN = c(x => x.Source === 'Spot'), today = new Date().toLocaleDateString('en-CA', { timeZone: IST });
+  const unpaid = MONEY ? c(x => !yes(x.FeePaid) && !Number(x.AmountPaid)) : 0;
+  const fees = MONEY ? P.reduce((s, x) => s + (Number(x.AmountPaid) || 0), 0) : 0;
 
-  /* today's gate attendance (needs Attendance report permission) */
-  let attKpi = ['fa-qrcode', 'Checked in today', '—', 'Attendance report not available to you'], attCard = '';
+  /* today's gate attendance */
+  let attKpi = ['fa-qrcode', 'Checked in today', null, 'Not available to you'], attCard = '';
   if (last.att) {
-    const ses = last.att.sessions.filter(s => s.date === today), rows = last.att.rows.filter(r => r.active);
+    const ses = last.att.sessions.filter(s => s.date === today), rows = last.att.rows.filter(r => r.active), ok = (r, s) => { const st = (r.cells[s.id] || {}).status; return st === 'Present' || st === 'Late'; };
     if (ses.length) {
-      const per = ses.map(s => [s.title, rows.filter(r => { const st = (r.cells[s.id] || {}).status; return st === 'Present' || st === 'Late'; }).length]);
-      const any = rows.filter(r => ses.some(s => { const st = (r.cells[s.id] || {}).status; return st === 'Present' || st === 'Late'; })).length;
+      const any = rows.filter(r => ses.some(s => ok(r, s))).length;
       attKpi = ['fa-qrcode', 'Checked in today', any, 'of ' + rows.length + ' registered (' + pct(any, rows.length) + '%)'];
-      attCard = card('fa-calendar-check', "Today's attendance", '', per.map(x => `<div class="row"><span>${esc(x[0])}</span><b>${x[1]}</b></div><div class="bar"><i style="width:${pct(x[1], rows.length)}%"></i></div>`).join(''));
-    } else { attKpi = ['fa-qrcode', 'Checked in today', '—', 'No attendance session today']; attCard = card('fa-calendar-check', "Today's attendance", '', '<div class="muted">No attendance session is set for today.</div>'); }
+      attCard = '@ATT@' + ses.map(s => { const k = rows.filter(r => ok(r, s)).length; return `<div class="row"><span>${esc(s.title)}</span><b>${num('att' + s.id, k)}</b></div>${bar(k, rows.length)}`; }).join('');
+    } else { attKpi = ['fa-qrcode', 'Checked in today', null, 'No attendance session today']; attCard = '@ATT@<div class="muted">No attendance session is set for today.</div>'; }
   }
 
   $('kpis').innerHTML = [
-    ['fa-users', 'Registered', n, online + ' online · ' + (n - online) + ' on campus'],
-    ['fa-indian-rupee-sign', 'Fees recorded', money(fees), spotN + ' spot registration' + (spotN === 1 ? '' : 's')],
-    ['fa-file-lines', 'Abstracts to review', submitted, revs + ' awaiting revision'],
-    ['fa-location-crosshairs', 'Slots to allot', noSlot, accepted.length + ' accepted presenters'],
-    attKpi
-  ].map(x => `<div class="kpi"><small><i class="fa-solid ${x[0]}"></i>${x[1]}</small><b>${x[2]}</b><span>${esc(x[3])}</span></div>`).join('');
+    ['fa-users', 'Registered', n, online + ' online · ' + (n - online) + ' on campus', 'reg'],
+    MONEY ? ['fa-indian-rupee-sign', 'Fees recorded', fees, spotN + ' spot registration' + (spotN === 1 ? '' : 's'), 'fees', 1] : ['fa-bolt', 'Spot registrations', spotN, 'registered at the desk', 'spot'],
+    ['fa-file-lines', 'Abstracts to review', submitted, revs + ' awaiting revision', 'rev'],
+    ['fa-location-crosshairs', 'Slots to allot', noSlot, accepted.length + ' accepted presenters', 'slot'],
+    [attKpi[0], attKpi[1], attKpi[2], attKpi[3], 'att']
+  ].map((x, i) => `<div class="kpi" style="--i:${i + 1}"><div class="ic"><i class="fa-solid ${x[0]}"></i></div><div><small>${x[1]}</small><b>${x[2] == null ? '—' : num('k' + x[4], x[2], x[5])}</b><span class="s">${esc(x[3])}</span></div></div>`).join('');
 
   /* needs attention */
   const A = [[submitted, 'fa-file-circle-check', 'abstract' + (submitted === 1 ? '' : 's') + ' awaiting review', 'Accept, reject or request revision', 'abstracts-review.html'],
@@ -151,43 +205,56 @@ function render() {
     [certs, 'fa-certificate', 'certificate request' + (certs === 1 ? '' : 's') + ' pending', 'Generate and send', 'certificates-manage.html'],
     [n - profile, 'fa-user-pen', 'participant' + (n - profile === 1 ? '' : 's') + ' with incomplete profile', 'Needed before abstract or PPT upload', 'participants-report.html'],
     [unpaid, 'fa-cash-register', 'registration' + (unpaid === 1 ? '' : 's') + ' with no payment recorded', 'Record at the payment desk', 'spot-desk.html']].filter(x => x[0] > 0);
-  const attn = A.length ? A.map(x => `<div class="act"><div class="l"><span class="n">${x[0]}</span><div><b>${x[2]}</b><span>${x[3]}</span></div></div><a href="${x[4]}">Open</a></div>`).join('')
+  const attn = A.length ? A.map((x, i) => `<div class="act"><div class="l"><span class="n">${num('a' + x[4], x[0])}</span><div><b>${x[2]}</b><span class="d">${x[3]}</span></div></div><a href="${x[4]}">Open <i class="fa-solid fa-arrow-right"></i></a></div>`).join('')
     : '<div class="ok-all"><i class="fa-solid fa-circle-check"></i> All caught up. Nothing needs action right now.</div>';
 
   /* abstract pipeline */
   const S = [['Accepted', 'var(--ok)'], ['Submitted', 'var(--warn)'], ['Revision Requested', 'var(--blue)'], ['Rejected', 'var(--bad)'], ['Not Submitted', '#5d6a8f']];
   const cnt = S.map(s => c(x => (x.ParticipantType === 'Oral' || x.ParticipantType === 'Poster') && x.AbstractStatus === s[0])), tot = cnt.reduce((a, b) => a + b, 0);
-  const pipe = tot ? `<div class="seg">${S.map((s, i) => `<i style="width:${cnt[i] * 100 / tot}%;background:${s[1]}"></i>`).join('')}</div><div class="leg">${S.map((s, i) => `<span style="--c:${s[1]}">${s[0]} <b>${cnt[i]}</b></span>`).join('')}</div>` : '<div class="muted">No presenters registered yet.</div>';
+  const pipe = tot ? `<div class="seg">${S.map((s, i) => `<i style="--w:${cnt[i] * 100 / tot}%;background:${s[1]}"></i>`).join('')}</div><div class="leg">${S.map((s, i) => `<span style="--c:${s[1]}">${s[0]} <b>${cnt[i]}</b></span>`).join('')}</div>` : '<div class="muted">No presenters registered yet.</div>';
 
-  /* category split */
-  const T = [['Oral', n && c(x => x.ParticipantType === 'Oral')], ['Poster', c(x => x.ParticipantType === 'Poster')], ['Delegate only', c(x => x.ParticipantType === 'Participant')]];
+  /* progress, type, category */
+  const prog = [['Accepted of submitted', accepted.length, accepted.length + submitted + revs], ['Accepted presenters with a slot', accepted.length - noSlot, accepted.length], ['Accepted Oral with a PPT', acceptedOral.length - noPpt, acceptedOral.length]]
+    .map(x => `<div class="row"><span>${x[0]}</span><b>${x[1]} / ${x[2]}</b></div>${bar(x[1], x[2])}`).join('');
+  const T = [['Oral', c(x => x.ParticipantType === 'Oral')], ['Poster', c(x => x.ParticipantType === 'Poster')], ['Delegate only', c(x => x.ParticipantType === 'Participant')]];
+  const types = T.map(t => `<div class="row"><span>${t[0]}</span><b>${t[1]}</b></div>${bar(t[1], n)}`).join('');
   const cats = {}; P.forEach(x => { const k = String(x.Role || x.Category || 'Not set').trim() || 'Not set'; cats[k] = (cats[k] || 0) + 1; });
-  const catRows = Object.keys(cats).sort((a, b) => cats[b] - cats[a]).map(k => `<div class="row"><span>${esc(k)}</span><b>${cats[k]}</b></div>`).join('');
-  const types = T.map(t => `<div class="row"><span>${t[0]}</span><b>${t[1]}</b></div><div class="bar"><i style="width:${pct(t[1], n)}%"></i></div>`).join('');
+  const catRows = Object.keys(cats).sort((a, b) => cats[b] - cats[a]).map(k => `<div class="row"><span>${esc(k)}</span><b>${cats[k]}</b></div>${bar(cats[k], n)}`).join('');
 
-  /* presenters: slot + PPT progress */
-  const withSlot = accepted.length - noSlot, withPpt = acceptedOral.length - noPpt;
-  const prog = [['Accepted of submitted', accepted.length, accepted.length + submitted + revs], ['Accepted presenters with a slot', withSlot, accepted.length], ['Accepted Oral with a PPT', withPpt, acceptedOral.length]]
-    .map(x => `<div class="row"><span>${x[0]}</span><b>${x[1]} / ${x[2]}</b></div><div class="bar"><i style="width:${pct(x[1], x[2])}%"></i></div>`).join('');
-
-  /* registrations per day, last 14 days */
+  /* registrations per day */
   const days = [], by = {}; P.forEach(x => { const d = istDay(x.RegistrationDate || x.CreatedAt); if (d) by[d] = (by[d] || 0) + 1; });
   for (let i = 13; i >= 0; i--) days.push(new Date(Date.now() - i * 864e5).toLocaleDateString('en-CA', { timeZone: IST }));
   const max = Math.max(1, ...days.map(d => by[d] || 0));
-  const chart = `<div class="chart">${days.map(d => `<div title="${d}: ${by[d] || 0}"><em>${by[d] || ''}</em><i style="height:${(by[d] || 0) * 100 / max * 0.8}%"></i><span>${d.slice(8)}</span></div>`).join('')}</div>`;
+  const chart = `<div class="chart">${days.map((d, i) => `<div title="${d}: ${by[d] || 0}"><em>${by[d] || ''}</em><i style="--h:${(by[d] || 0) * 80 / max}%;--i:${i / 3}"></i><span>${d.slice(8)}</span></div>`).join('')}</div>`;
 
-  /* spot desk collection (needs Spot registration report permission) */
+  /* spot collection: money users only */
   let spotCard = '';
-  if (last.spot) {
-    const m = last.spot.byMode || {}, rows = Object.keys(m).map(k => `<div class="row"><span>${esc(k || 'Not set')}</span><b>${money(m[k])}</b></div>`).join('');
-    spotCard = card('fa-bolt', 'Spot registration', last.spot.count + ' registered · ' + money(last.spot.total), rows || '<div class="muted">No spot registrations yet.</div>');
+  if (MONEY && last.spot) {
+    const m = last.spot.byMode || {}, rows = Object.keys(m).map(k => `<div class="row"><span>${esc(k || 'Not set')}</span><b>${money(m[k])}</b></div>${bar(m[k], last.spot.total)}`).join('');
+    spotCard = card('fa-bolt', 'Spot registration collection', last.spot.count + ' registered · ' + money(last.spot.total), rows || '<div class="muted">No spot registrations yet.</div>');
   }
+  const attHtml = attCard ? card('fa-calendar-check', "Today's attendance", '', attCard.replace('@ATT@', '')) : '';
 
   $('cols').innerHTML = card('fa-list-check', 'Needs attention', A.length ? A.length + ' item' + (A.length === 1 ? '' : 's') : '', attn) + card('fa-file-lines', 'Abstract pipeline', tot + ' presenters', pipe) +
-    card('fa-bars-progress', 'Presenter progress', '', prog) + attCard + card('fa-chart-column', 'Registrations per day', 'last 14 days', chart) +
+    card('fa-bars-progress', 'Presenter progress', '', prog) + attHtml + card('fa-chart-column', 'Registrations per day', 'last 14 days', chart) +
     card('fa-chart-pie', 'Participant type', '', types) + card('fa-tags', 'By fee category', '', catRows || '<div class="muted">No data.</div>') + spotCard;
+
+  if (first) { document.body.classList.add('anim'); setTimeout(() => document.body.classList.remove('anim'), 2200); }
+  countUp();
+  first = false;
 }
-const card = (ic, t, em, body) => `<div class="card"><h3><i class="fa-solid ${ic}"></i>${t}${em ? '<em>' + esc(em) + '</em>' : ''}</h3>${body}</div>`;
+
+/* numbers count up on the first load and glide to new values on later refreshes */
+const fmt = (el, v) => el.dataset.m ? money(v) : v.toLocaleString('en-IN');
+function countUp() {
+  document.querySelectorAll('[data-n]').forEach(el => {
+    const to = +el.dataset.n, k = el.dataset.k, from = first ? 0 : (prev[k] === undefined ? to : prev[k]); prev[k] = to;
+    if (RM || from === to) { el.textContent = fmt(el, to); return; }
+    if (!first) { el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1300); }
+    const t0 = performance.now(), d = first ? 1000 : 600;
+    (function f(t) { const p = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(el, Math.round(from + (to - from) * e)); if (p < 1) requestAnimationFrame(f); })(t0);
+  });
+}
 
 /* ---------- auto-refresh: every 60 s, only while this tab is visible ---------- */
 setInterval(() => {
@@ -198,7 +265,7 @@ setInterval(() => {
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !paused && Date.now() >= nextAt) load(); });
 $('ref').onclick = load;
 $('pause').onclick = function () { paused = !paused; this.classList.toggle('on', paused); this.innerHTML = paused ? '<i class="fa-solid fa-play"></i> Resume' : '<i class="fa-solid fa-pause"></i> Pause'; if (!paused) load(); };
-load();
+VR.settings().then(s => { conf = s || {}; }).finally(load);
 </script>
 </body>
 </html>
