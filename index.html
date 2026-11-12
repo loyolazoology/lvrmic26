@@ -628,6 +628,47 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
 .breadcrumb a:hover{color:var(--gold-light);}
 .breadcrumb .sep{margin:0 6px;color:var(--navy-border);}
 .breadcrumb .current{color:var(--gold-light);}
+
+/* =====================================================
+   ACCOMMODATION
+===================================================== */
+.stay-card{display:flex;flex-direction:column;gap:6px;}
+.stay-card h3{margin:10px 0 2px;font-size:18px;}
+.stay-sub{font-size:13px;color:var(--ink-3);margin:0 0 10px;}
+.stay-card table{margin:6px 0 12px;}
+.stay-card th,.stay-card td{padding:9px 8px;font-size:13.5px;}
+.stay-list{list-style:none;margin:0 0 14px;padding:0;}
+.stay-list li{font-size:13.5px;color:var(--ink-2);padding:5px 0 5px 22px;position:relative;}
+.stay-list li::before{content:"\f3c5";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:0;top:6px;font-size:11px;color:var(--gold);}
+.stay-addr{font-size:13.5px;color:var(--ink-2);margin:0 0 14px;}
+.stay-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;}
+.stay-actions .btn{padding:10px 16px;font-size:13.5px;}
+.stay-enquiry{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:22px;
+  background:rgba(201,151,79,.08);border:1px solid rgba(201,151,79,.3);border-radius:var(--radius);padding:18px 22px;}
+.stay-enquiry b{color:var(--ink-1);font-size:15px;display:block;}
+.stay-enquiry span{font-size:13px;color:var(--ink-3);}
+.stay-enquiry a.phone{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:#9a6b28;}
+
+.pamphlet-overlay{
+  position:fixed;inset:0;background:rgba(6,10,26,.85);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;z-index:300;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s ease;
+}
+.pamphlet-overlay.show{opacity:1;pointer-events:auto;}
+.pamphlet-box{
+  position:relative;max-width:min(900px,100%);max-height:92vh;display:flex;flex-direction:column;
+  background:var(--navy-900);border:1px solid var(--navy-border);border-radius:14px;
+  padding:16px;transform:scale(.95);transition:transform .3s ease;box-shadow:0 30px 70px rgba(0,0,0,.55);
+}
+.pamphlet-overlay.show .pamphlet-box{transform:scale(1);}
+.pamphlet-box img{max-width:100%;max-height:calc(92vh - 110px);object-fit:contain;border-radius:8px;display:block;margin:0 auto;background:#fff;}
+.pamphlet-close{
+  position:absolute;top:-14px;right:-14px;width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--gold);background:var(--navy-950);color:var(--gold-light);cursor:pointer;font-size:15px;
+}
+.pamphlet-foot{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+.pamphlet-foot .btn{padding:9px 16px;font-size:13px;}
+@media (max-width:600px){.pamphlet-close{top:-10px;right:-6px;}}
 </style>
 <link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/lvrmic26/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -691,6 +732,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
       <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
       <li><a href="themes.html">Themes</a></li>
       <li><a href="iaes-award.html">IAES Award</a></li>
+      <li><a href="#accommodation">Accommodation</a></li>
       <li class="has-dropdown">
         <a href="#" class="dropdown-toggle">Register / Login <i class="fa-solid fa-chevron-down caret"></i></a>
         <ul class="dropdown">
@@ -743,11 +785,13 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
     <div class="ticker-track">
       <span><i class="fa-solid fa-circle"></i> Abstract submission portal is now open for the 4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment.</span>
       <span><i class="fa-solid fa-circle"></i> Early bird registration closes soon — register today to save on fees.</span>
+      <span><i class="fa-solid fa-circle"></i> Accommodation is available at World University Centre, Egmore and Golden Monar, Anna Nagar — see the Accommodation section.</span>
       <span><i class="fa-solid fa-circle"></i> Selected papers will be considered for publication in partner journals.</span>
       <span><i class="fa-solid fa-circle"></i> For conference updates, write to conferencecimser@gmail.com.</span>
       <!-- duplicate for seamless loop -->
       <span><i class="fa-solid fa-circle"></i> Abstract submission portal is now open for the 4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment.</span>
       <span><i class="fa-solid fa-circle"></i> Early bird registration closes soon — register today to save on fees.</span>
+      <span><i class="fa-solid fa-circle"></i> Accommodation is available at World University Centre, Egmore and Golden Monar, Anna Nagar — see the Accommodation section.</span>
       <span><i class="fa-solid fa-circle"></i> Selected papers will be considered for publication in partner journals.</span>
       <span><i class="fa-solid fa-circle"></i> For conference updates, write to conferencecimser@gmail.com.</span>
     </div>
@@ -1033,8 +1077,75 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
   </div>
 </section>
 
+<!-- ============ ACCOMMODATION ============ -->
+<section class="section-alt section" id="accommodation">
+  <div class="wrap">
+    <span class="eyebrow"><i class="fa-solid fa-bed"></i>&nbsp; Stay</span>
+    <h2>Accommodation facilities</h2>
+    <div class="helix-rule"></div>
+    <p style="max-width:640px;font-size:14.5px;margin-bottom:26px;">Comfortable and convenient non-AC room accommodation for students and staff is available at the following locations.</p>
+
+    <div class="grid grid-2">
+
+      <!-- World University Centre -->
+      <div class="card stay-card reveal">
+        <i class="fa-solid fa-building-columns" style="color:var(--gold);"></i>
+        <h3>World University Centre, Egmore</h3>
+        <p class="stay-sub">Non-AC room accommodation · Chennai</p>
+        <table>
+          <thead><tr><th>Room category</th><th>Rate</th></tr></thead>
+          <tbody>
+            <tr><td>Non-AC attached room – Sharing</td><td>₹1,000 + 5% GST</td></tr>
+            <tr><td>Non-AC attached room – Single</td><td>₹800 + 5% GST</td></tr>
+            <tr><td>Registration fee</td><td>₹200</td></tr>
+            <tr><td>Non-AC non-attached room (common bathroom) – Students</td><td>₹150 per head</td></tr>
+            <tr><td>Non-AC non-attached room (common bathroom) – Staff / Teachers</td><td>₹300 per head</td></tr>
+          </tbody>
+        </table>
+        <p class="stay-addr"><b>Address:</b> 8/18, Mayor Ramanathan Salai (formerly Mayor Ramanathan Rd), M.S. Nagar, Chetpet, Chennai, Tamil Nadu 600031</p>
+        <ul class="stay-list">
+          <li>Approximately 200 metres from Nehru Park Metro Station.</li>
+          <li>Pickup from the railway station or airport is not provided.</li>
+          <li>Auto-rickshaws are available from Chennai Central Railway Station.</li>
+        </ul>
+        <div class="stay-actions">
+          <a href="https://maps.app.goo.gl/5xfpqh2R6qd3SkebA" target="_blank" rel="noopener" class="btn btn-gold"><i class="fa-solid fa-location-arrow"></i> View on Google Maps</a>
+        </div>
+      </div>
+
+      <!-- Golden Monar -->
+      <div class="card stay-card reveal reveal-delay-1">
+        <i class="fa-solid fa-hotel" style="color:var(--gold);"></i>
+        <h3>Golden Monar, Chennai</h3>
+        <p class="stay-sub">Non-AC room accommodation · Chennai</p>
+        <table>
+          <thead><tr><th>Room category</th><th>Rate / day</th><th>Sharing</th></tr></thead>
+          <tbody>
+            <tr><td>Non-AC sharing</td><td>₹1,200</td><td>Two persons</td></tr>
+          </tbody>
+        </table>
+        <p class="stay-addr"><b>Address:</b> Block AI, AI Block, Anna Nagar, Chennai, Tamil Nadu 600040</p>
+        <div class="stay-actions">
+          <a href="https://maps.app.goo.gl/XBnqXdNNsz96Fprr6" target="_blank" rel="noopener" class="btn btn-gold"><i class="fa-solid fa-location-arrow"></i> View on Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stay-enquiry reveal">
+      <div>
+        <b><i class="fa-solid fa-phone" style="color:var(--gold);"></i>&nbsp; For accommodation enquiries</b>
+        <span>Please contact the accommodation office to confirm availability, applicable charges and booking requirements.</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <a class="phone" href="tel:+918682061230">86820 61230</a>
+        <button type="button" class="btn btn-outline" id="pamphlet-open"><i class="fa-solid fa-image"></i> View pamphlet</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ PLACES TO VISIT AROUND CHENNAI ============ -->
-<section class="section-alt section">
+<section class="section-light section">
   <div class="wrap">
     <span class="eyebrow"><i class="fa-solid fa-map-location-dot"></i>&nbsp; Beyond the conference</span>
     <h2>Places to visit around Chennai</h2>
@@ -1086,7 +1197,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
 </section>
 
 <!-- ============ GALLERY PREVIEW — previous conferences ============ -->
-<section class="section-light section">
+<section class="section-alt section">
   <div class="wrap">
     <span class="eyebrow"><i class="fa-solid fa-images"></i>&nbsp; Gallery</span>
     <h2>Moments from previous conferences</h2>
@@ -1116,7 +1227,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
 </section>
 
 <!-- ============ CONTACT ============ -->
-<section class="section-alt section" id="contact">
+<section class="section-light section" id="contact">
   <div class="wrap">
     <span class="eyebrow"><i class="fa-solid fa-envelope-open-text"></i>&nbsp; Contact</span>
     <h2>Get in touch</h2>
@@ -1167,6 +1278,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
           <li><a href="about/conference.html">About the Conference</a></li>
           <li><a href="themes.html">Conference Themes</a></li>
           <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
+          <li><a href="#accommodation">Accommodation</a></li>
           <li><a href="gallery.html">Gallery</a></li>
         </ul>
       </div>
@@ -1185,6 +1297,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
         <ul>
           <li><a href="mailto:conferencecimser@gmail.com"><i class="fa-regular fa-envelope"></i> conferencecimser@gmail.com</a></li>
           <li><a href="tel:+918838558646"><i class="fa-solid fa-headset"></i> Technical support: +91 88385 58646</a></li>
+          <li><a href="tel:+918682061230"><i class="fa-solid fa-bed"></i> Accommodation: 86820 61230</a></li>
           <li><a href="#"><i class="fa-solid fa-location-dot"></i> Loyola College, Chennai – 34</a></li>
         </ul>
       </div>
@@ -1218,6 +1331,19 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
     <div class="welcome-actions">
       <a href="https://erp.loyolacollege.edu/loyolaonline/conference" class="btn btn-gold">Register now</a>
       <button class="btn btn-outline" id="welcome-dismiss">Explore site</button>
+    </div>
+  </div>
+</div>
+
+<!-- Accommodation pamphlet popup -->
+<div class="pamphlet-overlay" id="pamphlet-overlay" role="dialog" aria-modal="true" aria-label="Accommodation pamphlet">
+  <div class="pamphlet-box">
+    <button class="pamphlet-close" id="pamphlet-close" aria-label="Close">✕</button>
+    <img src="https://lvrmic26.vercel.app/assets/accommodation.png" alt="Accommodation facilities pamphlet — World University Centre and Golden Monar">
+    <div class="pamphlet-foot">
+      <a class="btn btn-outline" href="https://maps.app.goo.gl/5xfpqh2R6qd3SkebA" target="_blank" rel="noopener" style="color:var(--text-1);"><i class="fa-solid fa-location-dot"></i> World University Centre</a>
+      <a class="btn btn-outline" href="https://maps.app.goo.gl/XBnqXdNNsz96Fprr6" target="_blank" rel="noopener" style="color:var(--text-1);"><i class="fa-solid fa-location-dot"></i> Golden Monar</a>
+      <a class="btn btn-gold" href="tel:+918682061230"><i class="fa-solid fa-phone"></i> 86820 61230</a>
     </div>
   </div>
 </div>
@@ -1407,6 +1533,40 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
   overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
   const welcomeRegisterLink = overlay.querySelector('.welcome-actions a.btn-gold');
   if (welcomeRegisterLink) welcomeRegisterLink.addEventListener('click', enterSitePlayAnthem);
+})();
+
+// ---- Accommodation pamphlet popup ----
+(function(){
+  const overlay = document.getElementById('pamphlet-overlay');
+  const openBtn = document.getElementById('pamphlet-open');
+  const closeBtn = document.getElementById('pamphlet-close');
+  if(!overlay) return;
+  const open = () => { overlay.classList.add('show'); document.body.classList.add('no-scroll'); };
+  const close = () => { overlay.classList.remove('show'); document.body.classList.remove('no-scroll'); };
+  if(openBtn) openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', e => { if(e.target === overlay) close(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') close(); });
+
+  // Auto popup: once per day, shortly after the welcome modal is closed
+  try {
+    const key = 'cimser_pamphlet_shown';
+    const today = new Date().toISOString().slice(0,10);
+    if(localStorage.getItem(key) !== today){
+      const welcomeOverlay = document.getElementById('welcome-overlay');
+      let fired = false;
+      const once = () => {
+        if(fired) return;
+        fired = true;
+        setTimeout(() => { open(); try{ localStorage.setItem(key, today); }catch(e){} }, 400);
+      };
+      ['welcome-close','welcome-dismiss'].forEach(id => {
+        const b = document.getElementById(id);
+        if(b) b.addEventListener('click', once);
+      });
+      welcomeOverlay.addEventListener('click', e => { if(e.target === welcomeOverlay) once(); });
+    }
+  } catch(e) {}
 })();
 </script>
 
