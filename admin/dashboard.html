@@ -109,14 +109,35 @@ button{font-family:inherit}
 .skel{height:84px;border-radius:14px;background:linear-gradient(90deg,var(--n850),var(--n800),var(--n850));background-size:200% 100%;animation:sh 1.2s linear infinite}
 @keyframes sh{to{background-position:-200% 0}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* layout fixes: one-row top bar and hero on phones, credit line */
+.hero{flex-wrap:nowrap}.hero>div:first-child{min-width:0}.cd{flex-shrink:0;white-space:nowrap}
+.top h1{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.credit{position:fixed;left:0;right:0;bottom:0;z-index:30;height:34px;overflow:hidden;display:flex;align-items:center;background:rgba(6,11,28,.96);border-top:1px solid var(--bd)}
+.credit span{display:inline-block;white-space:nowrap;padding-left:100%;font-size:12px;color:var(--t2);animation:run 30s linear infinite}
+.credit i{color:var(--gl);margin-right:8px}
+@keyframes run{to{transform:translateX(-100%)}}
+.wrap{padding-bottom:64px}
+@media(max-width:640px){
+.top{flex-wrap:nowrap;padding:10px 12px;gap:8px}
+.top h1{font-size:1rem;gap:7px}
+.btn{width:34px;padding:0;justify-content:center}.btn .t{display:none}
+.st{font-size:11px;white-space:nowrap}.st br,#nxt{display:none}
+.wrap{padding:14px 12px 64px}
+.hero{padding:14px 16px;gap:10px}.hero h2{font-size:1.1rem}.hero p{font-size:12px}
+.cd b{font-size:1.35rem}.cd span{font-size:11px}
+.kpis{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:12px;gap:10px}.kpi .ic{display:none}.kpi b{font-size:1.4rem}
+.card{padding:14px}.act{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){.credit span{padding:0 12px;white-space:normal;font-size:11.5px}}
 </style>
 </head>
 <body class="anim-pending">
 <div class="top">
   <h1><i class="fa-solid fa-gauge-high"></i> Dashboard</h1>
   <div class="st"><span class="dot" id="dot"></span><span id="upd">Loading…</span><br><span id="nxt"></span></div>
-  <button class="btn" id="pause" title="Pause automatic refresh"><i class="fa-solid fa-pause"></i> Pause</button>
-  <button class="btn" id="ref" title="Refresh now"><i class="fa-solid fa-rotate"></i> Refresh</button>
+  <button class="btn" id="pause" title="Pause automatic refresh"><i class="fa-solid fa-pause"></i><span class="t">Pause</span></button>
+  <button class="btn" id="ref" title="Refresh now"><i class="fa-solid fa-rotate"></i><span class="t">Refresh</span></button>
 </div>
 <div class="wrap" id="wrap">
   <div class="err" id="err"></div>
@@ -125,6 +146,8 @@ button{font-family:inherit}
   <div class="quick" id="quick"></div>
   <div class="cols" id="cols"></div>
 </div>
+
+<div class="credit" role="contentinfo"><span><i class="fa-solid fa-code"></i> Designed and developed by Media and Digital Innovation Team of AZ-BT, Loyola College, Chennai - 34</span></div>
 
 <script src="admin-common.js"></script>
 <script>
@@ -153,16 +176,14 @@ const prev = {};
 async function load() {
   if (busy) return; busy = true; $('dot').className = 'dot p'; $('ref').classList.add('spin');
   try {
-    const [pr, sp, at] = await Promise.all([
-      VR.api('adminListParticipants', {}),
-      (MONEY && has('spotRegistration')) ? VR.api('adminSpotReport', {}) : Promise.resolve({ ok: false }),
-      has('attendance') ? VR.api('adminAttendanceReport', { kind: 'participant' }) : Promise.resolve({ ok: false })
-    ]);
+    let pr = await VR.api('adminDashboardData', {});          /* open to every admin; server returns only safe fields */
+    if (!pr.ok) pr = await VR.api('adminListParticipants', {});   /* fallback until the server endpoint is added */
+    const sp = (MONEY && has('spotRegistration')) ? await VR.api('adminSpotReport', {}) : { ok: false };
     if (!pr.ok) {
-      if (!last) { $('kpis').innerHTML = ''; $('cols').innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;color:var(--t3)">${/permission/i.test(pr.error || '') ? 'You do not have access to participant statistics. Use the menu to open your modules.' : esc(pr.error || 'Could not load.')}</div>`; }
+      if (!last) { $('kpis').innerHTML = ''; $('cols').innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;color:var(--t3)">${/permission/i.test(pr.error || '') ? 'Dashboard data is not available for your account yet. Use the menu to open your modules.' : esc(pr.error || 'Could not load.')}</div>`; }
       throw new Error(pr.error || 'Could not load.');
     }
-    last = { p: pr.participants, spot: sp.ok ? sp : null, att: at.ok ? at : null };
+    last = { p: pr.participants, spot: sp.ok ? sp : null, att: pr.att || null };   /* attendance counts now come with the dashboard feed (works for view or edit access) */
     $('err').classList.remove('show'); $('dot').className = 'dot'; $('upd').textContent = 'Updated ' + VR.now();
     render();
   } catch (e) { $('dot').className = 'dot x'; const m = $('err'); m.textContent = (last ? 'Could not refresh, showing the last data. ' : '') + (e.message || ''); m.classList.add('show'); }
@@ -216,11 +237,10 @@ function render() {
   /* today's gate attendance (Attendance module) */
   let attKpi = ['fa-qrcode', 'Checked in today', null, 'Not available to you'], attCard = '';
   if (M.att && last.att) {
-    const ses = last.att.sessions.filter(s => s.date === today), rows = last.att.rows.filter(r => r.active), ok = (r, s) => { const st = (r.cells[s.id] || {}).status; return st === 'Present' || st === 'Late'; };
-    if (ses.length) {
-      const any = rows.filter(r => ses.some(s => ok(r, s))).length;
-      attKpi = ['fa-qrcode', 'Checked in today', any, 'of ' + rows.length + ' registered (' + pct(any, rows.length) + '%)'];
-      attCard = ses.map(s => { const k = rows.filter(r => ok(r, s)).length; return `<div class="row"><span>${esc(s.title)}</span><b>${num('att' + s.id, k)}</b></div>${bar(k, rows.length)}`; }).join('');
+    const A8 = last.att;
+    if (A8.sessions.length) {
+      attKpi = ['fa-qrcode', 'Checked in today', A8.any, 'of ' + A8.total + ' registered (' + pct(A8.any, A8.total) + '%)'];
+      attCard = A8.sessions.map(s => `<div class="row"><span>${esc(s.title)}</span><b>${num('att' + s.id, s.count)}</b></div>${bar(s.count, A8.total)}`).join('');
     } else { attKpi = ['fa-qrcode', 'Checked in today', null, 'No attendance session today']; attCard = '<div class="muted">No attendance session is set for today.</div>'; }
   }
 
@@ -312,7 +332,7 @@ setInterval(() => {
 }, 1000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !paused && Date.now() >= nextAt) load(); });
 $('ref').onclick = load;
-$('pause').onclick = function () { paused = !paused; this.classList.toggle('on', paused); this.innerHTML = paused ? '<i class="fa-solid fa-play"></i> Resume' : '<i class="fa-solid fa-pause"></i> Pause'; if (!paused) load(); };
+$('pause').onclick = function () { paused = !paused; this.classList.toggle('on', paused); this.innerHTML = paused ? '<i class="fa-solid fa-play"></i><span class="t">Resume</span>' : '<i class="fa-solid fa-pause"></i><span class="t">Pause</span>'; if (!paused) load(); };
 VR.settings().then(s => { conf = s || {}; }).finally(load);
 </script>
 </body>
