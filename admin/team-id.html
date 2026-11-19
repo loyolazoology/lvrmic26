@@ -486,7 +486,7 @@ function cardHtml(m, head, qrMode, theme) {
   return `<div class="badge t-${esc(theme)}">
     <div class="hole"><i></i></div>
     <div class="bh">
-      <div class="lgs">${LOGO('loyola-crest.png','Loyola College')}${LOGO('cimser-logo.png','CIMSER')}${LOGO('iaes-logo.png','IAES')}${LOGO('ahcf-logo.png','AHCF')}${LOGO('centenary-logo.png','Centenary')}</div>
+      <div class="lgs">${LOGO('loyola-crest.png','Loyola College')}${LOGO('cimser-logo.png','CIMSER')}${LOGO('iaes-logo.png','IAES')}${LOGO('ahcf-logo.png','AHCF')}${LOGO('phes.png','PHES')}</div>
       <div class="bt1">${esc(head.short)}</div>
       <div class="bt2">${esc(head.name)}</div>
     </div>
@@ -609,7 +609,7 @@ $('cpTable').addEventListener('click', e => {
   const keys = b.dataset.row ? MEALS.map(m => b.dataset.row + '-' + m.c) : DAYS.map(d => d + '-' + b.dataset.col);
   setKeys(keys, !keys.every(k => CP.has(k)));
 });
-const logoRow = () => LOGO('loyola-crest.png', 'Loyola College') + LOGO('cimser-logo.png', 'CIMSER') + LOGO('iaes-logo.png', 'IAES') + LOGO('ahcf-logo.png', 'AHCF') + LOGO('centenary-logo.png', 'Centenary');
+const logoRow = () => LOGO('loyola-crest.png', 'Loyola College') + LOGO('cimser-logo.png', 'CIMSER') + LOGO('iaes-logo.png', 'IAES') + LOGO('ahcf-logo.png', 'AHCF') + LOGO('phes.png', 'PHES');
 function punchHtml(m, head, theme) {
   const id = S(m.id), rc = roleClass(m), photo = PHOTO[id], bl = !!m.blank;
   const meals = MEALS.filter(me => DAYS.some(d => CP.has(d + '-' + me.c)));     // only ticked meals appear
