@@ -554,7 +554,7 @@ const headInfo = () => { const s = CONF || {}; return {
   name: s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment',
   line: fmtRange(s['conf.startDate'], s['conf.endDate']) + ' · Loyola College (Autonomous), Chennai',
   range: fmtRange(s['conf.startDate'], s['conf.endDate']) }; };
-const logoRow = () => LOGO('loyola-crest.png', 'Loyola College') + LOGO('cimser-logo.png', 'CIMSER') + LOGO('iaes-logo.png', 'IAES') + LOGO('ahcf-logo.png', 'AHCF') + LOGO('centenary-logo.png', 'Centenary');
+const logoRow = () => LOGO('loyola-crest.png', 'Loyola College') + LOGO('cimser-logo.png', 'CIMSER') + LOGO('iaes-logo.png', 'IAES') + LOGO('ahcf-logo.png', 'AHCF') + LOGO('phes.png', 'PHES');
 const headHtml = h => `<div class="bh"><div class="lgs">${logoRow()}</div><div class="bt1">${esc(h.short)}</div><div class="bt2">${esc(h.name)}</div><div class="bt3">${esc(h.line)}</div></div>`;
 const idBoxes = '<div class="idb"><em>LVRMIC26-</em><i>1</i><i></i><i></i><i></i></div>';
 async function ensureSign() { if ($('fSign').value === 'with' && !SIGN && !(await loadSign())) { $('fSign').value = 'blank'; setMsg('Sign image could not be loaded, badges keep a blank space.', 'err'); } }
