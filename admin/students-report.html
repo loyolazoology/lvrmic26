@@ -3,28 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student List &amp; QR Codes | VRMIC 2026 Admin</title>
+<title>Student List &amp; QR Codes | LVRMIC 2026 Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="admin-base.css">
 <link rel="stylesheet" href="admin-common.css">
+<style>
+.b-warn{background:rgba(219,164,60,.14);color:var(--warn);}
+.b-bad{background:rgba(216,105,90,.14);color:#e8988c;}
+.cred-line{font-size:11px;color:var(--text-3);display:block;margin-top:2px;white-space:normal;}
+td.em{font-family:'IBM Plex Mono',monospace;font-size:12px;white-space:nowrap;}
+.crow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:12px;}
+.crow label{margin-bottom:4px;}
+#c-prog{margin-top:10px;font-size:13px;color:var(--text-2);min-height:18px;}
+</style>
 </head>
 <body>
 
 <div class="topbar"><h1><i class="fa-solid fa-qrcode" style="color:var(--gold-light);"></i> <span id="ttl">Student list &amp; QR codes</span></h1><div id="xp"></div></div>
 <div class="wrap">
   <div class="alert" id="err"></div><div class="alert" id="ok"></div>
-  <div class="banner noprint"><i class="fa-solid fa-circle-info"></i><div>Each QR code holds a <b>signed</b> ID (for example <span class="mono">VRMIC26-S001</span>), so a code that was not generated here is rejected by the scanner. Tick people to print only them; with nothing ticked, everyone in the current filter is printed.</div></div>
+
+  <!-- student login credentials (students only) -->
+  <div class="card noprint" id="cred" style="display:none;">
+    <h3><i class="fa-solid fa-paper-plane"></i> Student login credentials</h3>
+    <div class="stats" id="cstats"></div>
+    <p class="hint" id="cquota" style="margin-top:6px;"></p>
+    <div class="crow" id="csend">
+      <div><label for="c-n">Send to the next</label><input type="number" id="c-n" min="1" max="500" value="80" style="width:110px;"></div>
+      <button class="btn btn-gold" id="c-send"><i class="fa-solid fa-paper-plane"></i> Send login e-mails</button>
+      <button class="btn" id="c-ticked"><i class="fa-solid fa-square-check"></i> Send to ticked students</button>
+      <button class="btn" id="c-fill"><i class="fa-solid fa-at"></i> Fill missing e-mails</button>
+    </div>
+    <div id="c-prog" role="status"></div>
+    <p class="hint">Each student gets a random temporary password by e-mail and must change it at first login. Students who already have credentials are skipped. A password is saved only after its e-mail has been sent.</p>
+  </div>
+
+  <div class="banner noprint"><i class="fa-solid fa-circle-info"></i><div>Each QR code holds a <b>signed</b> ID (for example <span class="mono">LVRMIC26-S001</span>), so a code that was not generated here is rejected by the scanner. Tick people to print only them; with nothing ticked, everyone in the current filter is printed.</div></div>
   <div class="toolbar noprint">
-    <input id="q" placeholder="Search name, ID, class or department number…" autocomplete="off">
+    <input id="q" placeholder="Search name, ID, class, department number or e-mail…" autocomplete="off">
     <select id="fc" style="display:none;"><option value="">All classes</option></select>
     <select id="fs"><option value="">Active &amp; inactive</option><option value="1">Active only</option><option value="0">Inactive only</option></select>
+    <select id="fcred" style="display:none;"><option value="">All login states</option><option value="unsent">Credentials not sent</option><option value="sent">Credentials sent</option><option value="failed">Send failed</option><option value="noemail">No e-mail</option></select>
     <select id="lay" title="QR tiles per A4 page"><option value="24">24 per page (3 × 8)</option><option value="12">12 per page (3 × 4)</option><option value="8">8 per page, large (2 × 4)</option></select>
     <button class="btn btn-gold" id="pdf"><i class="fa-solid fa-file-pdf"></i> QR sheet PDF</button>
     <button class="btn" id="prt"><i class="fa-solid fa-print"></i> Print QR sheet</button>
   </div>
   <div style="font-size:12.5px;color:var(--text-3);margin-bottom:8px;" id="count"></div>
-  <div class="table-card" id="tc"><div class="scroll-x"><table class="list"><thead id="th"></thead><tbody id="tb"><tr><td class="empty" colspan="8"><span class="spinner"></span> Loading…</td></tr></tbody></table></div></div>
+  <div class="table-card" id="tc"><div class="scroll-x"><table class="list"><thead id="th"></thead><tbody id="tb"><tr><td class="empty" colspan="11"><span class="spinner"></span> Loading…</td></tr></tbody></table></div></div>
 </div>
 
 <div class="modal" id="qm"><div class="box" style="text-align:center;">
@@ -39,8 +65,9 @@
   <div class="alert alert-error" id="e-err"></div>
   <label>Name</label><input id="e-name" maxlength="100"><div style="height:10px"></div>
   <label>Class</label><input id="e-class" maxlength="60"><div style="height:10px"></div>
-  <label>Department number</label><input id="e-dept" maxlength="30"><div style="height:12px"></div>
-  <label class="chk"><input type="checkbox" id="e-active"> Active (inactive students cannot be marked)</label>
+  <label>Department number</label><input id="e-dept" maxlength="30"><div style="height:10px"></div>
+  <label>College e-mail (login)</label><input id="e-email" type="email" maxlength="120" autocomplete="off"><div class="hint" id="e-emailhint">Changing the department number does not change the e-mail. Edit it here if needed.</div><div style="height:12px"></div>
+  <label class="chk"><input type="checkbox" id="e-active"> Active (inactive students cannot be marked or log in)</label>
   <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;"><button class="btn" id="e-cancel">Cancel</button><button class="btn btn-gold" id="e-save">Save</button></div>
 </div></div>
 
@@ -51,16 +78,26 @@ if (VR.guard() && VR.frameOnly()) (function () {
 const kind = VR.kind(), isStudent = kind === 'student', MOD = isStudent ? 'students' : 'attendance';
 if (!VR.can(MOD, 'report') && !VR.can(MOD, 'transaction')) { VR.denied('You do not have permission to view this page.'); return; }
 $('ttl').textContent = isStudent ? 'Student list & QR codes' : 'Participant QR codes';
-document.title = $('ttl').textContent + ' | VRMIC 2026 Admin';
+document.title = $('ttl').textContent + ' | LVRMIC 2026 Admin';
 const canEdit = isStudent && VR.can('students', 'transaction');
 const QR_URL = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js', PDF_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
 const LAYOUTS = { 24: { cols: 3, rows: 8 }, 12: { cols: 3, rows: 4 }, 8: { cols: 2, rows: 4 } };
-let all = [], shown = [], picked = new Set(), cur = null;
+let all = [], shown = [], picked = new Set(), cur = null, credInfo = null;
 const cache = {};
 
-const H = isStudent ? ['VRMIC ID', 'Name', 'Class', 'Department No.', 'Status'] : ['VRMIC ID', 'Name', 'Institution', 'Category', 'Mode', 'Status'];
-const rowOf = p => isStudent ? [p.id, p.name, p.class, p.deptNo, p.active ? 'Active' : 'Inactive'] : [p.id, p.name, p.institution, p.type, p.mode, p.active ? 'Active' : 'Cancelled'];
-const hay = p => [p.id, p.name, p.class, p.deptNo, p.institution].join(' ').toLowerCase();
+const H = isStudent ? ['LVRMIC ID', 'Name', 'Class', 'Department No.', 'E-mail', 'Login', 'Status'] : ['LVRMIC ID', 'Name', 'Institution', 'Category', 'Mode', 'Status'];
+const credText = p => !p.email ? 'No e-mail' : (p.credStatus || 'Not sent') + (p.credStatus === 'Sent' ? (p.mustChange ? ' (password not changed yet)' : ' (password changed)') : '');
+const rowOf = p => isStudent ? [p.id, p.name, p.class, p.deptNo, p.email || '', credText(p), p.active ? 'Active' : 'Inactive'] : [p.id, p.name, p.institution, p.type, p.mode, p.active ? 'Active' : 'Cancelled'];
+const hay = p => [p.id, p.name, p.class, p.deptNo, p.institution, p.email].join(' ').toLowerCase();
+const dshort = v => { const d = new Date(v); return isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', timeZone: 'Asia/Kolkata' }); };
+
+function credCell(p) {
+  if (!p.email) return '<td><span class="badge b-warn">No e-mail</span></td>';
+  const st = p.credStatus || 'Not sent', cls = st === 'Sent' ? 'b-ok' : st === 'Failed' ? 'b-bad' : 'b-neu';
+  const sub = st === 'Sent' ? (p.mustChange ? 'Not logged in yet' : 'Password changed') : (st === 'Failed' ? p.credError : '');
+  return '<td><span class="badge ' + cls + '">' + esc(st) + (st === 'Sent' && p.credSentAt ? ' · ' + esc(dshort(p.credSentAt)) : '') + '</span>' + (sub ? '<span class="cred-line">' + esc(sub) + '</span>' : '') + '</td>';
+}
+const credState = p => !p.email ? 'noemail' : (p.credStatus === 'Sent' ? 'sent' : p.credStatus === 'Failed' ? 'failed' : 'unsent');
 
 async function qrImg(text, px) {
   const key = text + '|' + px; if (cache[key]) return cache[key];
@@ -70,41 +107,127 @@ async function qrImg(text, px) {
 }
 
 function filter() {
-  const q = $('q').value.trim().toLowerCase(), c = $('fc').value, s = $('fs').value;
-  shown = all.filter(p => (!q || hay(p).includes(q)) && (!c || p.class === c) && (!s || (s === '1') === p.active));
+  const q = $('q').value.trim().toLowerCase(), c = $('fc').value, s = $('fs').value, cr = $('fcred').value;
+  shown = all.filter(p => (!q || hay(p).includes(q)) && (!c || p.class === c) && (!s || (s === '1') === p.active) && (!cr || credState(p) === cr));
   $('count').textContent = shown.length + ' of ' + all.length + ' shown' + (picked.size ? ' · ' + picked.size + ' ticked' : '');
   $('th').innerHTML = '<tr><th class="noprint"><input type="checkbox" id="all" style="width:auto;" title="Tick everyone shown"></th>' + H.map(h => '<th>' + h + '</th>').join('') + '<th class="noprint">QR</th>' + (canEdit ? '<th class="noprint"></th>' : '') + '</tr>';
   $('all').checked = shown.length > 0 && shown.every(p => picked.has(p.id));
   $('tb').innerHTML = shown.length ? shown.map(p => {
     const r = rowOf(p);
-    return '<tr><td class="noprint"><input type="checkbox" data-pick="' + esc(p.id) + '" style="width:auto;"' + (picked.has(p.id) ? ' checked' : '') + '></td><td class="id">' + esc(r[0]) + '</td><td class="nm">' + esc(r[1]) + '</td>' +
-      r.slice(2, -1).map(x => '<td>' + esc(x) + '</td>').join('') + '<td><span class="badge ' + (p.active ? 'b-ok' : 'b-neu') + '">' + esc(r[r.length - 1]) + '</span></td>' +
+    const mid = r.slice(2, -1).map((x, i) => isStudent && i === 3 ? credCell(p) : '<td' + (isStudent && i === 2 ? ' class="em"' : '') + '>' + esc(x) + '</td>').join('');
+    return '<tr><td class="noprint"><input type="checkbox" data-pick="' + esc(p.id) + '" style="width:auto;"' + (picked.has(p.id) ? ' checked' : '') + '></td><td class="id">' + esc(r[0]) + '</td><td class="nm">' + esc(r[1]) + '</td>' + mid +
+      '<td><span class="badge ' + (p.active ? 'b-ok' : 'b-neu') + '">' + esc(r[r.length - 1]) + '</span></td>' +
       '<td class="noprint"><button class="btn btn-sm" data-qr="' + esc(p.id) + '"><i class="fa-solid fa-qrcode"></i> Show</button></td>' +
-      (canEdit ? '<td class="noprint"><button class="btn btn-sm" data-edit="' + esc(p.id) + '"><i class="fa-solid fa-pen"></i></button></td>' : '') + '</tr>';
-  }).join('') : '<tr><td class="empty" colspan="9">' + (all.length ? 'No match.' : (isStudent ? 'No students yet. Add them under Students → Transaction → Student creation.' : 'No participants yet.')) + '</td></tr>';
+      (canEdit ? '<td class="noprint" style="white-space:nowrap;"><button class="btn btn-sm" data-edit="' + esc(p.id) + '" title="Edit"><i class="fa-solid fa-pen"></i></button> ' +
+        (p.active && p.email ? '<button class="btn btn-sm" data-reset="' + esc(p.id) + '" title="E-mail a new temporary password"><i class="fa-solid fa-key"></i> Reset</button>' : '') + '</td>' : '') + '</tr>';
+  }).join('') : '<tr><td class="empty" colspan="11">' + (all.length ? 'No match.' : (isStudent ? 'No students yet. Add them under Students → Transaction → Student creation.' : 'No participants yet.')) + '</td></tr>';
   $('all').onchange = function () { shown.forEach(p => this.checked ? picked.add(p.id) : picked.delete(p.id)); filter(); };
 }
+
+/* ---------- credentials panel ---------- */
+function renderCred() {
+  if (!isStudent) return;
+  $('cred').style.display = '';
+  if (!credInfo) { $('cstats').innerHTML = ''; $('cquota').textContent = 'Credential status could not be loaded.'; $('csend').style.display = 'none'; return; }
+  const c = credInfo.counts, sc = (ic, h, v, s) => '<div class="sc"><i class="fa-solid ' + ic + '"></i><h4>' + h + '</h4><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('cstats').innerHTML = sc('fa-user-graduate', 'Students', c.total, 'in the list') + sc('fa-envelope-circle-check', 'Credentials sent', c.sent, 'e-mailed') + sc('fa-hourglass-half', 'Still to send', c.unsent, 'active, with e-mail') + sc('fa-triangle-exclamation', 'Failed', c.failed, 'will be retried') + sc('fa-at', 'No e-mail', c.noEmail, 'add an e-mail');
+  const q = credInfo.quota, room = q === null ? null : Math.max(0, q - credInfo.reserve);
+  $('cquota').innerHTML = q === null ? 'Daily e-mail quota could not be read.' : '<i class="fa-solid fa-gauge"></i> E-mails left today: <b>' + q + '</b> (' + credInfo.reserve + ' kept for system e-mails) — you can send up to <b>' + room + '</b> more today.';
+  $('csend').style.display = canEdit ? '' : 'none';
+  if (canEdit) { $('c-n').max = 500; $('c-n').value = Math.max(1, Math.min(80, room === null ? 80 : room, c.unsent || 80)); }
+}
+async function loadCred() {
+  if (!isStudent) return;
+  try {
+    const r = await VR.api('adminStudentCredList', {});
+    if (r.ok) { credInfo = r; const m = {}; r.students.forEach(s => m[s.id] = s); all.forEach(p => { const s = m[p.id]; if (s) Object.assign(p, { email: s.email, credStatus: s.credStatus, credSentAt: s.credSentAt, credError: s.credError, lastLogin: s.lastLogin, mustChange: s.mustChange }); }); }
+    else credInfo = null;
+  } catch (e) { credInfo = null; }
+  renderCred();
+}
+function progress(t) { $('c-prog').innerHTML = t; }
+
+// sends in server-sized batches until the target is reached, the quota ends, or something fails
+async function sendLoop(target, ids) {
+  let sent = 0, failed = 0, note = '';
+  progress('<span class="spinner"></span> Sending… 0 of ' + target);
+  while (sent + failed < target) {
+    const r = await VR.api('adminStudentSendCredentials', { limit: Math.min(25, target - sent - failed), ids: ids || undefined });
+    if (!r.ok) { showErr(r.error || 'Sending stopped.'); break; }
+    sent += r.sent; failed += r.failed;
+    progress('<span class="spinner"></span> Sending… ' + (sent + failed) + ' of ' + target);
+    if (r.quotaHit) { note = ' The daily e-mail limit was reached; continue tomorrow.'; break; }
+    if (r.failed) { note = ' Some e-mails failed; see the Login column.'; break; }
+    if ((!r.sent && !r.failed) || r.remaining === 0) break;
+  }
+  progress('<b>' + sent + '</b> sent, <b>' + failed + '</b> failed.' + note);
+  if (sent) showOk(sent + ' login e-mail(s) sent.');
+  await load();
+}
+if (isStudent) {
+  $('c-send').onclick = function () {
+    hideAlerts(); const n = Math.floor(Number($('c-n').value));
+    if (!(n >= 1 && n <= 500)) return showErr('Enter a number between 1 and 500.');
+    const room = credInfo && credInfo.quota !== null ? credInfo.quota - credInfo.reserve : null;
+    if (room !== null && n > room) return showErr('Only ' + Math.max(0, room) + ' e-mail(s) can be sent today. Lower the number or continue tomorrow.');
+    if (credInfo && n > credInfo.counts.unsent) return showErr('Only ' + credInfo.counts.unsent + ' student(s) are still waiting.');
+    if (!confirm('Send login e-mails to the next ' + n + ' student(s)?')) return;
+    return VR.busy(this, 'Sending…', () => sendLoop(n, null));
+  };
+  $('c-ticked').onclick = function () {
+    hideAlerts();
+    const ids = all.filter(p => picked.has(p.id) && p.active && p.email && p.credStatus !== 'Sent').map(p => p.id);
+    if (!ids.length) return showErr('Tick students who are active, have an e-mail and have not been sent credentials yet. (To send a new password to someone already sent, use Reset.)');
+    if (!confirm('Send login e-mails to ' + ids.length + ' ticked student(s)?')) return;
+    return VR.busy(this, 'Sending…', () => sendLoop(ids.length, ids));
+  };
+  $('c-fill').onclick = function () {
+    return VR.busy(this, 'Working…', async () => {
+      hideAlerts(); const r = await VR.api('adminStudentBackfillEmails', {}); if (!r.ok) return showErr(r.error || 'Could not fill the e-mails.');
+      if (r.missing.length) showErr(r.filled + ' e-mail(s) added. ' + r.missing.length + ' need a manual e-mail (use Edit): ' + r.missing.slice(0, 8).map(m => m.id + ' ' + m.name + ' — ' + m.reason).join(' | ') + (r.missing.length > 8 ? ' …' : ''));
+      else showOk(r.filled + ' e-mail(s) added.');
+      await load();
+    });
+  };
+}
+
 async function load() {
   const r = await VR.api('adminQrList', { kind }); if (!r.ok) { showErr(r.error || 'Could not load the list.'); $('tb').innerHTML = ''; return; }
   all = r.people;
-  if (isStudent) { const cl = [...new Set(all.map(p => p.class).filter(Boolean))].sort(); $('fc').style.display = ''; $('fc').innerHTML = '<option value="">All classes</option>' + cl.map(c => '<option>' + esc(c) + '</option>').join(''); }
+  if (isStudent) { const cl = [...new Set(all.map(p => p.class).filter(Boolean))].sort(); $('fc').style.display = ''; $('fcred').style.display = ''; $('fc').innerHTML = '<option value="">All classes</option>' + cl.map(c => '<option>' + esc(c) + '</option>').join(''); await loadCred(); }
   filter();
 }
-$('q').oninput = filter; $('fc').onchange = filter; $('fs').onchange = filter;
+$('q').oninput = filter; $('fc').onchange = filter; $('fs').onchange = filter; $('fcred').onchange = filter;
 $('tb').onclick = async e => {
-  const pk = e.target.closest('[data-pick]'), qr = e.target.closest('[data-qr]'), ed = e.target.closest('[data-edit]');
+  const pk = e.target.closest('[data-pick]'), qr = e.target.closest('[data-qr]'), ed = e.target.closest('[data-edit]'), rs = e.target.closest('[data-reset]');
   if (pk) { pk.checked ? picked.add(pk.dataset.pick) : picked.delete(pk.dataset.pick); $('count').textContent = shown.length + ' of ' + all.length + ' shown' + (picked.size ? ' · ' + picked.size + ' ticked' : ''); }
   if (qr) { cur = all.find(p => p.id === qr.dataset.qr); $('q-img').innerHTML = '<img alt="QR code" width="240" height="240" src="' + await qrImg(cur.qr, 480) + '">';
     $('q-id').textContent = cur.id; $('q-name').textContent = cur.name; $('q-sub').textContent = isStudent ? cur.class + ' · Dept ' + cur.deptNo : (cur.institution || ''); $('qm').classList.add('show'); }
-  if (ed) { cur = all.find(p => p.id === ed.dataset.edit); $('e-id').textContent = cur.id; $('e-name').value = cur.name; $('e-class').value = cur.class; $('e-dept').value = cur.deptNo; $('e-active').checked = cur.active; $('e-err').classList.remove('show'); $('em').classList.add('show'); }
+  if (ed) { cur = all.find(p => p.id === ed.dataset.edit); $('e-id').textContent = cur.id; $('e-name').value = cur.name; $('e-class').value = cur.class; $('e-dept').value = cur.deptNo; $('e-email').value = cur.email || ''; $('e-active').checked = cur.active; $('e-err').classList.remove('show'); $('em').classList.add('show'); }
+  if (rs) {
+    const p = all.find(x => x.id === rs.dataset.reset);
+    if (!confirm('E-mail a NEW temporary password to ' + p.name + ' (' + p.email + ')?\nTheir current password will stop working.')) return;
+    await VR.busy(rs, 'Sending…', async () => {
+      hideAlerts(); const r = await VR.api('adminStudentResetPassword', { id: p.id });
+      if (!r.ok) return showErr(r.error || 'Could not reset the password.');
+      showOk('A new temporary password was e-mailed to ' + p.email + '.'); await load();
+    });
+  }
 };
 $('q-close').onclick = () => $('qm').classList.remove('show');
 $('q-dl').onclick = async () => { const a = document.createElement('a'); a.href = await qrImg(cur.qr, 600); a.download = 'QR_' + cur.id + '.png'; document.body.appendChild(a); a.click(); a.remove(); };
 $('e-cancel').onclick = () => $('em').classList.remove('show');
 $('e-save').onclick = function () {
   return VR.busy(this, 'Saving…', async () => {
+    const bad = m => { $('e-err').textContent = m; $('e-err').classList.add('show'); };
     const r = await VR.api('adminUpdateStudent', { id: cur.id, name: $('e-name').value, class: $('e-class').value, deptNo: $('e-dept').value, active: $('e-active').checked });
-    if (!r.ok) { $('e-err').textContent = r.error || 'Could not save.'; $('e-err').classList.add('show'); return; }
+    if (!r.ok) return bad(r.error || 'Could not save.');
+    const em = $('e-email').value.trim().toLowerCase();
+    if (em && em !== String(cur.email || '').toLowerCase()) {
+      const x = await VR.api('adminStudentSetEmail', { id: cur.id, email: em });
+      if (!x.ok) { $('em').classList.remove('show'); showErr('Details saved, but the e-mail was not changed: ' + (x.error || 'error')); load(); return; }
+      $('em').classList.remove('show'); showOk(x.sentBefore ? 'Saved. Credentials were already e-mailed to the old address; use Reset to send a new password to the new one.' : 'Saved.'); load(); return;
+    }
     $('em').classList.remove('show'); showOk('Saved.'); load();
   });
 };
@@ -124,7 +247,7 @@ $('pdf').onclick = function () {
     for (let i = 0; i < l.length; i++) {
       if (i && i % per === 0) doc.addPage();
       const k = i % per, x = M + (k % L.cols) * tw, y = M + Math.floor(k / L.cols) * th, t = lines(l[i]);
-      doc.setLineDashPattern([1.2, 1.2], 0); doc.setDrawColor(150); doc.setLineWidth(0.15); doc.rect(x, y, tw, th);   // cut guide
+      doc.setLineDashPattern([1.2, 1.2], 0); doc.setDrawColor(150); doc.setLineWidth(0.15); doc.rect(x, y, tw, th);
       doc.addImage(await qrImg(l[i].qr, 360), 'PNG', x + (tw - side) / 2, y + 3.5, side, side);
       let ty = y + 3.5 + side + 4.5;
       doc.setTextColor(0); doc.setFont('helvetica', 'bold'); doc.setFontSize(fs); doc.text(t.a, x + tw / 2, ty, { align: 'center' });
