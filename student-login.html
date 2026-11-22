@@ -35,20 +35,38 @@ a{color:var(--gold-light);text-decoration:none;}a:hover{text-decoration:underlin
 .logo-slot img{height:100%;width:auto;max-width:90px;object-fit:contain;}
 .topbar-text{font-size:12px;font-family:'IBM Plex Mono',monospace;text-align:center;max-width:560px;line-height:1.6;}
 @media(max-width:900px){.topbar-text{display:none;}.topbar-inner{justify-content:center;}.logo-slot{height:40px;}}
-/* nav */
-.nav{position:sticky;top:0;z-index:100;background:rgba(6,11,28,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--navy-border);}
-.nav-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;}
-.nav-brand{display:flex;align-items:center;gap:14px;min-width:0;}
-.brand-logo-img{height:48px;width:auto;max-width:100px;object-fit:contain;}
-.brand-title{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--text-1);white-space:nowrap;}
-.nav-links{display:flex;align-items:center;gap:2px;list-style:none;padding:0;margin:0;}
-.nav-links a{display:flex;align-items:center;gap:6px;padding:10px 12px;border-radius:6px;color:var(--text-2);font-size:13px;font-weight:500;white-space:nowrap;}
+/* Nav */
+.nav{position:sticky;top:0;z-index:100;background:rgba(6,11,28,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--navy-border);width:100%;}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:18px;width:100%;}
+.nav-brand{display:flex;align-items:center;gap:14px;flex-shrink:1;min-width:0;overflow:hidden;}
+.brand-logo-link{display:flex;align-items:center;height:100%;flex-shrink:0;}
+.brand-logo-img{height:52px;width:auto;max-width:100px;object-fit:contain;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));}
+.brand-title{font-family:'Fraunces',serif;font-weight:700;font-size:23px;letter-spacing:.4px;color:var(--text-1);white-space:nowrap;}
+@media(max-width:1080px){.brand-logo-img{height:44px;}.brand-title{font-size:20px;}}
+@media(max-width:992px){.brand-logo-img{height:40px;}}
+@media(max-width:700px){.brand-logo-img{height:34px;}.brand-title{font-size:18px;}}
+@media(max-width:480px){.brand-title{font-size:16px;}.brand-logo-img{height:30px;}.nav-brand{gap:8px;}}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;padding:0;margin:0;flex-shrink:0;}
+.nav-links>li{position:relative;}
+.nav-links a{display:flex;align-items:center;gap:6px;padding:10px 11px;border-radius:6px;color:var(--text-2);font-size:13px;font-weight:500;white-space:nowrap;transition:.25s;}
 .nav-links a:hover,.nav-links a.active{color:var(--gold-light);background:rgba(232,201,131,.08);text-decoration:none;}
-.nav-toggle{display:none;background:none;border:1px solid var(--navy-border);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:18px;line-height:1;}
+.dropdown-toggle{cursor:pointer;}
+.has-dropdown>a .caret{font-size:10px;transition:.25s;}
+.has-dropdown.open>a .caret{transform:rotate(180deg);}
+.dropdown{position:absolute;left:0;top:calc(100% + 8px);min-width:250px;padding:8px;list-style:none;background:var(--navy-850);border:1px solid var(--navy-border);border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(8px);transition:.25s;z-index:999;}
+.dropdown a{display:block;padding:10px 12px;border-radius:6px;color:var(--text-2);white-space:normal;}
+.dropdown a:hover{background:rgba(232,201,131,.08);color:var(--gold-light);}
+.has-dropdown:hover .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--navy-border);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:18px;flex-shrink:0;appearance:none;-webkit-appearance:none;line-height:1;}
+@media(max-width:1200px){.nav-links a{font-size:12.5px;padding:9px 9px;}}
 @media(max-width:800px){
-  .nav-toggle{display:block;position:relative;z-index:101;}.brand-title{font-size:18px;}.brand-logo-img{height:34px;}.nav-inner{padding:10px 16px;}
-  .nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;height:100dvh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;}
-  .nav-links.open{transform:none;visibility:visible;}.nav-links a{padding:12px;font-size:14.5px;}
+  .nav-toggle{display:block;position:relative;z-index:101;}
+  .nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;gap:4px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;margin-left:0;}
+  .nav-links.open{transform:translateX(0);visibility:visible;}
+  .nav-links>li{width:100%;}
+  .nav-links>li>a{width:100%;justify-content:space-between;font-size:14.5px;padding:12px 12px;}
+  .dropdown{position:static;opacity:1;visibility:visible;transform:none;display:none;background:rgba(255,255,255,.04);border:none;box-shadow:none;margin-top:4px;}
+  .has-dropdown.open .dropdown{display:block;}
 }
 /* header + card */
 .page-header{padding:44px 0 36px;text-align:center;}
@@ -111,20 +129,50 @@ footer p{font-size:12.5px;color:var(--text-3);text-align:center;margin:0 0 4px;}
   <span class="topbar-text">Loyola College (Autonomous), Chennai · Est. 1925 &nbsp;·&nbsp; CIMSER — Centre for Insect Molecular Studies and Environmental Research</span>
 </div></div>
 
-<nav class="nav"><div class="nav-inner">
-  <div class="nav-brand">
-    <a href="index.html"><img src="assets/loyola-crest.png" alt="Loyola College" class="brand-logo-img" onerror="this.style.display='none'"></a>
-    <a href="index.html"><img src="assets/cimser-logo.png" alt="CIMSER" class="brand-logo-img" onerror="this.style.display='none'"></a>
-    <a href="index.html"><span class="brand-title">LVRMIC 2026</span></a>
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand" title="4th International Conference on Life Sciences &amp; Vector Risk Management for a Sustainable Healthy Environment">
+      <a href="index.html" class="brand-logo-link" title="Loyola College">
+        <img src="assets/loyola-crest.png" alt="Loyola College" class="brand-logo-img" onerror="this.style.display='none'">
+      </a>
+      <a href="index.html" class="brand-logo-link" title="CIMSER">
+        <img src="assets/cimser-logo.png" alt="CIMSER" class="brand-logo-img" onerror="this.style.display='none'">
+      </a>
+      <a href="index.html" style="text-decoration:none;">
+        <span class="brand-title">LVRMIC 2026</span>
+      </a>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="committee.html">Committee</a></li>
+      <li class="has-dropdown">
+        <a href="#" class="dropdown-toggle">About <i class="fa-solid fa-chevron-down caret"></i></a>
+        <ul class="dropdown">
+          <li><a href="about/college.html">About the College</a></li>
+          <li><a href="about/department.html">About the Department</a></li>
+          <li><a href="about/cimser.html">About CIMSER</a></li>
+          <li><a href="about/iaes.html">About IAES</a></li>
+          <li><a href="about/conference.html">About the Conference</a></li>
+        </ul>
+      </li>
+      <li><a href="about-paper-poster.html">Call for Papers &amp; Posters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="iaes-award.html">IAES Award</a></li>
+      <li class="has-dropdown">
+        <a href="#" class="dropdown-toggle">Register / Login <i class="fa-solid fa-chevron-down caret"></i></a>
+        <ul class="dropdown">
+          <li><a href="https://erp.loyolacollege.edu/loyolaonline/conference"><i class="fa-solid fa-user-plus"></i>&nbsp; Participant Registration</a></li>
+          <li><a href="participant-login.html"><i class="fa-solid fa-user"></i>&nbsp; Participant Login</a></li>
+          <li><a href="student-login.html" class="active"><i class="fa-solid fa-user-graduate"></i>&nbsp; student Login</a></li>
+          <li><a href="admin-login.html"><i class="fa-solid fa-user-shield"></i>&nbsp; Admin Login</a></li>
+        </ul>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
   </div>
-  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="participant-login.html">Participant Login</a></li>
-    <li><a href="student-login.html" class="active">Student Login</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-</div></nav>
+</nav>
 
 <header class="page-header"><div class="wrap">
   <span class="eyebrow"><i class="fa-solid fa-user-graduate"></i>&nbsp; Student portal</span>
