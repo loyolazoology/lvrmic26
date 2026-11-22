@@ -142,8 +142,17 @@ body.cap .sheet{box-shadow:none}
 .strip .hw{font-size:.2cm}
 .strip .hw i{height:.42cm}
 .cq.blank,.sq.blank{border-style:dashed;font-size:.24cm;font-weight:600;color:var(--lab);text-align:center;line-height:1.25}
-.cb b.wl{height:.62cm}
-.s1 .pcode.wl{display:inline-block;min-width:3.4cm}
+.cb b.wl{height:.8cm}
+.cbody.bk{gap:.3cm;padding:.2cm .5cm}
+.cbody.bk .hw i{height:.7cm}
+/* ID write-in boxes: LVRMIC26-S [ ][ ][ ] */
+.idb{display:flex;align-items:center;justify-content:center;gap:.1cm}
+.idb em{font-style:normal;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.5cm;line-height:1.2;color:var(--acc)}
+.idb i{display:block;width:.85cm;height:.95cm;border:.04cm solid var(--acc);background:rgba(255,255,255,.75)}
+.t-midnight .idb i{background:rgba(255,255,255,.08)}
+.strip .idb{justify-content:flex-start;gap:.07cm}
+.strip .idb em{font-size:.34cm}
+.strip .idb i{width:.52cm;height:.6cm}
 
 /* =================== SETTINGS DIALOG =================== */
 dialog{margin:auto;background:var(--n900);color:var(--t1);border:1px solid var(--bd);border-radius:12px;padding:0;width:min(640px,calc(100% - 24px));max-height:88vh}
@@ -238,11 +247,8 @@ dialog::backdrop{background:rgba(5,10,28,.7)}
 
   <div class="panel">
     <h2>Blank cards for handwriting</h2>
-    <p class="msg">Prints empty ID cards or meal coupons with lines to write the name, class, department number and department, and an empty box to stick the QR. The ID can be pre-numbered, continuing after the last student ID. Uses the colour theme and meal configuration above.</p>
+    <p class="msg">Prints empty ID cards or meal coupons with no QR and no number. The ID is written in the boxes (LVRMIC26-S followed by three boxes), with lines for the name, class, department number and department. Uses the colour theme and meal configuration above.</p>
     <div class="bar">
-      <div class="f" style="min-width:170px"><label for="bNum">Numbering</label><select id="bNum">
-        <option value="num">Pre-numbered ID</option><option value="none">No number (write by hand)</option></select></div>
-      <div class="f" style="min-width:180px"><label for="bFirst">First ID (continues from the last student)</label><input id="bFirst" type="text" maxlength="30" placeholder="Loading last ID"></div>
       <div class="f" style="min-width:100px"><label for="bN">How many</label><input id="bN" type="number" min="1" max="400" value="8"></div>
       <button class="btn pri" id="bGenC" type="button"><i class="fa-solid fa-pen-to-square"></i>Blank ID cards</button>
       <button class="btn pri" id="bGenM" type="button"><i class="fa-solid fa-pen-to-square"></i>Blank meal coupons</button>
@@ -318,8 +324,6 @@ async function init() {
   const r = await VR.api('adminQrList', { kind: 'student' });
   if (!r || !r.ok) { $('count').textContent = (r && r.error) || 'Could not load students.'; $('count').className = 'msg err'; $('rows').innerHTML = '<tr><td colspan="7" class="empty">No data</td></tr>'; return; }
   ALL = (r.people || []).filter(p => S(p.id));
-  if (!firstTouched) $('bFirst').value = nextStudentId();
-  updateBlankInfo();
   const cls = Array.from(new Set(ALL.map(p => S(p.class)).filter(Boolean))).sort();
   $('fCls').innerHTML = '<option value="">All classes</option>' + cls.map(c => `<option>${esc(c)}</option>`).join('');
   applyFilters();
@@ -438,9 +442,9 @@ function cardHtml(p, h, theme) {
       <div class="bt1">${esc(h.short)}</div>
       <div class="bt2">${esc(h.name)}</div>
     </div>
-    <div class="cbody">
-      ${bl ? '<div class="cq none blank">Stick<br>QR here</div>' : qr ? `<div class="cq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="cq none">QR not available</div>'}
-      <div class="cmid"><div class="k">${esc(CFG.idLabel)}</div>${bl && !id ? '<div class="hw"><i></i></div>' : `<div class="code">${esc(id)}</div>`}${bl ? '<div class="hw"><span>Name</span><i></i></div>' : `<div class="nm fit wrap2">${esc(S(p.name))}</div>`}</div>
+    <div class="cbody${bl ? ' bk' : ''}">
+      ${bl ? '' : qr ? `<div class="cq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="cq none">QR not available</div>'}
+      <div class="cmid"><div class="k">${esc(CFG.idLabel)}</div>${bl ? IDBOXES : `<div class="code">${esc(id)}</div>`}${bl ? '<div class="hw"><span>Name</span><i></i></div>' : `<div class="nm fit wrap2">${esc(S(p.name))}</div>`}</div>
       <div class="cinfo"><div class="cb"><small>Class</small><b class="${bl ? 'wl' : 'fit'}">${bl ? '' : esc(S(p.class) || '-')}</b></div><div class="cb"><small>Dept. no.</small><b class="${bl ? 'wl' : 'fit'}">${bl ? '' : esc(S(p.deptNo) || '-')}</b></div></div>
       ${bl ? '<div class="hw"><span>Department</span><i></i></div>' : dept ? `<div class="cdept"><small>Department</small>${esc(dept)}</div>` : ''}
     </div>
@@ -459,11 +463,11 @@ function stripHtml(p, h, theme) {
   return `<div class="strip t-${esc(theme)}">
     <div class="sl">${sideHtml('meal')}</div>
     <div class="sm">
-      ${bl ? '<div class="sq none blank">Stick<br>QR here</div>' : qr ? `<div class="sq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="sq none">QR not available</div>'}
+      ${bl ? '' : qr ? `<div class="sq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="sq none">QR not available</div>'}
       <div class="si">
         <div class="s0 fit">${esc(h.short)} · ${esc(CFG.title)}</div>
         ${bl ? '<div class="hw"><span>Name</span><i></i></div>' : `<div class="sn fit">${esc(S(p.name))}</div>`}
-        <div class="s1"><span class="pl">${esc(CFG.idLabel)}</span><span class="pcode${bl && !id ? ' wl' : ''}">${esc(id)}</span></div>
+        ${bl ? IDBOXES : `<div class="s1"><span class="pl">${esc(CFG.idLabel)}</span><span class="pcode">${esc(id)}</span></div>`}
         ${bl ? '<div class="hw"><span>Class</span><i></i><span>Dept. no.</span><i></i></div><div class="hw"><span>Dept.</span><i></i></div>' : `<div class="s2 fit">Class: ${esc(S(p.class) || '-')} · Dept. no.: ${esc(S(p.deptNo) || '-')}</div>`}
         ${dept ? `<div class="s3">${esc(dept)}</div>` : ''}
         <div class="s4 fit">${esc(CFG.foot)}</div>
@@ -581,36 +585,17 @@ $('cfgClose').onclick = () => $('cfgDlg').close();
 $('cfgReset').onclick = () => { CFG = clone(DEF); fillCfg(); afterCfg(); };
 
 /* ---------- blank cards (fill in by hand) ---------- */
-let firstTouched = false;
-const idParts = s => { const m = /^(.*?)(\d+)$/.exec(S(s)); return m ? { pre: m[1], n: parseInt(m[2], 10), w: m[2].length } : null; };
-const fmtId = (pre, n, w) => pre + String(n).padStart(w, '0');
-function nextStudentId() {                          // highest number among all students (also deactivated), plus one
-  let best = null;
-  ALL.forEach(p => { const x = idParts(p.id); if (x && (!best || x.n > best.n)) best = x; });
-  return best ? fmtId(best.pre, best.n + 1, best.w) : '';
-}
+const IDBOXES = '<div class="idb"><em>LVRMIC26-S</em><i></i><i></i><i></i></div>';     // no number is printed: the ID is written in the three boxes
 const blankN = () => Math.max(1, Math.min(400, parseInt($('bN').value, 10) || 1));
-function blankIds() {
-  const n = blankN();
-  if ($('bNum').value !== 'num') return Array(n).fill('');
-  const x = idParts($('bFirst').value);
-  return x ? Array.from({ length: n }, (_, i) => fmtId(x.pre, x.n + i, x.w)) : null;
-}
 function updateBlankInfo() {
-  const n = blankN(), per = parseInt($('fPer').value, 10), ids = blankIds();
-  $('bFirst').disabled = $('bNum').value !== 'num';
-  $('bInfo').textContent = ids === null ? 'The first ID must end with a number, for example 0151 or ST0151.'
-    : `${n} blank card${n === 1 ? '' : 's'} = ${Math.ceil(n / 4)} A4 sheet${Math.ceil(n / 4) === 1 ? '' : 's'} as ID cards, or ${Math.ceil(n / per)} as meal coupons (${per} per page)` + (ids[0] ? ` · IDs ${ids[0]} to ${ids[n - 1]}` : ' · no ID printed');
-  $('bInfo').className = 'msg' + (ids === null ? ' err' : '');
+  const n = blankN(), per = parseInt($('fPer').value, 10);
+  $('bInfo').textContent = `${n} blank card${n === 1 ? '' : 's'} = ${Math.ceil(n / 4)} A4 sheet${Math.ceil(n / 4) === 1 ? '' : 's'} as ID cards, or ${Math.ceil(n / per)} as meal coupons (${per} per page)`;
 }
 function genBlank(mode) {
-  const ids = blankIds();
-  if (ids === null) { updateBlankInfo(); return; }
   if (mode === 'coupons' && !CP.size) { setMsg('Tick at least one day and meal in the meal configuration.', 'err'); return; }
-  lastRows = ids.map(id => ({ blank: true, id: id })); lastMode = mode; render();
+  lastRows = Array.from({ length: blankN() }, () => ({ blank: true, id: '' })); lastMode = mode; render();
 }
-$('bFirst').oninput = () => { firstTouched = true; updateBlankInfo(); };
-['bNum', 'bN'].forEach(id => $(id).addEventListener(id === 'bN' ? 'input' : 'change', updateBlankInfo));
+$('bN').addEventListener('input', updateBlankInfo);
 $('fPer').addEventListener('change', updateBlankInfo);
 $('bGenC').onclick = () => genBlank('cards');
 $('bGenM').onclick = () => genBlank('coupons');
