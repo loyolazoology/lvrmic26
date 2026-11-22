@@ -674,6 +674,13 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
 .pamphlet-foot{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
 .pamphlet-foot .btn{padding:9px 16px;font-size:13px;}
 @media (max-width:600px){.pamphlet-close{top:-10px;right:-6px;}}
+
+.speaker-card{display:flex;flex-direction:column;align-items:center;text-align:center;}
+.speaker-card h4{margin:0 0 4px;}
+.speaker-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
+.speaker-grid .speaker-card{flex:0 1 260px;}
+.speaker-card .avatar-slot{width:110px;height:110px;font-size:32px;}
+
 </style>
 <link rel="icon" type="image/x-icon" href="https://loyolazoology.github.io/lvrmic26/assets/cimser-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -934,7 +941,7 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
     <span class="eyebrow"><i class="fa-solid fa-microphone-lines"></i>&nbsp; Distinguished guests</span>
     <h2>Keynote speakers &amp; chief guests</h2>
     <div class="helix-rule"></div>
-    <div class="grid grid-4">
+    <div class="speaker-grid">
         <div class="card speaker-card reveal">
            <div class="speaker-photo">
             <img src="https://lh3.googleusercontent.com/d/13LjX76zwH7C7NFTz_34F1w6ctlsrsf93" alt="Dr. G.S. Sameeran, I.A.S."
@@ -944,21 +951,42 @@ th{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:12px;
           <h4>Dr. G.S. Sameeran, I.A.S.</h4>
           <span class="affil">Commissioner, <br>Greater Chennai Corporation</span>
         </div>
-      <div class="card speaker-card reveal reveal-delay-2">
-        <div class="avatar-slot"><i class="fa-solid fa-user"></i></div>
-        <h4>To be announced</h4>
-        <span>Guest of Honour · —</span>
-      </div>
-      <!-- <div class="card speaker-card reveal reveal-delay-3">
-        <div class="avatar-slot"><i class="fa-solid fa-user"></i></div>
-        <h4>To be announced</h4>
-        <span>Plenary Speaker · —</span>
-      </div>
-      <div class="card speaker-card reveal">
-        <div class="avatar-slot"><i class="fa-solid fa-user"></i></div>
-        <h4>To be announced</h4>
-        <span>Keynote Speaker · —</span>
-      </div> -->
+        <div class="card speaker-card reveal">
+            <div class="speaker-photo">
+              <img src="https://lh3.googleusercontent.com/d/1mup_aywlcOQizIWbly7lxm_ggJrYN6Qh" alt="Dr. Manju Rahi "
+              onerror="this.parentElement.innerHTML='<i class=&quot;fa-solid fa-user&quot; style=&quot;font-size:32px;color:#7c869f;line-height:104px;&quot;></i>'">
+              </div>
+              <span class="role">Guest of Honor</span>
+            <h4>Dr. Manju Rahi</h4>
+            <span class="affil">Director, <br>(ICMR-NIVCR) Puducherry</span>
+          </div>
+        <div class="card speaker-card reveal">
+            <div class="speaker-photo">
+              <img src="https://lh3.googleusercontent.com/d/1jJG9uEnf_4kfj3ITVC7CE6jdjU3kLQcQ" alt="Padmashree Prof. Dr A.P. Dash"
+              onerror="this.parentElement.innerHTML='<i class=&quot;fa-solid fa-user&quot; style=&quot;font-size:32px;color:#7c869f;line-height:104px;&quot;></i>'">
+              </div>
+              <span class="role">Guest of Honor</span>
+            <h4>Padmashree Prof. Dr A.P. Dash</h4>
+            <span class="affil">Former Vice Chancellor, <br>Central University Tamil Nadu and AIPH University Bhubaneswar</span>
+          </div>
+          <div class="card speaker-card reveal">
+            <div class="speaker-photo">
+              <img src="https://lh3.googleusercontent.com/d/1vlSWjsJDeDvs-Z6ne_QEHgsY61b3Lc1o" alt="Dr. P. K. Srivastava"
+              onerror="this.parentElement.innerHTML='<i class=&quot;fa-solid fa-user&quot; style=&quot;font-size:32px;color:#7c869f;line-height:104px;&quot;></i>'">
+              </div>
+              <span class="role">Guest of Honor</span>
+            <h4>Dr. P. K. Srivastava</h4>
+            <span class="affil">Director, <br>Absolute Human Health Care Foundation, New Delhi</span>
+          </div>
+          <div class="card speaker-card reveal">
+            <div class="speaker-photo">
+              <img src="https://lh3.googleusercontent.com/d/1VaPvCQ5vFjr_YdJCmZ3eK3uQYx7TKKUo" alt="Dr. S. Selvakumar"
+              onerror="this.parentElement.innerHTML='<i class=&quot;fa-solid fa-user&quot; style=&quot;font-size:32px;color:#7c869f;line-height:104px;&quot;></i>'">
+              </div>
+              <span class="role">Special Guest</span>
+            <h4>Dr. S. Selvakumar</h4>
+            <span class="affil">Chief Vector Control Officer, <br>Greater Chennai Corporation, Chennai</span>
+          </div>
     </div>
   </div>
 </section>
