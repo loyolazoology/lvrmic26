@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Received Items Setup | LVRMIC 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-sliders" style="color:var(--gold-light);"></i> Received items setup</h1></div>
+<div class="wrap" style="max-width:900px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="card">
+    <h3>What is handed over, and to whom</h3>
+    <p class="hint">Tick the groups that receive each item. These items appear on the "ID card &amp; kit received" entry page and as columns in the report. Items cannot be deleted (records are kept); switch them off instead.</p>
+    <div class="table-card"><table class="list"><thead><tr><th>Item</th><th style="text-align:center;">Participants</th><th style="text-align:center;">Students</th><th style="text-align:center;">Team</th><th style="text-align:center;">Active</th></tr></thead>
+      <tbody id="tb"><tr><td class="empty" colspan="5">Loading…</td></tr></tbody></table></div>
+    <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+      <button class="btn" id="add"><i class="fa-solid fa-plus"></i> Add item</button>
+      <button class="btn btn-gold" id="save"><i class="fa-solid fa-floppy-disk"></i> Save setup</button>
+    </div>
+  </div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('badges', 'transaction') && !VR.can('badges', 'report')) { VR.denied('You do not have permission to view this page.'); return; }
+let items = [], canEdit = false;
+const G = ['participant', 'student', 'team'];
+function draw() {
+  const dis = canEdit ? '' : ' disabled';
+  $('tb').innerHTML = items.map((it, i) => '<tr data-i="' + i + '"><td><input class="lb" value="' + esc(it.label) + '" maxlength="40" placeholder="Item name"' + dis + '></td>'
+    + G.map(g => '<td style="text-align:center;"><input type="checkbox" data-g="' + g + '"' + (it.groups[g] ? ' checked' : '') + ' style="width:auto;"' + dis + '></td>').join('')
+    + '<td style="text-align:center;"><input type="checkbox" data-act' + (it.active ? ' checked' : '') + ' style="width:auto;"' + dis + '></td></tr>').join('');
+  $('add').style.display = $('save').style.display = canEdit ? '' : 'none';
+}
+$('tb').addEventListener('input', e => { const tr = e.target.closest('tr'); if (!tr) return; const it = items[+tr.dataset.i];
+  if (e.target.classList.contains('lb')) it.label = e.target.value;
+  else if (e.target.dataset.g) it.groups[e.target.dataset.g] = e.target.checked;
+  else if (e.target.hasAttribute('data-act')) it.active = e.target.checked; });
+$('add').onclick = () => { items.push({ key: '', label: '', active: true, groups: { participant: true, student: false, team: false } }); draw(); };
+$('save').onclick = async function () {
+  hideAlerts();
+  await VR.busy(this, 'Saving…', async () => {
+    try {
+      const r = await VR.api('adminBadgeSaveConfig', { items: items });
+      if (!r.ok) return showErr(r.error || 'Could not save.');
+      items = r.config.items; draw(); showOk('Saved.');
+    } catch (e) { showErr('Could not reach the server.'); }
+  });
+};
+(async function () {
+  try {
+    const r = await VR.api('adminBadgeGetConfig', {});
+    if (!r.ok) { $('tb').innerHTML = '<tr><td class="empty" colspan="5">Could not load.</td></tr>'; return showErr(r.error || 'Could not load the setup.'); }
+    items = r.config.items; canEdit = !!r.canEdit; draw();
+  } catch (e) { showErr('Could not reach the server.'); }
+})();
+})();
+</script>
+</body>
+</html>
