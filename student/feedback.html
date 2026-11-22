@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conference Feedback | LVRMIC 2026 Student Portal</title>
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../student-common.css">
+<style>
+.identity-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+@media(max-width:760px){.identity-grid{grid-template-columns:1fr 1fr;}}@media(max-width:460px){.identity-grid{grid-template-columns:1fr;}}
+.identity-item{min-width:0;}.identity-item .l{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:4px;}.identity-item .v{font-size:14px;color:var(--navy);font-weight:500;overflow-wrap:anywhere;}
+.rating-block{margin-bottom:26px;}.rating-block:last-child{margin-bottom:0;}
+.rating-q{font-size:14.5px;font-weight:600;color:var(--navy);margin-bottom:10px;}
+.rating-help{font-size:12.5px;color:var(--ink-3);margin:-4px 0 10px;}
+.stars{display:flex;gap:6px;}.star{font-size:26px;color:var(--card-border);cursor:pointer;transition:.15s;}.star.filled{color:var(--gold-deep);}
+.mcq-options{display:flex;flex-wrap:wrap;gap:10px;}
+.mcq-opt{padding:9px 16px;border-radius:999px;border:1px solid var(--card-border);background:var(--paper-alt);font-size:13.5px;color:var(--ink-2);cursor:pointer;transition:.2s;}
+.mcq-opt:hover{border-color:var(--gold);}.mcq-opt.selected{background:linear-gradient(180deg,var(--gold-light),var(--gold-deep));color:#fff;border-color:var(--gold);font-weight:600;}
+textarea,input[type=text].txt{width:100%;background:#fff;border:1px solid var(--card-border);color:var(--ink-1);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14.5px;}
+textarea{min-height:110px;resize:vertical;}textarea:focus,input[type=text].txt:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.scope-tag{display:inline-block;font-size:11px;font-weight:600;background:var(--paper-alt);border:1px solid var(--card-border);color:var(--gold-deep);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:middle;}
+.req{color:var(--danger);}.q-err{color:var(--danger);font-size:12.5px;margin-top:8px;}
+.ro-ans{font-size:14.5px;color:var(--ink-1);background:var(--paper-alt);border-radius:8px;padding:10px 14px;white-space:pre-wrap;overflow-wrap:anywhere;}
+.btn-lg{padding:13px 26px;}.submit-row{display:flex;justify-content:flex-end;margin-top:6px;}
+.state-card,.thankyou{text-align:center;padding:50px 24px;}
+.state-card>i,.thankyou>i{font-size:34px;color:var(--gold-deep);margin-bottom:14px;display:block;}
+.thankyou>i{color:var(--success);font-size:42px;}.state-card p,.thankyou p{max-width:520px;margin-left:auto;margin-right:auto;}
+.edit-note{font-size:13px;color:var(--ink-3);}
+</style>
+</head>
+<body>
+<div id="shell"></div>
+
+<header class="page-head"><div class="wrap-narrow">
+  <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Feedback</span></div>
+  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);margin:0;">Conference feedback</h1>
+  <div class="helix-rule"></div>
+  <p style="max-width:620px;">Your responses help us improve future editions of the conference. This form opens once the conference concludes.</p>
+</div></header>
+
+<section class="section" id="loader"><div class="wrap-narrow"><div class="sk" style="height:110px;"></div><div class="sk" style="height:260px;margin-top:20px;"></div></div></section>
+
+<section class="section" id="content" style="display:none;"><div class="wrap-narrow">
+  <div class="alert" id="err" role="alert"></div>
+
+  <div class="card state-card" id="not-open-view" style="display:none;"><i class="fa-regular fa-clock"></i>
+    <h3 id="not-open-title" style="justify-content:center;">Feedback isn’t open yet</h3><p id="not-open-text"></p></div>
+  <div class="card state-card" id="closed-view" style="display:none;"><i class="fa-solid fa-lock"></i>
+    <h3 style="justify-content:center;">Feedback window has closed</h3><p>Thank you to everyone who shared their thoughts. The feedback period has ended.</p></div>
+
+  <form id="feedback-form" style="display:none;" novalidate>
+    <div class="card"><h3 style="margin-bottom:14px;"><i class="fa-solid fa-user"></i> Respondent details</h3>
+      <div class="identity-grid">
+        <div class="identity-item"><div class="l">LVRMIC ID</div><div class="v" id="i-id">—</div></div>
+        <div class="identity-item"><div class="l">Name</div><div class="v" id="i-name">—</div></div>
+        <div class="identity-item"><div class="l">Email</div><div class="v" id="i-email">—</div></div>
+        <div class="identity-item"><div class="l">Class</div><div class="v" id="i-class">—</div></div>
+      </div></div>
+    <div class="card"><h3 style="margin-bottom:6px;"><i class="fa-solid fa-star"></i> Your feedback</h3>
+      <p id="form-note" style="font-size:13px;margin-bottom:20px;"></p><div id="qs"></div></div>
+    <div class="submit-row" id="submit-row"><button type="submit" class="btn btn-gold btn-lg" id="submit-btn"><i class="fa-solid fa-paper-plane"></i> Submit feedback</button></div>
+  </form>
+
+  <div class="card thankyou" id="thanks" style="display:none;margin-top:22px;"><i class="fa-solid fa-circle-check"></i>
+    <h3 id="thanks-title" style="justify-content:center;">Thank you for your feedback!</h3>
+    <p id="thanks-text"></p><p class="edit-note" id="thanks-edit"></p></div>
+</div></section>
+<div id="foot"></div>
+
+<script src="../participant-common.js"></script>
+<script src="../student-common.js"></script>
+<script>
+const L = window.LVRMIC, S = window.StudentPortal, esc = S.esc, fmtDT = S.fmtDT, $ = id => document.getElementById(id);
+S.shell('feedback');
+const show = (id, on) => { $(id).style.display = on ? 'block' : 'none'; };
+const fmtD = v => { const d = new Date(String(v).length === 10 ? v + 'T00:00:00+05:30' : v); return isNaN(d) ? v : d.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }); };
+function showErr(m) { const e = $('err'); e.textContent = m; e.classList.add('show'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+let F = null, A = {}, locked = false;
+
+function qBlock(q, i) {
+  const v = A[q.id], tag = q.scopeType === 'day' ? '<span class="scope-tag">' + esc(fmtD(q.scopeValue)) + '</span>' : '';
+  let f = '';
+  if (locked) { const t = Array.isArray(v) ? v.join(', ') : (v == null || v === '' ? '' : (q.type === 'rating' ? v + ' / 5' : v)); f = '<div class="ro-ans">' + (t === '' ? '<i>No answer</i>' : esc(t)) + '</div>'; }
+  else if (q.type === 'rating') f = '<div class="stars" data-q="' + q.id + '">' + [1, 2, 3, 4, 5].map(n => '<i class="fa-solid fa-star star' + (Number(v) >= n ? ' filled' : '') + '" data-value="' + n + '"></i>').join('') + '</div>';
+  else if (q.type === 'yesno' || q.type === 'single') f = '<div class="mcq-options" data-q="' + q.id + '">' + (q.type === 'yesno' ? ['Yes', 'No'] : q.options).map(o => '<div class="mcq-opt' + (v === o ? ' selected' : '') + '" data-value="' + esc(o) + '">' + esc(o) + '</div>').join('') + '</div>';
+  else if (q.type === 'multi') f = '<div class="mcq-options" data-q="' + q.id + '" data-multi="1">' + q.options.map(o => '<div class="mcq-opt' + (Array.isArray(v) && v.indexOf(o) > -1 ? ' selected' : '') + '" data-value="' + esc(o) + '">' + esc(o) + '</div>').join('') + '</div>';
+  else if (q.type === 'short') f = '<input type="text" class="txt" maxlength="200" data-t="' + q.id + '" value="' + esc(v || '') + '">';
+  else f = '<textarea maxlength="2000" data-t="' + q.id + '">' + esc(v || '') + '</textarea>';
+  return '<div class="rating-block" data-block="' + q.id + '"><div class="rating-q">' + (i + 1) + '. ' + esc(q.text) + (q.required && !locked ? ' <span class="req">*</span>' : '') + tag + '</div>' + (q.help ? '<div class="rating-help">' + esc(q.help) + '</div>' : '') + f + '<div class="q-err" id="e-' + q.id + '"></div></div>';
+}
+const paint = (g, v) => g.querySelectorAll('.star').forEach(s => s.classList.toggle('filled', Number(s.dataset.value) <= v));
+const qsEl = $('qs');
+qsEl.addEventListener('click', e => {
+  if (locked) return;
+  const star = e.target.closest('.star'); if (star) { const g = star.closest('.stars'); A[g.dataset.q] = Number(star.dataset.value); paint(g, A[g.dataset.q]); return; }
+  const opt = e.target.closest('.mcq-opt'); if (!opt) return;
+  const g = opt.closest('.mcq-options'), q = g.dataset.q, val = opt.dataset.value;
+  if (g.dataset.multi) { const arr = Array.isArray(A[q]) ? A[q].slice() : [], k = arr.indexOf(val); k > -1 ? arr.splice(k, 1) : arr.push(val); A[q] = arr; opt.classList.toggle('selected', k === -1); }
+  else { g.querySelectorAll('.mcq-opt').forEach(o => o.classList.remove('selected')); opt.classList.add('selected'); A[q] = val; }
+});
+qsEl.addEventListener('mouseover', e => { const s = e.target.closest('.star'); if (s && !locked) paint(s.closest('.stars'), Number(s.dataset.value)); });
+qsEl.addEventListener('mouseout', e => { const g = e.target.closest('.stars'); if (g && !locked && !g.contains(e.relatedTarget)) paint(g, Number(A[g.dataset.q]) || 0); });
+qsEl.addEventListener('input', e => { const t = e.target.dataset && e.target.dataset.t; if (t) A[t] = e.target.value; });
+
+function renderForm() {
+  qsEl.innerHTML = F.questions.map(qBlock).join('');
+  $('submit-row').style.display = locked ? 'none' : 'flex';
+  $('submit-btn').innerHTML = '<i class="fa-solid fa-paper-plane"></i> ' + (F.submitted ? 'Save changes' : 'Submit feedback');
+  $('form-note').textContent = locked ? 'The feedback window has closed. These are the answers you submitted.' : (F.submitted ? 'Your feedback is on record. You can change your answers below until the form closes on ' + fmtDT(F.closesAt) + '.' : 'Questions marked * are required. The form closes on ' + fmtDT(F.closesAt) + '.');
+}
+function showThanks(justSaved, edited) {
+  $('thanks-title').textContent = justSaved && edited ? 'Your changes have been saved' : 'Thank you for your feedback!';
+  $('thanks-text').textContent = justSaved ? 'Thank you for helping us improve. Your response has been recorded.' : 'You have already shared your feedback. We appreciate your time.';
+  $('thanks-edit').textContent = locked ? '' : 'You can still edit your answers above until ' + fmtDT(F.closesAt) + '.';
+  show('thanks', true); if (justSaved) $('thanks').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+(async function init() {
+  try {
+    const dash = await S.api('getStudentDashboard', {});
+    if (!dash.ok) { $('loader').innerHTML = '<div class="wrap-narrow"><div class="alert show">' + esc(dash.error || 'Could not load your account.') + '</div></div>'; return; }
+    const st = dash.student;
+    $('i-id').textContent = st.id; $('i-name').textContent = st.name; $('i-email').textContent = st.email; $('i-class').textContent = st.class || '—';
+    if (dash.switches.scheduleVisible) $('nav-schedule').style.display = '';
+    F = await S.api('getStudentFeedbackForm', {});
+    $('loader').style.display = 'none'; $('content').style.display = 'block';
+    if (!F.ok) { showErr(F.error || 'Could not load the feedback form.'); return; }
+    A = F.answers || {};
+    if (F.state === 'before') { $('not-open-text').textContent = 'The feedback form opens on ' + fmtDT(F.opensAt) + ', after the conference concludes.'; show('not-open-view', true); return; }
+    locked = F.state === 'closed';
+    if (locked && !F.submitted) { show('closed-view', true); return; }
+    if (!F.questions.length) { $('not-open-title').textContent = 'No feedback questions yet'; $('not-open-text').textContent = 'There are no feedback questions for you right now. Please check back later.'; show('not-open-view', true); return; }
+    renderForm(); show('feedback-form', true); if (F.submitted) showThanks(false, false);
+  } catch (err) { $('loader').innerHTML = '<div class="wrap-narrow"><div class="alert show">Could not reach the server. Check your connection and reload.</div></div>'; }
+})();
+
+$('feedback-form').addEventListener('submit', async e => {
+  e.preventDefault(); if (locked) return;
+  $('err').classList.remove('show');
+  let first = null;
+  F.questions.forEach(q => { const v = A[q.id], empty = v == null || v === '' || (Array.isArray(v) && !v.length) || (typeof v === 'string' && !v.trim()); const el = $('e-' + q.id); el.textContent = ''; if (q.required && empty) { el.textContent = 'This question is required.'; if (!first) first = q.id; } });
+  if (first) { showErr('Please answer the required questions.'); document.querySelector('[data-block="' + first + '"]').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+  const btn = $('submit-btn'), label = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Submitting...';
+  try {
+    const res = await S.api('submitStudentFeedbackAnswers', { answers: A });
+    if (!res.ok) { showErr(res.error || 'Could not submit feedback.'); btn.disabled = false; btn.innerHTML = label; return; }
+    F.submitted = true; btn.disabled = false; renderForm(); showThanks(true, res.edited);
+  } catch (err) { showErr('Could not reach the server. Check your connection and try again.'); btn.disabled = false; btn.innerHTML = label; }
+});
+</script>
+</body>
+</html>

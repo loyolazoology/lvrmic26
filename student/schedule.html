@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schedule | LVRMIC 2026 Student Portal</title>
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../student-common.css">
+<style>
+.day-tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:18px;}
+.day-tab{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:12px 16px;cursor:pointer;text-align:left;font-family:inherit;transition:.2s;}
+.day-tab:hover{border-color:var(--gold-light);}
+.day-tab.active{background:linear-gradient(135deg,#fff7e3,#fdf0cf);border-color:var(--gold);box-shadow:0 4px 14px rgba(169,118,47,.15);}
+.day-tab .a{font-size:11px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.6px;}
+.day-tab .b{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--navy);margin:2px 0;}
+.day-tab .c{font-size:12px;color:var(--gold-deep);font-weight:600;}.day-tab .c.none{color:var(--ink-3);font-weight:500;}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px;}.bar .sp{flex:1;}
+.bar label{font-size:13px;color:var(--ink-2);font-weight:600;}
+.bar select{font:13px Inter,sans-serif;padding:9px 12px;border:1px solid var(--card-border);border-radius:8px;background:#fff;color:var(--ink-1);min-width:160px;}
+.day-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.day-title h2{font-size:1.25rem;margin:0;}.day-title span{font-size:13px;color:var(--ink-3);}
+.row{display:grid;grid-template-columns:92px 1fr;gap:14px;margin-bottom:14px;align-items:start;}
+.row-t{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:700;color:var(--gold-deep);padding-top:14px;text-align:right;line-height:1.35;}
+.row-t small{display:block;font-weight:500;color:var(--ink-3);font-size:11px;}
+.par{display:grid;gap:12px;grid-template-columns:repeat(var(--n),minmax(0,1fr));}
+.ses{background:var(--card);border:1px solid var(--card-border);border-top:3px solid var(--gold-light);border-radius:12px;padding:14px 16px;box-shadow:0 4px 16px rgba(20,30,60,.04);min-width:0;}
+.ses h3{font-size:1.02rem;margin:0;overflow-wrap:anywhere;}
+.meta{font-size:12.5px;color:var(--ink-3);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;}
+.hall{display:inline-block;font:700 11px Inter,sans-serif;background:var(--paper-alt);color:var(--gold-deep);border-radius:999px;padding:2px 10px;}
+.roles{margin:10px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px;}
+.roles dt{color:var(--ink-3);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;padding-top:2px;}.roles dd{margin:0;color:var(--navy);font-weight:600;overflow-wrap:anywhere;}
+.desc{font-size:13px;color:var(--ink-2);margin-top:8px;}
+.it{display:grid;grid-template-columns:104px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--card-border);margin-top:9px;font-size:13.5px;}
+.it-t{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-deep);}.it-b{min-width:0;overflow-wrap:anywhere;}
+.it ul{margin:4px 0 0 18px;padding:0;color:var(--ink-2);}
+.gl{color:var(--danger);font-weight:600;font-size:13px;margin-top:3px;}
+.tag{font-size:11px;border:1px solid var(--card-border);border-radius:999px;padding:1px 8px;color:var(--ink-3);}
+.brk{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;text-align:center;font-size:13.5px;color:var(--ink-2);padding:10px 14px;border:1px dashed var(--gold-light);border-radius:10px;background:var(--paper-alt);}
+.brk i{color:var(--gold-deep);}
+.print-title{display:none;}
+@media(max-width:860px){.row{grid-template-columns:1fr;gap:4px;}.row-t{text-align:left;padding-top:0;}.row-t small{display:inline;margin-left:6px;}.par{grid-template-columns:1fr;}}
+@media(max-width:520px){.it{grid-template-columns:1fr;gap:2px;}}
+@media print{
+  @page{margin:12mm;}body{background:#fff;font-size:11.5px;}
+  .utcbar,.masthead-logos,.topnav,.page-head,.day-tabs,.bar,#foot,.pnav-toggle{display:none !important;}
+  .masthead{border:0;background:#fff;}.masthead-inner{padding:0 0 8px;}
+  .print-title{display:block;font:600 15px Fraunces,serif;margin:0 0 10px;color:#000;}
+  .section{padding:0;}.wrap{padding:0;max-width:none;}
+  .row{grid-template-columns:78px 1fr;margin-bottom:8px;break-inside:avoid;}
+  .par{grid-template-columns:repeat(var(--n),minmax(0,1fr)) !important;}.ses{box-shadow:none;break-inside:avoid;padding:8px 10px;}
+  body.printing-all #content{display:none !important;}body.printing-all .pday{display:block;break-after:page;}body.printing-all .pday:last-child{break-after:auto;}
+}
+.pday{display:none;}
+</style>
+</head>
+<body>
+<div id="shell"></div>
+
+<header class="page-head"><div class="wrap">
+  <div class="breadcrumb"><a href="home.html">Dashboard</a><span class="sep">/</span><span class="current">Schedule</span></div>
+  <h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);margin:0;">Conference schedule</h1>
+  <div class="helix-rule"></div>
+  <p style="max-width:640px;">Only sessions the organisers have published are shown.</p>
+</div></header>
+
+<section class="section" id="loader"><div class="wrap"><div class="sk" style="height:74px;"></div><div class="sk" style="height:180px;margin-top:18px;"></div></div></section>
+
+<section class="section" id="content" style="display:none;"><div class="wrap">
+  <div class="day-tabs" id="day-tabs" role="tablist" aria-label="Conference days"></div>
+  <div class="bar">
+    <label for="venue">Venue</label><select id="venue"></select><span class="sp"></span>
+    <button class="btn btn-outline" type="button" id="print-day"><i class="fa-solid fa-print"></i> Print this day</button>
+    <button class="btn btn-outline" type="button" id="print-all"><i class="fa-regular fa-file-pdf"></i> Full programme (PDF)</button>
+  </div>
+  <div class="print-title" id="print-title"></div>
+  <div id="day-content" role="tabpanel"></div>
+</div></section>
+<div id="print-area"></div>
+<div id="foot"></div>
+
+<script src="../participant-common.js"></script>
+<script src="../student-common.js"></script>
+<script>
+const L = window.LVRMIC, S = window.StudentPortal, E = S.esc, $ = id => document.getElementById(id);
+S.shell('schedule');
+
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmtDate = k => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(k || ''); return m ? (+m[3]) + ' ' + MON[+m[2] - 1] + ' ' + m[1] : ''; };
+const hm12 = hm => { const m = /^(\d{1,2}):(\d{2})/.exec(hm || ''); if (!m) return ''; let h = +m[1]; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m[2] + ' ' + ap; };
+const todayKey = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+const weekday = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' });
+const range = (a, b) => hm12(a) + (b ? ' – ' + hm12(b) : '');
+const BREAKS = ['tea', 'lunch', 'break', 'registration', 'coffee', 'dinner', 'inauguration-break'], BREAK_WORDS = /\b(tea|coffee|lunch|dinner|break|registration)\b/i;
+const isBreak = s => !(s.items || []).length && !s.chair && (BREAKS.indexOf(s.type) > -1 || BREAK_WORDS.test(s.name || ''));
+const mins = t => { const m = /^(\d{1,2}):(\d{2})/.exec(String(t || '')); return m ? +m[1] * 60 + +m[2] : null; };
+let days = [], sel = '', venue = '', settings = {};
+
+(async function load() {
+  try {
+    const [prog, set] = await Promise.all([S.api('getStudentSchedule', {}), L.loadPublicSettings()]);
+    settings = set || {};
+    if (!prog.ok) throw new Error(prog.error || 'Could not load the schedule.');
+    const byDate = {}; (prog.days || []).forEach(d => byDate[d.date] = d);
+    const dates = new Set(Object.keys(byDate)), st = settings['conf.startDate'], en = settings['conf.endDate'];
+    if (st && en) for (let t = new Date(st + 'T12:00:00Z'), e = new Date(en + 'T12:00:00Z'), n = 0; t <= e && n < 14; t.setUTCDate(t.getUTCDate() + 1), n++) dates.add(t.toISOString().slice(0, 10));
+    days = [...dates].sort().map((date, i) => { const d = byDate[date] || {}; return { date, no: i + 1, label: d.label || '', venue: d.venue || '', sessions: d.sessions || [] }; });
+    const hash = (location.hash || '').slice(1);
+    sel = (days.find(d => d.date === hash) || days.find(d => d.date === todayKey()) || days.find(d => d.sessions.length) || days[0] || {}).date || '';
+    $('loader').style.display = 'none'; $('content').style.display = 'block'; draw();
+  } catch (err) {
+    $('loader').innerHTML = '<div class="wrap"><div class="notice"><i class="fa-solid fa-triangle-exclamation"></i><div><b>Schedule not available</b><p>' + E(err.message) + '</p><a class="btn btn-outline" href="home.html">Back to dashboard</a></div></div></div>';
+  }
+})();
+
+const empty = msg => '<div class="empty-note"><i class="fa-regular fa-calendar"></i><h3>Nothing to show yet</h3><p>' + E(msg) + '</p></div>';
+function draw() {
+  const day = days.find(d => d.date === sel);
+  $('day-tabs').innerHTML = days.map(d => { const n = d.sessions.filter(s => !isBreak(s)).length;
+    return '<button class="day-tab' + (d.date === sel ? ' active' : '') + '" role="tab" aria-selected="' + (d.date === sel) + '" data-d="' + d.date + '"><div class="a">Day ' + d.no + ' · ' + E(weekday(d.date)) + '</div><div class="b">' + E(fmtDate(d.date)) + '</div><div class="c' + (n ? '' : ' none') + '">' + (n ? n + (n === 1 ? ' session' : ' sessions') : 'Not published yet') + '</div></button>'; }).join('');
+  const tabs = [].slice.call(document.querySelectorAll('.day-tab'));
+  tabs.forEach((b, i) => { b.onclick = () => { sel = b.dataset.d; venue = ''; history.replaceState(null, '', '#' + sel); draw(); };
+    b.onkeydown = e => { const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (k && tabs[i + k]) { tabs[i + k].click(); document.querySelectorAll('.day-tab')[i + k].focus(); } }; });
+  if (!day) { $('venue').innerHTML = ''; $('day-content').innerHTML = empty('The programme will appear here once the organisers publish it.'); return; }
+  const halls = [...new Set(day.sessions.map(s => s.hall).filter(Boolean))];
+  if (venue && halls.indexOf(venue) < 0) venue = '';
+  $('venue').innerHTML = '<option value="">All venues</option>' + halls.map(h => '<option value="' + E(h) + '"' + (h === venue ? ' selected' : '') + '>' + E(h) + '</option>').join('');
+  $('venue').disabled = halls.length < 2;
+  $('print-title').textContent = 'Day ' + day.no + ' · ' + fmtDate(day.date) + (venue ? ' · ' + venue : '');
+  $('day-content').innerHTML = dayHtml(day, venue);
+}
+function dayHtml(day, v) {
+  const list = day.sessions.filter(s => !v || s.hall === v || isBreak(s)), real = list.filter(s => !isBreak(s));
+  const head = '<div class="day-title"><h2>' + E('Day ' + day.no + (day.label && !/^day\s*\d+$/i.test(day.label) ? ' · ' + day.label : '')) + '</h2><span>' + E(weekday(day.date) + ', ' + fmtDate(day.date)) + (day.venue ? ' · ' + E(day.venue) : '') + '</span></div>';
+  return real.length ? head + rows(list) : head + empty('The programme for this day has not been published yet. Check the announcements on your dashboard for updates.');
+}
+function rows(list) {   // overlapping sessions in different halls sit side by side
+  const out = []; let cur = null;
+  list.forEach(s => {
+    const a = mins(s.start), b = mins(s.end), h = String(s.hall).toLowerCase();
+    if (isBreak(s)) { cur = null; out.push({ brk: true, l: [s] }); return; }
+    if (cur && a != null && cur.a != null && a < cur.b && (b == null || b > cur.a) && cur.h.indexOf(h) < 0 && cur.l.length < 4) { cur.l.push(s); cur.h.push(h); cur.a = Math.min(cur.a, a); cur.b = Math.max(cur.b, b == null ? cur.b : b); }
+    else { cur = { l: [s], a, b: b == null ? (a == null ? 0 : a + 1) : b, h: [h] }; out.push(cur); }
+  });
+  return out.map(g => {
+    const t = g.l[0], when = '<div class="row-t">' + E(hm12(t.start) || '') + (t.end ? '<small>to ' + E(hm12(t.end)) + '</small>' : '') + '</div>';
+    if (g.brk) return '<div class="row">' + when + '<div class="brk"><i class="fa-solid fa-mug-hot"></i><b>' + E(t.name) + '</b>' + (t.hall ? '<span class="tag">' + E([t.hall, t.room].filter(Boolean).join(' · ')) + '</span>' : '') + '</div></div>';
+    return '<div class="row">' + when + '<div class="par" style="--n:' + g.l.length + '">' + g.l.map(card).join('') + '</div></div>';
+  }).join('');
+}
+function card(s) {
+  const roles = [['Chairperson', s.chair], ['Co-Chair', s.coChair], ['Rapporteur', s.rapporteur]].filter(r => r[1]);
+  return '<article class="ses"><h3>' + (s.number ? 'Session ' + E(s.number) + ' — ' : '') + E(s.name) + '</h3><div class="meta"><span>' + E(range(s.start, s.end)) + '</span><span class="hall"><i class="fa-solid fa-location-dot"></i> ' + E([s.hall, s.room && 'Room ' + s.room, s.track && 'Track ' + s.track].filter(Boolean).join(' · ')) + '</span></div>' +
+    (roles.length ? '<dl class="roles">' + roles.map(r => '<dt>' + r[0] + '</dt><dd>' + E(r[1]) + '</dd>').join('') + '</dl>' : '') + (s.description ? '<div class="desc">' + E(s.description) + '</div>' : '') + (s.items || []).map(item).join('') + '</article>';
+}
+function item(i) {
+  return '<div class="it"><div class="it-t">' + E(range(i.Start, i.End)) + '</div><div class="it-b">' + (i.Speaker ? '<b>' + E(i.Speaker) + '</b>' + (i.Affiliation ? ', ' + E(i.Affiliation) : '') + '<br>' : '') + E(i.Topic || '') +
+    (i.Mode && i.Mode !== 'Physical' ? ' <span class="tag">' + E(i.Mode) + '</span>' : '') + ((i.Lines || []).length ? '<ul>' + i.Lines.map(l => '<li>' + E(l) + '</li>').join('') + '</ul>' : '') +
+    (i.Guests || []).map(g => '<div class="gl">' + (g.role ? E(g.role) + ': ' : '') + E(g.text) + '</div>').join('') + '</div></div>';
+}
+
+$('venue').addEventListener('change', e => { venue = e.target.value; draw(); });
+$('print-day').addEventListener('click', () => window.print());
+$('print-all').addEventListener('click', () => {
+  const shown = days.filter(d => d.sessions.some(s => !isBreak(s)));
+  if (!shown.length) { S.popup('Nothing has been published yet.', 'No programme'); return; }
+  $('print-area').innerHTML = '<div class="print-title">' + E(settings['conf.shortName'] ? settings['conf.shortName'] + ' — Programme' : 'Programme') + '</div>' + shown.map(d => '<section class="pday">' + dayHtml(d, '') + '</section>').join('');
+  document.body.classList.add('printing-all'); window.print();
+});
+window.addEventListener('afterprint', () => { document.body.classList.remove('printing-all'); $('print-area').innerHTML = ''; if (days.length) draw(); });
+</script>
+</body>
+</html>
