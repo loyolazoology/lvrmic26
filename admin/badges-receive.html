@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID card &amp; Kit Received | LVRMIC 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="admin-base.css">
+<link rel="stylesheet" href="admin-common.css">
+<style>
+.yes{color:var(--teal-light);font-weight:600;}
+.no{color:var(--text-3);}
+.pc{display:none;margin-top:14px;padding:16px;border:1px solid var(--gold);border-radius:12px;background:rgba(232,201,131,.06);}
+.pc.show{display:block;}
+.pc h2{margin:0 0 2px;font-size:20px;}
+.its{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;}
+.it{flex:1;min-width:220px;padding:14px;border:1px solid rgba(255,255,255,.14);border-radius:10px;}
+.it.done{border-color:var(--teal-light);background:rgba(79,169,128,.08);}
+.it b{display:block;margin-bottom:8px;font-size:15px;}
+.bigbtn{width:100%;padding:14px;font-size:15px;}
+.und{background:none;border:0;color:#e8988c;cursor:pointer;font-size:12px;text-decoration:underline;padding:6px 0 0;}
+</style>
+</head>
+<body>
+<div class="topbar"><h1><i class="fa-solid fa-hand-holding" style="color:var(--gold-light);"></i> ID card &amp; conference kit received</h1><span><button class="btn btn-sm" id="refresh"><i class="fa-solid fa-rotate-right"></i> Refresh list</button></span></div>
+<div class="wrap" style="max-width:900px;">
+  <div class="alert" id="err"></div><div class="alert" id="ok"></div>
+  <div class="card">
+    <h3><i class="fa-solid fa-qrcode"></i> Scan QR code, or type name / LVRMIC ID</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <input id="rx" placeholder="Scan the QR, or type a name or ID (LVRMIC26-0023 or just 23), then press Enter" autocomplete="off" autofocus style="flex:1;min-width:260px;">
+      <button class="btn btn-gold" id="rxgo"><i class="fa-solid fa-magnifying-glass"></i> Find</button>
+    </div>
+    <div class="hint" id="rxmsg"></div>
+    <div class="pc" id="pc"></div>
+  </div>
+  <div class="card"><h3><i class="fa-solid fa-clock-rotate-left"></i> Recent entries (this screen)</h3><div class="tiny" id="recent">Nothing yet.</div></div>
+</div>
+
+<script src="admin-common.js"></script>
+<script src="admin-page.js"></script>
+<script>
+if (VR.guard() && VR.frameOnly()) (function () {
+if (!VR.can('badges', 'transaction') && !VR.can('spotRegistration', 'transaction')) { VR.denied('You do not have permission to mark received entries.'); return; }
+const GN = { participant: 'Participant', student: 'Student', team: 'Volunteer / staff' };
+let all = [], cfg = { items: [] }, canMark = false, canUndo = false, cur = null, busy = false; const recent = [];
+const key = p => p.group + ':' + p.id;
+const tm = v => { const d = new Date(v); return isNaN(d) ? '' : d.toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true }); };
+const itemsOf = p => cfg.items.filter(i => i.active && i.groups && i.groups[p.group]);
+
+function norm(raw) {
+  let s = String(raw || '').trim();
+  const m = s.match(/^(L?VRMIC26-(?:S\d{3,}|\d{4,}))\.[A-Za-z0-9_-]{10}$/i); if (m) s = m[1];
+  s = s.toUpperCase().replace(/^VRMIC26-/, 'LVRMIC26-');
+  const out = [s];
+  if (/^\d{1,4}$/.test(s)) out.unshift('LVRMIC26-' + ('0000' + s).slice(-4));
+  else if (/^S\d{1,3}$/.test(s)) out.unshift('LVRMIC26-S' + ('000' + s.slice(1)).slice(-3));
+  return out;
+}
+const byId = raw => { for (const c of norm(raw)) { const p = all.find(x => x.id.toUpperCase() === c); if (p) return p; } return null; };
+const byName = raw => { const q = String(raw).trim().toLowerCase(); return q.length < 2 ? [] : all.filter(x => x.name.toLowerCase().indexOf(q) > -1); };
+
+function card(p) {
+  cur = p; const its = itemsOf(p);
+  $('pc').innerHTML = '<h2>' + esc(p.name) + '</h2><div class="tiny">' + esc(p.id) + ' · ' + esc(GN[p.group]) + ' · ' + esc(p.category) + (p.org ? ' · ' + esc(p.org) : '') + '</div>'
+    + (its.length ? '<div class="its">' + its.map(i => { const r = p.rec[i.key];
+      return r ? '<div class="it done"><b>' + esc(i.label) + '</b><span class="yes"><i class="fa-solid fa-circle-check"></i> Received</span><div class="tiny">' + esc(tm(r.at)) + ' · ' + esc(r.by) + '</div>' + (canUndo ? '<button class="und" data-a="undo" data-i="' + esc(i.key) + '">Cancel received</button>' : '') + '</div>'
+        : '<div class="it"><b>' + esc(i.label) + '</b>' + (canMark ? '<button class="btn btn-gold bigbtn" data-a="mark" data-i="' + esc(i.key) + '">Mark ' + esc(i.label) + ' received</button>' : '<span class="no">Not received</span>') + '</div>'; }).join('') + '</div>'
+      : '<p class="hint" style="margin-top:12px;">No items are issued to this group. Change it in Received items setup.</p>');
+  $('pc').classList.add('show');
+}
+function renderRecent() {
+  $('recent').innerHTML = recent.length ? recent.slice(0, 12).map(r => '<div>' + esc(r.t) + ' · <b>' + esc(r.name) + '</b> (' + esc(r.id) + ') — ' + esc(r.item) + '</div>').join('') : 'Nothing yet.';
+}
+async function load(silent) {
+  try {
+    const r = await VR.api('adminBadgeRegister', {});
+    if (!r.ok) return showErr(r.error || 'Could not load the list.');
+    all = r.people || []; cfg = r.config || cfg; canMark = !!r.canMark; canUndo = !!r.canUndo;
+    if (cur) { const n = all.find(x => key(x) === key(cur)); if (n) card(n); }
+  } catch (e) { showErr('Could not reach the server. Check your connection and try again.'); }
+}
+async function lookup() {
+  const v = $('rx').value.trim(); if (!v) return; hideAlerts(); $('rxmsg').textContent = '';
+  let p = byId(v), list = p ? [p] : byName(v);
+  if (!list.length) { await load(true); p = byId(v); list = p ? [p] : byName(v); }   // picks up people added a moment ago
+  if (!list.length) { $('rxmsg').innerHTML = '<span style="color:#e8988c;">No person found for "' + esc(v) + '".</span>'; $('pc').classList.remove('show'); cur = null; return; }
+  if (list.length === 1) { card(list[0]); $('rx').value = ''; $('rx').focus(); return; }
+  cur = null; $('rxmsg').textContent = list.length + ' people match. Choose one:';
+  $('pc').innerHTML = '<div class="its">' + list.slice(0, 15).map(x => '<button class="btn btn-sm" data-pick="' + esc(key(x)) + '">' + esc(x.name) + ' · ' + esc(x.id) + (x.org ? ' · ' + esc(x.org) : '') + '</button>').join('') + '</div>';
+  $('pc').classList.add('show');
+}
+async function act(a, itemKey) {
+  if (busy || !cur) return; busy = true; hideAlerts();
+  const p = cur, it = cfg.items.find(i => i.key === itemKey); let reason = '';
+  try {
+    if (a === 'undo') { reason = prompt('Cancel "' + it.label + ' received" for ' + p.name + ' (' + p.id + ').\nReason (at least 3 characters):'); if (!reason || reason.trim().length < 3) return; }
+    const r = await VR.api('adminMarkBadgeCollected', { group: p.group, id: p.id, item: itemKey, collected: a === 'mark', reason: (reason || '').trim() });
+    if (!r.ok) { showErr(r.error || 'Could not save.'); if (/already received/i.test(r.error || '')) load(true); return; }
+    if (a === 'mark') { p.rec[itemKey] = { at: r.at, by: r.by }; recent.unshift({ t: tm(r.at), name: p.name, id: p.id, item: it.label }); renderRecent(); showOk(it.label + ' marked received: ' + p.name + ' (' + p.id + ')'); }
+    else { delete p.rec[itemKey]; showOk('Cancelled: ' + it.label + ' for ' + p.name); }
+    card(p);
+  } catch (e) { showErr('Could not reach the server.'); }
+  finally { busy = false; $('rx').focus(); }
+}
+$('pc').onclick = e => {
+  const b = e.target.closest('[data-pick],[data-a]'); if (!b) return;
+  if (b.dataset.pick) { const p = all.find(x => key(x) === b.dataset.pick); if (p) { $('rxmsg').textContent = ''; card(p); } return; }
+  act(b.dataset.a, b.dataset.i);
+};
+$('rxgo').onclick = lookup;
+$('rx').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); lookup(); } });
+$('refresh').onclick = () => load();
+load();
+})();
+</script>
+</body>
+</html>
