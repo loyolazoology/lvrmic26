@@ -135,6 +135,16 @@ body.cap .sheet{box-shadow:none}
 .out[data-per="6"] .s4{display:block}
 .out[data-per="6"] .sn{font-size:.6cm}
 
+/* =================== BLANK CARDS: writing lines and slots =================== */
+.hw{display:flex;align-items:flex-end;gap:.15cm;width:100%;font-size:.24cm;font-weight:600;letter-spacing:.04cm;color:var(--lab);text-transform:uppercase;line-height:1.2}
+.hw span{white-space:nowrap}
+.hw i{flex:1;display:block;border-bottom:.03cm solid var(--lab);height:.6cm}
+.strip .hw{font-size:.2cm}
+.strip .hw i{height:.42cm}
+.cq.blank,.sq.blank{border-style:dashed;font-size:.24cm;font-weight:600;color:var(--lab);text-align:center;line-height:1.25}
+.cb b.wl{height:.62cm}
+.s1 .pcode.wl{display:inline-block;min-width:3.4cm}
+
 /* =================== SETTINGS DIALOG =================== */
 dialog{margin:auto;background:var(--n900);color:var(--t1);border:1px solid var(--bd);border-radius:12px;padding:0;width:min(640px,calc(100% - 24px));max-height:88vh}
 dialog::backdrop{background:rgba(5,10,28,.7)}
@@ -225,6 +235,20 @@ dialog::backdrop{background:rgba(5,10,28,.7)}
     <p class="msg" id="status" style="margin-top:10px"></p>
     <p class="msg" style="margin-top:6px">In the print window set margins to <b>None</b> and turn on <b>Background graphics</b>. Cut the cards along the dashed lines. On the coupons, punch the circle for the meal when it is taken.</p>
   </div>
+
+  <div class="panel">
+    <h2>Blank cards for handwriting</h2>
+    <p class="msg">Prints empty ID cards or meal coupons with lines to write the name, class, department number and department, and an empty box to stick the QR. The ID can be pre-numbered, continuing after the last student ID. Uses the colour theme and meal configuration above.</p>
+    <div class="bar">
+      <div class="f" style="min-width:170px"><label for="bNum">Numbering</label><select id="bNum">
+        <option value="num">Pre-numbered ID</option><option value="none">No number (write by hand)</option></select></div>
+      <div class="f" style="min-width:180px"><label for="bFirst">First ID (continues from the last student)</label><input id="bFirst" type="text" maxlength="30" placeholder="Loading last ID"></div>
+      <div class="f" style="min-width:100px"><label for="bN">How many</label><input id="bN" type="number" min="1" max="400" value="8"></div>
+      <button class="btn pri" id="bGenC" type="button"><i class="fa-solid fa-pen-to-square"></i>Blank ID cards</button>
+      <button class="btn pri" id="bGenM" type="button"><i class="fa-solid fa-pen-to-square"></i>Blank meal coupons</button>
+    </div>
+    <p class="msg" id="bInfo" style="margin-top:8px"></p>
+  </div>
 </div>
 
 <div class="stage">
@@ -294,6 +318,8 @@ async function init() {
   const r = await VR.api('adminQrList', { kind: 'student' });
   if (!r || !r.ok) { $('count').textContent = (r && r.error) || 'Could not load students.'; $('count').className = 'msg err'; $('rows').innerHTML = '<tr><td colspan="7" class="empty">No data</td></tr>'; return; }
   ALL = (r.people || []).filter(p => S(p.id));
+  if (!firstTouched) $('bFirst').value = nextStudentId();
+  updateBlankInfo();
   const cls = Array.from(new Set(ALL.map(p => S(p.class)).filter(Boolean))).sort();
   $('fCls').innerHTML = '<option value="">All classes</option>' + cls.map(c => `<option>${esc(c)}</option>`).join('');
   applyFilters();
@@ -404,7 +430,7 @@ function headInfo() {
 /* ---------- ID card ---------- */
 const LOGO = (f, alt) => `<div class="lg"><img src="../assets/${f}" alt="${alt}" onerror="this.parentNode.style.display='none'"></div>`;
 function cardHtml(p, h, theme) {
-  const id = S(p.id), qr = qrImg(S(p.qr)), dept = deptOf(p);
+  const bl = !!p.blank, id = S(p.id), qr = bl ? '' : qrImg(S(p.qr)), dept = bl ? '' : deptOf(p);
   return `<div class="card t-${esc(theme)}">
     <div class="hole"><i></i></div>
     <div class="bh">
@@ -413,10 +439,10 @@ function cardHtml(p, h, theme) {
       <div class="bt2">${esc(h.name)}</div>
     </div>
     <div class="cbody">
-      ${qr ? `<div class="cq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="cq none">QR not available</div>'}
-      <div class="cmid"><div class="k">${esc(CFG.idLabel)}</div><div class="code">${esc(id)}</div><div class="nm fit wrap2">${esc(S(p.name))}</div></div>
-      <div class="cinfo"><div class="cb"><small>Class</small><b class="fit">${esc(S(p.class) || '-')}</b></div><div class="cb"><small>Dept. no.</small><b class="fit">${esc(S(p.deptNo) || '-')}</b></div></div>
-      ${dept ? `<div class="cdept"><small>Department</small>${esc(dept)}</div>` : ''}
+      ${bl ? '<div class="cq none blank">Stick<br>QR here</div>' : qr ? `<div class="cq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="cq none">QR not available</div>'}
+      <div class="cmid"><div class="k">${esc(CFG.idLabel)}</div>${bl && !id ? '<div class="hw"><i></i></div>' : `<div class="code">${esc(id)}</div>`}${bl ? '<div class="hw"><span>Name</span><i></i></div>' : `<div class="nm fit wrap2">${esc(S(p.name))}</div>`}</div>
+      <div class="cinfo"><div class="cb"><small>Class</small><b class="${bl ? 'wl' : 'fit'}">${bl ? '' : esc(S(p.class) || '-')}</b></div><div class="cb"><small>Dept. no.</small><b class="${bl ? 'wl' : 'fit'}">${bl ? '' : esc(S(p.deptNo) || '-')}</b></div></div>
+      ${bl ? '<div class="hw"><span>Department</span><i></i></div>' : dept ? `<div class="cdept"><small>Department</small>${esc(dept)}</div>` : ''}
     </div>
     <div class="bf"><div class="r fit">STUDENT</div><div class="v fit">${esc(h.range)} · Loyola College, Chennai</div></div>
   </div>`;
@@ -429,16 +455,16 @@ function sideHtml(g) {
       `<div class="pcell"><i class="pc"></i><span>Day ${d} · ${esc(dayDate(d))}</span></div>`).join('')}</div></div>`).join('');
 }
 function stripHtml(p, h, theme) {
-  const id = S(p.id), qr = qrImg(S(p.qr)), dept = deptOf(p);
+  const bl = !!p.blank, id = S(p.id), qr = bl ? '' : qrImg(S(p.qr)), dept = bl ? '' : deptOf(p);
   return `<div class="strip t-${esc(theme)}">
     <div class="sl">${sideHtml('meal')}</div>
     <div class="sm">
-      ${qr ? `<div class="sq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="sq none">QR not available</div>'}
+      ${bl ? '<div class="sq none blank">Stick<br>QR here</div>' : qr ? `<div class="sq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="sq none">QR not available</div>'}
       <div class="si">
         <div class="s0 fit">${esc(h.short)} · ${esc(CFG.title)}</div>
-        <div class="sn fit">${esc(S(p.name))}</div>
-        <div class="s1"><span class="pl">${esc(CFG.idLabel)}</span><span class="pcode">${esc(id)}</span></div>
-        <div class="s2 fit">Class: ${esc(S(p.class) || '-')} · Dept. no.: ${esc(S(p.deptNo) || '-')}</div>
+        ${bl ? '<div class="hw"><span>Name</span><i></i></div>' : `<div class="sn fit">${esc(S(p.name))}</div>`}
+        <div class="s1"><span class="pl">${esc(CFG.idLabel)}</span><span class="pcode${bl && !id ? ' wl' : ''}">${esc(id)}</span></div>
+        ${bl ? '<div class="hw"><span>Class</span><i></i><span>Dept. no.</span><i></i></div><div class="hw"><span>Dept.</span><i></i></div>' : `<div class="s2 fit">Class: ${esc(S(p.class) || '-')} · Dept. no.: ${esc(S(p.deptNo) || '-')}</div>`}
         ${dept ? `<div class="s3">${esc(dept)}</div>` : ''}
         <div class="s4 fit">${esc(CFG.foot)}</div>
       </div>
@@ -478,11 +504,11 @@ async function render(keepScroll) {
   out.innerHTML = html;
   try { await document.fonts.ready; } catch (e) {}
   await applyStyle(); refit();
-  const noQr = lastRows.filter(p => !S(p.qr)).length, n = lastRows.length;
+  const noQr = lastRows.filter(p => !p.blank && !S(p.qr)).length, n = lastRows.length, bk = lastRows[0].blank ? 'blank ' : '';
   const sheets = lastMode === 'cards' ? Math.ceil(n / 4) : Math.ceil(n / per);
   setMsg(lastMode === 'cmp' ? `Showing ${S(lastRows[0].name)} in all ${THEMES.length} themes. Pick one under Colour theme, then generate.`
-    : lastMode === 'cards' ? `${n} ID card${n > 1 ? 's' : ''} ready · ${sheets} A4 sheet${sheets > 1 ? 's' : ''}` + (noQr ? ` · ${noQr} without QR` : '')
-    : `${n} meal coupon${n > 1 ? 's' : ''} ready · ${sheets} A4 sheet${sheets > 1 ? 's' : ''} · ${CP.size} punch circle${CP.size > 1 ? 's' : ''} each` + (noQr ? ` · ${noQr} without QR` : ''), noQr && lastMode !== 'cmp' ? 'err' : 'ok');
+    : lastMode === 'cards' ? `${n} ${bk}ID card${n > 1 ? 's' : ''} ready · ${sheets} A4 sheet${sheets > 1 ? 's' : ''}` + (noQr ? ` · ${noQr} without QR` : '')
+    : `${n} ${bk}meal coupon${n > 1 ? 's' : ''} ready · ${sheets} A4 sheet${sheets > 1 ? 's' : ''} · ${CP.size} punch circle${CP.size > 1 ? 's' : ''} each` + (noQr ? ` · ${noQr} without QR` : ''), noQr && lastMode !== 'cmp' ? 'err' : 'ok');
   $('print').disabled = $('pdf').disabled = lastMode === 'cmp';
   if (keepScroll !== true) out.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -505,6 +531,7 @@ $('fMain').onchange = setLayout; setLayout();
 $('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
 async function logOk() {
   if (typeof BADGELOG === 'undefined') return true;
+  if (lastRows && lastRows[0] && lastRows[0].blank) return true;     // blank cards belong to no student, so nothing to log
   try { return await BADGELOG.record('student', (lastRows || []).map(p => S(p.id)), lastMode === 'coupons' ? 'Student meal coupon page' : 'Student ID card page'); }
   catch (e) { setMsg('Could not record the print log: ' + (e && e.message || e), 'err'); return false; }
 }
@@ -552,6 +579,42 @@ $('cfgDlg').addEventListener('change', () => { readCfg(); afterCfg(); });
 $('cfgBtn').onclick = () => { fillCfg(); $('cfgDlg').showModal(); };
 $('cfgClose').onclick = () => $('cfgDlg').close();
 $('cfgReset').onclick = () => { CFG = clone(DEF); fillCfg(); afterCfg(); };
+
+/* ---------- blank cards (fill in by hand) ---------- */
+let firstTouched = false;
+const idParts = s => { const m = /^(.*?)(\d+)$/.exec(S(s)); return m ? { pre: m[1], n: parseInt(m[2], 10), w: m[2].length } : null; };
+const fmtId = (pre, n, w) => pre + String(n).padStart(w, '0');
+function nextStudentId() {                          // highest number among all students (also deactivated), plus one
+  let best = null;
+  ALL.forEach(p => { const x = idParts(p.id); if (x && (!best || x.n > best.n)) best = x; });
+  return best ? fmtId(best.pre, best.n + 1, best.w) : '';
+}
+const blankN = () => Math.max(1, Math.min(400, parseInt($('bN').value, 10) || 1));
+function blankIds() {
+  const n = blankN();
+  if ($('bNum').value !== 'num') return Array(n).fill('');
+  const x = idParts($('bFirst').value);
+  return x ? Array.from({ length: n }, (_, i) => fmtId(x.pre, x.n + i, x.w)) : null;
+}
+function updateBlankInfo() {
+  const n = blankN(), per = parseInt($('fPer').value, 10), ids = blankIds();
+  $('bFirst').disabled = $('bNum').value !== 'num';
+  $('bInfo').textContent = ids === null ? 'The first ID must end with a number, for example 0151 or ST0151.'
+    : `${n} blank card${n === 1 ? '' : 's'} = ${Math.ceil(n / 4)} A4 sheet${Math.ceil(n / 4) === 1 ? '' : 's'} as ID cards, or ${Math.ceil(n / per)} as meal coupons (${per} per page)` + (ids[0] ? ` · IDs ${ids[0]} to ${ids[n - 1]}` : ' · no ID printed');
+  $('bInfo').className = 'msg' + (ids === null ? ' err' : '');
+}
+function genBlank(mode) {
+  const ids = blankIds();
+  if (ids === null) { updateBlankInfo(); return; }
+  if (mode === 'coupons' && !CP.size) { setMsg('Tick at least one day and meal in the meal configuration.', 'err'); return; }
+  lastRows = ids.map(id => ({ blank: true, id: id })); lastMode = mode; render();
+}
+$('bFirst').oninput = () => { firstTouched = true; updateBlankInfo(); };
+['bNum', 'bN'].forEach(id => $(id).addEventListener(id === 'bN' ? 'input' : 'change', updateBlankInfo));
+$('fPer').addEventListener('change', updateBlankInfo);
+$('bGenC').onclick = () => genBlank('cards');
+$('bGenM').onclick = () => genBlank('coupons');
+updateBlankInfo();
 
 $('fTheme').value = 'emerald';
 renderCp(); applyStyle();
