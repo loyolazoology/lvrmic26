@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Login | LVRMIC 2026</title>
+<link rel="icon" type="image/png" href="assets/cimser-logo.png">
+<meta name="description" content="Student login — 4th International Conference on Life Sciences and Vector Risk Management (LVRMIC 2026), Loyola College (Autonomous), Chennai.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap');
+:root{--navy-950:#0a1230;--navy-900:#0e1938;--navy-850:#122043;--navy-border:rgba(226,187,120,.24);--gold:#c9974f;--gold-light:#e8c983;--teal-light:#6fc9b6;--text-1:#f3f5fb;--text-2:#b3bcd6;--text-3:#8390b3;--maxw:1180px;--paper-border:rgba(20,30,60,.10);--ink-3:#7c869f;}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+html,body{overflow-x:hidden;max-width:100%;}
+img{max-width:100%;}
+body{margin:0;background:radial-gradient(1200px 700px at 85% -10%,#12234f 0%,transparent 55%),radial-gradient(900px 500px at -10% 10%,#0f1d42 0%,transparent 50%),var(--navy-950);color:var(--text-1);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body.no-scroll{overflow:hidden;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0 0 .4em;color:var(--text-1);}
+h1{font-size:clamp(1.7rem,3vw,2.4rem);font-weight:600;line-height:1.12;}
+p{color:var(--text-2);margin:0 0 1em;}
+a{color:var(--gold-light);text-decoration:none;}a:hover{text-decoration:underline;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+@media(max-width:600px){.wrap{padding:0 16px;}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);border:1px solid var(--navy-border);background:rgba(205,163,85,.08);padding:6px 14px;border-radius:999px;margin-bottom:18px;}
+.helix-rule{height:2px;width:56px;background:linear-gradient(90deg,var(--gold),#279c85);border-radius:2px;margin:0 auto 20px;}
+/* bars */
+.utcbar{background:#070c22;border-bottom:1px solid var(--navy-border);}
+.utcbar-inner{max-width:var(--maxw);margin:0 auto;padding:6px 24px;display:flex;align-items:center;justify-content:flex-end;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-3);flex-wrap:wrap;}
+.utcbar i{color:var(--gold-light);}.utcbar b{color:var(--text-2);font-weight:500;}
+@media(max-width:700px){.utcbar-inner{justify-content:center;font-size:10.5px;padding:6px 12px;}}
+.topbar{background:var(--navy-950);border-bottom:1px solid var(--navy-border);}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.logo-slots{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.logo-slot{height:52px;border-radius:8px;border:1px solid var(--paper-border);display:flex;align-items:center;background:#fff;padding:6px 10px;}
+.logo-slot img{height:100%;width:auto;max-width:90px;object-fit:contain;}
+.topbar-text{font-size:12px;font-family:'IBM Plex Mono',monospace;text-align:center;max-width:560px;line-height:1.6;}
+@media(max-width:900px){.topbar-text{display:none;}.topbar-inner{justify-content:center;}.logo-slot{height:40px;}}
+/* nav */
+.nav{position:sticky;top:0;z-index:100;background:rgba(6,11,28,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--navy-border);}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;}
+.nav-brand{display:flex;align-items:center;gap:14px;min-width:0;}
+.brand-logo-img{height:48px;width:auto;max-width:100px;object-fit:contain;}
+.brand-title{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--text-1);white-space:nowrap;}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;padding:0;margin:0;}
+.nav-links a{display:flex;align-items:center;gap:6px;padding:10px 12px;border-radius:6px;color:var(--text-2);font-size:13px;font-weight:500;white-space:nowrap;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold-light);background:rgba(232,201,131,.08);text-decoration:none;}
+.nav-toggle{display:none;background:none;border:1px solid var(--navy-border);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:18px;line-height:1;}
+@media(max-width:800px){
+  .nav-toggle{display:block;position:relative;z-index:101;}.brand-title{font-size:18px;}.brand-logo-img{height:34px;}.nav-inner{padding:10px 16px;}
+  .nav-links{position:fixed;right:0;top:0;width:min(320px,85vw);height:100vh;height:100dvh;background:var(--navy-950);border-left:1px solid var(--navy-border);flex-direction:column;align-items:stretch;padding:90px 22px 24px;overflow-y:auto;transform:translateX(100%);transition:.35s;visibility:hidden;}
+  .nav-links.open{transform:none;visibility:visible;}.nav-links a{padding:12px;font-size:14.5px;}
+}
+/* header + card */
+.page-header{padding:44px 0 36px;text-align:center;}
+.page-header .wrap{max-width:900px;display:flex;flex-direction:column;align-items:center;}
+.section-light{background:#faf8f3;}
+.auth-wrap{display:flex;align-items:center;justify-content:center;padding:0 20px 60px;}
+.auth-card{width:100%;max-width:420px;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid var(--navy-border);border-radius:16px;padding:38px 32px;box-shadow:0 30px 70px rgba(0,0,0,.35);margin-top:-1px;}
+@media(max-width:480px){.auth-card{padding:28px 20px;}}
+.auth-icon{width:54px;height:54px;border-radius:14px;background:rgba(201,151,79,.12);border:1px solid var(--navy-border);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold-light);margin-bottom:18px;}
+.auth-card h2{font-size:1.5rem;margin-bottom:6px;}
+.auth-sub{font-size:13.5px;color:var(--text-3);margin-bottom:26px;}
+.auth-view{display:none;}.auth-view.active{display:block;}
+label{display:block;font-size:13px;font-weight:600;color:var(--text-2);margin:0 0 6px;}
+input[type=text],input[type=email],input[type=password]{width:100%;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--text-1);border-radius:8px;padding:12px 14px;font-family:inherit;font-size:16px;}
+@media(min-width:801px){input[type=text],input[type=email],input[type=password]{font-size:14.5px;}}
+input:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.field{margin-bottom:18px;}
+.pw-wrap{position:relative;}.pw-wrap input{padding-right:48px;}
+.pw-toggle{position:absolute;top:50%;right:6px;transform:translateY(-50%);width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:6px;color:var(--text-3);cursor:pointer;}
+.pw-toggle:hover{color:var(--gold-light);}
+.captcha-container{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.captcha-box{flex:1;min-width:0;background:var(--navy-950);border:1px solid var(--navy-border);color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;letter-spacing:6px;padding:10px 14px;border-radius:8px;user-select:none;text-align:center;}
+.captcha-refresh{width:46px;height:46px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--navy-border);color:var(--text-2);border-radius:8px;cursor:pointer;flex-shrink:0;}
+.captcha-refresh:hover{color:var(--gold-light);border-color:var(--gold);}
+.auth-check{display:flex;align-items:center;gap:8px;margin-bottom:20px;}
+.auth-check input{width:16px;height:16px;accent-color:var(--gold);}
+.auth-check label{margin:0;font-weight:400;font-size:13px;cursor:pointer;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:14.5px;padding:13px 24px;border-radius:8px;cursor:pointer;border:1px solid transparent;font-family:inherit;width:100%;transition:.2s;}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:#241a06;}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.2);}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(60%);}
+.spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.25);border-top-color:#241a06;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.alert{display:none;border-radius:8px;padding:12px 14px;font-size:13.5px;margin-bottom:18px;background:rgba(232,201,131,.08);border:1px solid var(--navy-border);color:var(--gold-light);}
+.alert.show{display:block;}
+.help-box{margin-top:22px;border:1px solid var(--navy-border);background:rgba(232,201,131,.06);border-radius:10px;padding:14px 16px;font-size:12.5px;color:var(--text-2);}
+.help-box b{color:var(--text-1);}
+footer{border-top:1px solid var(--navy-border);padding:28px 0;background:var(--navy-950);}
+footer p{font-size:12.5px;color:var(--text-3);text-align:center;margin:0 0 4px;}
+/* pop-up */
+.popup-back{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(4,8,22,.72);backdrop-filter:blur(3px);overflow-y:auto;}
+.popup-back.show{display:flex;}
+.popup{width:100%;max-width:400px;margin:auto;background:linear-gradient(180deg,var(--navy-850),var(--navy-900));border:1px solid rgba(216,105,90,.45);border-radius:16px;padding:28px 26px 22px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.55);}
+.popup-icon{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(216,105,90,.14);color:#e8988c;border:1px solid rgba(216,105,90,.4);}
+.popup h3{font-size:1.25rem;}.popup p{font-size:14px;overflow-wrap:anywhere;}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<div class="utcbar"><div class="utcbar-inner"><i class="fa-regular fa-clock"></i><span id="utc-clock"><b>Loading time…</b></span></div></div>
+
+<div class="topbar"><div class="topbar-inner">
+  <div class="logo-slots">
+    <div class="logo-slot"><img src="assets/iaes-logo.png" alt="IAES" onerror="this.parentNode.style.display='none'"></div>
+    <div class="logo-slot"><img src="assets/ahcf-logo.png" alt="AHCF" onerror="this.parentNode.style.display='none'"></div>
+    <div class="logo-slot"><img src="assets/centenary-logo.png" alt="Centenary" onerror="this.parentNode.style.display='none'"></div>
+  </div>
+  <span class="topbar-text">Loyola College (Autonomous), Chennai · Est. 1925 &nbsp;·&nbsp; CIMSER — Centre for Insect Molecular Studies and Environmental Research</span>
+</div></div>
+
+<nav class="nav"><div class="nav-inner">
+  <div class="nav-brand">
+    <a href="index.html"><img src="assets/loyola-crest.png" alt="Loyola College" class="brand-logo-img" onerror="this.style.display='none'"></a>
+    <a href="index.html"><img src="assets/cimser-logo.png" alt="CIMSER" class="brand-logo-img" onerror="this.style.display='none'"></a>
+    <a href="index.html"><span class="brand-title">LVRMIC 2026</span></a>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="participant-login.html">Participant Login</a></li>
+    <li><a href="student-login.html" class="active">Student Login</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</div></nav>
+
+<header class="page-header"><div class="wrap">
+  <span class="eyebrow"><i class="fa-solid fa-user-graduate"></i>&nbsp; Student portal</span>
+  <h1>Student login</h1>
+  <div class="helix-rule"></div>
+  <p style="max-width:560px;">Sign in to see your attendance, announcements, the schedule and to give feedback for LVRMIC 2026.</p>
+</div></header>
+
+<section class="section-light" style="background:none;"><div class="auth-wrap">
+  <div class="auth-card" id="auth-card">
+
+    <div class="auth-view active" id="view-login">
+      <div class="auth-icon"><i class="fa-solid fa-user-graduate"></i></div>
+      <h2>Welcome</h2>
+      <p class="auth-sub">Log in with your college email. Your temporary password was emailed to you by the organisers.</p>
+      <div class="alert" id="closed-note"></div>
+      <form id="login-form" autocomplete="off">
+        <div class="field"><label for="login-email">College email</label><input type="email" id="login-email" required placeholder="25uaz016@loyolacollege.edu" autocapitalize="none" spellcheck="false"></div>
+        <div class="field"><label for="login-password">Password</label>
+          <div class="pw-wrap"><input type="password" id="login-password" required placeholder="Your password"><button type="button" class="pw-toggle" data-target="login-password" aria-label="Show password" aria-pressed="false"><i class="fa-regular fa-eye"></i></button></div></div>
+        <div class="field"><label for="login-captcha">Security CAPTCHA</label>
+          <div class="captcha-container"><div class="captcha-box" id="captcha-display"></div><button type="button" class="captcha-refresh" id="captcha-refresh" aria-label="Refresh CAPTCHA"><i class="fa-solid fa-rotate-right"></i></button></div>
+          <input type="text" id="login-captcha" required placeholder="Enter 5-character code" maxlength="5" autocapitalize="characters" style="text-transform:uppercase;"></div>
+        <div class="auth-check"><input type="checkbox" id="remember-me"><label for="remember-me">Remember my email</label></div>
+        <button class="btn btn-gold" type="submit" id="login-btn" disabled><i class="fa-solid fa-lock"></i> Log in</button>
+      </form>
+      <div class="help-box"><b>Forgot your password?</b> Please ask the organising team to send you a new temporary password.</div>
+    </div>
+
+    <div class="auth-view" id="view-reset">
+      <div class="auth-icon"><i class="fa-solid fa-key"></i></div>
+      <h2>Choose a new password</h2>
+      <p class="auth-sub">For security, please set your own password before continuing.</p>
+      <form id="reset-form" autocomplete="off">
+        <div class="field"><label for="reset-password">New password (min. 6 characters)</label>
+          <div class="pw-wrap"><input type="password" id="reset-password" required minlength="6" placeholder="New password"><button type="button" class="pw-toggle" data-target="reset-password" aria-label="Show password" aria-pressed="false"><i class="fa-regular fa-eye"></i></button></div></div>
+        <div class="field"><label for="reset-password2">Confirm new password</label>
+          <div class="pw-wrap"><input type="password" id="reset-password2" required minlength="6" placeholder="Confirm new password"><button type="button" class="pw-toggle" data-target="reset-password2" aria-label="Show password" aria-pressed="false"><i class="fa-regular fa-eye"></i></button></div></div>
+        <button class="btn btn-gold" type="submit" id="reset-btn"><i class="fa-solid fa-key"></i> Set password &amp; continue</button>
+      </form>
+    </div>
+
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <p>© 2026, CIMSER — PG &amp; Research Dept. of Advanced Zoology &amp; Biotechnology, Loyola College (Autonomous), Chennai.</p>
+  <p><em>"Luceat Lux Vestra - Let Your Light Shine"</em></p>
+</div></footer>
+
+<div class="popup-back" id="popup-back"><div class="popup" role="alertdialog" aria-modal="true">
+  <div class="popup-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><h3 id="popup-title"></h3><p id="popup-msg"></p>
+  <button type="button" class="btn btn-gold" id="popup-ok">OK</button></div></div>
+
+<script src="participant-common.js"></script>
+<script src="student-common.js"></script>
+<script>
+const L = window.LVRMIC, S = window.StudentPortal;
+L.startClock('utc-clock'); L.initMenu();
+const $ = id => document.getElementById(id);
+
+/* pop-up */
+function showPopup(msg, title) { $('popup-title').textContent = title || 'Something went wrong'; $('popup-msg').textContent = msg || 'Please try again.'; $('popup-back').classList.add('show'); $('popup-ok').focus(); }
+$('popup-ok').onclick = () => $('popup-back').classList.remove('show');
+$('popup-back').addEventListener('click', e => { if (e.target === $('popup-back')) $('popup-back').classList.remove('show'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('popup-back').classList.remove('show'); });
+
+/* show / hide password */
+document.querySelectorAll('.pw-toggle').forEach(b => b.addEventListener('click', () => {
+  const inp = $(b.dataset.target), on = b.getAttribute('aria-pressed') !== 'true';
+  inp.type = on ? 'text' : 'password'; b.setAttribute('aria-pressed', on); b.querySelector('i').className = on ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+}));
+function hidePasswords() { document.querySelectorAll('.pw-toggle').forEach(b => { $(b.dataset.target).type = 'password'; b.setAttribute('aria-pressed', 'false'); b.querySelector('i').className = 'fa-regular fa-eye'; }); }
+function showView(n) { document.querySelectorAll('.auth-view').forEach(v => v.classList.remove('active')); $('view-' + n).classList.add('active'); hidePasswords(); }
+
+/* portal-closed notice (public setting) */
+L.loadPublicSettings().then(s => { if (s && s['sw.studentLoginOpen'] === 'false') { $('closed-note').textContent = 'The student portal is not open yet. Please check back later.'; $('closed-note').classList.add('show'); } });
+
+/* CAPTCHA */
+let captcha = '', warned = false; const cin = $('login-captcha'), lbtn = $('login-btn');
+const idle = () => { lbtn.innerHTML = '<i class="fa-solid fa-lock"></i> Log in'; };
+function newCaptcha() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; captcha = ''; for (let i = 0; i < 5; i++) captcha += c[Math.floor(Math.random() * c.length)]; warned = false; $('captcha-display').textContent = captcha; cin.value = ''; lbtn.disabled = true; idle(); }
+cin.addEventListener('input', () => {
+  const v = cin.value.trim().toUpperCase();
+  if (v.length === 5 && v === captcha) { lbtn.disabled = false; lbtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Log in'; warned = false; }
+  else { lbtn.disabled = true; idle(); if (v.length === 5 && !warned) { warned = true; showPopup('The code you entered does not match. Please try again.', 'Incorrect CAPTCHA'); cin.select(); } else if (v.length < 5) warned = false; }
+});
+$('captcha-refresh').onclick = newCaptcha; newCaptcha();
+
+/* remembered email */
+const saved = localStorage.getItem(S.KEYS.email); if (saved) { $('login-email').value = saved; $('remember-me').checked = true; }
+
+/* login */
+$('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('login-email').value.trim().toLowerCase();
+  if ($('remember-me').checked) localStorage.setItem(S.KEYS.email, email); else localStorage.removeItem(S.KEYS.email);
+  lbtn.disabled = true; lbtn.innerHTML = '<span class="spinner"></span> Logging in...';
+  try {
+    const ip = await L.getClientIp();
+    const res = await L.callApi('studentLogin', { email: email, password: $('login-password').value, ip: ip });
+    if (!res.ok) { showPopup(res.error || 'Login failed.', res.locked ? 'Too many attempts' : 'Login failed'); newCaptcha(); return; }
+    S.session.save(res.token, res.name);
+    if (res.forceReset) showView('reset'); else location.href = 'student/home.html';
+  } catch (err) { showPopup(err.message, 'Connection problem'); newCaptcha(); }
+});
+
+/* set new password */
+$('reset-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const p1 = $('reset-password').value, p2 = $('reset-password2').value;
+  if (p1 !== p2) { showPopup('The two passwords do not match. Please type them again.', 'Passwords do not match'); return; }
+  const b = $('reset-btn'); b.disabled = true; b.innerHTML = '<span class="spinner"></span> Saving...';
+  try {
+    const res = await L.callApi('studentSetNewPassword', { token: S.session.token(), newPassword: p1 });
+    if (!res.ok) { showPopup(res.error || 'Could not set the new password.', 'Could not save password'); if (/session expired|log in again/i.test(res.error || '')) { S.session.clear(); showView('login'); } return; }
+    location.href = 'student/home.html';
+  } catch (err) { showPopup(err.message, 'Connection problem'); }
+  finally { b.disabled = false; b.innerHTML = '<i class="fa-solid fa-key"></i> Set password &amp; continue'; }
+});
+
+/* arrived from a page that needs a password change */
+if (location.hash === '#reset' && S.session.token()) showView('reset');
+</script>
+</body>
+</html>

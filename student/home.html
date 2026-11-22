@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dashboard | LVRMIC 2026 Student Portal</title>
+<link rel="icon" type="image/png" href="https://lvrmic26.vercel.app/assets/cimser-logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../student-common.css">
+<style>
+.welcome-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;}
+.welcome-left{display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 320px;}
+.welcome-av{width:62px;height:62px;border-radius:50%;border:3px solid var(--gold);background:var(--paper-alt);display:flex;align-items:center;justify-content:center;color:var(--gold-deep);font-size:20px;font-weight:700;flex-shrink:0;}
+.welcome-text{min-width:0;}.welcome-text h1{font-size:clamp(1.05rem,2vw,1.45rem);margin-bottom:2px;overflow-wrap:anywhere;}.welcome-text p{margin:0;font-size:13px;overflow-wrap:anywhere;}
+.id-chip{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--navy);background:#fff;border:1.5px solid var(--gold);padding:8px 16px;border-radius:999px;font-weight:700;}
+.section-title{display:flex;align-items:center;gap:10px;margin:30px 0 14px;scroll-margin-top:80px;}
+.section-title i{color:var(--gold-deep);}.section-title h2{font-size:1.1rem;margin:0;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:820px){.two-col{grid-template-columns:1fr;}}
+.two-col .card{margin-bottom:0;}
+.info-card h4{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:14.5px;color:var(--navy);}.info-card h4 i{color:var(--gold-deep);}
+.info-card p{font-size:13px;margin:0 0 10px;}
+/* attendance */
+.att-summary{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
+.att-pct{font-family:'Fraunces',serif;font-size:2.4rem;color:var(--navy);line-height:1;}.att-pct small{font-size:1rem;color:var(--ink-3);}
+.att-bar-wrap{flex:1 1 260px;min-width:0;}
+.att-bar{position:relative;height:12px;border-radius:8px;background:var(--paper-alt);margin:22px 0 6px;}
+.att-fill{height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,var(--teal-light),var(--teal));transition:width 1.2s cubic-bezier(.2,.8,.2,1);}
+.att-fill.low{background:linear-gradient(90deg,#e0a458,var(--warn));}
+.att-min{position:absolute;top:-6px;bottom:-6px;width:2px;background:var(--navy);}
+.att-min span{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:10.5px;font-weight:700;color:var(--navy);white-space:nowrap;font-family:'IBM Plex Mono',monospace;}
+.att-hint{font-size:12.5px;color:var(--ink-2);margin:0;}
+.sess-list{margin-top:14px;border-top:1px solid var(--paper-alt);}
+.sess-row{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 2px;border-bottom:1px solid var(--paper-alt);flex-wrap:wrap;}
+.sess-main{flex:1 1 200px;min-width:0;}.sess-main b{display:block;font-size:14px;color:var(--navy);overflow-wrap:anywhere;}.sess-main span{font-size:12px;color:var(--ink-3);}
+.sess-times{display:flex;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-2);}
+.att-notice{font-size:13px;color:var(--ink-3);text-align:center;padding:20px;border:1px dashed var(--card-border);border-radius:12px;background:#fff;}
+/* qr */
+.qr-box{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.qr-img{background:#fff;padding:10px;border:1px solid var(--card-border);border-radius:12px;line-height:0;}
+/* announcements + support */
+.announce-list{display:flex;flex-direction:column;gap:12px;}
+.announce-item{display:flex;gap:14px;padding:16px;background:var(--paper-alt);border:1px solid var(--card-border);border-radius:10px;}
+.announce-item>i{color:var(--gold-deep);font-size:16px;margin-top:2px;}
+.announce-item h5{margin:0 0 4px;font-size:14px;color:var(--navy);}.announce-item p{margin:0;font-size:13px;overflow-wrap:anywhere;}
+.announce-item time{font-size:11px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;display:block;margin-top:6px;}
+.announce-item img{max-width:220px;border-radius:8px;margin-top:10px;display:block;}
+.empty-line{font-size:13.5px;color:var(--ink-3);text-align:center;padding:20px;margin:0;}
+.support-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+.support-card{background:var(--paper-alt);border:1px solid var(--card-border);border-radius:12px;padding:18px;}
+.support-card>i{color:var(--gold-deep);font-size:17px;margin-bottom:10px;display:block;}
+.support-card h5{margin:0 0 4px;font-size:14px;color:var(--navy);}.support-card p{margin:0 0 10px;font-size:12.5px;}.support-card a{font-size:13px;font-weight:700;overflow-wrap:anywhere;}
+</style>
+</head>
+<body>
+<div id="shell"></div>
+
+<header class="page-head"><div class="wrap">
+  <div class="welcome-row">
+    <div class="welcome-left"><div class="welcome-av" id="w-av"><i class="fa-solid fa-user-graduate"></i></div>
+      <div class="welcome-text"><h1 id="w-name"><span class="sk" style="display:inline-block;width:220px;height:22px;"></span></h1><p id="w-sub">&nbsp;</p></div></div>
+    <div class="id-chip"><i class="fa-solid fa-hashtag"></i> <span id="w-id">—</span></div>
+  </div>
+  <div class="helix-rule"></div>
+</div></header>
+
+<section class="section" id="loader"><div class="wrap"><div class="sk" style="height:170px;"></div><div class="sk" style="height:140px;margin-top:20px;"></div></div></section>
+
+<section class="section" id="content" style="display:none;"><div class="wrap">
+
+  <div class="section-title" style="margin-top:6px;"><i class="fa-solid fa-calendar-check"></i><h2>My attendance</h2></div>
+  <div id="att"></div>
+
+  <div id="qr-area"></div>
+
+  <div class="section-title"><i class="fa-solid fa-star"></i><h2>Certificate &amp; feedback</h2></div>
+  <div class="two-col" id="cards"></div>
+
+  <div class="section-title" id="announcements"><i class="fa-solid fa-bullhorn"></i><h2>Announcements</h2></div>
+  <div class="card"><div class="announce-list" id="announce"></div></div>
+
+  <div class="section-title"><i class="fa-solid fa-headset"></i><h2>Support</h2></div>
+  <div class="support-grid" id="support"></div>
+
+</div></section>
+
+<div id="foot"></div>
+
+<script src="../participant-common.js"></script>
+<script src="../student-common.js"></script>
+<script>
+const L = window.LVRMIC, S = window.StudentPortal, esc = S.esc, $ = id => document.getElementById(id);
+S.shell('home');
+
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const dmy = k => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(k || ''); return m ? (+m[3]) + ' ' + MON[+m[2] - 1] + ' ' + m[1] : ''; };
+const t12 = hm => { const m = /^(\d{2}):(\d{2})$/.exec(hm || ''); if (!m) return ''; let h = +m[1]; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m[2] + ' ' + ap; };
+const badge = (t, k) => '<span class="badge badge-' + k + '"><i class="fa-solid fa-circle"></i> ' + esc(t) + '</span>';
+
+function renderAttendance(a) {
+  const sess = a.sessions || [];
+  if (!sess.length) { $('att').innerHTML = '<div class="att-notice"><i class="fa-regular fa-clock"></i>&nbsp; Attendance sessions will appear here once the organising team schedules them. Attendance is marked at the venue by QR scan.</div>'; return; }
+  const pct = a.percent, min = +a.minPercent || 0, has = pct !== null && pct !== undefined, ok = has && pct >= min;
+  const kind = s => s === 'Present' ? 'success' : (s === 'Late' || s === 'Missing exit') ? 'pending' : s === 'Absent' ? 'danger' : 'neutral';
+  $('att').innerHTML = '<div class="card"><div class="att-summary"><div class="att-pct">' + (has ? '<span id="pct">0</span><small>%</small>' : '—') + '</div>' +
+    '<div class="att-bar-wrap"><div class="att-bar"><div class="att-fill' + (has && !ok ? ' low' : '') + '" id="fill"></div>' + (min ? '<div class="att-min" style="left:' + Math.min(100, min) + '%"><span>Min ' + min + '%</span></div>' : '') + '</div>' +
+    '<p class="att-hint">' + (has ? (ok ? 'You meet the minimum attendance required for the certificate.' : 'Below the minimum attendance (' + min + '%) required for the certificate.') + ' (' + a.attended + ' of ' + a.total + ' sessions)' : 'Your attendance percentage will appear after the first session.') + '</p></div></div>' +
+    '<div class="sess-list">' + sess.map(s => '<div class="sess-row"><div class="sess-main"><b>' + esc(s.title) + '</b><span>' + esc(dmy(s.date)) + (s.entry ? ' · ' + esc(t12(s.entry)) + (s.exit ? ' – ' + esc(t12(s.exit)) : '') : '') + (s.counts === false ? ' · not counted' : '') + '</span></div>' +
+      '<div class="sess-times"><span>In: ' + esc(t12(s.in) || '—') + '</span>' + (s.exit ? '<span>Out: ' + esc(t12(s.out) || '—') + '</span>' : '') + '</div>' + badge(s.status || 'Upcoming', kind(s.status)) + '</div>').join('') + '</div></div>';
+  if (has) {
+    const t0 = performance.now(); (function step(now) { const k = Math.min(1, (now - t0) / 900); $('pct').textContent = (pct * (1 - Math.pow(1 - k, 3))).toFixed(1); if (k < 1) requestAnimationFrame(step); })(t0);
+    setTimeout(() => { $('fill').style.width = Math.max(0, Math.min(100, pct)) + '%'; }, 120);
+  }
+}
+
+async function renderQr(qr) {
+  if (!qr) { $('qr-area').innerHTML = ''; return; }
+  $('qr-area').innerHTML = '<div class="section-title"><i class="fa-solid fa-qrcode"></i><h2>My QR code</h2></div><div class="card"><div class="qr-box"><div class="qr-img" id="qr-img"></div>' +
+    '<div style="flex:1 1 220px;"><h4 style="margin:0 0 6px;color:var(--navy);">Show this at the gate</h4><p style="margin:0;font-size:13px;">Open this page on your phone and show the code to the volunteer for attendance. Do not share it with anyone.</p></div></div></div>';
+  try { await S.load('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'); new QRCode($('qr-img'), { text: qr, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M }); }
+  catch (e) { $('qr-img').innerHTML = '<span style="padding:20px;font-size:13px;color:var(--ink-3);">Could not load the QR code. Reload the page.</span>'; }
+}
+
+function certCard(d) {
+  const st = d.certificateStatus, email = window.__set['conf.convenerEmail'] || window.__set['conf.contactEmail'] || '';
+  const map = {
+    'Not released': { icon: 'fa-lock', kind: 'neutral', text: 'Attendance certificates will be released after the conference. You will be able to send your request from here.', btn: false },
+    'Open': { icon: 'fa-certificate', kind: 'success', text: 'Send your request here. The organising team will email your attendance certificate once the conference is over, or you can collect it from the registration desk.', btn: true },
+    'In progress': { icon: 'fa-hourglass-half', kind: 'pending', text: 'Your request has been received. You will get your certificate by email, or you can collect it from the registration desk.', btn: false },
+    'Closed': { icon: 'fa-circle-check', kind: 'success', text: 'Your attendance certificate has been issued. Please check your email, or collect it from the registration desk.', btn: false },
+    'Rejected': { icon: 'fa-circle-xmark', kind: 'danger', text: 'Your certificate request could not be approved.' + (email ? ' Please contact ' + email + '.' : ' Please contact the organising team.'), btn: false }
+  };
+  const m = map[st] || map['Not released'];
+  return '<div class="card info-card"><h4><i class="fa-solid ' + m.icon + '"></i> Attendance certificate &nbsp;' + badge(st, m.kind) + '</h4><p>' + esc(m.text) + '</p>' +
+    (m.btn ? '<button class="btn btn-gold" id="cert-btn" type="button"><i class="fa-solid fa-paper-plane"></i> Request certificate</button>' : '') + '</div>';
+}
+function feedbackCard(f) {
+  let body;
+  if (f.submitted) body = '<p>Thank you for sharing your feedback.' + (f.state === 'open' ? ' You can still edit your answers until ' + esc(S.fmtDT(f.closesAt)) + '.' : '') + '</p>' + badge('Submitted', 'success') + (f.state === 'open' ? ' <a class="btn btn-outline" style="margin-left:6px;" href="feedback.html">Edit</a>' : '');
+  else if (f.state === 'before') body = '<p>The feedback form opens on <b>' + esc(S.fmtDT(f.opensAt)) + '</b>.</p>' + badge('Not open yet', 'neutral');
+  else if (f.state === 'closed') body = '<p>The feedback window has closed.</p>' + badge('Closed', 'neutral');
+  else body = '<p>Tell us about your experience before <b>' + esc(S.fmtDT(f.closesAt)) + '</b>.</p><a class="btn btn-gold" href="feedback.html"><i class="fa-regular fa-comment-dots"></i> Give feedback</a>';
+  return '<div class="card info-card"><h4><i class="fa-regular fa-comment-dots"></i> Feedback</h4>' + body + '</div>';
+}
+
+function renderAnnouncements(list) {
+  const fmt = a => a.createdAt ? new Date(a.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+  $('announce').innerHTML = (list && list.length) ? list.map(a => '<div class="announce-item"><i class="fa-solid fa-bullhorn"></i><div><h5>' + esc(a.title) + '</h5><p>' + S.nl2br(a.message) + '</p>' +
+    (/^https:\/\/\S+$/i.test(a.posterImageUrl || '') ? '<img loading="lazy" src="' + esc(a.posterImageUrl) + '" alt="">' : '') + '<time>' + esc(fmt(a)) + '</time></div></div>').join('') : '<p class="empty-line">No announcements yet — check back soon.</p>';
+}
+function renderSupport(s) {
+  const c = [], oe = s['conf.contactEmail'], ce = s['conf.convenerEmail'], ph = s['conf.supportPhone'] || s['conf.contactPhone'];
+  if (oe) c.push(['fa-user-tie', 'Organising Committee', 'General queries and certificates.', 'mailto:' + oe, 'fa-regular fa-envelope', oe]);
+  if (ce) c.push(['fa-people-group', "Convener's Office", 'Corrections to your details and other queries.', 'mailto:' + ce, 'fa-regular fa-envelope', ce]);
+  if (ph) c.push(['fa-headset', 'Technical support', 'Portal login or password problems.', 'tel:' + String(ph).replace(/[^\d+]/g, ''), 'fa-solid fa-phone', ph]);
+  $('support').innerHTML = c.length ? c.map(x => '<div class="support-card"><i class="fa-solid ' + x[0] + '"></i><h5>' + esc(x[1]) + '</h5><p>' + esc(x[2]) + '</p><a href="' + esc(x[3]) + '"><i class="' + x[4] + '"></i> ' + esc(x[5]) + '</a></div>').join('') : '<p class="empty-line">Contact details will be shown here soon.</p>';
+}
+
+(async function init() {
+  try {
+    const [res, set] = await Promise.all([S.api('getStudentDashboard', {}), L.loadPublicSettings()]);
+    window.__set = set || {};
+    if (!res.ok) { $('loader').innerHTML = '<div class="wrap"><div class="notice"><i class="fa-solid fa-triangle-exclamation"></i><div><b>Could not load your dashboard</b><p>' + esc(res.error || 'Please try again.') + '</p></div></div></div>'; return; }
+    const st = res.student;
+    $('w-name').textContent = 'Welcome, ' + st.name;
+    $('w-sub').textContent = [st.class, 'Dept No ' + st.deptNo, st.email].filter(Boolean).join(' · ');
+    $('w-id').textContent = st.id;
+    $('w-av').textContent = st.name.split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0]).join('').toUpperCase();
+    if (res.switches.scheduleVisible) $('nav-schedule').style.display = '';
+    renderAttendance(res.attendance);
+    renderQr(res.qr);
+    $('cards').innerHTML = certCard(res) + feedbackCard(res.feedback);
+    renderAnnouncements(res.announcements);
+    renderSupport(window.__set);
+    $('loader').style.display = 'none'; $('content').style.display = 'block';
+    const b = $('cert-btn');
+    if (b) b.addEventListener('click', async () => {
+      const label = b.innerHTML; b.disabled = true; b.innerHTML = '<span class="spinner"></span> Sending request...';
+      try {
+        const r = await S.api('studentRequestCertificate', {});
+        if (!r.ok) { S.popup(r.error || 'Could not send the request.', 'Request not sent'); b.disabled = false; b.innerHTML = label; return; }
+        res.certificateStatus = 'In progress'; $('cards').innerHTML = certCard(res) + feedbackCard(res.feedback);
+        S.popup('Your request has been received. The organising team will email your attendance certificate once the conference is over, or you can collect it from the registration desk.', 'Request received', true);
+      } catch (err) { S.popup(err.message, 'Connection problem'); b.disabled = false; b.innerHTML = label; }
+    });
+  } catch (err) { $('loader').innerHTML = '<div class="wrap"><div class="notice"><i class="fa-solid fa-triangle-exclamation"></i><div><b>Could not load your dashboard</b><p>' + esc(err.message) + '</p></div></div></div>'; }
+})();
+</script>
+</body>
+</html>
