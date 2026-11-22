@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student ID cards and meal coupons | LVRMIC 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;700&family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--n950:#0a1230;--n900:#0e1938;--n850:#122043;--n800:#152750;--bd:rgba(226,187,120,.24);--gold:#c9974f;--gl:#e8c983;--t1:#f3f5fb;--t2:#b3bcd6;--t3:#8390b3;--ok:#5cc08a;--bad:#e8988c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--n950);color:var(--t1);line-height:1.5;padding:18px}
+button,select,input{font-family:inherit}
+:focus-visible{outline:2px solid var(--gl);outline-offset:2px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:22px}
+.sub{color:var(--t3);font-size:13px;margin:2px 0 16px}
+.panel{background:var(--n900);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:14px}
+.panel h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gl);margin-bottom:4px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.f label{display:block;font-size:11.5px;color:var(--t3);margin-bottom:3px}
+.f input,.f select{width:100%;height:36px;border-radius:8px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);padding:0 10px;font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:12px}
+.btn{height:38px;padding:0 16px;border-radius:9px;border:1px solid var(--bd);background:var(--n850);color:var(--t1);font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--gold)}
+.btn.pri{background:linear-gradient(180deg,#e8c983,#c9974f);color:#241a06;border-color:transparent}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.grow{flex:1}
+.msg{font-size:12.5px;color:var(--t2)}
+.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+.prog{height:6px;border-radius:4px;background:var(--n800);overflow:hidden;margin-top:10px;display:none}
+.prog i{display:block;height:100%;width:0;background:var(--gl);transition:width .15s}
+.tw{max-height:280px;overflow:auto;border:1px solid var(--bd);border-radius:8px;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:7px 10px;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(226,187,120,.1)}
+th{position:sticky;top:0;background:var(--n850);color:var(--t2);font-weight:600;z-index:1}
+td.w{white-space:normal}
+.chk{width:16px;height:16px;accent-color:#c9974f}
+.stage{background:#2a3358;border-radius:10px;padding:18px;overflow:auto}
+.out{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:flex-start}
+.empty{color:var(--t3);font-size:13px;text-align:center;padding:30px}
+.cmpwrap{display:block}
+.cmplab{color:#d3daee;font-size:12.5px;font-weight:600;margin-bottom:6px;text-align:center}
+.cpt{border-collapse:collapse;margin-top:10px;width:auto}
+.cpt th,.cpt td{position:static;text-align:center;padding:6px 12px;background:none}
+.cpt th:first-child{text-align:left}
+.lnk{background:none;border:0;color:var(--gl);font-size:12.5px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.tg{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;height:38px}
+
+/* =================== COLOUR THEMES (shared by the ID card and the meal strip) =================== */
+.card,.strip{--bgi:url('../assets/badge-bg.png');--bg:linear-gradient(165deg,#fcfaf3 0%,#f2ebd9 100%);--ink:#0a1230;--ink2:#3b4560;--lab:#5b6684;--acc:#8a5f1f;
+  --hd:linear-gradient(135deg,#0a1230,#152750);--hdt:#e8c983;--hdt2:#d3daee;--line:#c9974f;--qrb:#122043;--ft:linear-gradient(135deg,#0a1230,#1b3a7a);--ftt:#fff;
+  --nf:'Fraunces',serif;
+  --ov:radial-gradient(circle at 105% 98%,rgba(201,151,79,.28),transparent 42%),repeating-linear-gradient(135deg,rgba(18,32,67,.028) 0 .12cm,transparent .12cm .5cm)}
+.t-modern{--bgi:none!important;--bg:#fff!important;--ink:#0f172a!important;--ink2:#475569!important;--lab:#64748b!important;--acc:#0f766e!important;--hd:linear-gradient(135deg,#0f766e,#0e7490)!important;--hdt:#fff!important;--hdt2:#d5f0ee!important;--line:#14b8a6!important;--qrb:#0f766e!important;--ft:linear-gradient(135deg,#0f766e,#0e7490)!important;--ftt:#fff!important;--nf:'Inter',sans-serif!important;--ov:none!important}
+.t-midnight{--bgi:none!important;--bg:linear-gradient(160deg,#0a1230,#122043)!important;--ink:#f3f5fb!important;--ink2:#b3bcd6!important;--lab:#8390b3!important;--acc:#e8c983!important;--hd:linear-gradient(135deg,#050a1c,#0e1938)!important;--hdt:#e8c983!important;--hdt2:#b3bcd6!important;--line:#e8c983!important;--qrb:#e8c983!important;--ft:linear-gradient(135deg,#8a5f1f,#c9974f)!important;--ftt:#1d1305!important;--ov:radial-gradient(circle at 105% 98%,rgba(232,201,131,.18),transparent 45%)!important}
+.t-crimson{--bgi:none!important;--bg:linear-gradient(165deg,#fffaf8,#f6e7e2)!important;--ink:#3a0d1a!important;--ink2:#5b3a44!important;--lab:#8a6470!important;--acc:#8f1d3a!important;--hd:linear-gradient(135deg,#5e1226,#8f1d3a)!important;--hdt:#f6d9a8!important;--hdt2:#f1d6dc!important;--line:#d9a441!important;--qrb:#5e1226!important;--ft:linear-gradient(135deg,#5e1226,#8f1d3a)!important;--ftt:#fff!important;--ov:repeating-linear-gradient(135deg,rgba(94,18,38,.03) 0 .12cm,transparent .12cm .5cm)!important}
+.t-emerald{--bgi:none!important;--bg:linear-gradient(165deg,#f8fbf3,#e5efd9)!important;--ink:#10281c!important;--ink2:#3f5a4b!important;--lab:#5f7a6b!important;--acc:#1f6b45!important;--hd:linear-gradient(135deg,#0c3b27,#1f6b45)!important;--hdt:#d9ee9a!important;--hdt2:#d6ecd9!important;--line:#b5cc3a!important;--qrb:#0c3b27!important;--ft:linear-gradient(135deg,#0c3b27,#1f6b45)!important;--ftt:#fff!important;--ov:radial-gradient(circle at 105% 98%,rgba(181,204,58,.25),transparent 42%),repeating-linear-gradient(135deg,rgba(12,59,39,.03) 0 .12cm,transparent .12cm .5cm)!important}
+.t-violet{--bgi:none!important;--bg:linear-gradient(165deg,#faf7ff,#ebe2f8)!important;--ink:#26123f!important;--ink2:#54406f!important;--lab:#7b6a94!important;--acc:#6b2fa8!important;--hd:linear-gradient(135deg,#2a1052,#5b2a9a)!important;--hdt:#ffd37a!important;--hdt2:#e6dcf6!important;--line:#f0a830!important;--qrb:#2a1052!important;--ft:linear-gradient(135deg,#2a1052,#5b2a9a)!important;--ftt:#fff!important;--ov:radial-gradient(circle at 105% 98%,rgba(240,168,48,.22),transparent 42%)!important}
+.t-saffron{--bgi:none!important;--bg:linear-gradient(165deg,#fffaf2,#fbe7cb)!important;--ink:#3b1d0a!important;--ink2:#6a4a30!important;--lab:#8f735a!important;--acc:#b4520e!important;--hd:linear-gradient(135deg,#7a2f06,#d2691e)!important;--hdt:#fff1d0!important;--hdt2:#fbe3c6!important;--line:#f2b134!important;--qrb:#7a2f06!important;--ft:linear-gradient(135deg,#7a2f06,#d2691e)!important;--ftt:#fff!important;--ov:repeating-linear-gradient(135deg,rgba(122,47,6,.03) 0 .12cm,transparent .12cm .5cm)!important}
+.t-slaterose{--bgi:none!important;--bg:linear-gradient(165deg,#fbf8f9,#ebe5e9)!important;--ink:#20242c!important;--ink2:#4a5160!important;--lab:#70788a!important;--acc:#b0405f!important;--hd:linear-gradient(135deg,#1f242d,#3a4252)!important;--hdt:#f6c1cf!important;--hdt2:#cfd5e1!important;--line:#e08aa3!important;--qrb:#1f242d!important;--ft:linear-gradient(135deg,#1f242d,#3a4252)!important;--ftt:#fff!important;--ov:repeating-linear-gradient(135deg,rgba(32,36,44,.025) 0 .12cm,transparent .12cm .5cm)!important}
+
+/* =================== SHEETS =================== */
+.sheet{width:21cm;height:29.6cm;flex-shrink:0;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.sheet.cards{display:grid;grid-template-columns:repeat(2,8.5cm);grid-auto-rows:12cm;gap:.6cm;justify-content:center;align-content:center}
+.sheet.strips{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35cm}
+.out[data-per="6"] .sheet.strips{gap:.5cm}
+body.cap .sheet{box-shadow:none}
+.sheet.cards .card{outline:.1mm dashed #8a8a8a}
+
+/* =================== STUDENT ID CARD: 8.5 cm x 12 cm portrait =================== */
+.card{width:8.5cm;height:12cm;flex-shrink:0;position:relative;overflow:hidden;display:flex;flex-direction:column;color:var(--ink);font-family:'Inter',sans-serif;
+  background:var(--bgi) center/cover no-repeat,var(--bg);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.card::before,.strip::before{content:"";position:absolute;inset:0;pointer-events:none;background:var(--ov)}
+.card>*{position:relative}
+.hole{height:.8cm;flex-shrink:0;background:var(--hd);display:flex;align-items:center;justify-content:center}
+.hole i{display:block;width:.5cm;height:.5cm;border-radius:50%;border:.03cm solid var(--hdt)}
+.bh{height:2.6cm;flex-shrink:0;background:var(--hd);border-bottom:.08cm solid var(--line);padding:.05cm .4cm .12cm;display:flex;flex-direction:column;align-items:center;justify-content:space-between}
+.lgs{display:flex;gap:.15cm;justify-content:center;align-items:center;height:.85cm}
+.lg{width:1.1cm;height:.85cm;background:#fff;padding:.07cm;border-radius:.22cm;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lg img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.bt1{font-family:var(--nf);font-weight:600;font-size:.5cm;line-height:1.1;color:var(--hdt);letter-spacing:.02cm}
+.bt2{font-size:.19cm;line-height:1.25;color:var(--hdt2);text-align:center}
+.cbody{flex:1;min-height:0;padding:.2cm .4cm;display:flex;flex-direction:column;gap:.14cm;align-items:center;justify-content:center}
+.cq{width:2.6cm;height:2.6cm;flex-shrink:0;background:#fff;border:.05cm solid var(--qrb);padding:.09cm;display:flex;align-items:center;justify-content:center}
+.cq img{width:100%;height:100%;display:block;image-rendering:pixelated}
+.cq.none{font-size:.26cm;color:#8a93ad;text-align:center;line-height:1.2}
+.cmid{width:100%;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.04cm;text-align:center}
+.k{display:flex;align-items:center;gap:.15cm;line-height:1.2;font-size:.22cm;letter-spacing:.06cm;font-weight:700;color:var(--lab);text-transform:uppercase}
+.k::before,.k::after{content:"";width:.8cm;height:.025cm;background:linear-gradient(90deg,transparent,var(--line))}
+.k::after{transform:scaleX(-1)}
+.code{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.6cm;line-height:1.2;color:var(--acc)}
+.nm{max-width:100%;font-family:var(--nmf,var(--nf));font-weight:600;font-size:.6cm;line-height:1.25;color:var(--ink);white-space:nowrap}
+.cinfo{display:flex;gap:.25cm;width:100%}
+.cb{flex:1;min-width:0;border:.03cm solid var(--line);border-radius:.2cm;background:rgba(128,128,128,.08);padding:.06cm .15cm;text-align:center}
+.cb small{display:block;font-size:.19cm;line-height:1.2;font-weight:700;letter-spacing:.05cm;text-transform:uppercase;color:var(--lab)}
+.cb b{display:block;font-size:.34cm;line-height:1.3;font-weight:700;color:var(--ink);white-space:nowrap}
+.cdept{width:100%;text-align:center;font-size:.25cm;line-height:1.25;font-weight:600;color:var(--acc)}
+.cdept small{display:block;font-size:.18cm;font-weight:700;letter-spacing:.05cm;text-transform:uppercase;color:var(--lab)}
+.bf{height:1.15cm;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.03cm;background:var(--ft);color:var(--ftt);border-top:.08cm solid var(--line);padding:0 .4cm}
+.bf .r{font-weight:700;font-size:.42cm;line-height:1.2;letter-spacing:.1cm;text-transform:uppercase;white-space:nowrap}
+.bf .v{max-width:100%;font-size:.24cm;line-height:1.3;font-weight:500;white-space:nowrap}
+
+/* =================== MEAL STRIP: 19 cm wide, 3 cm (8 per page) or 4 cm (6 per page) =================== */
+.strip{width:19cm;height:3cm;flex-shrink:0;position:relative;overflow:hidden;display:flex;color:var(--ink);font-family:'Inter',sans-serif;
+  background:var(--bgi) center/cover no-repeat,var(--bg);border:.04cm solid var(--line);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.out[data-per="6"] .strip{height:4cm}
+.strip>*{position:relative}
+.sl,.sr{width:4.7cm;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;gap:.12cm;padding:.1cm .3cm;background:rgba(128,128,128,.07)}
+.sl{align-items:flex-start;border-right:.025cm dashed var(--lab)}
+.sr{align-items:flex-end;border-left:.025cm dashed var(--lab)}
+.mr{display:flex;flex-direction:column;gap:.03cm}
+.sl .mr{align-items:flex-start}.sr .mr{align-items:flex-end}
+.mn{font-size:.19cm;line-height:1.2;font-weight:800;letter-spacing:.04cm;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.cells{display:flex;gap:.05cm}
+.sl .cells{justify-content:flex-start}.sr .cells{justify-content:flex-end}
+.pcell{width:1.4cm;display:flex;flex-direction:column;gap:.02cm}
+.sl .pcell{align-items:flex-start}.sr .pcell{align-items:flex-end}
+.pc{display:block;width:.65cm;height:.65cm;border-radius:50%;border:.035cm solid var(--acc);background:rgba(255,255,255,.55)}
+.pcell span{font-size:.165cm;line-height:1.2;color:var(--lab);white-space:nowrap}
+.sm{flex:1;min-width:0;display:flex;align-items:center;gap:.3cm;padding:.1cm .25cm}
+.sq{width:2.5cm;height:2.5cm;flex-shrink:0;background:#fff;border:.04cm solid var(--qrb);padding:.08cm;display:flex;align-items:center;justify-content:center}
+.out[data-per="6"] .sq{width:3.2cm;height:3.2cm}
+.sq img{width:100%;height:100%;display:block;image-rendering:pixelated}
+.sq.none{font-size:.22cm;color:#8a93ad;text-align:center}
+.si{flex:1;min-width:0;display:flex;flex-direction:column;gap:.04cm}
+.s0{font-size:.19cm;line-height:1.2;font-weight:700;letter-spacing:.045cm;text-transform:uppercase;color:var(--lab);white-space:nowrap}
+.sn{font-family:var(--nmf,var(--nf));font-weight:600;font-size:.52cm;line-height:1.25;color:var(--ink);white-space:nowrap}
+.s1{display:inline-flex;align-self:flex-start;align-items:center;border:.03cm solid var(--acc);border-radius:.4cm;overflow:hidden;max-width:100%}
+.s1 span{padding:.02cm .15cm;line-height:1.3;white-space:nowrap}
+.s1 .pl{font-size:.18cm;font-weight:700;letter-spacing:.05cm;text-transform:uppercase;background:var(--acc);color:var(--ftt)}
+.s1 .pcode{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.4cm;color:var(--acc)}
+.s2{font-size:.26cm;line-height:1.3;color:var(--ink2);font-weight:600;white-space:nowrap}
+.s3{font-size:.2cm;line-height:1.18;color:var(--acc);font-weight:600}
+.s4{display:none;font-size:.2cm;line-height:1.2;color:var(--lab);margin-top:.05cm}
+.out[data-per="6"] .s4{display:block}
+.out[data-per="6"] .sn{font-size:.6cm}
+
+/* =================== SETTINGS DIALOG =================== */
+dialog{margin:auto;background:var(--n900);color:var(--t1);border:1px solid var(--bd);border-radius:12px;padding:0;width:min(640px,calc(100% - 24px));max-height:88vh}
+dialog::backdrop{background:rgba(5,10,28,.7)}
+.dlg{padding:16px;overflow:auto;max-height:88vh}
+.dlg h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px}
+.dlg h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gl);margin:16px 0 8px}
+.dh{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+
+/* =================== PRINT =================== */
+@page punch{size:A4 portrait;margin:0}
+@media print{
+  body{background:#fff;padding:0}
+  .noprint{display:none!important}
+  .stage{background:none;padding:0;overflow:visible;border-radius:0}
+  .out{display:block;zoom:1!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sheet{box-shadow:none;break-after:page}
+  .sheet:last-child{break-after:auto}
+  .sheet.strips{page:punch}
+  body.m-one .sheet.cards{display:contents}
+  body.m-one .card{break-after:page;outline:none}
+  body.m-one .sheet.cards:last-child .card:last-child{break-after:auto}
+}
+</style>
+<style id="pageStyle">@media print{@page{size:A4 portrait;margin:0}}</style>
+</head>
+<body class="m-a4">
+
+<div class="noprint">
+  <h1>Student ID cards and meal coupons</h1>
+  <p class="sub">ID card 8.5 cm × 12 cm, 4 per A4. Meal coupon strips 19 × 3 cm (8 per page) or 19 × 4 cm (6 per page) with the punch circles on the left and right ends. Name and class text is sized automatically so every letter is visible.</p>
+
+  <div class="panel">
+    <div class="filters">
+      <div class="f"><label for="fQ">Search</label><input id="fQ" type="search" placeholder="Name, ID, department number" autocomplete="off"></div>
+      <div class="f"><label for="fCls">Class</label><select id="fCls"><option value="">All classes</option></select></div>
+      <div class="f"><label for="fAct">Status</label><select id="fAct"><option value="active">Active students</option><option value="">Active and deactivated</option></select></div>
+      <div class="f"><label for="fSort">Sort by</label><select id="fSort"><option value="class">Class, then department number</option><option value="name">Name</option><option value="id">Student ID</option></select></div>
+    </div>
+    <div class="bar">
+      <button class="btn" id="selAll" type="button"><i class="fa-regular fa-square-check"></i>Select all shown</button>
+      <button class="btn" id="selNone" type="button"><i class="fa-regular fa-square"></i>Clear</button>
+      <span class="msg" id="count">Loading students</span>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th><input class="chk" type="checkbox" id="selHead" aria-label="Select all shown"></th><th>Student ID</th><th>Name</th><th>Class</th><th>Dept no.</th><th>Department</th><th>Status</th></tr></thead>
+      <tbody id="rows"><tr><td colspan="7" class="empty">Loading</td></tr></tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <h2>Meal configuration</h2>
+    <p class="msg">Tick the days and meals students get. Only ticked items appear on each coupon, one punch circle per day. Saved in this browser.</p>
+    <div style="overflow:auto"><table class="cpt" id="cpTable"></table></div>
+    <div class="bar" style="margin-top:6px"><button class="btn" id="cpAll" type="button">All meals and days</button><button class="btn" id="cpNone" type="button">Clear</button><span class="msg" id="cpInfo"></span></div>
+  </div>
+
+  <div class="panel">
+    <div class="bar" style="margin-top:0">
+      <button class="btn pri" id="gen" type="button" disabled><i class="fa-solid fa-id-card-clip"></i><span id="genTxt">Generate ID cards</span></button>
+      <button class="btn pri" id="genM" type="button" disabled><i class="fa-solid fa-utensils"></i><span id="genMTxt">Generate meal coupons</span></button>
+      <button class="btn" id="cmp" type="button" disabled><i class="fa-solid fa-palette"></i>Compare themes</button>
+      <button class="btn" id="print" type="button" disabled><i class="fa-solid fa-print"></i>Print</button>
+      <button class="btn" id="pdf" type="button" disabled><i class="fa-solid fa-file-pdf"></i>Download PDF</button>
+      <button class="btn" id="cfgBtn" type="button"><i class="fa-solid fa-sliders"></i>Settings</button>
+    </div>
+    <div class="bar">
+      <div class="f" style="min-width:210px"><label for="fTheme">Colour theme</label><select id="fTheme">
+        <option value="emerald">Emerald · green &amp; lime</option>
+        <option value="violet">Violet · violet &amp; amber</option>
+        <option value="saffron">Saffron · orange &amp; brown</option>
+        <option value="slaterose">Slate rose · charcoal &amp; rose</option>
+        <option value="classical">Classical · navy &amp; gold</option>
+        <option value="modern">Modern · teal</option>
+        <option value="midnight">Midnight · dark &amp; gold</option>
+        <option value="crimson">Crimson · maroon &amp; gold</option></select></div>
+      <div class="f" style="min-width:250px"><label for="fMain">ID card paper</label><select id="fMain">
+        <option value="a4">A4 paper, 4 cards per page</option>
+        <option value="one">Exact size, 1 card per page (8.5 × 12 cm)</option></select></div>
+      <div class="f" style="min-width:250px"><label for="fPer">Meal coupons per A4 page</label><select id="fPer">
+        <option value="8">8 per page (19 × 3 cm)</option>
+        <option value="6">6 per page (19 × 4 cm)</option></select></div>
+      <div class="f" style="min-width:120px"><label for="fZoom">Preview</label><select id="fZoom">
+        <option value="1">100%</option><option value=".75">75%</option><option value=".5">50%</option></select></div>
+    </div>
+    <div class="prog" id="prog"><i></i></div>
+    <p class="msg" id="status" style="margin-top:10px"></p>
+    <p class="msg" style="margin-top:6px">In the print window set margins to <b>None</b> and turn on <b>Background graphics</b>. Cut the cards along the dashed lines. On the coupons, punch the circle for the meal when it is taken.</p>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="out" id="out" data-per="8"><div class="empty noprint">Press Generate ID cards or Generate meal coupons. Compare themes shows the first selected student in every colour theme.</div></div>
+</div>
+
+<dialog id="cfgDlg" aria-labelledby="cfgT">
+  <div class="dlg">
+    <div class="dh"><h2 id="cfgT">Settings</h2><button class="btn pri" id="cfgClose" type="button">Done</button></div>
+    <p class="msg">Changes apply at once and are remembered in this browser.</p>
+    <h3>Text and font</h3>
+    <div class="g2">
+      <div class="f"><label for="cIdLabel">ID label</label><input id="cIdLabel" type="text" maxlength="24"></div>
+      <div class="f"><label for="cFont">Name font</label><select id="cFont">
+        <option value="pro">Professional (default)</option><option value="classic">Classic serif</option><option value="clean">Clean sans-serif</option><option value="elegant">Elegant serif</option><option value="modern">Bold modern</option></select></div>
+      <div class="f"><label for="cTitle">Coupon title</label><input id="cTitle" type="text" maxlength="40"></div>
+      <div class="f"><label for="cFoot">Coupon note (shown on 6 per page)</label><input id="cFoot" type="text" maxlength="80"></div>
+    </div>
+    <h3>Meal names</h3>
+    <div class="g2">
+      <div class="f"><label>Morning snacks</label><input type="text" data-meal="B1" maxlength="24"></div>
+      <div class="f"><label>Lunch</label><input type="text" data-meal="LN" maxlength="24"></div>
+      <div class="f"><label>Afternoon snacks</label><input type="text" data-meal="TB" maxlength="24"></div>
+    </div>
+    <div class="bar"><button class="btn" id="cfgReset" type="button"><i class="fa-solid fa-rotate-left"></i>Reset to defaults</button></div>
+  </div>
+</dialog>
+
+<script src="admin-common.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const $ = id => document.getElementById(id), esc = VR.esc;
+if (!VR.token()) location.replace(VR.LOGIN_URL);
+
+const S = v => String(v == null ? '' : v).trim();
+const num = v => parseInt(String(v).replace(/\D+/g, ''), 10);
+const setMsg = (t, c) => { const s = $('status'); s.textContent = t || ''; s.className = 'msg ' + (c || ''); };
+const THEMES = [['emerald','Emerald'],['violet','Violet'],['saffron','Saffron'],['slaterose','Slate rose'],['classical','Classical'],['modern','Modern'],['midnight','Midnight'],['crimson','Crimson']];
+const UAZ_DEPT = 'PG & Research Department of Advanced Zoology and Biotechnology';
+const deptOf = p => /uaz/i.test(S(p.deptNo)) ? UAZ_DEPT : '';
+
+let ALL = [], CONF = {}, view = [], sel = new Set(), lastRows = null, lastMode = '';
+
+/* ---------- settings (remembered in this browser) ---------- */
+const DEF = { idLabel: 'LVRMIC ID', nameFont: 'pro', title: 'MEAL COUPON', foot: 'Valid for registered students only · Non-transferable', names: { B1: 'Morning Snacks', LN: 'Lunch', TB: 'Afternoon Snacks' } };
+const clone = o => JSON.parse(JSON.stringify(o));
+function loadCfg() {
+  const c = clone(DEF);
+  try { const s = JSON.parse(localStorage.getItem('vrmic.stcfg') || 'null'); if (s) Object.keys(DEF).forEach(k => { if (s[k] !== undefined) c[k] = typeof DEF[k] === 'object' ? Object.assign({}, DEF[k], s[k]) : s[k]; }); } catch (e) {}
+  return c;
+}
+let CFG = loadCfg();
+const saveCfg = () => { try { localStorage.setItem('vrmic.stcfg', JSON.stringify(CFG)); } catch (e) {} };
+const FONTS = { pro: '', classic: "'Playfair Display',serif", clean: "'Inter',sans-serif", elegant: "'Cormorant Garamond',serif", modern: "'Montserrat',sans-serif" };
+async function applyStyle() {
+  const o = $('out'), f = FONTS[CFG.nameFont] || '';
+  f ? o.style.setProperty('--nmf', f) : o.style.removeProperty('--nmf');
+  if (f) { try { await document.fonts.load('600 20px ' + f); } catch (e) {} }
+  if (o.querySelector('.fit')) refit();
+}
+
+/* ---------- load ---------- */
+async function init() {
+  VR.settings().then(s => { CONF = s || {}; renderCp(); }).catch(() => {});
+  const r = await VR.api('adminQrList', { kind: 'student' });
+  if (!r || !r.ok) { $('count').textContent = (r && r.error) || 'Could not load students.'; $('count').className = 'msg err'; $('rows').innerHTML = '<tr><td colspan="7" class="empty">No data</td></tr>'; return; }
+  ALL = (r.people || []).filter(p => S(p.id));
+  const cls = Array.from(new Set(ALL.map(p => S(p.class)).filter(Boolean))).sort();
+  $('fCls').innerHTML = '<option value="">All classes</option>' + cls.map(c => `<option>${esc(c)}</option>`).join('');
+  applyFilters();
+}
+
+/* ---------- filter + list ---------- */
+function applyFilters() {
+  const q = S($('fQ').value).toLowerCase(), c = $('fCls').value, a = $('fAct').value, so = $('fSort').value;
+  view = ALL.filter(p => {
+    if (a === 'active' && !p.active) return false;
+    if (c && S(p.class) !== c) return false;
+    if (q && ![p.id, p.name, p.deptNo, p.class].some(x => S(x).toLowerCase().includes(q))) return false;
+    return true;
+  });
+  view.sort((x, y) => so === 'name' ? S(x.name).localeCompare(S(y.name))
+    : so === 'id' ? S(x.id).localeCompare(S(y.id), undefined, { numeric: true })
+    : S(x.class).localeCompare(S(y.class)) || ((num(x.deptNo) || 0) - (num(y.deptNo) || 0)) || S(x.deptNo).localeCompare(S(y.deptNo), undefined, { numeric: true }));
+  sel = new Set(view.map(p => S(p.id)));
+  renderList();
+}
+function renderList() {
+  $('rows').innerHTML = view.length ? view.map(p => `<tr>
+    <td><input class="chk row-chk" type="checkbox" data-id="${esc(S(p.id))}" ${sel.has(S(p.id)) ? 'checked' : ''} aria-label="Select ${esc(S(p.name))}"></td>
+    <td>${esc(S(p.id))}</td><td class="w">${esc(S(p.name))}</td><td>${esc(S(p.class))}</td><td>${esc(S(p.deptNo))}</td><td class="w">${esc(deptOf(p) || '-')}</td><td>${p.active ? 'Active' : 'Deactivated'}</td></tr>`).join('')
+    : '<tr><td colspan="7" class="empty">No students match these filters.</td></tr>';
+  updateCount();
+}
+function updateCount() {
+  const n = view.filter(p => sel.has(S(p.id))).length;
+  $('count').textContent = `${n} selected of ${view.length} shown (${ALL.length} students)`;
+  $('count').className = 'msg';
+  $('genTxt').textContent = n ? `Generate ${n} ID card${n > 1 ? 's' : ''}` : 'Generate ID cards';
+  $('genMTxt').textContent = n ? `Generate ${n} meal coupon${n > 1 ? 's' : ''}` : 'Generate meal coupons';
+  $('gen').disabled = !n; $('genM').disabled = !n; $('cmp').disabled = !n;
+  $('selHead').checked = n > 0 && n === view.length;
+  updateCp();
+}
+['fQ','fCls','fAct','fSort'].forEach(id => $(id).addEventListener(id === 'fQ' ? 'input' : 'change', applyFilters));
+$('rows').addEventListener('change', e => { const c = e.target.closest('.row-chk'); if (!c) return; c.checked ? sel.add(c.dataset.id) : sel.delete(c.dataset.id); updateCount(); });
+$('selAll').onclick = () => { view.forEach(p => sel.add(S(p.id))); renderList(); };
+$('selNone').onclick = () => { sel.clear(); renderList(); };
+$('selHead').onchange = e => { e.target.checked ? $('selAll').click() : $('selNone').click(); };
+const picked = () => view.filter(p => sel.has(S(p.id)));
+
+/* ---------- QR ---------- */
+const qrCache = {};
+function qrImg(text) {
+  if (!text || typeof QRCode === 'undefined') return '';
+  if (qrCache[text]) return qrCache[text];
+  const d = document.createElement('div');
+  new QRCode(d, { text: text, width: 320, height: 320, colorDark: '#0a1230', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  const c = d.querySelector('canvas'), im = d.querySelector('img');
+  return qrCache[text] = c ? c.toDataURL('image/png') : (im ? im.src : '');
+}
+
+/* ---------- meals: only snacks and lunch for students ---------- */
+const MEALS = [
+  { c: 'B1', d: 'Morning Snacks', g: 'snack', ic: 'fa-cookie-bite' },
+  { c: 'LN', d: 'Lunch', g: 'meal', ic: 'fa-utensils' },
+  { c: 'TB', d: 'Afternoon Snacks', g: 'snack', ic: 'fa-mug-hot' }
+], DAYS = [1, 2, 3], ALLKEYS = DAYS.flatMap(d => MEALS.map(m => d + '-' + m.c));
+const applyNames = () => MEALS.forEach(m => { m.n = S(CFG.names[m.c]) || m.d; });
+applyNames();
+let CP = new Set(ALLKEYS);
+try { const s = JSON.parse(localStorage.getItem('vrmic.stmeals') || 'null'); if (Array.isArray(s)) CP = new Set(s.filter(k => ALLKEYS.includes(k))); } catch (e) {}
+const saveCp = () => { try { localStorage.setItem('vrmic.stmeals', JSON.stringify([...CP])); } catch (e) {} };
+function dayDate(d) {
+  const A = new Date(((CONF && CONF['conf.startDate']) || '2026-11-26') + 'T00:00:00');
+  if (isNaN(A)) return '';
+  A.setDate(A.getDate() + d - 1);
+  return A.getDate() + ' ' + A.toLocaleString('en-GB', { month: 'short' });
+}
+function renderCp() {
+  $('cpTable').innerHTML = '<tr><th></th>' + MEALS.map(m => `<th><button type="button" class="lnk" data-col="${m.c}"><i class="fa-solid ${m.ic}"></i> ${esc(m.n)}</button></th>`).join('') + '</tr>'
+    + DAYS.map(d => `<tr><th><button type="button" class="lnk" data-row="${d}">Day ${d} · ${esc(dayDate(d))}</button></th>`
+      + MEALS.map(m => `<td><input class="chk cp-chk" type="checkbox" data-k="${d}-${m.c}" ${CP.has(d + '-' + m.c) ? 'checked' : ''} aria-label="Day ${d} ${esc(m.n)}"></td>`).join('') + '</tr>').join('');
+  updateCp();
+}
+function updateCp() {
+  const n = picked().length, k = CP.size, per = parseInt($('fPer').value, 10), sh = Math.ceil(n / per);
+  $('cpInfo').textContent = k ? `${k} punch circle${k === 1 ? '' : 's'} on each coupon · ${n} coupon${n === 1 ? '' : 's'} = ${sh} A4 sheet${sh === 1 ? '' : 's'}` : 'Tick at least one day and meal';
+}
+function setKeys(keys, on) { keys.forEach(k => on ? CP.add(k) : CP.delete(k)); saveCp(); renderCp(); if (lastMode === 'coupons') render(true); }
+$('cpAll').onclick = () => setKeys(ALLKEYS, true);
+$('cpNone').onclick = () => setKeys(ALLKEYS, false);
+$('cpTable').addEventListener('change', e => { const c = e.target.closest('.cp-chk'); if (!c) return; c.checked ? CP.add(c.dataset.k) : CP.delete(c.dataset.k); saveCp(); updateCp(); if (lastMode === 'coupons') render(true); });
+$('cpTable').addEventListener('click', e => {
+  const b = e.target.closest('.lnk'); if (!b) return;
+  const keys = b.dataset.row ? MEALS.map(m => b.dataset.row + '-' + m.c) : DAYS.map(d => d + '-' + b.dataset.col);
+  setKeys(keys, !keys.every(k => CP.has(k)));
+});
+
+/* ---------- head info ---------- */
+function fmtRange(a, b) {
+  try {
+    if (!a || !b) throw 0;
+    const A = new Date(a + 'T00:00:00'), B = new Date(b + 'T00:00:00'), m = d => d.toLocaleString('en-GB', { month: 'short' });
+    if (isNaN(A) || isNaN(B)) throw 0;
+    return A.getMonth() === B.getMonth() ? `${A.getDate()}–${B.getDate()} ${m(B)} ${B.getFullYear()}` : `${A.getDate()} ${m(A)} – ${B.getDate()} ${m(B)} ${B.getFullYear()}`;
+  } catch (e) { return '26–28 Nov 2026'; }
+}
+function headInfo() {
+  const s = CONF || {}, range = fmtRange(s['conf.startDate'], s['conf.endDate']);
+  const full = s['conf.name'] || 'International Conference on Life Sciences and Vector Risk Management for a Sustainable Healthy Environment';
+  return { short: s['conf.shortName'] || 'LVRMIC 2026', full: full, range: range, name: full + ' · ' + range };
+}
+
+/* ---------- ID card ---------- */
+const LOGO = (f, alt) => `<div class="lg"><img src="../assets/${f}" alt="${alt}" onerror="this.parentNode.style.display='none'"></div>`;
+function cardHtml(p, h, theme) {
+  const id = S(p.id), qr = qrImg(S(p.qr)), dept = deptOf(p);
+  return `<div class="card t-${esc(theme)}">
+    <div class="hole"><i></i></div>
+    <div class="bh">
+      <div class="lgs">${LOGO('loyola-crest.png','Loyola College')}${LOGO('cimser-logo.png','CIMSER')}${LOGO('iaes-logo.png','IAES')}${LOGO('ahcf-logo.png','AHCF')}${LOGO('phes.png','PHES')}</div>
+      <div class="bt1">${esc(h.short)}</div>
+      <div class="bt2">${esc(h.name)}</div>
+    </div>
+    <div class="cbody">
+      ${qr ? `<div class="cq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="cq none">QR not available</div>'}
+      <div class="cmid"><div class="k">${esc(CFG.idLabel)}</div><div class="code">${esc(id)}</div><div class="nm fit wrap2">${esc(S(p.name))}</div></div>
+      <div class="cinfo"><div class="cb"><small>Class</small><b class="fit">${esc(S(p.class) || '-')}</b></div><div class="cb"><small>Dept. no.</small><b class="fit">${esc(S(p.deptNo) || '-')}</b></div></div>
+      ${dept ? `<div class="cdept"><small>Department</small>${esc(dept)}</div>` : ''}
+    </div>
+    <div class="bf"><div class="r fit">STUDENT</div><div class="v fit">${esc(h.range)} · Loyola College, Chennai</div></div>
+  </div>`;
+}
+
+/* ---------- meal strip: lunch cells on the left end, snack cells on the right end ---------- */
+function sideHtml(g) {
+  return MEALS.filter(me => me.g === g && DAYS.some(d => CP.has(d + '-' + me.c))).map(me =>
+    `<div class="mr"><div class="mn">${esc(me.n)}</div><div class="cells">${DAYS.filter(d => CP.has(d + '-' + me.c)).map(d =>
+      `<div class="pcell"><i class="pc"></i><span>Day ${d} · ${esc(dayDate(d))}</span></div>`).join('')}</div></div>`).join('');
+}
+function stripHtml(p, h, theme) {
+  const id = S(p.id), qr = qrImg(S(p.qr)), dept = deptOf(p);
+  return `<div class="strip t-${esc(theme)}">
+    <div class="sl">${sideHtml('meal')}</div>
+    <div class="sm">
+      ${qr ? `<div class="sq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="sq none">QR not available</div>'}
+      <div class="si">
+        <div class="s0 fit">${esc(h.short)} · ${esc(CFG.title)}</div>
+        <div class="sn fit">${esc(S(p.name))}</div>
+        <div class="s1"><span class="pl">${esc(CFG.idLabel)}</span><span class="pcode">${esc(id)}</span></div>
+        <div class="s2 fit">Class: ${esc(S(p.class) || '-')} · Dept. no.: ${esc(S(p.deptNo) || '-')}</div>
+        ${dept ? `<div class="s3">${esc(dept)}</div>` : ''}
+        <div class="s4 fit">${esc(CFG.foot)}</div>
+      </div>
+    </div>
+    <div class="sr">${sideHtml('snack')}</div>
+  </div>`;
+}
+
+/* ---------- auto-fit single-line text so every letter stays visible ---------- */
+function fitAll(root) {
+  root.querySelectorAll('.fit').forEach(el => {
+    el.style.fontSize = ''; el.style.whiteSpace = ''; el.style.lineHeight = ''; el.style.overflow = '';
+    const p = el.parentNode, cs = getComputedStyle(p), max = p.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
+    let f = parseFloat(getComputedStyle(el).fontSize); const min = f * 0.5, f0 = f;
+    el.style.display = 'inline-block'; el.style.maxWidth = 'none';
+    while (el.scrollWidth > max && f > min) { f -= 0.5; el.style.fontSize = f + 'px'; }
+    if (el.classList.contains('wrap2') && el.scrollWidth > max) { el.style.whiteSpace = 'normal'; el.style.fontSize = (f0 * 0.5) + 'px'; el.style.lineHeight = '1.15'; el.style.overflow = 'visible'; }
+    el.style.display = ''; el.style.maxWidth = '';
+  });
+}
+function refit() { const out = $('out'), z = out.style.zoom; out.style.zoom = 1; fitAll(out); out.style.zoom = z; }
+
+/* ---------- render ---------- */
+async function render(keepScroll) {
+  if (!lastRows || !lastRows.length) return;
+  const h = headInfo(), theme = $('fTheme').value, per = parseInt($('fPer').value, 10);
+  const out = $('out'); out.dataset.per = String(per);
+  let html = '';
+  if (lastMode === 'cmp') {
+    html = THEMES.map(t => `<div class="cmpwrap"><div class="cmplab noprint">${t[1]}</div>${cardHtml(lastRows[0], h, t[0])}</div>`).join('');
+  } else if (lastMode === 'cards') {
+    for (let i = 0; i < lastRows.length; i += 4) html += '<div class="sheet cards">' + lastRows.slice(i, i + 4).map(p => cardHtml(p, h, theme)).join('') + '</div>';
+  } else {
+    if (!CP.size) { setMsg('Tick at least one day and meal in the meal configuration.', 'err'); return; }
+    for (let i = 0; i < lastRows.length; i += per) html += '<div class="sheet strips">' + lastRows.slice(i, i + per).map(p => stripHtml(p, h, theme)).join('') + '</div>';
+  }
+  out.innerHTML = html;
+  try { await document.fonts.ready; } catch (e) {}
+  await applyStyle(); refit();
+  const noQr = lastRows.filter(p => !S(p.qr)).length, n = lastRows.length;
+  const sheets = lastMode === 'cards' ? Math.ceil(n / 4) : Math.ceil(n / per);
+  setMsg(lastMode === 'cmp' ? `Showing ${S(lastRows[0].name)} in all ${THEMES.length} themes. Pick one under Colour theme, then generate.`
+    : lastMode === 'cards' ? `${n} ID card${n > 1 ? 's' : ''} ready · ${sheets} A4 sheet${sheets > 1 ? 's' : ''}` + (noQr ? ` · ${noQr} without QR` : '')
+    : `${n} meal coupon${n > 1 ? 's' : ''} ready · ${sheets} A4 sheet${sheets > 1 ? 's' : ''} · ${CP.size} punch circle${CP.size > 1 ? 's' : ''} each` + (noQr ? ` · ${noQr} without QR` : ''), noQr && lastMode !== 'cmp' ? 'err' : 'ok');
+  $('print').disabled = $('pdf').disabled = lastMode === 'cmp';
+  if (keepScroll !== true) out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+const go = mode => () => { const r = picked(); if (!r.length) return; lastRows = r; lastMode = mode; render(); };
+$('gen').onclick = go('cards'); $('genM').onclick = go('coupons'); $('cmp').onclick = go('cmp');
+$('fTheme').onchange = e => {
+  if (lastMode === 'cmp') return;
+  $('out').querySelectorAll('.card,.strip').forEach(b => { b.className = (b.classList.contains('strip') ? 'strip' : 'card') + ' t-' + e.target.value; });
+  refit();
+};
+$('fPer').onchange = () => { updateCp(); if (lastMode === 'coupons') render(true); };
+
+/* ---------- paper, preview, print, PDF ---------- */
+function setLayout() {
+  const one = $('fMain').value === 'one';
+  document.body.classList.toggle('m-one', one); document.body.classList.toggle('m-a4', !one);
+  $('pageStyle').textContent = one ? '@media print{@page{size:8.5cm 12cm;margin:0}}' : '@media print{@page{size:A4 portrait;margin:0}}';
+}
+$('fMain').onchange = setLayout; setLayout();
+$('fZoom').onchange = e => { $('out').style.zoom = e.target.value; };
+async function logOk() {
+  if (typeof BADGELOG === 'undefined') return true;
+  try { return await BADGELOG.record('student', (lastRows || []).map(p => S(p.id)), lastMode === 'coupons' ? 'Student meal coupon page' : 'Student ID card page'); }
+  catch (e) { setMsg('Could not record the print log: ' + (e && e.message || e), 'err'); return false; }
+}
+$('print').onclick = async () => { if (lastMode !== 'cmp' && await logOk()) window.print(); };
+
+async function downloadPdf() {
+  const JS = window.jspdf && window.jspdf.jsPDF;
+  if (!JS || typeof html2canvas === 'undefined') { setMsg('The PDF library could not load. Check the connection, or use Print and choose Save as PDF.', 'err'); return; }
+  if (!(await logOk())) { setMsg('Print log failed, so the PDF was not created.', 'err'); return; }
+  const out = $('out'), zoom = out.style.zoom, one = $('fMain').value === 'one';
+  const sheets = [...out.querySelectorAll('.sheet')], bar = $('prog').firstElementChild;
+  let doc = null, n = 0;
+  $('pdf').disabled = $('print').disabled = $('gen').disabled = $('genM').disabled = true;
+  $('prog').style.display = 'block'; bar.style.width = '0';
+  out.style.zoom = 1; document.body.classList.add('cap'); window.scrollTo(0, 0);
+  const newPage = (w, h) => { if (!doc) doc = new JS({ unit: 'mm', format: [w, h], orientation: 'portrait', compress: true }); else doc.addPage([w, h], 'portrait'); };
+  const shot = async el => (await html2canvas(el, { scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false })).toDataURL('image/jpeg', 0.95);
+  try {
+    const total = sheets.reduce((a, s) => a + ((one && s.classList.contains('cards')) ? s.querySelectorAll('.card').length : 1), 0);
+    const tick = () => { n++; bar.style.width = (n * 100 / total) + '%'; setMsg(`Building PDF: page ${n} of ${total}`); };
+    for (const sh of sheets) {
+      if (one && sh.classList.contains('cards')) { for (const c of sh.querySelectorAll('.card')) { newPage(85, 120); doc.addImage(await shot(c), 'JPEG', 0, 0, 85, 120); tick(); } continue; }
+      newPage(210, 296); doc.addImage(await shot(sh), 'JPEG', 0, 0, 210, 296); tick();
+    }
+    doc.save(`Student-${lastMode === 'coupons' ? 'meal-coupons' : 'ID-cards'}-${new Date().toISOString().slice(0, 10)}.pdf`);
+    setMsg('PDF downloaded', 'ok');
+  } catch (e) { setMsg('Could not build the PDF: ' + (e && e.message || e), 'err'); }
+  document.body.classList.remove('cap'); out.style.zoom = zoom; $('prog').style.display = 'none';
+  $('pdf').disabled = $('print').disabled = false; updateCount();
+}
+$('pdf').onclick = downloadPdf;
+
+/* ---------- settings dialog ---------- */
+const FIELDS = { idLabel: 'cIdLabel', nameFont: 'cFont', title: 'cTitle', foot: 'cFoot' };
+function fillCfg() {
+  Object.keys(FIELDS).forEach(k => { $(FIELDS[k]).value = CFG[k]; });
+  document.querySelectorAll('[data-meal]').forEach(i => { i.value = CFG.names[i.dataset.meal]; });
+}
+function readCfg() {
+  Object.keys(FIELDS).forEach(k => { CFG[k] = S($(FIELDS[k]).value) || DEF[k]; });
+  document.querySelectorAll('[data-meal]').forEach(i => { CFG.names[i.dataset.meal] = S(i.value) || DEF.names[i.dataset.meal]; });
+}
+async function afterCfg() { saveCfg(); applyNames(); renderCp(); await applyStyle(); if (lastRows && lastMode !== 'cmp') render(true); }
+$('cfgDlg').addEventListener('change', () => { readCfg(); afterCfg(); });
+$('cfgBtn').onclick = () => { fillCfg(); $('cfgDlg').showModal(); };
+$('cfgClose').onclick = () => $('cfgDlg').close();
+$('cfgReset').onclick = () => { CFG = clone(DEF); fillCfg(); afterCfg(); };
+
+$('fTheme').value = 'emerald';
+renderCp(); applyStyle();
+init();
+</script>
+</body>
+</html>
