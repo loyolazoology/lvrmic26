@@ -137,53 +137,56 @@ td.w{white-space:normal}
 .wf.w2 u{height:.62cm}
 .sb.rem .sbl{align-items:flex-start;justify-content:flex-start;padding:.12cm .3cm;text-align:left}
 .sb.rem .sbl b{font-size:.24cm}
-/* meal coupon: 10 x 14.5 cm, 4 per A4, punch circles on the left and right edges */
-.mpg{width:21cm;height:29.6cm;flex-shrink:0;background:#fff;display:grid;grid-template-columns:repeat(2,10cm);grid-auto-rows:14.5cm;gap:.3cm .5cm;justify-content:center;align-content:center;box-shadow:0 2px 12px rgba(0,0,0,.35)}
-.pcard{width:10cm;height:14.5cm;position:relative;overflow:hidden;display:flex;flex-direction:column;color:var(--ink);font-family:'Inter',sans-serif;background:var(--bgi) center/cover no-repeat,var(--bg);border:.04cm solid var(--line);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* meal coupon strip: 19 cm wide, 3 cm tall (8 per A4) or 4 cm tall (6 per A4); punch circles on both ends */
+.mpg{width:21cm;height:29.6cm;flex-shrink:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35cm;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.out[data-per="6"] .mpg{gap:.5cm}
+.pcard{width:19cm;height:3cm;flex-shrink:0;position:relative;overflow:hidden;display:flex;color:var(--ink);font-family:'Inter',sans-serif;background:var(--bgi) center/cover no-repeat,var(--bg);border:.04cm solid var(--line);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.out[data-per="6"] .pcard{height:4cm}
 .pcard::before{content:"";position:absolute;inset:0;pointer-events:none;background:var(--ov)}
 .pcard>*{position:relative}
-.pch{flex-shrink:0;background:var(--hd);border-bottom:.08cm solid var(--line);padding:.2cm .4cm .18cm;display:flex;flex-direction:column;align-items:center;gap:.06cm}
-.pt1{font-family:var(--nf);font-weight:600;font-size:.58cm;line-height:1.15;letter-spacing:.05cm;color:var(--hdt);white-space:nowrap}
-.pt2{max-width:100%;font-size:.22cm;font-weight:600;line-height:1.3;color:var(--hdt2);text-align:center}
-.pt3{font-size:.2cm;color:var(--hdt2);opacity:.85;white-space:nowrap}
-.pid{flex-shrink:0;margin:.25cm .45cm 0;padding:.18cm .3cm;border:.03cm solid var(--line);border-radius:.25cm;background:rgba(128,128,128,.08);display:flex;align-items:center;gap:.3cm}
-.pidl{flex:1;min-width:0;display:flex;flex-direction:column;gap:.07cm}
-.pk{font-size:.19cm;font-weight:700;letter-spacing:.07cm;color:var(--lab);text-transform:uppercase}
-.pnm{font-family:var(--nf);font-weight:600;font-size:.76cm;line-height:1.2;color:var(--ink);white-space:nowrap;max-width:100%}
-.pdg{font-size:.26cm;line-height:1.3;color:var(--ink2);white-space:nowrap;max-width:100%}
-.pidp{align-self:flex-start;display:inline-flex;align-items:center;margin-top:.04cm;max-width:100%;border:.03cm solid var(--acc);border-radius:.4cm;overflow:hidden}
-.pidp span{padding:.04cm .16cm;line-height:1.3;white-space:nowrap}
-.pidp .pl{font-size:.2cm;font-weight:700;letter-spacing:.05cm;text-transform:uppercase;background:var(--acc);color:var(--ftt)}
-.pidp .pcode{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.42cm;color:var(--acc)}
-.pid .idb{justify-content:flex-start;gap:.07cm}
-.pid .idb em{font-size:.34cm}
-.pid .idb i{width:.52cm;height:.6cm;font-size:.38cm}
-.hw{display:flex;align-items:flex-end;width:100%}
-.hw i{flex:1;border-bottom:.03cm solid var(--lab);height:.45cm}
-.fd{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:.14cm}
-.fv{width:2cm;display:flex;flex-direction:column;align-items:center;gap:.08cm;font-size:.26cm;font-weight:700;letter-spacing:.04cm;color:var(--ink)}
-.fs{--c:#1c8f4a;width:.95cm;height:.95cm;border:.06cm solid var(--c);border-radius:.1cm;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sl,.sr{width:5cm;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;gap:.12cm;padding:.1cm .3cm;background:rgba(128,128,128,.07)}
+.sl{align-items:flex-start;border-right:.025cm dashed var(--lab)}
+.sr{align-items:flex-end;border-left:.025cm dashed var(--lab)}
+.mr{display:flex;flex-direction:column;gap:.03cm}
+.sl .mr{align-items:flex-start}.sr .mr{align-items:flex-end}
+.mn{font-size:.19cm;line-height:1.2;font-weight:800;letter-spacing:.04cm;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.cells{display:flex;gap:.05cm}
+.sl .cells{justify-content:flex-start}.sr .cells{justify-content:flex-end}
+.pcell{width:1.4cm;display:flex;flex-direction:column;gap:.02cm}
+.sl .pcell{align-items:flex-start}.sr .pcell{align-items:flex-end}
+.pc{display:block;width:.65cm;height:.65cm;border-radius:50%;border:.035cm solid var(--acc);background:rgba(255,255,255,.55)}
+.pcell span{font-size:.165cm;line-height:1.2;color:var(--lab);white-space:nowrap}
+.sm{flex:1;min-width:0;display:flex;align-items:center;gap:.3cm;padding:.1cm .25cm}
+.sq{width:2.5cm;height:2.5cm;flex-shrink:0;background:#fff;border:.04cm solid var(--qrb);padding:.08cm;display:flex;align-items:center;justify-content:center}
+.out[data-per="6"] .sq{width:3.2cm;height:3.2cm}
+.sq img{width:100%;height:100%;display:block;image-rendering:pixelated}
+.sq.none{font-size:.22cm;color:#8a93ad;text-align:center}
+.si{flex:1;min-width:0;display:flex;flex-direction:column;gap:.04cm}
+.s0{font-size:.19cm;line-height:1.2;font-weight:700;letter-spacing:.045cm;text-transform:uppercase;color:var(--lab);white-space:nowrap}
+.sn{font-family:var(--nf);font-weight:600;font-size:.52cm;line-height:1.25;color:var(--ink);white-space:nowrap}
+.out[data-per="6"] .sn{font-size:.6cm}
+.s1{display:inline-flex;align-self:flex-start;align-items:center;border:.03cm solid var(--acc);border-radius:.4cm;overflow:hidden;max-width:100%}
+.s1 span{padding:.02cm .15cm;line-height:1.3;white-space:nowrap}
+.s1 .pl{font-size:.18cm;font-weight:700;letter-spacing:.05cm;text-transform:uppercase;background:var(--acc);color:var(--ftt)}
+.s1 .pcode{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.4cm;color:var(--acc)}
+.s2{font-size:.26cm;line-height:1.3;color:var(--ink2);font-weight:600;white-space:nowrap}
+.s3{display:flex;align-items:center;gap:.2cm;font-size:.22cm;line-height:1.2;font-weight:700;letter-spacing:.03cm;color:var(--ink);white-space:nowrap}
+.s3 .g{display:inline-flex;align-items:center;gap:.08cm}
+.s3 s{display:inline-block;width:.4cm;height:.4cm;border:.04cm solid var(--ink);background:#fff;text-decoration:none}
+.s3 .tp{padding:.02cm .15cm;border-radius:.4cm;background:var(--acc);color:var(--ftt);font-size:.18cm;letter-spacing:.05cm;text-transform:uppercase}
+.fs{--c:#1c8f4a;width:.4cm;height:.4cm;border:.04cm solid var(--c);border-radius:.06cm;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .fs.n{--c:#c62828}
-.fs i{display:block;width:.48cm;height:.48cm;border-radius:50%;background:var(--c)}
-.ft{display:flex;align-items:center;gap:.12cm;font-size:.23cm;font-weight:700;letter-spacing:.03cm;color:var(--ink);white-space:nowrap}
-.ft s{display:inline-block;width:.5cm;height:.5cm;border:.04cm solid var(--ink);background:#fff;text-decoration:none}
-.ft .fs{width:.55cm;height:.55cm;border-width:.04cm}
-.ft .fs i{width:.26cm;height:.26cm}
-.pbody{flex:1;min-height:0;padding:.2cm 0 .15cm;display:flex}
-.pside{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
-.prow{flex:1 1 0;max-height:1cm;min-height:0;display:flex;align-items:center;gap:.22cm;padding-left:.67cm}
-.prow.first:not(:first-child){border-top:.02cm dotted var(--lab)}
-.pside.r .prow{flex-direction:row-reverse;padding-left:0;padding-right:.67cm;text-align:right}
-.pc{width:.72cm;height:.72cm;flex-shrink:0;border-radius:50%;border:.035cm solid var(--acc);background:rgba(128,128,128,.07)}
-.prt{display:flex;flex-direction:column;line-height:1.2;flex:1;min-width:0}
-.prt b{display:block;max-width:100%;font-size:.26cm;font-weight:700;letter-spacing:.03cm;color:var(--ink);text-transform:uppercase;white-space:nowrap}
-.prt span{font-size:.2cm;color:var(--lab);white-space:nowrap}
-.pft{height:1cm;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.02cm;background:var(--ft);color:var(--ftt);border-top:.08cm solid var(--line);padding:0 .4cm}
-.pft .r{font-weight:700;font-size:.34cm;letter-spacing:.04cm;text-transform:uppercase;white-space:nowrap}
-.pft .v{font-size:.22cm;white-space:nowrap}
-.t-classical .pft.Oral{background:linear-gradient(135deg,#8a5f1f,#c9974f);color:#1d1305}
-.t-classical .pft.Poster{background:linear-gradient(135deg,#0f5e63,#1f8a8a)}
-.t-classical .pft.Participant{background:linear-gradient(135deg,#0a1230,#1b3a7a)}
+.fs i{display:block;width:.2cm;height:.2cm;border-radius:50%;background:var(--c)}
+.s4{display:none;font-size:.2cm;line-height:1.2;color:var(--lab);margin-top:.05cm}
+.out[data-per="6"] .s4{display:block}
+.hw{display:flex;align-items:flex-end;gap:.15cm;width:100%;font-size:.2cm;font-weight:600;letter-spacing:.04cm;color:var(--lab);text-transform:uppercase;line-height:1.2}
+.hw span{white-space:nowrap}
+.hw i{flex:1;display:block;border-bottom:.03cm solid var(--lab);height:.42cm}
+.pcard .idb{justify-content:flex-start;gap:.07cm}
+.pcard .idb em{font-size:.34cm}
+.pcard .idb i{width:.52cm;height:.6cm;font-size:.38cm}
+
 .cpt{border-collapse:collapse;margin-top:10px}
 .cpt th,.cpt td{position:static;text-align:center;padding:6px 10px;background:none}
 .cpt th:first-child{text-align:left}
@@ -266,9 +269,10 @@ body.cap .out{display:block}
     <div style="overflow:auto"><table class="cpt" id="cpTable"></table></div>
     <div class="bar">
       <button class="btn pri" id="cGen" type="button"><i class="fa-solid fa-ticket"></i>Generate coupons for selected</button>
+      <div class="f" style="min-width:230px"><select id="cPer" aria-label="Coupons per A4 page"><option value="8">8 per page (19 × 3 cm)</option><option value="6">6 per page (19 × 4 cm)</option></select></div>
       <button class="btn" id="cpAll" type="button">All meals and days</button><button class="btn" id="cpNone" type="button">Clear</button>
     </div>
-    <p class="msg" style="margin-top:8px">Tick days and meals first (tap a day or meal name to tick its row or column). Only ticked meals print, one punch circle per day. Each coupon shows name, LVRMIC ID and VEG / NON-VEG from the sheet. A4 sheet, 4 coupons per page (10 × 14.5 cm).</p>
+    <p class="msg" style="margin-top:8px">Tick days and meals first (tap a day or meal name to tick its row or column). Only ticked meals print, one punch circle per day: breakfast, lunch and dinner on the left end, snacks on the right end. Each coupon is a 19 cm wide strip with QR, name, LVRMIC ID, designation and VEG / NON-VEG from the sheet. 8 per A4 page (3 cm strips) or 6 per page (4 cm strips); if 3 meals are ticked on one end, 6 per page is used automatically.</p>
   </div>
 
   <div class="panel">
@@ -587,7 +591,7 @@ const MEALS = [
   { c: 'BF', n: 'Breakfast', g: 'meal', ic: 'fa-egg' }, { c: 'B1', n: 'Morning Snacks', g: 'snack', ic: 'fa-cookie-bite' },
   { c: 'LN', n: 'Lunch', g: 'meal', ic: 'fa-utensils' }, { c: 'TB', n: 'Afternoon Snacks', g: 'snack', ic: 'fa-mug-hot' },
   { c: 'DN', n: 'Dinner', g: 'meal', ic: 'fa-bowl-food' }
-], DAYS = [1, 2, 3], CP = new Set();
+], DAYS = [1, 2, 3], CP = new Set([1, 2, 3].map(d => d + '-LN'));     // lunch on all 3 days ticked by default
 function dayDate(d) {
   const A = new Date(((CONF && CONF['conf.startDate']) || '2026-11-26') + 'T00:00:00');
   if (isNaN(A)) return '';
@@ -611,29 +615,44 @@ $('cpTable').addEventListener('click', e => {
   setKeys(keys, !keys.every(k => CP.has(k)));
 });
 const foodOf = r => { const f = S(r.FoodPreference); return /non/i.test(f) ? 'n' : /veg/i.test(f) ? 'v' : ''; };
-const FOOD_BLANK = '<div class="fd"><div class="ft"><s></s><span class="fs"><i></i></span>VEG</div><div class="ft"><s></s><span class="fs n"><i></i></span>NON-VEG</div></div>';
+
+/* meal coupon strip: lunch/breakfast/dinner on the left end, snacks on the right end */
+const maxSide = () => Math.max(...['meal', 'snack'].map(g => MEALS.filter(me => me.g === g && DAYS.some(d => CP.has(d + '-' + me.c))).length));
+const perPage = () => maxSide() > 2 ? 6 : parseInt($('cPer').value, 10);   // 3 meals on one end need the 4 cm strip
 function punchHtml(r, head, theme) {            // r = null makes a blank coupon
-  const bl = !r, t = bl ? $('bType').value : typeOf(r);
-  const meals = MEALS.filter(me => DAYS.some(d => CP.has(d + '-' + me.c)));
-  const rowsOf = g => meals.filter(me => me.g === g).flatMap(me => DAYS.filter(d => CP.has(d + '-' + me.c)).map((d, i) => ({ me: me, d: d, first: i === 0 })));
-  const row = x => `<div class="prow${x.first ? ' first' : ''}"><i class="pc"></i><div class="prt"><b class="fit">${esc(x.me.n)}</b><span>Day ${x.d} · ${esc(dayShort(x.d))}</span></div></div>`;
-  const side = (g, c) => `<div class="pside ${c}">${rowsOf(g).map(row).join('')}</div>`;
-  const f = bl ? FOOD_BLANK : (foodOf(r) ? `<div class="fv"><span class="fs ${foodOf(r)}"><i></i></span>${foodOf(r) === 'n' ? 'NON-VEG' : 'VEG'}</div>` : '');
+  const bl = !r, t = bl ? $('bType').value : typeOf(r), id = bl ? '' : S(r.ID), qr = bl ? '' : qrImg(QR[id]), fo = bl ? '' : foodOf(r);
+  const side = (g, c) => {
+    const ms = MEALS.filter(me => me.g === g && DAYS.some(d => CP.has(d + '-' + me.c)));
+    return ms.length ? `<div class="${c}">${ms.map(me => `<div class="mr"><div class="mn">${esc(me.n)}</div><div class="cells">${DAYS.filter(d => CP.has(d + '-' + me.c)).map(d =>
+      `<div class="pcell"><i class="pc"></i><span>Day ${d} · ${esc(dayShort(d))}</span></div>`).join('')}</div></div>`).join('')}</div>` : '';
+  };
+  const food = bl ? '<span class="g"><s></s><span class="fs"><i></i></span>VEG</span><span class="g"><s></s><span class="fs n"><i></i></span>NON-VEG</span>'
+    : fo ? `<span class="g"><span class="fs ${fo}"><i></i></span>${fo === 'n' ? 'NON-VEG' : 'VEG'}</span>` : '';
   return `<div class="pcard t-${esc(theme)}">
-    <div class="pch"><div class="lgs">${logoRow()}</div><div class="pt1 fit">MEAL COUPON</div><div class="pt2">${esc(head.name)}</div><div class="pt3 fit">${esc(head.short)}${head.range ? ' · ' + esc(head.range) : ''}</div></div>
-    <div class="pid"><div class="pidl"><div class="pk">Name</div>${bl ? `<div class="hw"><i></i></div><div class="pk">Designation</div><div class="hw"><i></i></div><div class="pk">LVRMIC ID</div>${idBoxes}`
-      : `<div class="pnm fit">${esc(S(r.Name))}</div><div class="pdg fit">${esc(desigOf(r))}</div><div class="pidp"><span class="pl">LVRMIC ID</span><span class="pcode">${esc(S(r.ID))}</span></div>`}</div>${f}</div>
-    <div class="pbody">${side('meal', 'l')}${side('snack', 'r')}</div>
-    <div class="pft ${t}"><div class="r fit">${esc(TYPE_LABEL[t])}</div><div class="v">Non-transferable</div></div></div>`;
+    ${side('meal', 'sl')}
+    <div class="sm">
+      ${bl ? '' : qr ? `<div class="sq"><img src="${qr}" alt="QR ${esc(id)}"></div>` : '<div class="sq none">QR not available</div>'}
+      <div class="si">
+        <div class="s0 fit">${esc(head.short)} · MEAL COUPON</div>
+        ${bl ? '<div class="hw"><span>Name</span><i></i></div>' : `<div class="sn fit">${esc(S(r.Name))}</div>`}
+        ${bl ? idBoxes : `<div class="s1"><span class="pl">LVRMIC ID</span><span class="pcode">${esc(id)}</span></div>`}
+        ${bl ? '<div class="hw"><span>Designation</span><i></i></div>' : `<div class="s2 fit">${esc(desigOf(r) || '-')}</div>`}
+        <div class="s3">${food}<span class="tp">${esc(TYPE_LABEL[t])}</span></div>
+        <div class="s4 fit">Valid for registered participants only · Non-transferable</div>
+      </div>
+    </div>
+    ${side('snack', 'sr')}
+  </div>`;
 }
 async function genCoupons(blank) {
   if (!CP.size) { setMsg('Tick at least one day and meal for the coupons.', 'err'); return; }
   const rows = blank ? Array.from({ length: blankN() }, () => null) : view.filter(r => sel.has(S(r.ID)));
   if (!rows.length) { setMsg('Select participants first.', 'err'); return; }
   MODE = 'coupon'; window.LASTROWS = [];
-  const head = headInfo(), theme = $('fTheme').value, pages = [];
-  for (let i = 0; i < rows.length; i += 4) pages.push('<div class="mpg">' + rows.slice(i, i + 4).map(r => punchHtml(r, head, theme)).join('') + '</div>');
-  await showOut(pages, `${rows.length} ${blank ? 'blank ' : ''}coupon${rows.length > 1 ? 's' : ''} ready · ${pages.length} A4 sheet${pages.length > 1 ? 's' : ''}`);
+  const head = headInfo(), theme = $('fTheme').value, per = perPage(), pages = [];
+  $('out').dataset.per = String(per);
+  for (let i = 0; i < rows.length; i += per) pages.push('<div class="mpg">' + rows.slice(i, i + per).map(r => punchHtml(r, head, theme)).join('') + '</div>');
+  await showOut(pages, `${rows.length} ${blank ? 'blank ' : ''}coupon${rows.length > 1 ? 's' : ''} ready · ${pages.length} A4 sheet${pages.length > 1 ? 's' : ''} · ${per} per page${per === 6 && $('cPer').value === '8' ? ' (4 cm strips, because 3 meals sit on one end)' : ''}`);
 }
 $('cGen').onclick = () => genCoupons(false);
 $('bGenC').onclick = () => genCoupons(true);
