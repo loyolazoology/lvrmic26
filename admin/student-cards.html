@@ -296,7 +296,7 @@ const num = v => parseInt(String(v).replace(/\D+/g, ''), 10);
 const setMsg = (t, c) => { const s = $('status'); s.textContent = t || ''; s.className = 'msg ' + (c || ''); };
 const THEMES = [['emerald','Emerald'],['violet','Violet'],['saffron','Saffron'],['slaterose','Slate rose'],['classical','Classical'],['modern','Modern'],['midnight','Midnight'],['crimson','Crimson']];
 const UAZ_DEPT = 'PG & Research Department of Advanced Zoology and Biotechnology';
-const deptOf = p => /uaz/i.test(S(p.deptNo)) ? UAZ_DEPT : '';
+const deptOf = p => /uaz|pzo/i.test(S(p.deptNo)) ? UAZ_DEPT : '';
 
 let ALL = [], CONF = {}, view = [], sel = new Set(), lastRows = null, lastMode = '';
 
