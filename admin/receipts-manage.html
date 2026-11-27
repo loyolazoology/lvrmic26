@@ -76,7 +76,10 @@ if (VR.guard() && VR.frameOnly()) (async function () {
 const PAGE = 'receipts-manage', g = id => document.getElementById(id), api = (a, d) => VR.api(a, Object.assign({ page: PAGE }, d || {})), CDN = 'https://cdnjs.cloudflare.com/ajax/libs/';
 const err = m => (window.showErr ? showErr(m) : alert(m)), ok = m => (window.showOk ? showOk(m) : alert(m)), hide = () => window.hideAlerts && hideAlerts();
 if (!VR.can('receipts', 'transaction')) { VR.denied('You do not have permission to generate receipts.'); return; }
-let I = {}, cfg, sel = null, spot = null, reissue = null, reqId = '', busy = false, tm;
+
+/* FIX 1: cfg starts as null and I carries safe defaults, so nothing can read undefined before init() finishes */
+let I = { requests: [], issued: [], participants: [], modes: [], conf: null, nextNo: '', today: '' }, cfg = null, sel = null, spot = null, reissue = null, reqId = '', busy = false, tm, ready = false;
+const clone = o => JSON.parse(JSON.stringify(o));
 const radio = () => document.querySelector('input[name=type]:checked').value, pill = (t, c) => '<span class="rx-pill rx-' + c + '">' + VR.esc(t) + '</span>', inr = n => LVReceipt.money(n, 'INR');
 const fetchAsset = id => (VR._ra && VR._ra[id]) ? Promise.resolve(VR._ra[id]) : api('adminReceiptAssetGet', { id }).then(r => { if (!r.ok) throw new Error(r.error); (VR._ra = VR._ra || {})[id] = r.dataUrl; return r.dataUrl; });
 const purposeFor = p => LVReceipt.fill(cfg.purpose, { conference: I.conf.name, category: (p && p.category) || 'Participant' }).replace(/\s*\(Participant\)/, '');
@@ -85,8 +88,10 @@ function data(no) { const c = sel || {}, t = radio(), amt = parseFloat(g('f-amt'
   return { receiptNo: no || (reissue ? reissue.receiptNo : I.nextNo), name: c.name || 'Participant name', id: c.id || 'LVRMIC26-0000', institution: c.institution || '', email: c.email || '', category: c.category || '', type: t, txnDate: g('f-date').value || I.today,
     erpNo: g('f-erp').value.trim() || 'ERP/0000', txnId: g('f-txn').value.trim() || '—', amount: amt, currency: 'INR', mode: g('f-mode').value, reference: g('f-ref').value.trim(), purpose: g('f-purpose').value.trim() || purposeFor(c),
     currencyNote: spot && spot.currency === 'USD' && spot.usd ? 'USD ' + spot.usd + ' at ₹' + spot.fx + ' per USD' : '', conference: I.conf.name, confDates: I.conf.dates, venue: I.conf.venue, site: I.conf.site, contact: I.conf.contact }; }
-function preview() { clearTimeout(tm); tm = setTimeout(() => { const c = JSON.parse(JSON.stringify(cfg)); LVReceipt.resolveAssets(c, fetchAsset).then(() => { const W = 210 * 3.7795, H = 297 * 3.7795, box = g('pv'), k = Math.min(1, (box.clientWidth - 24) / W);
-  box.innerHTML = '<div style="width:' + (W * k) + 'px;height:' + (H * k) + 'px"><div class="box" style="transform:scale(' + k + ')">' + LVReceipt.render(c, data()) + '</div></div>'; g('pvNo').textContent = '· ' + (reissue ? reissue.receiptNo + ' (reissue)' : I.nextNo); }); }, 150); }
+
+/* FIX 2: preview() does nothing until init() has loaded cfg and I.conf (this was the "undefined is not valid JSON" crash) */
+function preview() { if (!ready || !cfg || !I.conf) return; clearTimeout(tm); tm = setTimeout(() => { if (!cfg || !I.conf) return; const c = clone(cfg); LVReceipt.resolveAssets(c, fetchAsset).then(() => { const W = 210 * 3.7795, H = 297 * 3.7795, box = g('pv'), k = Math.min(1, (box.clientWidth - 24) / W);
+  box.innerHTML = '<div style="width:' + (W * k) + 'px;height:' + (H * k) + 'px"><div class="box" style="transform:scale(' + k + ')">' + LVReceipt.render(c, data()) + '</div></div>'; g('pvNo').textContent = '· ' + (reissue ? reissue.receiptNo + ' (reissue)' : I.nextNo); }).catch(e => console.error('Preview failed', e)); }, 150); }
 
 function layout() { const t = radio(); g('w-erp').classList.toggle('rx-hide', t !== 'ERP'); ['w-txn', 'w-mode', 'w-ref'].forEach(i => g(i).classList.toggle('rx-hide', t !== 'Manual')); g('w-reason').classList.toggle('rx-hide', !reissue);
   g('goTxt').textContent = reissue ? 'Reissue & e-mail' : 'Generate & e-mail'; preview(); }
@@ -97,29 +102,30 @@ function drawReq() { g('reqTb').innerHTML = I.requests.map(r => '<tr><td><b>' + 
 /* participant picker */
 function search() { const q = g('pq').value.trim().toLowerCase(), box = g('pick'); if (q.length < 2) { box.innerHTML = ''; return; }
   box.innerHTML = I.participants.filter(p => (p.id + ' ' + p.name + ' ' + p.email + ' ' + p.institution).toLowerCase().indexOf(q) > -1).slice(0, 8).map(p => '<button type="button" data-id="' + VR.esc(p.id) + '"><b>' + VR.esc(p.name) + '</b> · ' + VR.esc(p.id) + '<br><small>' + VR.esc(p.institution || '') + '</small></button>').join('') || '<div class="hint" style="padding:8px;">No match.</div>'; }
+const RECEIPT_MODES = () => I.modes;
 async function choose(id, fromReq) {
+  if (!ready) return;
   const p = I.participants.find(x => x.id === id); if (!p) return; sel = p; spot = null; reissue = null; g('pick').innerHTML = ''; g('pq').value = ''; g('who').innerHTML = '<b>' + VR.esc(p.name) + '</b> · ' + VR.esc(p.id) + ' · ' + VR.esc(p.category || '') + ' · ' + VR.esc(p.email || 'no e-mail');
-  ['f-erp', 'f-txn', 'f-ref', 'f-reason'].forEach(i => { g(i).value = ''; }); g('f-date').value = I.today; g('f-amt').value = ''; g('f-mode').value = RECEIPT_MODES()[0]; g('f-purpose').value = purposeFor(p);
+  ['f-erp', 'f-txn', 'f-ref', 'f-reason'].forEach(i => { g(i).value = ''; }); g('f-date').value = I.today; g('f-amt').value = ''; g('f-mode').value = RECEIPT_MODES()[0]; g('f-purpose').value = purposeFor(p); delete g('f-purpose').dataset.touched;
   const j = await api('adminReceiptPrefill', { id }); const pf = g('prefill'); pf.style.display = 'none'; g('have').style.display = 'none';
   if (j.ok) {
     if (j.spot) { spot = j.spot; document.getElementById('ty-m').checked = true; g('f-date').value = j.spot.date || I.today; g('f-amt').value = j.spot.amount || ''; if (RECEIPT_MODES().indexOf(j.spot.mode) > -1) g('f-mode').value = j.spot.mode; g('f-ref').value = j.spot.reference || ''; g('f-txn').value = j.spot.reference || '';
       pf.style.display = ''; pf.textContent = 'Pre-filled from the spot registration bill ' + j.spot.billNo + ' (' + inr(j.spot.amount) + ', ' + (j.spot.mode || '') + (j.spot.reference ? ', ' + j.spot.reference : '') + '). Check the transaction ID before generating.'; }
     else if (j.onFile && j.onFile.amount) { g('f-amt').value = j.onFile.amount; pf.style.display = ''; pf.textContent = 'Amount on file: ' + inr(j.onFile.amount) + (j.onFile.mode ? ' · ' + j.onFile.mode : '') + '. Enter the date and the ERP receipt number / transaction ID.'; }
-    if (j.existing.length) { g('have').style.display = ''; g('have').innerHTML = '<div class="hint">Already issued to this participant:</div>' + j.existing.map(r => '<div class="rx-row" style="margin-top:6px;">' + pill(r.receiptNo + ' v' + r.version, 'ok') + ' <span class="hint">' + VR.esc(r.type) + ' · ' + inr(r.amount) + ' · ' + VR.esc(LVReceipt.dmy(r.txnDate)) + '</span> <button class="btn btn-sm" data-a="re" data-n="' + VR.esc(r.receiptNo) + '">Reissue…</button></div>').join(''); } }
+    if (j.existing && j.existing.length) { g('have').style.display = ''; g('have').innerHTML = '<div class="hint">Already issued to this participant:</div>' + j.existing.map(r => '<div class="rx-row" style="margin-top:6px;">' + pill(r.receiptNo + ' v' + r.version, 'ok') + ' <span class="hint">' + VR.esc(r.type) + ' · ' + inr(r.amount) + ' · ' + VR.esc(LVReceipt.dmy(r.txnDate)) + '</span> <button class="btn btn-sm" data-a="re" data-n="' + VR.esc(r.receiptNo) + '">Reissue…</button></div>').join(''); } }
   layout(); g('pq').scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-const RECEIPT_MODES = () => I.modes;
-function loadReissue(no) { const r = I.issued.find(x => x.receiptNo === no); if (!r) return; const p = I.participants.find(x => x.id === r.id) || { id: r.id, name: r.name, email: r.email, institution: r.institution, category: r.category };
+function loadReissue(no) { if (!ready) return; const r = I.issued.find(x => x.receiptNo === no); if (!r) return; const p = I.participants.find(x => x.id === r.id) || { id: r.id, name: r.name, email: r.email, institution: r.institution, category: r.category };
   sel = p; spot = null; reissue = r; document.getElementById(r.type === 'ERP' ? 'ty-e' : 'ty-m').checked = true; g('who').innerHTML = '<b>' + VR.esc(p.name) + '</b> · ' + VR.esc(p.id) + ' — <b>reissuing ' + VR.esc(no) + '</b>';
   g('f-date').value = r.txnDate; g('f-erp').value = r.erpNo || ''; g('f-txn').value = r.txnId || ''; g('f-amt').value = r.amount; g('f-mode').value = r.mode; g('f-ref').value = r.reference || ''; g('f-purpose').value = r.purpose || ''; g('f-reason').value = '';
   g('prefill').style.display = 'none'; g('have').style.display = 'none'; layout(); g('f-reason').focus(); }
-function clearAll() { sel = null; spot = null; reissue = null; reqId = ''; g('who').textContent = ''; ['f-erp', 'f-txn', 'f-ref', 'f-reason', 'f-amt', 'f-purpose'].forEach(i => { g(i).value = ''; }); g('prefill').style.display = 'none'; g('have').style.display = 'none'; layout(); }
+function clearAll() { sel = null; spot = null; reissue = null; reqId = ''; g('who').textContent = ''; ['f-erp', 'f-txn', 'f-ref', 'f-reason', 'f-amt', 'f-purpose'].forEach(i => { g(i).value = ''; }); delete g('f-purpose').dataset.touched; g('prefill').style.display = 'none'; g('have').style.display = 'none'; layout(); }
 
 /* validate like the server, then draw the PDF with the final number and send it */
-function check() { if (!sel) return 'Choose a participant.'; const t = radio(), d = g('f-date').value; if (!d) return 'Enter the transaction date.'; if (d > I.today) return 'The transaction date cannot be in the future.';
+function check() { if (!ready) return 'The page is still loading. Please wait a moment.'; if (!sel) return 'Choose a participant.'; const t = radio(), d = g('f-date').value; if (!d) return 'Enter the transaction date.'; if (d > I.today) return 'The transaction date cannot be in the future.';
   if (t === 'ERP' && g('f-erp').value.trim().length < 3) return 'Enter the ERP receipt number.'; if (t === 'Manual' && g('f-txn').value.trim().length < 3) return 'Enter the transaction ID.';
   if (!(parseFloat(g('f-amt').value) > 0)) return 'Enter the amount.'; if (reissue && !g('f-reason').value.trim()) return 'Enter the reason for reissuing.'; return ''; }
 async function libs() { await VR.load(CDN + 'html2canvas/1.4.1/html2canvas.min.js'); await VR.load(CDN + 'jspdf/2.5.1/jspdf.umd.min.js'); }
-async function draw(no) { await libs(); const c = JSON.parse(JSON.stringify(cfg)); await LVReceipt.resolveAssets(c, fetchAsset); const pdf = await LVReceipt.pdfFrom(c, [data(no)]); return pdf.output('datauristring').split('base64,')[1]; }
+async function draw(no) { await libs(); const c = clone(cfg); await LVReceipt.resolveAssets(c, fetchAsset); const pdf = await LVReceipt.pdfFrom(c, [data(no)]); return pdf.output('datauristring').split('base64,')[1]; }
 function payload(b64, no, extra) { return Object.assign({ id: sel.id, requestId: reqId, type: radio(), txnDate: g('f-date').value, erpNo: g('f-erp').value.trim(), txnId: g('f-txn').value.trim(), amount: parseFloat(g('f-amt').value), mode: g('f-mode').value, reference: g('f-ref').value.trim(),
   purpose: g('f-purpose').value.trim() || purposeFor(sel), billNo: spot ? spot.billNo : '', pdf: b64, expectNo: no, sendMail: g('f-mail').checked, reissueOf: reissue ? reissue.receiptNo : '', reason: g('f-reason').value.trim() }, extra || {}); }
 g('go').onclick = async () => { hide(); const bad = check(); if (bad) return err(bad); if (busy) return; busy = true; g('go').disabled = true; g('goHint').textContent = 'Drawing the PDF and saving…';
@@ -132,8 +138,8 @@ g('go').onclick = async () => { hide(); const bad = check(); if (bad) return err
     ok(j.receiptNo + (reissue ? ' reissued (v' + j.version + ')' : ' generated') + (j.emailed ? ' and e-mailed to ' + sel.email + '.' : (g('f-mail').checked ? '. E-mail FAILED: ' + j.mailError : '.')));
     clearAll(); await init(); } catch (e) { err(e.message || 'Failed.'); }
   busy = false; g('go').disabled = false; g('goHint').textContent = ''; };
-g('prn').onclick = async () => { hide(); const bad = check(); if (bad) return err(bad); const c = JSON.parse(JSON.stringify(cfg)); await LVReceipt.resolveAssets(c, fetchAsset); LVReceipt.printHtml(c, [data()]); };
-g('pdf').onclick = async () => { hide(); const bad = check(); if (bad) return err(bad); try { await libs(); const c = JSON.parse(JSON.stringify(cfg)); await LVReceipt.resolveAssets(c, fetchAsset); (await LVReceipt.pdfFrom(c, [data()])).save(VR.fileName('Receipt_' + data().receiptNo, 'pdf')); } catch (e) { err(e.message); } };
+g('prn').onclick = async () => { hide(); const bad = check(); if (bad) return err(bad); try { const c = clone(cfg); await LVReceipt.resolveAssets(c, fetchAsset); LVReceipt.printHtml(c, [data()]); } catch (e) { err(e.message || 'Could not print.'); } };
+g('pdf').onclick = async () => { hide(); const bad = check(); if (bad) return err(bad); try { await libs(); const c = clone(cfg); await LVReceipt.resolveAssets(c, fetchAsset); (await LVReceipt.pdfFrom(c, [data()])).save(VR.fileName('Receipt_' + data().receiptNo, 'pdf')); } catch (e) { err(e.message); } };
 g('clr').onclick = clearAll;
 
 /* settings */
@@ -143,9 +149,9 @@ function imgField(label, obj, key, w, h) { const d = document.createElement('div
   d.querySelector('.clr').onclick = () => { obj[key] = ''; show(); preview(); }; return d; }
 function drawSettings() { const h = g('imgs'); h.innerHTML = ''; h.appendChild(imgField('Logo 1 (Loyola)', cfg.logos[0], 'src', 600, 600)); h.appendChild(imgField('Logo 2 (CIMSER)', cfg.logos[1], 'src', 600, 600)); h.appendChild(imgField('Signature image', cfg.signatory, 'src', 600, 263));
   g('s-name').value = cfg.signatory.name; g('s-title').value = cfg.signatory.title; g('s-mode').value = cfg.signMode; g('s-purpose').value = cfg.purpose; g('s-msub').value = cfg.mail.subject; g('s-mbody').value = cfg.mail.body; }
-[['s-name', v => cfg.signatory.name = v], ['s-title', v => cfg.signatory.title = v], ['s-mode', v => cfg.signMode = v], ['s-purpose', v => { cfg.purpose = v; }], ['s-msub', v => cfg.mail.subject = v], ['s-mbody', v => cfg.mail.body = v]].forEach(x => g(x[0]).addEventListener('input', e => { x[1](e.target.value); if (x[0] === 's-purpose' && sel && !g('f-purpose').dataset.touched) g('f-purpose').value = purposeFor(sel); preview(); }));
+[['s-name', v => cfg.signatory.name = v], ['s-title', v => cfg.signatory.title = v], ['s-mode', v => cfg.signMode = v], ['s-purpose', v => { cfg.purpose = v; }], ['s-msub', v => cfg.mail.subject = v], ['s-mbody', v => cfg.mail.body = v]].forEach(x => g(x[0]).addEventListener('input', e => { if (!ready || !cfg) return; x[1](e.target.value); if (x[0] === 's-purpose' && sel && !g('f-purpose').dataset.touched) g('f-purpose').value = purposeFor(sel); preview(); }));
 g('f-purpose').addEventListener('input', () => { g('f-purpose').dataset.touched = '1'; });
-g('saveCfg').onclick = async () => { await VR.busy(g('saveCfg'), 'Saving…', async () => { const j = await api('adminReceiptSaveConfig', { config: cfg }); j.ok ? ok('Receipt settings saved.') : err(j.error || 'Could not save.'); }); };
+g('saveCfg').onclick = async () => { if (!ready || !cfg) return err('The page is still loading.'); await VR.busy(g('saveCfg'), 'Saving…', async () => { const j = await api('adminReceiptSaveConfig', { config: cfg }); j.ok ? ok('Receipt settings saved.') : err(j.error || 'Could not save.'); }); };
 
 /* events */
 document.querySelectorAll('input[name=type]').forEach(r => r.addEventListener('change', layout));
@@ -158,10 +164,26 @@ g('reqTb').addEventListener('click', async e => { const b = e.target.closest('[d
     g('mdNo').onclick = () => g('mDec').classList.remove('show'); g('mdYes').onclick = async () => { const v = g('mdIn').value.trim(); if (!v) return g('mdIn').focus(); g('mDec').classList.remove('show'); const j = await api('adminReceiptDecline', { requestId: r.requestId, reason: v }); j.ok ? ok('Request declined.') : err(j.error); await init(); }; } });
 window.addEventListener('resize', preview);
 
-async function init() { const j = await api('adminReceiptInit'); if (!j.ok) return err(j.error || 'Could not load.'); I = j; cfg = LVReceipt.merge(LVReceipt.DEFAULTS, j.config || {}); stats(); drawReq(); drawSettings();
-  g('f-mode').innerHTML = I.modes.map(m => '<option>' + VR.esc(m) + '</option>').join(''); g('f-date').max = I.today; if (!g('f-date').value) g('f-date').value = I.today; layout(); }
+/* FIX 3: init() is wrapped in try/catch, validates the server reply, and never leaves cfg undefined */
+async function init() {
+  try {
+    const j = await api('adminReceiptInit');
+    if (!j || !j.ok) { err((j && j.error) || 'Could not load.'); return; }
+    if (!j.conf) { err('The server did not return the conference details (conf).'); return; }
+    I = Object.assign({ requests: [], issued: [], participants: [], modes: [], nextNo: '', today: '' }, j);
+    let merged = null;
+    try { merged = LVReceipt.merge(LVReceipt.DEFAULTS, j.config || {}); } catch (e) { console.error('Config merge failed', e); }
+    cfg = merged || clone(LVReceipt.DEFAULTS);
+    if (!cfg.logos) cfg.logos = [{ src: '' }, { src: '' }];
+    if (!cfg.signatory) cfg.signatory = { name: '', title: '', src: '' };
+    if (!cfg.mail) cfg.mail = { subject: '', body: '' };
+    ready = true;
+    stats(); drawReq(); drawSettings();
+    g('f-mode').innerHTML = I.modes.map(m => '<option>' + VR.esc(m) + '</option>').join(''); g('f-date').max = I.today; if (!g('f-date').value) g('f-date').value = I.today; layout();
+  } catch (e) { console.error(e); err('Could not load: ' + (e.message || e)); }
+}
 await init();
-const q = new URLSearchParams(location.search); if (q.get('reissue')) loadReissue(q.get('reissue')); else if (q.get('id')) choose(q.get('id'));
+if (ready) { const q = new URLSearchParams(location.search); if (q.get('reissue')) loadReissue(q.get('reissue')); else if (q.get('id')) choose(q.get('id')); }
 })();
 </script>
 </body>
